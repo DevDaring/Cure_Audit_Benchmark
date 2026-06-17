@@ -1,1 +1,1 @@
-dry-run rc=0 PASSED; cleaning test artifacts @ Wed Jun 17 15:05:05 UTC 2026
+main attempt 1 running @ Wed Jun 17 15:05:08 UTC 2026
