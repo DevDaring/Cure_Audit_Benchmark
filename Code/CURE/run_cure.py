@@ -185,7 +185,7 @@ def cmd_baselines():
         try:
             ctx = E.collect_acts(model, tok, cfg, sub_pairs)              # one shared pass
             head_basis = erase.subspace_from_diffs(ctx["diffs"], C.HEADLINE_RANK)
-            base_acc = E.native_accuracy(model, tok, cfg, None, C.E4_LIMIT, C.E4_MAX_TOKENS)
+            base_acc = E.native_accuracy(model, tok, cfg, None, C.BASELINE_E4_LIMIT, C.E4_MAX_TOKENS)
             for m in todo:
                 try:
                     if m == "cure":
@@ -211,7 +211,7 @@ def cmd_baselines():
                             row["n_pairs"] = int(len(re))
                         else:
                             row["causal_residual_removed"] = float("nan"); row["n_pairs"] = 0
-                        er_acc = E.native_accuracy(model, tok, cfg, basis, C.E4_LIMIT, C.E4_MAX_TOKENS)
+                        er_acc = E.native_accuracy(model, tok, cfg, basis, C.BASELINE_E4_LIMIT, C.E4_MAX_TOKENS)
                         row["utility_cost"] = (base_acc - er_acc) if (
                             np.isfinite(base_acc) and np.isfinite(er_acc)) else float("nan")
                         row["baseline_acc"] = base_acc; row["erased_acc"] = er_acc

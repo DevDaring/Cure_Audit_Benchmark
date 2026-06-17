@@ -158,6 +158,11 @@ E4_MAX_TOKENS = int(os.environ.get("CURE_E4_MAX_TOKENS", "64"))
 _e4 = os.environ.get("CURE_E4_LIMIT", "").strip()
 E4_LIMIT = int(_e4) if _e4 else None
 
+# Utility prompts for the baseline head-to-head. ALL ten methods share this single
+# limit, so the comparison stays parity-consistent; it is smaller than the full E4
+# curve (E4_LIMIT) purely for tractability on the four-model x ten-method grid.
+BASELINE_E4_LIMIT = int(os.environ.get("CURE_BASELINE_E4_LIMIT", "200"))
+
 # Causal threshold tau: reuse the audit default (75th percentile of |C|).
 TAU = float(os.environ.get("CURE_TAU", "0.7644"))
 
