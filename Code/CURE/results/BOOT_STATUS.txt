@@ -1,1 +1,1 @@
-dry-run rc=1 FAILED (see results/DRYFAIL_1781707883.txt); pull+retry in 60s @ Wed Jun 17 14:51:23 UTC 2026
+dry-run rc=1 FAILED (see results/DRYFAIL_1781707974.txt); pull+retry in 60s @ Wed Jun 17 14:52:54 UTC 2026
