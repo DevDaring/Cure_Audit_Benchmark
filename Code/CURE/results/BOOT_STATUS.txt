@@ -1,1 +1,1 @@
-setup complete; starting dry-run @ Wed Jun 17 14:30:08 UTC 2026
+dry-run rc=1 FAILED:  cure.dry | dry check flash_attention raised: No module named 'load_osm' 2026-06-17 14:30:33,735 | INFO | cure.dry | DRY CHECK flash_attention      FAIL 2026-06-17 14:30:33,736 | ERROR | cure.dry | dry check per_model_smoke raised: No module named 'load_osm' 2026-06-17 14:30:33,736 | INFO | cure.dry | DRY CHECK per_model_smoke      FAIL 2026-06-17 14:30:33,736 | INFO | cure.dry | DRY RESULT: FAIL  @ Wed Jun 17 14:30:34 UTC 2026
