@@ -1,1 +1,1 @@
-FATAL: lib import failed FA_OK=0 (see results/VERIFY_FAIL_1781705642.txt) @ Wed Jun 17 14:14:02 UTC 2026
+container started (nvidia-smi: GPU 0: NVIDIA H100 80GB HBM3 (UUID: GPU-71cf2fbe-895c-ddb2-eb74-4c9ab5b155f0)) @ Wed Jun 17 14:22:05 UTC 2026
