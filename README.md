@@ -134,6 +134,18 @@ The experiments:
 | E5 | Six recent baselines, same models and data | `cure_baselines_*.parquet` |
 | E6 | Audit score versus repair effort | `cure_prognosis_*.parquet`, `.json` |
 
+### Cost controls (safe, statistically sound)
+
+The run is expedited without weakening any reported number. The bias subspace is
+estimated once from a bounded subset and sliced to every rank (no per-rank
+re-extraction). The headline residual-removed and the per-model recovery run on the
+full pair set at one operating rank, so they keep the full audit sample and stay in
+harmony with the audit. The multi-rank sweep, the fairness-utility curve, and the
+six-baseline head-to-head run on a fixed-seed, benchmark-stratified subset of about a
+thousand pairs, which gives tight confidence intervals for the prognosis and the
+comparison. Knobs (with safe defaults) in `.env`: `CURE_HEADLINE_RANK`,
+`CURE_SUBSPACE_PAIRS`, `CURE_SWEEP_SUBSET`, `CURE_E4_MAX_TOKENS`, `CURE_E4_LIMIT`.
+
 The six comparative baselines: FairSteer (arXiv:2504.14492), BiasGym (arXiv:2508.08855),
 SAE-Debias (arXiv:2511.00177), H-SAL (arXiv:2606.12088), Faithful-Patchscopes
 (arXiv:2602.00300), and the No Free Lunch suite (arXiv:2511.18635). Three in-stack

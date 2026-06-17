@@ -71,8 +71,12 @@ def _positions(tokenizer, pair: dict):
 # E1: subspace
 # ---------------------------------------------------------------------------
 
-def build_subspace(model, tokenizer, cfg, pairs, rank: int) -> dict:
-    """Collect per-layer difference vectors from the pairs, return rank-r basis."""
+def collect_diffs(model, tokenizer, cfg, pairs) -> dict:
+    """One caching pass over the pairs; returns {layer: list of (a-b) diff vectors}.
+    The bias subspace is estimated from these diffs ONCE; all ranks are then slices
+    of the same SVD (erase.bases_at_ranks), so activations are not re-extracted per
+    rank. A low-rank direction is robust from a few hundred pairs, so this caching
+    runs on a bounded subspace-estimation subset (config SUBSPACE_PAIRS)."""
     lib = cfg["patching_lib"]
     diffs = {}
     for pair in pairs:
@@ -88,7 +92,34 @@ def build_subspace(model, tokenizer, cfg, pairs, rank: int) -> dict:
         for layer in ca:
             if layer in cb:
                 diffs.setdefault(layer, []).append(ca[layer] - cb[layer])
-    return erase.subspace_from_diffs(diffs, rank)
+    return diffs
+
+
+def build_subspace(model, tokenizer, cfg, pairs, rank: int) -> dict:
+    """Single-rank basis (used by the dry run and the baselines)."""
+    return erase.subspace_from_diffs(collect_diffs(model, tokenizer, cfg, pairs), rank)
+
+
+def stratified_subset(pairs, n, seed):
+    """Fixed-seed subset stratified by benchmark (the seed_id prefix bbq/crows/stereo).
+    Keeps the same benchmark mix as the full set, so a sweep on the subset stays
+    representative and statistically sound."""
+    import random
+    if not n or n >= len(pairs):
+        return list(pairs)
+    rng = random.Random(seed)
+    by_src = {}
+    for p in pairs:
+        src = str(p["seed_id"]).split("_", 1)[0]
+        by_src.setdefault(src, []).append(p)
+    out = []
+    total = len(pairs)
+    for grp in by_src.values():
+        k = max(1, round(n * len(grp) / total))
+        rng.shuffle(grp)
+        out.extend(grp[:k])
+    rng.shuffle(out)
+    return out[:n]
 
 
 # ---------------------------------------------------------------------------
@@ -123,8 +154,12 @@ def e3_reaudit(model, tokenizer, cfg, pairs, basis_by_layer) -> pd.DataFrame:
 # E4: utility under erasure
 # ---------------------------------------------------------------------------
 
-def e4_utility(model, tokenizer, cfg, basis_by_layer, limit: int | None = None) -> pd.DataFrame:
-    """Native slot-a accuracy with erasure active, via the audit generation path."""
+def native_accuracy(model, tokenizer, cfg, basis_by_layer=None,
+                    limit: int | None = None, max_tokens: int = 64) -> float:
+    """Native slot-a accuracy, optionally with erasure active (via the audit path).
+    Short generations (max_tokens default 64) suffice for the option answer, which is
+    the safe expedite here. Passing basis_by_layer=None gives the un-erased baseline,
+    computed once per model and reused across ranks by the caller."""
     from osm_behavioral import evaluate_osm_model
     import uuid
 
@@ -145,16 +180,14 @@ def e4_utility(model, tokenizer, cfg, basis_by_layer, limit: int | None = None) 
                      axis=1)
         return float(m.mean())
 
-    base = evaluate_osm_model(cfg, model, tokenizer, slot_a, run_id, temperature=0.0, sample_index=0)
-    base_acc = _acc(base)
-    with erase.ErasureContext(model, basis_by_layer):
-        er = evaluate_osm_model(cfg, model, tokenizer, slot_a, run_id, temperature=0.0, sample_index=0)
-    er_acc = _acc(er)
-    return pd.DataFrame([
-        {"model_name": cfg["name"], "erase_rank": len(next(iter(basis_by_layer.values()))) if basis_by_layer else 0,
-         "metric": "native_accuracy", "baseline": base_acc, "erased": er_acc,
-         "utility_cost": (base_acc - er_acc) if np.isfinite(base_acc) and np.isfinite(er_acc) else float("nan")},
-    ])
+    if basis_by_layer:
+        with erase.ErasureContext(model, basis_by_layer):
+            df = evaluate_osm_model(cfg, model, tokenizer, slot_a, run_id,
+                                    temperature=0.0, sample_index=0, max_tokens=max_tokens)
+    else:
+        df = evaluate_osm_model(cfg, model, tokenizer, slot_a, run_id,
+                                temperature=0.0, sample_index=0, max_tokens=max_tokens)
+    return _acc(df)
 
 
 # ---------------------------------------------------------------------------

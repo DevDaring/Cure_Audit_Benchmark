@@ -15,10 +15,12 @@ import logging
 import sys
 import time
 
+import numpy as np
 import pandas as pd
 
 import config_cure as C
 import integrity
+import erase
 import experiments as E
 import baselines as B
 
@@ -37,9 +39,20 @@ def _save(df: pd.DataFrame, name: str):
 
 
 def cmd_main():
+    """Expedited but statistically sound flow (see README, Run section):
+
+      - E1 subspace is estimated ONCE from a bounded subset, then every rank is a
+        slice of the same SVD (no per-rank re-extraction).
+      - E3 HEADLINE residual-removed runs on ALL pairs at the single operating rank,
+        so the headline number keeps the full audit n and stays in harmony with it.
+      - The multi-rank sweep, the fairness-utility curve (E4), and the six-baseline
+        head-to-head run on a fixed-seed, benchmark-stratified subset; with ~1000
+        pairs the prognosis and comparison carry tight confidence intervals.
+      - Utility uses the no-erasure baseline computed once and short generations.
+    """
     from load_osm import load_model, unload_model
+    from checkpoint import CheckpointPusher, push_checkpoint
     integrity.run()
-    from checkpoint import CheckpointPusher
     pusher = CheckpointPusher()
     pusher.start()
 
@@ -56,42 +69,63 @@ def cmd_main():
         if not pairs:
             log.error("no pairs for %s; skipping", name); continue
 
+        sub_pairs = E.stratified_subset(pairs, C.SUBSPACE_PAIRS, C.RANDOM_SEED)   # estimate subspace
+        sweep_pairs = E.stratified_subset(pairs, C.SWEEP_SUBSET, C.RANDOM_SEED)   # sweep / head-to-head
+
         model, tok = load_model(cfg)
         try:
-            per_rank_re = {}
-            util_by_rank = {}
-            util_rows = []
-            top_basis = None
+            # E1: cache diffs ONCE, derive every rank basis from the same SVD
+            diffs = E.collect_diffs(model, tok, cfg, sub_pairs)
+            bases = erase.bases_at_ranks(diffs, C.ERASE_RANKS)
+            if not bases or not next(iter(bases.values())):
+                log.error("empty subspace for %s; skipping", name); unload_model(name); continue
+            head_rank = C.HEADLINE_RANK if C.HEADLINE_RANK in bases else max(bases)
+            head_basis = bases[head_rank]
+
+            # E3 HEADLINE: ALL pairs at the operating rank (full-set residual removed)
+            re_head = E.e3_reaudit(model, tok, cfg, pairs, head_basis)
+            re_head["erase_rank"] = head_rank
+            _save(re_head, f"cure_recovery_{name}.parquet")
+            push_checkpoint(f"cure-results: {name} headline E3 rank {head_rank} n={len(re_head)}")
+
+            # E4 baseline accuracy computed ONCE, reused across ranks
+            base_acc = E.native_accuracy(model, tok, cfg, None, C.E4_LIMIT, C.E4_MAX_TOKENS)
+
+            # E3 SWEEP + E4 on the stratified subset (feeds E6 and the curve)
+            per_rank_re, util_by_rank, util_rows = {}, {}, []
             for rank in C.ERASE_RANKS:
-                basis = E.build_subspace(model, tok, cfg, pairs, rank=rank)
-                if not basis:
-                    log.warning("empty subspace at rank %d for %s", rank, name); continue
-                top_basis = basis
-                re_df = E.e3_reaudit(model, tok, cfg, pairs, basis)
+                re_df = E.e3_reaudit(model, tok, cfg, sweep_pairs, bases[rank])
+                re_df["erase_rank"] = rank
                 per_rank_re[rank] = re_df
-                _save(re_df, f"cure_recovery_{name}_rank{rank}.parquet")
-                util = E.e4_utility(model, tok, cfg, basis, limit=None)
-                util_rows.append(util)
-                if len(util):
-                    util_by_rank[rank] = float(util["utility_cost"].iloc[0])
-                from checkpoint import push_checkpoint
-                push_checkpoint(f"cure-results: {name} rank {rank}")
-
-            if util_rows:
-                _save(pd.concat(util_rows, ignore_index=True), f"cure_utility_{name}.parquet")
+                er_acc = E.native_accuracy(model, tok, cfg, bases[rank], C.E4_LIMIT, C.E4_MAX_TOKENS)
+                cost = (base_acc - er_acc) if (np.isfinite(base_acc) and np.isfinite(er_acc)) else float("nan")
+                util_by_rank[rank] = cost
+                util_rows.append({"model_name": name, "erase_rank": rank, "metric": "native_accuracy",
+                                  "baseline": base_acc, "erased": er_acc, "utility_cost": cost})
+                push_checkpoint(f"cure-results: {name} sweep rank {rank}")
             if per_rank_re:
-                prog_df, fit = E.e6_prognosis(per_rank_re, util_by_rank, name)
-                _save(prog_df, f"cure_prognosis_{name}.parquet")
-                (C.RESULTS / f"cure_prognosis_{name}.json").write_text(json.dumps(fit, indent=2), encoding="utf-8")
+                _save(pd.concat(per_rank_re.values(), ignore_index=True), f"cure_recovery_sweep_{name}.parquet")
+            _save(pd.DataFrame(util_rows), f"cure_utility_{name}.parquet")
 
-            # E5 baselines (in-stack now; adapters report pending until wired)
+            # E6 prognosis from the sweep
+            prog_df, fit = E.e6_prognosis(per_rank_re, util_by_rank, name)
+            _save(prog_df, f"cure_prognosis_{name}.parquet")
+            (C.RESULTS / f"cure_prognosis_{name}.json").write_text(json.dumps(fit, indent=2), encoding="utf-8")
+
+            # E5 head-to-head on the SAME subset at the operating rank (fair, bounded);
+            # include a CURE row scored identically for an apples-to-apples comparison.
             brows = []
+            cure_re = E.e3_reaudit(model, tok, cfg, sweep_pairs, head_basis)
+            if len(cure_re):
+                brows.append({"method": "cure", "model_name": name, "status": "ok",
+                              "kind": "audit_guided_erase",
+                              "causal_residual_removed": float((cure_re["erased_commutator"] < cure_re["orig_commutator"]).mean()),
+                              "mean_erased_commutator": float(cure_re["erased_commutator"].mean())})
             for m in B.REGISTRY:
-                brows.append(B.score_baseline(m, model, tok, cfg, pairs))
+                brows.append(B.score_baseline(m, model, tok, cfg, sweep_pairs))
             _save(pd.DataFrame(brows), f"cure_baselines_{name}.parquet")
         except Exception as exc:
             log.error("model %s raised: %s", name, str(exc)[:300])
-            from checkpoint import push_checkpoint
             push_checkpoint(f"cure-results: error on {name}")
             unload_model(name); continue
         unload_model(name)
@@ -99,7 +133,6 @@ def cmd_main():
         done.add(name)
         status["done"] = sorted(done)
         done_path.write_text(json.dumps(status, indent=2))
-        from checkpoint import push_checkpoint
         push_checkpoint(f"cure-results: {name} complete")
         log.info("model %s complete", name)
 

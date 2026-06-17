@@ -69,21 +69,35 @@ def cache_resid(model, tokenizer, prompt: str, position: int, patching_lib: str)
 # E1: subspace from counterfactual difference vectors
 # ---------------------------------------------------------------------------
 
-def subspace_from_diffs(diffs_by_layer: dict, rank: int) -> dict:
-    """Per layer, return an orthonormal basis (rank x d) of the top principal
-    directions of the difference vectors. diffs_by_layer: {layer: list[np.ndarray]}.
-    """
-    basis = {}
+def _svd_components(diffs_by_layer: dict) -> dict:
+    """Per layer, the full right-singular-vector matrix of the centred diffs.
+    Computed ONCE; all ranks are slices of this (no recomputation per rank)."""
+    full = {}
     for layer, diffs in diffs_by_layer.items():
         if len(diffs) < 2:
             continue
         X = np.stack(diffs, axis=0)            # n x d
         X = X - X.mean(axis=0, keepdims=True)
-        # right singular vectors are the principal directions in feature space
         _, _, vt = np.linalg.svd(X, full_matrices=False)
-        k = min(rank, vt.shape[0])
-        basis[layer] = vt[:k, :].astype(np.float32)   # k x d, orthonormal rows
-    return basis
+        full[layer] = vt.astype(np.float32)   # all components, orthonormal rows
+    return full
+
+
+def subspace_from_diffs(diffs_by_layer: dict, rank: int) -> dict:
+    """Per layer, an orthonormal basis (rank x d) of the top principal directions."""
+    full = _svd_components(diffs_by_layer)
+    return {layer: vt[:min(rank, vt.shape[0]), :] for layer, vt in full.items()}
+
+
+def bases_at_ranks(diffs_by_layer: dict, ranks: list) -> dict:
+    """Compute the SVD once, return {rank: {layer: rank x d basis}} for every rank.
+    This is the safe expedite: the bias direction is estimated a single time, then
+    sliced to each rank, rather than re-extracting activations per rank."""
+    full = _svd_components(diffs_by_layer)
+    out = {}
+    for r in ranks:
+        out[r] = {layer: vt[:min(r, vt.shape[0]), :] for layer, vt in full.items()}
+    return out
 
 
 def project_out(vec, basis_rows):

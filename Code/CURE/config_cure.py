@@ -132,6 +132,29 @@ OSM_NAMES = [m["name"] for m in OSM_MODELS]
 DRY_LIMIT = int(os.environ.get("CURE_DRY_LIMIT", "2"))
 ERASE_RANKS = [int(x) for x in os.environ.get("CURE_ERASE_RANKS", "1,2,4,8").split(",")]
 
+# ---------------------------------------------------------------------------
+# Safe expedite knobs (each preserves correctness, harmony, and statistical
+# soundness; see README and the head-to-head design).
+#
+#   HEADLINE_RANK   the single operating rank at which the headline numbers
+#                   (residual removed, the head-to-head) are reported on ALL pairs.
+#   SUBSPACE_PAIRS  number of counterfactual pairs used to ESTIMATE the bias
+#                   subspace once (a low-rank direction is robust from a few hundred
+#                   pairs; the full set is not needed to estimate a direction).
+#   SWEEP_SUBSET    stratified, fixed-seed subset on which the multi-rank sweep runs,
+#                   feeding the prognosis (E6) and the fairness-utility curve (E4).
+#                   The headline numbers still use ALL pairs, so no reported statistic
+#                   loses power.
+#   E4_MAX_TOKENS   short generations suffice for option-answer accuracy.
+#   E4_LIMIT        prompts used for the utility measurement (None = all slot-a).
+# ---------------------------------------------------------------------------
+HEADLINE_RANK = int(os.environ.get("CURE_HEADLINE_RANK", "4"))
+SUBSPACE_PAIRS = int(os.environ.get("CURE_SUBSPACE_PAIRS", "600"))
+SWEEP_SUBSET = int(os.environ.get("CURE_SWEEP_SUBSET", "1000"))
+E4_MAX_TOKENS = int(os.environ.get("CURE_E4_MAX_TOKENS", "64"))
+_e4 = os.environ.get("CURE_E4_LIMIT", "").strip()
+E4_LIMIT = int(_e4) if _e4 else None
+
 # Causal threshold tau: reuse the audit default (75th percentile of |C|).
 TAU = float(os.environ.get("CURE_TAU", "0.7644"))
 

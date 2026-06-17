@@ -60,7 +60,8 @@ def generic_erase(model, tokenizer, cfg, pairs, rank=2):
     (no counterfactual swap), to show that audit guidance matters."""
     import pandas as pd
     pentad = pd.read_parquet(C.PENTAD_PATH)
-    sa = pentad[(pentad["slot"] == "a") & (pentad["subvariant"] == "surface")].head(len(pairs) * 2)
+    sa = pentad[(pentad["slot"] == "a") & (pentad["subvariant"] == "surface")].head(
+        min(len(pairs) * 2, C.SUBSPACE_PAIRS))
     acts = {}
     for _, r in sa.iterrows():
         toks = tokenizer.encode(str(r["prompt_text"]))
@@ -78,8 +79,9 @@ def generic_erase(model, tokenizer, cfg, pairs, rank=2):
 def meandiff_steer(model, tokenizer, cfg, pairs, rank=1):
     """Contrastive steering (ITI/CAA family): use the rank-1 mean-difference as a
     steering direction. Here represented as a rank-1 erasure subspace for scoring
-    parity; a true steering variant subtracts alpha*direction at inference."""
-    basis = E.build_subspace(model, tokenizer, cfg, pairs, rank=rank)
+    parity; a true steering variant subtracts alpha*direction at inference. The
+    direction is estimated from a bounded subset (config SUBSPACE_PAIRS)."""
+    basis = E.build_subspace(model, tokenizer, cfg, pairs[:C.SUBSPACE_PAIRS], rank=rank)
     return {"kind": "steer", "basis": basis}
 
 
