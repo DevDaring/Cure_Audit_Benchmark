@@ -19,6 +19,8 @@ apt-get update -y
 apt-get install -y --no-install-recommends git wget ca-certificates python3 python3-pip build-essential
 echo "[bootstrap] python: $(python3 --version)"   # expect 3.12 on Ubuntu 24.04
 cd "$CURE"
+# the cloned repo has no empty logs/ dir; create it so every '> logs/...' redirect works
+mkdir -p "$CURE/logs" "$CURE/results"
 
 echo "[bootstrap] write .env from injected secrets (gitignored, local only)"
 python3 - <<'PY'
@@ -102,10 +104,10 @@ python3 -c "import transformer_lens, nnsight, flash_attn, importlib.metadata as 
 VRC=$?
 tail -40 "$DIAG"
 if [ "$VRC" -ne 0 ]; then
-  mkdir -p "$CURE/results"
-  cp "$DIAG" "$CURE/results/VERIFY_FAIL.txt"
-  git -C "$REPO" add -f Code/CURE/results/VERIFY_FAIL.txt >/dev/null 2>&1
-  push_status "FATAL: lib import failed FA_OK=$FA_OK (see results/VERIFY_FAIL.txt)"
+  TS=$(date +%s)
+  cp "$DIAG" "$CURE/results/VERIFY_FAIL_${TS}.txt"
+  git -C "$REPO" add -f "Code/CURE/results/VERIFY_FAIL_${TS}.txt" >/dev/null 2>&1
+  push_status "FATAL: lib import failed FA_OK=$FA_OK (see results/VERIFY_FAIL_${TS}.txt)"
   echo "[bootstrap] FATAL: a required library failed to import -- container kept alive"; sleep infinity
 fi
 
