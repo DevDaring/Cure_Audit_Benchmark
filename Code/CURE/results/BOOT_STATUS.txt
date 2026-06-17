@@ -1,1 +1,1 @@
-container started (nvidia-smi: GPU 0: NVIDIA H100 80GB HBM3 (UUID: GPU-4e2eca10-9cd8-42b0-0097-1184ebc0ba21)) @ Wed Jun 17 13:44:52 UTC 2026
+FATAL: lib import failed (see results/VERIFY_FAIL.txt) @ Wed Jun 17 13:49:38 UTC 2026
