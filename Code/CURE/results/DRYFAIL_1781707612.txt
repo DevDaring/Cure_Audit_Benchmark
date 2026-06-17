@@ -1,0 +1,31 @@
+2026-06-17 14:46:28,776 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-17 14:46:28,777 | INFO | cure.integrity | integrity: 0 files, 0 deduped, 0 quarantined
+2026-06-17 14:46:28,797 | INFO | cure.dry | secret scan clean
+2026-06-17 14:46:28,797 | INFO | cure.dry | DRY CHECK secret_scan          PASS
+2026-06-17 14:46:28,805 | INFO | cure.integrity | dedup cure_baselines_selftest.parquet: removed 1 duplicate rows
+2026-06-17 14:46:28,805 | WARNING | cure.integrity | quarantined corrupt parquet cure_recovery_corrupt.parquet: Could not open Parquet input source '<Buffer>': Parquet magic bytes not found in footer. Either the file is corrupted or
+2026-06-17 14:46:28,805 | INFO | cure.integrity | integrity: 2 files, 1 deduped, 1 quarantined
+2026-06-17 14:46:28,805 | INFO | cure.dry | integrity self-test: ok
+2026-06-17 14:46:28,806 | INFO | cure.dry | DRY CHECK integrity_selftest   PASS
+2026-06-17 14:46:48,060 | INFO | cure.dry | api gemini     key#0 model=gemini-2.5-flash -> failed
+2026-06-17 14:46:48,060 | INFO | cure.dry | api gemini     key#1 model=gemini-2.5-flash -> failed
+2026-06-17 14:46:48,061 | INFO | cure.dry | api gemini     key#2 model=gemini-2.5-flash -> failed
+2026-06-17 14:46:48,061 | INFO | cure.dry | api gemini     key#3 model=gemini-2.5-flash -> bad_response
+2026-06-17 14:46:48,061 | INFO | cure.dry | api deepseek   key#0 model=deepseek-chat -> ok
+2026-06-17 14:46:48,061 | INFO | cure.dry | api deepseek   key#1 model=deepseek-chat -> ok
+2026-06-17 14:46:48,061 | INFO | cure.dry | api mistral    key#0 model=mistral-small-latest -> ok
+2026-06-17 14:46:48,061 | INFO | cure.dry | api mistral    key#1 model=mistral-small-latest -> ok
+2026-06-17 14:46:48,061 | INFO | cure.dry | api openrouter key#0 model=google/gemini-2.5-flash -> ok
+2026-06-17 14:46:48,061 | INFO | cure.dry | api openrouter key#1 model=google/gemini-2.5-flash -> ok
+2026-06-17 14:46:48,061 | ERROR | cure.dry | DRY FAIL: active judge tier 'gemini' has zero working keys
+2026-06-17 14:46:48,061 | INFO | cure.dry | DRY CHECK apis                 FAIL
+2026-06-17 14:46:48,064 | INFO | load_osm | Loading model: gemma-2-2b-it (google/gemma-2-2b-it) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.08it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.07it/s]
+2026-06-17 14:46:50,894 | INFO | load_osm |   Model gemma-2-2b-it                       | attention impl: flash_attention_2
+2026-06-17 14:46:50,894 | INFO | load_osm | Model 'gemma-2-2b-it' loaded successfully.
+2026-06-17 14:46:51,305 | INFO | cure.dry | flash-attention forward pass ok; impl=flash_attention_2
+2026-06-17 14:46:51,475 | INFO | load_osm | Model 'gemma-2-2b-it' unloaded and VRAM freed.
+2026-06-17 14:46:51,517 | INFO | cure.dry | DRY CHECK flash_attention      PASS
+2026-06-17 14:46:51,519 | ERROR | cure.dry | dry check per_model_smoke raised: [Errno 2] No such file or directory: '/workspace/Cure_Audit_Benchmark/Code/audit/results/cdva_results.parquet'
+2026-06-17 14:46:51,519 | INFO | cure.dry | DRY CHECK per_model_smoke      FAIL
+2026-06-17 14:46:51,519 | INFO | cure.dry | DRY RESULT: FAIL
