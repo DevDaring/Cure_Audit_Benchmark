@@ -83,7 +83,7 @@ class JudgeClient:
     """Active-tier judge client with within-tier round-robin and no cross-tier fallback."""
 
     def __init__(self, provider: str | None = None):
-        self.provider = (provider or C.ACTIVE_JUDGE).strip().lower()
+        self.provider = (provider or active_judge()).strip().lower()
         if self.provider not in C.JUDGE_PROVIDERS:
             raise ValueError(f"unknown judge provider {self.provider!r}")
         self.cfg = C.JUDGE_PROVIDERS[self.provider]
@@ -192,3 +192,93 @@ def test_all_keys() -> dict:
                              "model": cfg["model"], "error": str(exc)[:200]})
         report[name] = rows
     return report
+
+
+# ---------------------------------------------------------------------------
+# Active-tier resolution.
+#
+# CURE keeps one judge tier for an entire run; there is no per-item cross-tier
+# fallback. The configured tier (CURE_JUDGE_PROVIDER, default gemini) is used
+# whenever its keys work. If that tier has zero working keys at start-up, the
+# first working tier in preference order is selected ONCE and used for every
+# judgement thereafter. OpenRouter sits immediately after the configured tier
+# because it serves the same gemini-2.5-flash model through a different gateway,
+# so the judge model stays identical when only the direct Gemini keys are down.
+# ---------------------------------------------------------------------------
+
+_RESOLVED: str | None = None
+_RESOLVE_LOCK = threading.Lock()
+_ACTIVE_FILE = C.HERE / ".judge_active"
+
+
+def _tier_works(name: str) -> bool:
+    cfg = C.JUDGE_PROVIDERS.get(name)
+    if not cfg or not cfg["keys"]:
+        return False
+    probe = 'Reply with strict JSON only: {"ok": true}'
+    for key in cfg["keys"]:
+        try:
+            client = JudgeClient.__new__(JudgeClient)
+            client.provider, client.cfg, client.keys = name, cfg, [key]
+            client.rr = RoundRobin(1)
+            text = client._call_once(key, probe, "Return only JSON.", 32)
+            if _extract_json_object(text) is not None:
+                return True
+        except Exception:
+            continue
+    return False
+
+
+def _preference_order() -> list[str]:
+    order = [C.ACTIVE_JUDGE, "openrouter", "deepseek", "mistral", "gemini"]
+    seen, out = set(), []
+    for t in order:
+        if t in C.JUDGE_PROVIDERS and t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+def resolve_active_judge(report: dict | None = None, persist: bool = True) -> str | None:
+    """Select one working judge tier for the whole run. Cached after first call.
+
+    When a precomputed test report is supplied (the dry run already probed every
+    tier) tier health is read from it, so no extra API calls are made.
+    """
+    global _RESOLVED
+    with _RESOLVE_LOCK:
+        if _RESOLVED:
+            return _RESOLVED
+
+        def works(name: str) -> bool:
+            if report is not None and name in report:
+                return any(r.get("status") == "ok" for r in report[name])
+            return _tier_works(name)
+
+        chosen = next((t for t in _preference_order() if works(t)), None)
+        if chosen and persist:
+            try:
+                _ACTIVE_FILE.write_text(chosen, encoding="utf-8")
+            except Exception:
+                pass
+        _RESOLVED = chosen
+        return chosen
+
+
+def active_judge() -> str:
+    """The resolved working tier: in-process cache, then persisted hint, then probe.
+
+    Falls back to the configured tier name when nothing resolves, so a JudgeClient
+    still constructs (and surfaces a clear key error) rather than seeing None.
+    """
+    global _RESOLVED
+    if _RESOLVED:
+        return _RESOLVED
+    try:
+        t = _ACTIVE_FILE.read_text(encoding="utf-8").strip()
+        if t in C.JUDGE_PROVIDERS:
+            _RESOLVED = t
+            return t
+    except Exception:
+        pass
+    return resolve_active_judge() or C.ACTIVE_JUDGE

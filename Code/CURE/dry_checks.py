@@ -30,15 +30,20 @@ def check_apis() -> bool:
     report = judge_api.test_all_keys()
     (C.RESULTS / "dryrun").mkdir(parents=True, exist_ok=True)
     (C.RESULTS / "dryrun" / "api_check.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
-    active = C.ACTIVE_JUDGE
-    rows = report.get(active, [])
-    ok = any(r["status"] == "ok" for r in rows)
     for prov, rs in report.items():
         for r in rs:
             log.info("api %-10s key#%d model=%s -> %s", prov, r["key_index"], r.get("model"), r["status"])
-    if not ok:
-        log.error("DRY FAIL: active judge tier %r has zero working keys", active)
-    return ok
+    # Resolve one working tier for the whole run (no per-item cross-tier fallback).
+    chosen = judge_api.resolve_active_judge(report=report)
+    if not chosen:
+        log.error("DRY FAIL: no judge tier has a working key (checked %s)", ", ".join(report))
+        return False
+    if chosen != C.ACTIVE_JUDGE:
+        log.warning("configured judge tier %r has no working keys; using %r for the whole run "
+                    "(same task, working keys; still no per-item fallback)", C.ACTIVE_JUDGE, chosen)
+    else:
+        log.info("judge tier %r active for the whole run", chosen)
+    return True
 
 
 def check_flash_attention() -> bool:
