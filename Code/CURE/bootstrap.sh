@@ -64,11 +64,18 @@ push_status "container started (nvidia-smi: $(nvidia-smi -L 2>/dev/null | head -
 
 echo "[bootstrap] torch 2.5.1 (cu124)"
 $PIP --upgrade pip
-$PIP torch==2.5.1 --index-url https://download.pytorch.org/whl/cu124
-echo "[bootstrap] python deps"
-$PIP -r requirements_cure.txt
+$PIP torch==2.5.1 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+echo "[bootstrap] python deps (torch pinned by constraint + cu124 extra-index so deps cannot upgrade it)"
+printf 'torch==2.5.1\n' > /tmp/torch_pin.txt
+$PIP -r requirements_cure.txt -c /tmp/torch_pin.txt --extra-index-url https://download.pytorch.org/whl/cu124
 echo "[bootstrap] transformer_lens 2.18.0 (--no-deps so it keeps torch 2.5.1 / transformers 4.50.3)"
 $PIP --no-deps transformer_lens==2.18.0
+TORCH_V=$(python3 -c "import torch; print(torch.__version__)" 2>/dev/null)
+echo "[bootstrap] torch in use: $TORCH_V"
+if [ "${TORCH_V#2.5.1}" = "$TORCH_V" ]; then
+  $PIP --force-reinstall --no-deps torch==2.5.1 --index-url https://download.pytorch.org/whl/cu124
+  echo "[bootstrap] re-pinned torch -> $(python3 -c 'import torch;print(torch.__version__)' 2>/dev/null)"
+fi
 
 DIAG="$CURE/logs/diag.txt"; : > "$DIAG"
 echo "[bootstrap] environment diagnostics" | tee -a "$DIAG"
@@ -88,10 +95,11 @@ echo "[bootstrap] precompiled flash-attention (try both cxx11abi, capture every 
 FA_BASE="https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3"
 FA_OK=0
 for ABI in TRUE FALSE; do
+  FA_URL="$FA_BASE/flash_attn-2.8.3+cu12torch2.5cxx11abi${ABI}-cp312-cp312-linux_x86_64.whl"
   echo "=== flash_attn cxx11abi${ABI} ===" >> "$DIAG"
-  wget -q "$FA_BASE/flash_attn-2.8.3+cu12torch2.5cxx11abi${ABI}-cp312-cp312-linux_x86_64.whl" -O /tmp/fa.whl
-  echo "wheel_size=$(stat -c%s /tmp/fa.whl 2>/dev/null) bytes" >> "$DIAG"
-  $PIP --no-deps --force-reinstall /tmp/fa.whl >> "$DIAG" 2>&1
+  # install directly from the URL: pip keeps the proper wheel filename (renaming to
+  # fa.whl made pip reject it as 'not a valid wheel filename').
+  $PIP --no-deps --force-reinstall "$FA_URL" >> "$DIAG" 2>&1
   python3 -c "import flash_attn; print('flash_attn', flash_attn.__version__)" >> "$DIAG" 2>&1
   echo "import_exit=$? (139=segfault, 132=illegal-instruction, 1=ImportError)" >> "$DIAG"
   if python3 -c "import flash_attn" >/dev/null 2>&1; then
