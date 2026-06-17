@@ -3,6 +3,8 @@
 # Secrets arrive as container env vars injected by the SDL; they are written to a local
 # .env (gitignored) and never committed. Flash-attention is installed from a precompiled
 # wheel and verified before the run. No virtual environment: installs are global.
+# Monitoring uses a tiny results/BOOT_STATUS.txt marker; logs and test results are never
+# pushed. Models are predownloaded before the dry run; the dataset ships in Code/audit.
 set -uo pipefail
 
 WORK=/workspace
@@ -21,13 +23,12 @@ cd "$CURE"
 echo "[bootstrap] write .env from injected secrets (gitignored, local only)"
 python3 - <<'PY'
 import os
-real = ["HUGGINGFACE_TOKEN", "Github_Classic_Token", "RANDOM_SEED",
+real = ["HUGGINGFACE_TOKEN", "Github_Classic_Token", "RANDOM_SEED", "CURE_JUDGE_PROVIDER",
         "GEMINI_API_KEY_1", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3", "GEMINI_API_KEY_4",
         "DEEPSEEK_API_KEY_1", "DEEPSEEK_API_KEY_2", "DEEPSEEK_API_BASE_URL", "DEEPSEEK_JUDGE_MODEL_NAME",
         "MISTRAL_API_KEY1", "MISTRAL_API_KEY2",
         "OPENROUTER_API_KEY_1", "OPENROUTER_API_KEY_2", "OPENROUTER_API_BASE_URL"]
-# the audit config _require()s a few keys CURE never calls; dummy values satisfy it.
-dummy = ["AWS_ACCESS_KEY", "AWS_SECRET_KEY"]
+dummy = ["AWS_ACCESS_KEY", "AWS_SECRET_KEY"]   # required by the audit config; unused by CURE
 with open(".env", "w") as f:
     for k in real:
         v = os.environ.get(k, "")
@@ -47,6 +48,18 @@ if [ -n "${Github_Classic_Token:-}" ]; then
   git -C "$REPO" remote set-url origin "https://${Github_Classic_Token}@github.com/DevDaring/Cure_Audit_Benchmark.git"
 fi
 
+# Tiny status marker for monitoring (status only -- never pushes logs or test results).
+push_status() {
+  mkdir -p "$CURE/results"
+  printf '%s @ %s\n' "$1" "$(date -u)" > "$CURE/results/BOOT_STATUS.txt"
+  git -C "$REPO" add -f Code/CURE/results/BOOT_STATUS.txt >/dev/null 2>&1
+  git -C "$REPO" commit -q -m "cure-boot: $1" >/dev/null 2>&1
+  git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1
+  git -C "$REPO" push -q origin main >/dev/null 2>&1 && echo "[bootstrap] status: $1"
+}
+
+push_status "container started (nvidia-smi: $(nvidia-smi -L 2>/dev/null | head -1))"
+
 echo "[bootstrap] torch 2.5.1 (cu124)"
 $PIP --upgrade pip
 $PIP torch==2.5.1 --index-url https://download.pytorch.org/whl/cu124
@@ -58,14 +71,17 @@ $PIP --no-deps transformer_lens==2.18.0
 echo "[bootstrap] precompiled flash-attention (Ubuntu 24.04 / py3.12 / torch2.5 / cu12)"
 FA_URL="https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl"
 wget -q "$FA_URL" -O /tmp/fa.whl && $PIP --no-deps /tmp/fa.whl \
-  && echo "[bootstrap] flash-attn installed" \
-  || echo "[bootstrap] WARN flash-attn wheel install failed"
+  && echo "[bootstrap] flash-attn installed" || echo "[bootstrap] WARN flash-attn wheel install failed"
 
-echo "[bootstrap] verify patching libs + flash-attn import"
-python3 -c "import transformer_lens, nnsight, flash_attn, importlib.metadata as m; print('TL', m.version('transformer_lens'), '| nnsight', m.version('nnsight'), '| flash_attn', m.version('flash_attn'))" || {
-  echo "[bootstrap] FATAL: a required library failed to import -- container kept alive"; sleep infinity; }
+echo "[bootstrap] verify patching libs + flash-attn import (fail loud)"
+python3 -c "import transformer_lens, nnsight, flash_attn, importlib.metadata as m; print('TL', m.version('transformer_lens'), '| nnsight', m.version('nnsight'), '| flash_attn', m.version('flash_attn'))" > "$CURE/logs/verify.log" 2>&1
+VRC=$?; cat "$CURE/logs/verify.log"
+if [ "$VRC" -ne 0 ]; then
+  push_status "FATAL: lib import failed -- $(tail -1 "$CURE/logs/verify.log" | tail -c 200)"
+  echo "[bootstrap] FATAL: a required library failed to import -- container kept alive"; sleep infinity
+fi
 
-echo "[bootstrap] download OSM models (dataset ships in Code/audit)"
+echo "[bootstrap] download OSM models (predownload; dataset ships in Code/audit)"
 python3 - <<'PY'
 import config_cure as C
 from huggingface_hub import snapshot_download
@@ -75,22 +91,30 @@ for m in C.OSM_MODELS:
 print("models present")
 PY
 
-echo "[bootstrap] DRY RUN"
+push_status "setup complete; starting dry-run"
+echo "[bootstrap] DRY RUN (2 instances per dataset)"
 python3 run_cure.py --mode dry > "$CURE/logs/dryrun_console.log" 2>&1; DRY_RC=$?
 tail -40 "$CURE/logs/dryrun_console.log"
 echo "[bootstrap] dry-run rc=$DRY_RC"
 if [ "$DRY_RC" -ne 0 ]; then
+  push_status "dry-run rc=$DRY_RC FAILED: $(tail -8 "$CURE/logs/dryrun_console.log" | tr '\n' ' ' | tail -c 400)"
   echo "[bootstrap] DRY FAILED -- container kept alive for inspection"; sleep infinity
 fi
-rm -rf results/dryrun; : > logs/run_cure.log || true
+push_status "dry-run rc=0 PASSED; cleaning test artifacts"
+# remove dry-run test results and logs before the real run
+rm -rf results/dryrun
+rm -f logs/dryrun_console.log
+: > logs/run_cure.log || true
 
 echo "[bootstrap] MAIN run (restart supervisor)"
 ATTEMPT=0
 while true; do
   ATTEMPT=$((ATTEMPT+1))
-  echo "[bootstrap] main attempt $ATTEMPT"
+  push_status "main attempt $ATTEMPT running"
   python3 run_cure.py --mode main > "$CURE/logs/main_console.log" 2>&1 && break
   tail -30 "$CURE/logs/main_console.log"
+  push_status "main attempt $ATTEMPT exited non-zero: $(tail -5 "$CURE/logs/main_console.log" | tr '\n' ' ' | tail -c 300)"
   echo "[bootstrap] main exited non-zero; retry in 60s"; sleep 60
 done
+push_status "ALL COMPLETE"
 echo "[bootstrap] COMPLETE"; sleep infinity

@@ -122,6 +122,18 @@ def stratified_subset(pairs, n, seed):
     return out[:n]
 
 
+def head_per_dataset(pairs, k):
+    """Up to k pairs from each benchmark (bbq, crows_pairs, stereoset). Used by the dry
+    run so it exercises two instances of EVERY dataset, not just the first two pairs."""
+    seen, out = {}, []
+    for p in pairs:
+        src = str(p["seed_id"]).split("_", 1)[0]
+        if seen.get(src, 0) < k:
+            out.append(p)
+            seen[src] = seen.get(src, 0) + 1
+    return out
+
+
 # ---------------------------------------------------------------------------
 # E3: re-audit (erased commutator)
 # ---------------------------------------------------------------------------

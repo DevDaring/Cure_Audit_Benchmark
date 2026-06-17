@@ -124,9 +124,12 @@ def per_model_smoke() -> bool:
     from load_osm import load_model, unload_model
     ok = True
     for cfg in C.OSM_MODELS:
-        pairs = E._load_pairs(cfg, limit=C.DRY_LIMIT)
+        # two instances of EACH dataset (bbq, crows_pairs, stereoset)
+        pairs = E.head_per_dataset(E._load_pairs(cfg, limit=None), C.DRY_LIMIT)
         if not pairs:
             log.error("DRY FAIL: no pairs for %s", cfg["name"]); ok = False; continue
+        log.info("dry %s: %d pairs across datasets %s", cfg["name"], len(pairs),
+                 sorted({str(p["seed_id"]).split("_", 1)[0] for p in pairs}))
         model, tok = load_model(cfg)
         try:
             basis = E.build_subspace(model, tok, cfg, pairs, rank=2)
