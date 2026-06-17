@@ -2,6 +2,7 @@
   "done": [
     "gemma-2-2b-it",
     "llama-3.1-8b-instruct",
+    "phi-4-mini-instruct",
     "qwen2.5-7b-instruct"
   ]
 }
