@@ -56,7 +56,9 @@ def cache_resid_nnsight(model, tokenizer, prompt: str, position: int) -> dict:
         for li in range(n_layers):
             layer = nn_model.model.layers[li] if shape_b else nn_model.layers[li]
             proxies[li] = layer.output[0][:, position, :].save()
-    return {li: p.value[0].float().cpu().numpy() for li, p in proxies.items()}
+    # nnsight traces keep autograd on, so the saved proxies require grad; detach
+    # before the numpy conversion (the TL path is already under torch.no_grad()).
+    return {li: p.value[0].detach().float().cpu().numpy() for li, p in proxies.items()}
 
 
 def cache_resid(model, tokenizer, prompt: str, position: int, patching_lib: str) -> dict:
@@ -209,7 +211,8 @@ def erased_commutator_nnsight(model, tokenizer, prompt_a, prompt_b, pos_a, pos_b
                 v = ly.output[0][:, pos_a, :]
                 ly.output[0][:, pos_a, :] = v - (v @ U[li].transpose(0, 1)) @ U[li]
             cache_a[li] = ly.output[0][:, pos_a, :].save()
-    cache_a = {li: p.value.clone() for li, p in cache_a.items()}
+    # detach: the cached source activation is injected as a constant, not backprop'd.
+    cache_a = {li: p.value.detach().clone() for li, p in cache_a.items()}
 
     # Pass 2: patched + erased on prompt_b
     with nn_model.trace(prompt_b):
