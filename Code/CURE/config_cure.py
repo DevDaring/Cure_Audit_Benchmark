@@ -23,8 +23,11 @@ AUDIT = HERE.parent / "audit"                          # Code/audit (the audit b
 REPO = HERE.parent.parent                             # repo root
 ENV_PATH = HERE / ".env"
 
-# Make the audit package importable (config, GPU_CPU.*, dataset, results).
+# Make the audit package importable: Code/audit for config/parse_utils/results_utils,
+# and Code/audit/GPU_CPU for the bare imports the CURE code uses (load_osm,
+# utils_attention, osm_behavioral, cdva_patching).
 sys.path.insert(0, str(AUDIT))
+sys.path.insert(0, str(AUDIT / "GPU_CPU"))
 
 
 def load_env(path: Path = ENV_PATH) -> int:

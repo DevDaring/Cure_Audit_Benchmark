@@ -130,18 +130,25 @@ print("models present")
 PY
 
 push_status "setup complete; starting dry-run"
-echo "[bootstrap] DRY RUN (2 instances per dataset)"
-python3 run_cure.py --mode dry > "$CURE/logs/dryrun_console.log" 2>&1; DRY_RC=$?
-tail -40 "$CURE/logs/dryrun_console.log"
-echo "[bootstrap] dry-run rc=$DRY_RC"
-if [ "$DRY_RC" -ne 0 ]; then
-  push_status "dry-run rc=$DRY_RC FAILED: $(tail -8 "$CURE/logs/dryrun_console.log" | tr '\n' ' ' | tail -c 400)"
-  echo "[bootstrap] DRY FAILED -- container kept alive for inspection"; sleep infinity
-fi
+echo "[bootstrap] DRY RUN (2 instances per dataset; pull+retry on failure so a fix needs no redeploy)"
+while true; do
+  python3 run_cure.py --mode dry > "$CURE/logs/dryrun_console.log" 2>&1; DRY_RC=$?
+  tail -45 "$CURE/logs/dryrun_console.log"
+  [ "$DRY_RC" -eq 0 ] && break
+  TS=$(date +%s)
+  cp "$CURE/logs/dryrun_console.log" "$CURE/results/DRYFAIL_${TS}.txt"
+  git -C "$REPO" add -f "Code/CURE/results/DRYFAIL_${TS}.txt" >/dev/null 2>&1
+  push_status "dry-run rc=$DRY_RC FAILED (see results/DRYFAIL_${TS}.txt); pull+retry in 60s"
+  echo "[bootstrap] dry failed; pull+retry in 60s (setup stays; no redeploy needed)"
+  sleep 60
+  git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1
+done
 push_status "dry-run rc=0 PASSED; cleaning test artifacts"
-# remove dry-run test results and logs before the real run
+# remove dry-run test results, logs, and diagnostics before the real run
 rm -rf results/dryrun
-rm -f logs/dryrun_console.log
+rm -f logs/dryrun_console.log results/DRYFAIL_*.txt results/VERIFY_FAIL_*.txt
+git -C "$REPO" rm -r --cached --ignore-unmatch Code/CURE/results/dryrun >/dev/null 2>&1 || true
+git -C "$REPO" rm --cached --ignore-unmatch "Code/CURE/results/DRYFAIL_*.txt" "Code/CURE/results/VERIFY_FAIL_*.txt" >/dev/null 2>&1 || true
 : > logs/run_cure.log || true
 
 echo "[bootstrap] MAIN run (restart supervisor)"
