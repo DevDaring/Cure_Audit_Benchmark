@@ -68,16 +68,28 @@ $PIP -r requirements_cure.txt
 echo "[bootstrap] transformer_lens 2.18.0 (--no-deps so it keeps torch 2.5.1 / transformers 4.50.3)"
 $PIP --no-deps transformer_lens==2.18.0
 
-echo "[bootstrap] precompiled flash-attention (Ubuntu 24.04 / py3.12 / torch2.5 / cu12)"
-FA_URL="https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl"
-wget -q "$FA_URL" -O /tmp/fa.whl && $PIP --no-deps /tmp/fa.whl \
-  && echo "[bootstrap] flash-attn installed" || echo "[bootstrap] WARN flash-attn wheel install failed"
+echo "[bootstrap] precompiled flash-attention (try matching ABI for the torch 2.5.1 wheel)"
+FA_BASE="https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3"
+FA_OK=0
+# torch pip cu124 wheels are usually cxx11abiTRUE; try TRUE first, FALSE as fallback,
+# and confirm the import each time (an ABI mismatch installs but fails to import).
+for ABI in TRUE FALSE; do
+  wget -q "$FA_BASE/flash_attn-2.8.3+cu12torch2.5cxx11abi${ABI}-cp312-cp312-linux_x86_64.whl" -O /tmp/fa.whl
+  $PIP --no-deps --force-reinstall /tmp/fa.whl >/dev/null 2>&1
+  if python3 -c "import flash_attn" >/dev/null 2>&1; then
+    echo "[bootstrap] flash-attn OK (cxx11abi${ABI})"; FA_OK=1; break
+  fi
+  echo "[bootstrap] flash-attn cxx11abi${ABI} did not import; trying next"
+done
 
 echo "[bootstrap] verify patching libs + flash-attn import (fail loud)"
 python3 -c "import transformer_lens, nnsight, flash_attn, importlib.metadata as m; print('TL', m.version('transformer_lens'), '| nnsight', m.version('nnsight'), '| flash_attn', m.version('flash_attn'))" > "$CURE/logs/verify.log" 2>&1
 VRC=$?; cat "$CURE/logs/verify.log"
 if [ "$VRC" -ne 0 ]; then
-  push_status "FATAL: lib import failed -- $(tail -1 "$CURE/logs/verify.log" | tail -c 200)"
+  mkdir -p "$CURE/results"
+  { echo "FA_OK=$FA_OK"; echo "--- verify.log tail ---"; tail -15 "$CURE/logs/verify.log"; } > "$CURE/results/VERIFY_FAIL.txt"
+  git -C "$REPO" add -f Code/CURE/results/VERIFY_FAIL.txt >/dev/null 2>&1
+  push_status "FATAL: lib import failed (see results/VERIFY_FAIL.txt)"
   echo "[bootstrap] FATAL: a required library failed to import -- container kept alive"; sleep infinity
 fi
 
