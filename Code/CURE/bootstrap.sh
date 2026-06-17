@@ -68,28 +68,44 @@ $PIP -r requirements_cure.txt
 echo "[bootstrap] transformer_lens 2.18.0 (--no-deps so it keeps torch 2.5.1 / transformers 4.50.3)"
 $PIP --no-deps transformer_lens==2.18.0
 
-echo "[bootstrap] precompiled flash-attention (try matching ABI for the torch 2.5.1 wheel)"
+DIAG="$CURE/logs/diag.txt"; : > "$DIAG"
+echo "[bootstrap] environment diagnostics" | tee -a "$DIAG"
+nvidia-smi --query-gpu=name,driver_version --format=csv,noheader 2>&1 | tee -a "$DIAG" || echo "no nvidia-smi" | tee -a "$DIAG"
+python3 - >> "$DIAG" 2>&1 <<'PY'
+import torch, sys
+print("python", sys.version.split()[0])
+print("torch", torch.__version__, "| torch.version.cuda", torch.version.cuda,
+      "| cuda_available", torch.cuda.is_available(),
+      "| cxx11abi", torch._C._GLIBCXX_USE_CXX11_ABI)
+if torch.cuda.is_available():
+    print("device", torch.cuda.get_device_name(0), "| capability", torch.cuda.get_device_capability(0))
+PY
+cat "$DIAG"
+
+echo "[bootstrap] precompiled flash-attention (try both cxx11abi, capture every failure)"
 FA_BASE="https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3"
 FA_OK=0
-# torch pip cu124 wheels are usually cxx11abiTRUE; try TRUE first, FALSE as fallback,
-# and confirm the import each time (an ABI mismatch installs but fails to import).
 for ABI in TRUE FALSE; do
+  echo "=== flash_attn cxx11abi${ABI} ===" >> "$DIAG"
   wget -q "$FA_BASE/flash_attn-2.8.3+cu12torch2.5cxx11abi${ABI}-cp312-cp312-linux_x86_64.whl" -O /tmp/fa.whl
-  $PIP --no-deps --force-reinstall /tmp/fa.whl >/dev/null 2>&1
+  echo "wheel_size=$(stat -c%s /tmp/fa.whl 2>/dev/null) bytes" >> "$DIAG"
+  $PIP --no-deps --force-reinstall /tmp/fa.whl >> "$DIAG" 2>&1
+  python3 -c "import flash_attn; print('flash_attn', flash_attn.__version__)" >> "$DIAG" 2>&1
+  echo "import_exit=$? (139=segfault, 132=illegal-instruction, 1=ImportError)" >> "$DIAG"
   if python3 -c "import flash_attn" >/dev/null 2>&1; then
     echo "[bootstrap] flash-attn OK (cxx11abi${ABI})"; FA_OK=1; break
   fi
-  echo "[bootstrap] flash-attn cxx11abi${ABI} did not import; trying next"
 done
 
 echo "[bootstrap] verify patching libs + flash-attn import (fail loud)"
-python3 -c "import transformer_lens, nnsight, flash_attn, importlib.metadata as m; print('TL', m.version('transformer_lens'), '| nnsight', m.version('nnsight'), '| flash_attn', m.version('flash_attn'))" > "$CURE/logs/verify.log" 2>&1
-VRC=$?; cat "$CURE/logs/verify.log"
+python3 -c "import transformer_lens, nnsight, flash_attn, importlib.metadata as m; print('TL', m.version('transformer_lens'), '| nnsight', m.version('nnsight'), '| flash_attn', m.version('flash_attn'))" >> "$DIAG" 2>&1
+VRC=$?
+tail -40 "$DIAG"
 if [ "$VRC" -ne 0 ]; then
   mkdir -p "$CURE/results"
-  { echo "FA_OK=$FA_OK"; echo "--- verify.log tail ---"; tail -15 "$CURE/logs/verify.log"; } > "$CURE/results/VERIFY_FAIL.txt"
+  cp "$DIAG" "$CURE/results/VERIFY_FAIL.txt"
   git -C "$REPO" add -f Code/CURE/results/VERIFY_FAIL.txt >/dev/null 2>&1
-  push_status "FATAL: lib import failed (see results/VERIFY_FAIL.txt)"
+  push_status "FATAL: lib import failed FA_OK=$FA_OK (see results/VERIFY_FAIL.txt)"
   echo "[bootstrap] FATAL: a required library failed to import -- container kept alive"; sleep infinity
 fi
 
