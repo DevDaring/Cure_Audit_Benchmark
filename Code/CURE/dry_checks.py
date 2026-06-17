@@ -143,9 +143,17 @@ def per_model_smoke() -> bool:
             re = E.e3_reaudit(model, tok, cfg, pairs, basis)
             if re.empty:
                 log.error("DRY FAIL: empty re-audit for %s", cfg["name"]); ok = False
-            for m in B.IN_STACK:
-                r = B.score_baseline(m, model, tok, cfg, pairs)
-                log.info("dry baseline %-14s %s -> %s", m, cfg["name"], r.get("status"))
+            # validate EVERY comparative baseline builds a basis without crashing
+            # (a raised exception here fails the dry before the full baseline pass).
+            ctx = E.collect_acts(model, tok, cfg, pairs)
+            for m in B.REGISTRY:
+                built = B.build_basis(m, model, tok, cfg, pairs, ctx=ctx)
+                st = built.get("status", "ok")
+                nb = len(built.get("basis", {}) or {})
+                log.info("dry baseline %-14s %s -> status=%s layers=%d", m, cfg["name"], st, nb)
+                if built.get("basis"):
+                    if E.e3_reaudit(model, tok, cfg, pairs, built["basis"]).empty:
+                        log.warning("dry baseline %s empty re-audit (acceptable on %d pairs)", m, len(pairs))
         except Exception as exc:
             log.error("DRY FAIL: %s raised: %s", cfg["name"], str(exc)[:200]); ok = False
         finally:

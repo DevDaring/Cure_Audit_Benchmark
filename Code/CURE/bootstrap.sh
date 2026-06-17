@@ -161,5 +161,17 @@ while true; do
   push_status "main attempt $ATTEMPT exited non-zero: $(tail -5 "$CURE/logs/main_console.log" | tr '\n' ' ' | tail -c 300)"
   echo "[bootstrap] main exited non-zero; retry in 60s"; sleep 60
 done
-push_status "ALL COMPLETE"
+push_status "main phase COMPLETE; starting baseline comparison"
+
+echo "[bootstrap] BASELINES run (cure + 9 baselines, one harness; restart supervisor)"
+BATTEMPT=0
+while true; do
+  BATTEMPT=$((BATTEMPT+1))
+  push_status "baselines attempt $BATTEMPT running"
+  python3 run_cure.py --mode baselines > "$CURE/logs/baselines_console.log" 2>&1 && break
+  tail -30 "$CURE/logs/baselines_console.log"
+  push_status "baselines attempt $BATTEMPT exited non-zero: $(tail -5 "$CURE/logs/baselines_console.log" | tr '\n' ' ' | tail -c 300)"
+  echo "[bootstrap] baselines exited non-zero; retry in 60s"; sleep 60
+done
+push_status "ALL COMPLETE (cure + baselines)"
 echo "[bootstrap] COMPLETE"; sleep infinity

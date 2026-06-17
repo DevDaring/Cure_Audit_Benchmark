@@ -100,6 +100,33 @@ def build_subspace(model, tokenizer, cfg, pairs, rank: int) -> dict:
     return erase.subspace_from_diffs(collect_diffs(model, tokenizer, cfg, pairs), rank)
 
 
+def collect_acts(model, tokenizer, cfg, pairs) -> dict:
+    """One caching pass returning slot-a and slot-b activations AND their diffs.
+
+    Returns {"A": {layer: [vec]}, "B": {layer: [vec]}, "diffs": {layer: [a-b]}}.
+    The eight comparative baselines (E5) share this single pass so the protected-
+    position activations are extracted ONCE per model, not once per baseline.
+    """
+    lib = cfg["patching_lib"]
+    A, B, diffs = {}, {}, {}
+    for pair in pairs:
+        pa, pb = _positions(tokenizer, pair)
+        if pa is None or pb is None:
+            continue
+        try:
+            ca = erase.cache_resid(model, tokenizer, pair["prompt_a"], pa, lib)
+            cb = erase.cache_resid(model, tokenizer, pair["prompt_b"], pb, lib)
+        except Exception as exc:
+            log.warning("collect_acts cache failed seed %s: %s", pair["seed_id"], str(exc)[:120])
+            continue
+        for layer in ca:
+            if layer in cb:
+                A.setdefault(layer, []).append(ca[layer])
+                B.setdefault(layer, []).append(cb[layer])
+                diffs.setdefault(layer, []).append(ca[layer] - cb[layer])
+    return {"A": A, "B": B, "diffs": diffs}
+
+
 def stratified_subset(pairs, n, seed):
     """Fixed-seed subset stratified by benchmark (the seed_id prefix bbq/crows/stereo).
     Keeps the same benchmark mix as the full set, so a sweep on the subset stays

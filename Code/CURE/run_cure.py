@@ -141,9 +141,107 @@ def cmd_main():
     log.info("ALL MODELS COMPLETE")
 
 
+def cmd_baselines():
+    """E5+ : the full comparison of CURE against all nine baselines under ONE harness.
+
+    Every method's basis is scored on the SAME causal-residual-removed metric and the
+    SAME native-utility metric as CURE, on the fixed-seed benchmark-stratified sweep
+    subset, for all four models. The protected-position activations are cached ONCE per
+    model and shared across baselines. Resume-aware: a method already present in
+    cure_baselines_full_<model>.parquet is skipped, so a released VM continues.
+    """
+    from load_osm import load_model, unload_model
+    from checkpoint import CheckpointPusher, push_checkpoint
+    integrity.run()
+    pusher = CheckpointPusher()
+    pusher.start()
+
+    methods = ["cure"] + list(B.REGISTRY.keys())          # cure + 9 baselines
+    for cfg in C.OSM_MODELS:
+        name = cfg["name"]
+        out_name = f"cure_baselines_full_{name}.parquet"
+        out_path = C.RESULTS / out_name
+        rows, have = [], set()
+        if integrity.parquet_nonempty(out_path):
+            try:
+                prev = pd.read_parquet(out_path)
+                rows = prev.to_dict("records")
+                have = set(prev["method"].astype(str))
+            except Exception:
+                rows, have = [], set()
+        todo = [m for m in methods if m not in have]
+        if not todo:
+            log.info("baselines for %s already complete (%d methods); skipping", name, len(have))
+            continue
+        log.info("=== baselines %s : %d/%d methods to score ===", name, len(todo), len(methods))
+
+        pairs = E._load_pairs(cfg, limit=None)
+        if not pairs:
+            log.error("no pairs for %s; skipping", name); continue
+        sub_pairs = E.stratified_subset(pairs, C.SUBSPACE_PAIRS, C.RANDOM_SEED)
+        sweep_pairs = E.stratified_subset(pairs, C.SWEEP_SUBSET, C.RANDOM_SEED)
+
+        model, tok = load_model(cfg)
+        try:
+            ctx = E.collect_acts(model, tok, cfg, sub_pairs)              # one shared pass
+            head_basis = erase.subspace_from_diffs(ctx["diffs"], C.HEADLINE_RANK)
+            base_acc = E.native_accuracy(model, tok, cfg, None, C.E4_LIMIT, C.E4_MAX_TOKENS)
+            for m in todo:
+                try:
+                    if m == "cure":
+                        basis, kind, status = head_basis, "audit_guided_erase", "ok"
+                    else:
+                        built = B.build_basis(m, model, tok, cfg, sub_pairs, ctx=ctx)
+                        if built.get("status") in ("pending", "error"):
+                            rows.append({"method": m, "model_name": name, "status": built["status"],
+                                         "note": built.get("note", "")})
+                            _save(pd.DataFrame(rows), out_name); continue
+                        basis, kind, status = built.get("basis", {}), built.get("kind"), "ok"
+                    row = {"method": m, "model_name": name, "status": status, "kind": kind,
+                           "erase_rank": C.HEADLINE_RANK}
+                    if not basis:
+                        # prompt-only / empty: no activation edit by construction
+                        row.update({"causal_residual_removed": 0.0, "utility_cost": 0.0, "n_pairs": 0})
+                    else:
+                        re = E.e3_reaudit(model, tok, cfg, sweep_pairs, basis)
+                        if len(re):
+                            row["causal_residual_removed"] = float(
+                                (re["erased_commutator"] < re["orig_commutator"]).mean())
+                            row["mean_erased_commutator"] = float(re["erased_commutator"].mean())
+                            row["n_pairs"] = int(len(re))
+                        else:
+                            row["causal_residual_removed"] = float("nan"); row["n_pairs"] = 0
+                        er_acc = E.native_accuracy(model, tok, cfg, basis, C.E4_LIMIT, C.E4_MAX_TOKENS)
+                        row["utility_cost"] = (base_acc - er_acc) if (
+                            np.isfinite(base_acc) and np.isfinite(er_acc)) else float("nan")
+                        row["baseline_acc"] = base_acc; row["erased_acc"] = er_acc
+                    rows.append(row)
+                    _save(pd.DataFrame(rows), out_name)
+                    push_checkpoint(f"baselines: {name} {m} crr="
+                                    f"{row.get('causal_residual_removed', float('nan')):.3f}")
+                    log.info("baseline %-14s %s -> crr=%.3f util=%.3f", m, name,
+                             row.get("causal_residual_removed", float("nan")),
+                             row.get("utility_cost", float("nan")))
+                except Exception as exc:
+                    log.error("baseline %s/%s raised: %s", name, m, str(exc)[:200])
+                    rows.append({"method": m, "model_name": name, "status": "error", "note": str(exc)[:160]})
+                    _save(pd.DataFrame(rows), out_name)
+            _save(pd.DataFrame(rows), out_name)
+        except Exception as exc:
+            log.error("baselines model %s raised: %s", name, str(exc)[:300])
+        finally:
+            unload_model(name)
+        push_checkpoint(f"baselines: {name} complete ({len(rows)} rows)")
+        log.info("baselines %s complete", name)
+
+    (C.RESULTS / "BASELINES_DONE").write_text(time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
+    pusher.stop_and_flush("baselines: ALL DONE")
+    log.info("ALL BASELINES COMPLETE")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=["dry", "main"], required=True)
+    ap.add_argument("--mode", choices=["dry", "main", "baselines"], required=True)
     args = ap.parse_args()
 
     # verify both patching libraries import before any work (fail loud)
@@ -156,6 +254,9 @@ def main():
     if args.mode == "dry":
         import dry_checks
         sys.exit(0 if dry_checks.run_all() else 1)
+    if args.mode == "baselines":
+        cmd_baselines()
+        return
     cmd_main()
 
 
