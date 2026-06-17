@@ -1,1 +1,1 @@
-dry-run rc=1 FAILED (see results/DRYFAIL_1781708511.txt); pull+retry in 60s @ Wed Jun 17 15:01:51 UTC 2026
+dry-run rc=0 PASSED; cleaning test artifacts @ Wed Jun 17 15:05:05 UTC 2026
