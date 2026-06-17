@@ -1,0 +1,49 @@
+# ==========================================================================
+# Secrets - never commit
+# ==========================================================================
+.env
+.env.*
+*.env
+!.env.example
+*.pem
+*.key
+**/.deploy_state.json
+akash/deployment.yaml
+akash/vm_ssh.txt
+
+# ==========================================================================
+# Python / OS / editor
+# ==========================================================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+.vscode/
+
+# ==========================================================================
+# Logs are transient, but keep the tracked mirage run logs
+# ==========================================================================
+/LOG
+*.log
+!Code/audit/**/*.log
+
+# ==========================================================================
+# This public repository holds ONLY Code/mirage and README.md.
+# Everything below is local working material and must not be pushed.
+# ==========================================================================
+/Analysis/
+/Submission/
+/Submission2/
+/Codemap/
+/Help/
+/akash/
+/Progress.md
+/first_review.txt
+/CHANGELOG_corrections.md
+/Code/MIRAGE_MASTER_PROMPT.md
+/Code/*.md

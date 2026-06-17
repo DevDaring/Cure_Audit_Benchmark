@@ -1,0 +1,1982 @@
+﻿{
+  "meta": {
+    "schema_version": "1.0",
+    "project_name": "MIRAGE",
+    "project_kind": "research",
+    "last_updated": "2026-06-01T00:30:00Z",
+    "updated_by": "cursor",
+    "languages": ["python", "yaml"],
+    "primary_entry_points": [
+      "fn:run_dataset.py:main",
+      "fn:Dry_Run/dry_run_all.py:main",
+      "fn:Dry_Run/dry_run_dataset.py:run",
+      "fn:Dry_Run/dry_run_apis.py:run",
+      "fn:Dry_Run/pilot_pentad.py:main"
+    ]
+  },
+
+  "layers": {
+    "config": {
+      "description": "Central configuration: env-var loading, path constants, model registries.",
+      "root_paths": ["config.py", ".env.example"],
+      "primary_language": "python",
+      "frameworks": ["python-dotenv"]
+    },
+    "shared": {
+      "description": "Cross-layer utilities: logging, HTTP API client wrappers.",
+      "root_paths": ["logger_setup.py", "CPU_Only/api_clients/"],
+      "primary_language": "python",
+      "frameworks": ["openai-sdk", "google-generativeai", "mistralai", "boto3", "requests"]
+    },
+    "data_pipeline": {
+      "description": "Dataset downloads, stratified seed sampling, and pentad probe generation.",
+      "root_paths": ["Dataset/"],
+      "primary_language": "python",
+      "frameworks": ["pandas", "datasets", "numpy", "openai-sdk", "requests"]
+    },
+    "ml_model": {
+      "description": "OSM model loading (flash-attention-2), behavioral inference, and CDVA activation patching. Linux + NVIDIA GPU required.",
+      "root_paths": ["GPU_CPU/"],
+      "primary_language": "python",
+      "frameworks": ["transformers", "torch", "transformer_lens", "nnsight", "outlines"]
+    },
+    "research": {
+      "description": "API-model behavioral evaluation, scoring (MIRAGE-B / MIRAGE-Full), leaderboard FM1-FM5, statistical tests, predictive validity, and result plots.",
+      "root_paths": ["CPU_Only/"],
+      "primary_language": "python",
+      "frameworks": ["pandas", "numpy", "scipy", "matplotlib", "seaborn", "scikit-learn"]
+    },
+    "test": {
+      "description": "Dry-run sanity checks for each pipeline stage.",
+      "root_paths": ["Dry_Run/"],
+      "primary_language": "python",
+      "frameworks": []
+    }
+  },
+
+  "files": {
+    "config.py": {
+      "language": "python",
+      "layer": "config",
+      "purpose": "Loads .env via python-dotenv; exposes all API keys, model registries, path constants, and RESEARCH_SYSTEM_PROMPT as typed module-level names.",
+      "exports": [
+        "fn:config.py:_require",
+        "fn:config.py:_optional",
+        "fn:config.py:ensure_dirs",
+        "fn:config.py:validate_all_keys",
+        "const:config.py:RESEARCH_SYSTEM_PROMPT"
+      ],
+      "imports_internal": [],
+      "imports_external": ["dotenv", "os", "pathlib", "logging"],
+      "tags": ["config", "env", "keys"],
+      "loc": 200
+    },
+    "logger_setup.py": {
+      "language": "python",
+      "layer": "shared",
+      "purpose": "Configures rotating file handler and console handler; called once per process entry point.",
+      "exports": ["fn:logger_setup.py:setup_logging"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["logging", "uuid", "pathlib"],
+      "tags": ["logging"],
+      "loc": 65
+    },
+    "Dataset/download_bbq.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Downloads BBQ bias benchmark (9 categories, ~31 k rows) via HuggingFace parquet API and caches to parquet.",
+      "exports": [
+        "fn:Dataset/download_bbq.py:download_bbq",
+        "fn:Dataset/download_bbq.py:validate_bbq",
+        "dataset:Dataset/download_bbq.py:BBQ"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "requests", "pathlib"],
+      "tags": ["bbq", "download", "cache"],
+      "loc": 155
+    },
+    "Dataset/download_crows_pairs.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Downloads CrowS-Pairs (1 508 rows) from GitHub canonical CSV and caches to parquet.",
+      "exports": [
+        "fn:Dataset/download_crows_pairs.py:download_crows_pairs",
+        "fn:Dataset/download_crows_pairs.py:validate_crows_pairs",
+        "dataset:Dataset/download_crows_pairs.py:CrowSPairs"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "requests", "pathlib"],
+      "tags": ["crows-pairs", "download", "cache"],
+      "loc": 125
+    },
+    "Dataset/download_stereoset.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Downloads StereoSet intra-sentence split (~2 106 rows) from HuggingFace and caches to parquet.",
+      "exports": [
+        "fn:Dataset/download_stereoset.py:download_stereoset",
+        "fn:Dataset/download_stereoset.py:validate_stereoset",
+        "dataset:Dataset/download_stereoset.py:StereoSet"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "datasets", "pathlib"],
+      "tags": ["stereoset", "download", "cache"],
+      "loc": 100
+    },
+    "Dataset/download_winobias.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Downloads WinoBias Type-1/2 pro/anti from GitHub and caches to parquet. Held out for predictive validity only.",
+      "exports": [
+        "fn:Dataset/download_winobias.py:download_winobias",
+        "fn:Dataset/download_winobias.py:validate_winobias",
+        "dataset:Dataset/download_winobias.py:WinoBias"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "requests", "pathlib"],
+      "tags": ["winobias", "download", "held-out"],
+      "loc": 120
+    },
+    "Dataset/sample_seeds.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Stratified seed sampling from BBQ+CrowS+StereoSet for main set; WinoBias is quarantined to winobias_heldout.parquet (held out for predictive validity only, never audited). Normalises seed_category to a 10-value canonical vocabulary (fixes B2/B6).",
+      "exports": [
+        "fn:Dataset/sample_seeds.py:sample_seeds",
+        "fn:Dataset/sample_seeds.py:verify_seeds_integrity",
+        "const:Dataset/sample_seeds.py:SEED_CATEGORY_CANONICAL"
+      ],
+      "imports_internal": [
+        "config.py",
+        "Dataset/download_bbq.py",
+        "Dataset/download_crows_pairs.py",
+        "Dataset/download_stereoset.py",
+        "Dataset/download_winobias.py"
+      ],
+      "imports_external": ["pandas", "numpy", "hashlib", "uuid"],
+      "tags": ["seeds", "sampling", "reproducibility"],
+      "loc": 289
+    },
+    "Dataset/pentad_generator.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Source-aware pentad probe generation: slot-a/b/c build full context+question+options per source (BBQ MCQ, CrowS binary choice, StereoSet 3-way, WinoBias cleaned coreference). Slot-b iso-control neutralization: BBQ Person A/B/C, CrowS/StereoSet surface expansion, plural terms (People are), Context: A person polish. Stores gold_answer in every row.",
+      "exports": [
+        "fn:Dataset/pentad_generator.py:generate_pentad_deterministic",
+        "fn:Dataset/pentad_generator.py:build_pentad_dataset",
+        "fn:Dataset/pentad_generator.py:_build_full_prompt",
+        "const:Dataset/pentad_generator.py:CATEGORY_TO_EQUIV_SET"
+      ],
+      "imports_internal": [
+        "config.py",
+        "Dataset/context_shift_drafter.py",
+        "Dataset/cot_attack_generator.py",
+        "Dataset/equivalence_sets.yaml"
+      ],
+      "imports_external": ["pandas", "numpy", "yaml", "uuid", "re", "json"],
+      "tags": ["pentad", "probe-generation", "dataset", "gold-answer"],
+      "loc": 441
+    },
+    "Dataset/cot_attack_generator.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Generates slot-e CoT-attack prompts (e1_neutral, e2_stereo_push, e3_antistereo_push) via DeepSeek API with 2 parallel workers (DEEPSEEK_API_KEY + DEEPSEEK_API_KEY_2), per-key fallback, 5 retries. Per-seed JSON checkpointing to cot_attack_checkpoint.json; safe to interrupt and resume.",
+      "exports": ["fn:Dataset/cot_attack_generator.py:generate_cot_attacks"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["openai", "pandas", "json", "uuid"],
+      "tags": ["cot", "probe-generation", "deepseek", "checkpointing"],
+      "loc": 185
+    },
+    "Dataset/context_shift_drafter.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Generates slot-d context-shift prompts (d_valid, d_harmful) via DeepSeek API with 2 parallel workers (DEEPSEEK_API_KEY + DEEPSEEK_API_KEY_2), per-key fallback, 5 retries. Per-seed JSON checkpointing to context_shift_checkpoint.json; safe to interrupt and resume.",
+      "exports": ["fn:Dataset/context_shift_drafter.py:draft_context_shifts"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["openai", "pandas", "json", "uuid"],
+      "tags": ["context-shift", "probe-generation", "deepseek", "checkpointing"],
+      "loc": 180
+    },
+    "Dataset/validate_pentad.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Hardened pentad validation: schema, completeness, sentinel rejection, slot-b grammar (validate_slot_b_grammar), slot-a/b/c semantic gates, MCQ options, DeepSeek embed check, production gate (assert_production_ready for N=596×12=7152). Raises loud failures so broken datasets cannot proceed to evaluation.",
+      "exports": [
+        "fn:Dataset/validate_pentad.py:validate_schema",
+        "fn:Dataset/validate_pentad.py:validate_completeness",
+        "fn:Dataset/validate_pentad.py:validate_no_sentinel_prompts",
+        "fn:Dataset/validate_pentad.py:validate_b_differs_from_a",
+        "fn:Dataset/validate_pentad.py:validate_c_variants_distinct",
+        "fn:Dataset/validate_pentad.py:validate_mcq_options_present",
+        "fn:Dataset/validate_pentad.py:validate_slot_b_grammar",
+        "fn:Dataset/validate_pentad.py:assert_production_ready",
+        "fn:Dataset/validate_pentad.py:run_all_validations"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "re"],
+      "tags": ["validation", "pentad", "semantic-gates"],
+      "loc": 261
+    },
+    "Dataset/equivalence_sets.yaml": {
+      "language": "yaml",
+      "layer": "data_pipeline",
+      "purpose": "Closed equivalence sets (religion:8, gender:5, gender_adjective:5, race_ethnicity:8, nationality:10, age_group:5, sexual_orientation:5, socioeconomic:5, disability:5) for slot-c counterfactual swaps. All sets have >= 5 members to ensure exactly 5 slot-c variants per seed.",
+      "exports": [],
+      "imports_internal": [],
+      "imports_external": [],
+      "tags": ["equivalence-sets", "counterfactual", "config"],
+      "loc": 57
+    },
+    "GPU_CPU/load_osm.py": {
+      "language": "python",
+      "layer": "ml_model",
+      "purpose": "Loads all 4 OSM models (Llama-3.1-8B, Qwen2.5-7B, Gemma-2-9B, Phi-4-mini) in bf16 with flash-attention-2 on Linux GPU.",
+      "exports": [
+        "fn:GPU_CPU/load_osm.py:load_model",
+        "fn:GPU_CPU/load_osm.py:load_all_osm_models"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["transformers", "torch"],
+      "tags": ["model-loading", "flash-attention", "osm"],
+      "loc": 145
+    },
+    "GPU_CPU/osm_behavioral.py": {
+      "language": "python",
+      "layer": "ml_model",
+      "purpose": "Behavioral inference of OSM models on the pentad probe set; produces behavioral_results.parquet with resume support. _SYSTEM_PROMPT references RESEARCH_SYSTEM_PROMPT from config.",
+      "exports": [
+        "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model",
+        "fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral"
+      ],
+      "imports_internal": ["config.py", "GPU_CPU/utils_attention.py"],
+      "imports_external": ["pandas", "torch", "outlines", "json", "time"],
+      "tags": ["behavioral-eval", "osm", "inference"],
+      "loc": 260
+    },
+    "GPU_CPU/utils_attention.py": {
+      "language": "python",
+      "layer": "ml_model",
+      "purpose": "Unified causal activation patching interface: TransformerLens for Llama/Gemma, nnsight for Qwen/Phi-4.",
+      "exports": [
+        "fn:GPU_CPU/utils_attention.py:_get_token_position",
+        "fn:GPU_CPU/utils_attention.py:patch_activation_transformer_lens",
+        "fn:GPU_CPU/utils_attention.py:patch_activation_nnsight",
+        "fn:GPU_CPU/utils_attention.py:patch_activation"
+      ],
+      "imports_internal": [],
+      "imports_external": ["torch", "transformer_lens", "nnsight"],
+      "tags": ["activation-patching", "cdva", "interpretability"],
+      "loc": 220
+    },
+    "GPU_CPU/cdva_patching.py": {
+      "language": "python",
+      "layer": "ml_model",
+      "purpose": "CDVA: computes C(5,2)=10 pairwise activation-patch scores for slot-c variants per seed. Fixes A5: bias_answer taken from gold_answer per seed (not hard-coded 'Yes'); identical-prompt pairs are skipped with failure_reason='identical_prompts'; global CDVA_GLOBAL_SCALE=5.0 replaces within-seed max normalization (which forced largest pair to score 0).",
+      "exports": [
+        "fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed",
+        "fn:GPU_CPU/cdva_patching.py:compute_cdva_seed_score",
+        "fn:GPU_CPU/cdva_patching.py:run_cdva",
+        "const:GPU_CPU/cdva_patching.py:CDVA_GLOBAL_SCALE"
+      ],
+      "imports_internal": [
+        "config.py",
+        "GPU_CPU/utils_attention.py"
+      ],
+      "imports_external": ["pandas", "itertools"],
+      "tags": ["cdva", "activation-patching", "discriminative-validity"],
+      "loc": 265
+    },
+    "GPU_CPU/cdva_calibration.py": {
+      "language": "python",
+      "layer": "ml_model",
+      "purpose": "Calibrates tau threshold on 50-seed dev set by maximising behavioral-CDVA agreement; saves tau_calibration.json.",
+      "exports": [
+        "fn:GPU_CPU/cdva_calibration.py:calibrate_tau",
+        "fn:GPU_CPU/cdva_calibration.py:load_tau"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "numpy"],
+      "tags": ["tau-calibration", "cdva", "dev-set"],
+      "loc": 145
+    },
+    "CPU_Only/api_clients/bedrock_client.py": {
+      "language": "python",
+      "layer": "shared",
+      "purpose": "AWS Bedrock client using Converse API (model-agnostic, no guardrails) with OpenRouter fallback (2-attempt retry each). Uses IAM key-pair credentials; no base64 decoding.",
+      "exports": ["fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["boto3", "requests", "openai", "json"],
+      "tags": ["api-client", "bedrock", "aws", "converse-api"],
+      "loc": 175
+    },
+    "CPU_Only/api_clients/gemini_client.py": {
+      "language": "python",
+      "layer": "shared",
+      "purpose": "Gemini API client with 4-key round-robin rotation and 2 attempts per key. All four harm-category safety filters set to BLOCK_NONE; uses system_instruction for research framing.",
+      "exports": ["fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["google.generativeai", "google.generativeai.types"],
+      "tags": ["api-client", "gemini", "gcp", "safety-disabled"],
+      "loc": 115
+    },
+    "CPU_Only/api_clients/mistral_client.py": {
+      "language": "python",
+      "layer": "shared",
+      "purpose": "Mistral platform client with 2-key round-robin rotation. safe_prompt=False disables Mistral's injected safety preamble. Import: mistralai.client.Mistral (Speakeasy v1.x SDK â€” not top-level mistralai.Mistral).",
+      "exports": ["fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["mistralai"],
+      "tags": ["api-client", "mistral", "safety-disabled"],
+      "loc": 95
+    },
+    "CPU_Only/api_clients/openrouter_client.py": {
+      "language": "python",
+      "layer": "shared",
+      "purpose": "OpenRouter client with 2-key round-robin; used as fallback for Bedrock models.",
+      "exports": ["fn:CPU_Only/api_clients/openrouter_client.py:call_openrouter_with_roundrobin"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["openai"],
+      "tags": ["api-client", "openrouter", "fallback"],
+      "loc": 90
+    },
+    "CPU_Only/api_behavioral.py": {
+      "language": "python",
+      "layer": "research",
+      "purpose": "Behavioral inference of the 4 API models on the pentad probe set. Two passes: (1) deterministic (temp=0.0, all slots, sample_index=0); (2) FM4 variance pass (temp=0.7, slot-a only, sample_index=1..5, fixes B5). Copies gold_answer from pentad_df into every result row. Skips None/empty prompts.",
+      "exports": [
+        "fn:CPU_Only/api_behavioral.py:evaluate_api_model",
+        "fn:CPU_Only/api_behavioral.py:run_api_behavioral",
+        "fn:CPU_Only/api_behavioral.py:_evaluate_single_prompt"
+      ],
+      "imports_internal": [
+        "config.py",
+        "CPU_Only/api_clients/bedrock_client.py",
+        "CPU_Only/api_clients/gemini_client.py",
+        "CPU_Only/api_clients/mistral_client.py",
+        "CPU_Only/judge_router.py"
+      ],
+      "imports_external": ["pandas", "json", "time"],
+      "tags": ["behavioral-eval", "api-models", "inference", "fm4-variance"],
+      "loc": 284
+    },
+    "CPU_Only/judge_router.py": {
+      "language": "python",
+      "layer": "shared",
+      "purpose": "Routes malformed model responses to a judge LLM (Gemini default, DeepSeek, or Mistral) for answer extraction.",
+      "exports": ["fn:CPU_Only/judge_router.py:judge"],
+      "imports_internal": [
+        "config.py",
+        "CPU_Only/api_clients/gemini_client.py",
+        "CPU_Only/api_clients/mistral_client.py"
+      ],
+      "imports_external": ["openai", "json"],
+      "tags": ["judge", "json-repair", "fallback"],
+      "loc": 160
+    },
+    "CPU_Only/scoring.py": {
+      "language": "python",
+      "layer": "research",
+      "purpose": "Computes MIRAGE-B and MIRAGE-Full per (seed_id x model_name) pair. Correctness is now evaluated against gold_answer from the behavioral_df (fixes A6): correct(a/b) requires parsed_answer matches gold; behavioral_stable(c) majority-votes DISTINCT c-texts; cot_robust(e) checks majority answer matches gold.",
+      "exports": [
+        "fn:CPU_Only/scoring.py:compute_mirage_b",
+        "fn:CPU_Only/scoring.py:compute_mirage_full",
+        "fn:CPU_Only/scoring.py:score_all",
+        "fn:CPU_Only/scoring.py:_answers_match"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas"],
+      "tags": ["scoring", "mirage-b", "mirage-full", "gold-answer"],
+      "loc": 179
+    },
+    "CPU_Only/statistics.py": {
+      "language": "python",
+      "layer": "research",
+      "purpose": "Statistical analysis: bootstrap CI, McNemar paired test, Cohen's h, Holm-Bonferroni, and Benjamini-Hochberg FDR.",
+      "exports": [
+        "fn:CPU_Only/statistics.py:bootstrap_ci",
+        "fn:CPU_Only/statistics.py:mcnemar_paired",
+        "fn:CPU_Only/statistics.py:cohen_h",
+        "fn:CPU_Only/statistics.py:holm_bonferroni",
+        "fn:CPU_Only/statistics.py:benjamini_hochberg"
+      ],
+      "imports_internal": [],
+      "imports_external": ["numpy", "scipy.stats"],
+      "tags": ["statistics", "bootstrap", "hypothesis-testing"],
+      "loc": 190
+    },
+    "CPU_Only/leaderboard.py": {
+      "language": "python",
+      "layer": "research",
+      "purpose": "Aggregates audit results into per-benchmark FM1-FM5 validity vectors. FM definitions now use answer CORRECTNESS against gold_answer (fixes B4): FM1=correct(a)+wrong(b); FM3=correct(a/b)+wrong(d_valid); FM5=correct(a-d)+wrong(e). WinoBias removed from BENCHMARKS list.",
+      "exports": [
+        "fn:CPU_Only/leaderboard.py:build_leaderboard",
+        "const:CPU_Only/leaderboard.py:BENCHMARKS",
+        "const:CPU_Only/leaderboard.py:FAILURE_MODES"
+      ],
+      "imports_internal": ["config.py", "CPU_Only/scoring.py"],
+      "imports_external": ["pandas"],
+      "tags": ["leaderboard", "failure-modes", "fm1-fm5", "correctness"],
+      "loc": 200
+    },
+    "CPU_Only/predictive_validity.py": {
+      "language": "python",
+      "layer": "research",
+      "purpose": "Trains a predictive validity classifier on BBQ+CrowS+StereoSet and tests on held-out WinoBias; assesses benchmark transferability.",
+      "exports": ["fn:CPU_Only/predictive_validity.py:run_predictive_validity"],
+      "imports_internal": ["config.py", "CPU_Only/leaderboard.py"],
+      "imports_external": ["pandas", "numpy", "sklearn"],
+      "tags": ["predictive-validity", "held-out", "winobias"],
+      "loc": 220
+    },
+    "CPU_Only/results_analysis.py": {
+      "language": "python",
+      "layer": "research",
+      "purpose": "Generates final result tables and figures (MIRAGE-B bar chart, CDVA violin, FM leaderboard heatmap) from scored parquet files.",
+      "exports": [
+        "fn:CPU_Only/results_analysis.py:plot_mirage_b_pass_rates",
+        "fn:CPU_Only/results_analysis.py:plot_cdva_distribution",
+        "fn:CPU_Only/results_analysis.py:plot_leaderboard_heatmap"
+      ],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "matplotlib", "seaborn"],
+      "tags": ["visualisation", "results", "figures"],
+      "loc": 180
+    },
+    "Dry_Run/dry_run_dataset.py": {
+      "language": "python",
+      "layer": "test",
+      "purpose": "8-component sanity check of the Dataset pipeline: env keys, all 4 downloads, seed sampling, pentad generation, parquet roundtrip.",
+      "exports": ["fn:Dry_Run/dry_run_dataset.py:run"],
+      "imports_internal": [
+        "config.py",
+        "logger_setup.py",
+        "Dataset/download_bbq.py",
+        "Dataset/download_crows_pairs.py",
+        "Dataset/download_stereoset.py",
+        "Dataset/download_winobias.py",
+        "Dataset/sample_seeds.py",
+        "Dataset/pentad_generator.py"
+      ],
+      "imports_external": ["logging"],
+      "tags": ["dry-run", "test", "dataset"],
+      "loc": 175
+    },
+    "Dry_Run/dry_run_apis.py": {
+      "language": "python",
+      "layer": "test",
+      "purpose": "Tests all 10 external API keys (DeepSeek x2, OpenRouter x2, Gemini x4, Mistral x2) with one minimal call per key.",
+      "exports": ["fn:Dry_Run/dry_run_apis.py:run"],
+      "imports_internal": ["config.py", "logger_setup.py"],
+      "imports_external": ["requests", "logging"],
+      "tags": ["dry-run", "test", "api-keys"],
+      "loc": 220
+    },
+    "Dry_Run/dry_run_cpu_only.py": {
+      "language": "python",
+      "layer": "test",
+      "purpose": "Sanity check of CPU_Only pipeline: Bedrock (w/ fallback), Gemini, Mistral, judge router, scoring, statistics.",
+      "exports": ["fn:Dry_Run/dry_run_cpu_only.py:run"],
+      "imports_internal": [
+        "config.py",
+        "logger_setup.py",
+        "CPU_Only/api_clients/bedrock_client.py",
+        "CPU_Only/api_clients/gemini_client.py",
+        "CPU_Only/api_clients/mistral_client.py",
+        "CPU_Only/judge_router.py",
+        "CPU_Only/scoring.py",
+        "CPU_Only/statistics.py"
+      ],
+      "imports_external": ["logging"],
+      "tags": ["dry-run", "test", "cpu-only"],
+      "loc": 200
+    },
+    "Dry_Run/dry_run_gpu_cpu.py": {
+      "language": "python",
+      "layer": "test",
+      "purpose": "Sanity check of GPU_CPU pipeline: platform/CUDA check, TransformerLens, nnsight, flash-attention, OSM model load, and one-prompt inference.",
+      "exports": ["fn:Dry_Run/dry_run_gpu_cpu.py:run"],
+      "imports_internal": [
+        "config.py",
+        "logger_setup.py",
+        "GPU_CPU/load_osm.py",
+        "GPU_CPU/osm_behavioral.py",
+        "GPU_CPU/cdva_patching.py"
+      ],
+      "imports_external": ["logging", "platform", "torch"],
+      "tags": ["dry-run", "test", "gpu", "osm"],
+      "loc": 180
+    },
+    "Dry_Run/dry_run_all.py": {
+      "language": "python",
+      "layer": "test",
+      "purpose": "Master dry-run entry point; sequentially invokes dataset, GPU_CPU, and CPU_Only sub-runs; supports --skip-gpu and --only flags.",
+      "exports": ["fn:Dry_Run/dry_run_all.py:main"],
+      "imports_internal": ["logger_setup.py"],
+      "imports_external": ["logging", "argparse"],
+      "tags": ["dry-run", "entry-point"],
+      "loc": 85
+    },
+    "Dry_Run/pilot_pentad.py": {
+      "language": "python",
+      "layer": "test",
+      "purpose": "5-seed full-pipeline pilot for pentad dataset (includes DeepSeek API calls for slots d/e). Prints template samples, runs run_all_validations, reports per-slot counts. Expected: 60 rows, 5 seeds, 0 duplicates. PASSED.",
+      "exports": ["fn:Dry_Run/pilot_pentad.py:main"],
+      "imports_internal": ["config.py", "Dataset/pentad_generator.py", "Dataset/validate_pentad.py"],
+      "imports_external": ["pandas", "numpy"],
+      "tags": ["dry-run", "pilot", "pentad", "deepseek"],
+      "loc": 120
+    },
+    "run_dataset.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Single entry-point for full audit-seed MIRAGE dataset build (N=596). Steps: (1) sample seeds, (2) build_pentad_dataset (det + DeepSeek), (3) run_all_validations. Supports --det-only and --force flags. Expected output: 596×12=7152 rows in Dataset/seeds/pentad_dataset.parquet.",
+      "exports": ["fn:run_dataset.py:main"],
+      "imports_internal": ["config.py", "logger_setup.py", "Dataset/sample_seeds.py", "Dataset/pentad_generator.py", "Dataset/validate_pentad.py"],
+      "imports_external": ["argparse", "logging"],
+      "tags": ["entry-point", "dataset-build", "pipeline"],
+      "loc": 85
+    },
+    "patch_det_slots.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Rebuilds deterministic slots (a/b/c) from seeds.parquet. Saves det-only pentad and DROPS all d/e rows until regenerate_api_slots completes. Orchestrator skips this when _det_slots_valid() passes. Use patch_slot_b_only.py for iso-control-only fixes.",
+      "exports": ["fn:patch_det_slots.py:main"],
+      "imports_internal": ["config.py", "logger_setup.py", "Dataset/sample_seeds.py", "Dataset/pentad_generator.py", "Dataset/validate_pentad.py"],
+      "imports_external": ["pandas", "numpy"],
+      "tags": ["patch", "dataset-build", "utility"],
+      "loc": 115
+    },
+    "patch_slot_b_only.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Patches only slot-b (iso-control) rows in pentad_dataset.parquet. Preserves slot-a, slot-c, and all DeepSeek slots d/e — no API calls when slot-a text unchanged.",
+      "exports": ["fn:patch_slot_b_only.py:main"],
+      "imports_internal": ["config.py", "logger_setup.py", "Dataset/pentad_generator.py"],
+      "imports_external": ["pandas"],
+      "tags": ["patch", "dataset-build", "slot-b", "utility"],
+      "loc": 112
+    },
+    "regenerate_api_slots.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "Regenerates DeepSeek slots d/e after deterministic patch. Incremental pentad save after slot-d (_save_partial_pentad). --keep-checkpoint for resume. Clears checkpoints on fresh run.",
+      "exports": ["fn:regenerate_api_slots.py:main", "fn:regenerate_api_slots.py:_save_partial_pentad"],
+      "imports_internal": ["config.py", "logger_setup.py", "Dataset/context_shift_drafter.py", "Dataset/cot_attack_generator.py", "Dataset/validate_pentad.py"],
+      "imports_external": ["pandas", "argparse"],
+      "tags": ["regen", "deepseek", "checkpointing", "dataset-build"],
+      "loc": 148
+    },
+    "repair_empty_d_slots.py": {
+      "language": "python",
+      "layer": "data_pipeline",
+      "purpose": "One-shot repair: re-generates empty slot-d (context_shift) prompt_text rows in pentad_dataset.parquet. Root cause was StereoSet seeds with sentence=None causing literal 'None' to be sent to DeepSeek. Uses context column (BLANKâ†’person) as fallback. Run after any build that produces empty d-slot rows.",
+      "exports": ["fn:repair_empty_d_slots.py:main"],
+      "imports_internal": ["config.py"],
+      "imports_external": ["pandas", "openai"],
+      "tags": ["patch", "dataset-build", "utility"],
+      "loc": 95
+    }
+  },
+
+  "symbols": {
+    "fn:config.py:_require": {
+      "kind": "function",
+      "name": "_require",
+      "file": "config.py",
+      "lines": [30, 37],
+      "layer": "config",
+      "purpose": "Returns an env var value or raises EnvironmentError if missing or empty.",
+      "signature": "_require(name: str) -> str",
+      "params": [{"name": "name", "type": "str", "doc": "Env var name"}],
+      "returns": {"type": "str", "doc": "Non-empty env var value"},
+      "calls": [],
+      "side_effects": ["reads env"],
+      "async": false,
+      "visibility": "private",
+      "tags": ["config", "validation"],
+      "semantic_signature": "required-env-var-loader"
+    },
+    "fn:config.py:_optional": {
+      "kind": "function",
+      "name": "_optional",
+      "file": "config.py",
+      "lines": [40, 41],
+      "layer": "config",
+      "purpose": "Returns an env var value or a default string if the var is absent.",
+      "signature": "_optional(name: str, default: str = '') -> str",
+      "params": [
+        {"name": "name", "type": "str", "doc": "Env var name"},
+        {"name": "default", "type": "str", "doc": "Fallback value"}
+      ],
+      "returns": {"type": "str", "doc": "Env var value or default"},
+      "calls": [],
+      "side_effects": ["reads env"],
+      "async": false,
+      "visibility": "private",
+      "tags": ["config"],
+      "semantic_signature": "optional-env-var-loader"
+    },
+    "fn:config.py:ensure_dirs": {
+      "kind": "function",
+      "name": "ensure_dirs",
+      "file": "config.py",
+      "lines": [174, 178],
+      "layer": "config",
+      "purpose": "Creates all MIRAGE output directories (results, cache, logs, figures, seeds) if they do not exist.",
+      "signature": "ensure_dirs() -> None",
+      "params": [],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["config", "io"],
+      "semantic_signature": "output-directory-creator"
+    },
+    "const:config.py:RESEARCH_SYSTEM_PROMPT": {
+      "kind": "constant",
+      "name": "RESEARCH_SYSTEM_PROMPT",
+      "file": "config.py",
+      "layer": "config",
+      "purpose": "Single-source research framing prompt used by all model clients (Bedrock, Gemini, Mistral, OSM) to prevent safety refusals on bias-audit benchmark prompts (BBQ, CrowS-Pairs, StereoSet, WinoBias).",
+      "type": "str",
+      "visibility": "public",
+      "tags": ["config", "system-prompt", "safety-bypass"],
+      "consumers": [
+        "CPU_Only/api_clients/bedrock_client.py",
+        "CPU_Only/api_clients/gemini_client.py",
+        "CPU_Only/api_behavioral.py",
+        "GPU_CPU/osm_behavioral.py"
+      ]
+    },
+    "fn:config.py:validate_all_keys": {
+      "kind": "function",
+      "name": "validate_all_keys",
+      "file": "config.py",
+      "lines": [181, 198],
+      "layer": "config",
+      "purpose": "Checks all 12 required env vars are present and non-empty; returns list of missing key names.",
+      "signature": "validate_all_keys() -> list[str]",
+      "params": [],
+      "returns": {"type": "list[str]", "doc": "Missing key names; empty means all present"},
+      "calls": [],
+      "side_effects": ["reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["config", "validation"],
+      "semantic_signature": "all-api-keys-presence-validator"
+    },
+    "fn:logger_setup.py:setup_logging": {
+      "kind": "function",
+      "name": "setup_logging",
+      "file": "logger_setup.py",
+      "lines": [14, 62],
+      "layer": "shared",
+      "purpose": "Configures rotating file handler (50 MB x5) and console handler on the root logger; returns the run_id used.",
+      "signature": "setup_logging(run_id: str | None = None, level: int = logging.INFO) -> str",
+      "params": [
+        {"name": "run_id", "type": "str | None", "doc": "UUID for this run; generated if None"},
+        {"name": "level", "type": "int", "doc": "Logging level"}
+      ],
+      "returns": {"type": "str", "doc": "run_id"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["writes file", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["logging"],
+      "semantic_signature": "rotating-logger-initialiser"
+    },
+    "fn:Dataset/download_bbq.py:download_bbq": {
+      "kind": "function",
+      "name": "download_bbq",
+      "file": "Dataset/download_bbq.py",
+      "lines": [46, 120],
+      "layer": "data_pipeline",
+      "purpose": "Downloads BBQ across 9 categories via HuggingFace parquet API with retry; caches combined DataFrame to bbq_raw.parquet.",
+      "signature": "download_bbq(force: bool = False) -> pd.DataFrame",
+      "params": [{"name": "force", "type": "bool", "doc": "Re-download even if cached"}],
+      "returns": {"type": "pd.DataFrame", "doc": "Combined BBQ DataFrame with bbq_category column"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["bbq", "download"],
+      "semantic_signature": "bbq-dataset-downloader-cacher"
+    },
+    "fn:Dataset/download_bbq.py:validate_bbq": {
+      "kind": "function",
+      "name": "validate_bbq",
+      "file": "Dataset/download_bbq.py",
+      "lines": [123, 138],
+      "layer": "data_pipeline",
+      "purpose": "Asserts required columns exist and logs row counts per BBQ category.",
+      "signature": "validate_bbq(df: pd.DataFrame) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame", "doc": "BBQ DataFrame"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["bbq", "validation"],
+      "semantic_signature": "bbq-schema-row-count-validator"
+    },
+    "dataset:Dataset/download_bbq.py:BBQ": {
+      "kind": "dataset",
+      "name": "BBQ",
+      "file": "Dataset/download_bbq.py",
+      "lines": [1, 155],
+      "layer": "data_pipeline",
+      "purpose": "Bias Benchmark for Question Answering; 9 social categories; ~31 372 rows.",
+      "source": "hf://heegyu/bbq (parquet API)",
+      "size": "31 372 rows, 9 categories",
+      "splits": ["test"],
+      "license": "CC BY 4.0",
+      "tags": ["bias", "qa", "benchmark"],
+      "semantic_signature": "bbq-bias-qa-benchmark"
+    },
+    "fn:Dataset/download_crows_pairs.py:download_crows_pairs": {
+      "kind": "function",
+      "name": "download_crows_pairs",
+      "file": "Dataset/download_crows_pairs.py",
+      "lines": [45, 100],
+      "layer": "data_pipeline",
+      "purpose": "Downloads CrowS-Pairs anonymised CSV from GitHub with retry; caches to crows_pairs_raw.parquet.",
+      "signature": "download_crows_pairs(force: bool = False) -> pd.DataFrame",
+      "params": [{"name": "force", "type": "bool", "doc": "Re-download even if cached"}],
+      "returns": {"type": "pd.DataFrame", "doc": "CrowS-Pairs DataFrame"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["crows-pairs", "download"],
+      "semantic_signature": "crows-pairs-dataset-downloader-cacher"
+    },
+    "fn:Dataset/download_crows_pairs.py:validate_crows_pairs": {
+      "kind": "function",
+      "name": "validate_crows_pairs",
+      "file": "Dataset/download_crows_pairs.py",
+      "lines": [103, 120],
+      "layer": "data_pipeline",
+      "purpose": "Asserts required columns and logs row counts per bias type for CrowS-Pairs.",
+      "signature": "validate_crows_pairs(df: pd.DataFrame) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame", "doc": "CrowS-Pairs DataFrame"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["crows-pairs", "validation"],
+      "semantic_signature": "crows-pairs-schema-validator"
+    },
+    "dataset:Dataset/download_crows_pairs.py:CrowSPairs": {
+      "kind": "dataset",
+      "name": "CrowSPairs",
+      "file": "Dataset/download_crows_pairs.py",
+      "lines": [1, 125],
+      "layer": "data_pipeline",
+      "purpose": "CrowS-Pairs challenge dataset for measuring social biases in MLMs; 1 508 rows, 9 bias types.",
+      "source": "https://github.com/nyu-mll/crows-pairs (CSV)",
+      "size": "1 508 rows",
+      "splits": ["full"],
+      "license": "CC BY-SA 4.0",
+      "tags": ["bias", "coreference", "benchmark"],
+      "semantic_signature": "crows-pairs-bias-challenge-dataset"
+    },
+    "fn:Dataset/download_stereoset.py:download_stereoset": {
+      "kind": "function",
+      "name": "download_stereoset",
+      "file": "Dataset/download_stereoset.py",
+      "lines": [35, 78],
+      "layer": "data_pipeline",
+      "purpose": "Downloads StereoSet intra-sentence validation split from HuggingFace; filters to 4 target domains; caches to parquet.",
+      "signature": "download_stereoset(force: bool = False) -> pd.DataFrame",
+      "params": [{"name": "force", "type": "bool", "doc": "Re-download even if cached"}],
+      "returns": {"type": "pd.DataFrame", "doc": "StereoSet intra-sentence DataFrame"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["stereoset", "download"],
+      "semantic_signature": "stereoset-dataset-downloader-cacher"
+    },
+    "fn:Dataset/download_stereoset.py:validate_stereoset": {
+      "kind": "function",
+      "name": "validate_stereoset",
+      "file": "Dataset/download_stereoset.py",
+      "lines": [81, 93],
+      "layer": "data_pipeline",
+      "purpose": "Asserts required columns and logs per-domain row counts for StereoSet.",
+      "signature": "validate_stereoset(df: pd.DataFrame) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame", "doc": "StereoSet DataFrame"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["stereoset", "validation"],
+      "semantic_signature": "stereoset-schema-validator"
+    },
+    "dataset:Dataset/download_stereoset.py:StereoSet": {
+      "kind": "dataset",
+      "name": "StereoSet",
+      "file": "Dataset/download_stereoset.py",
+      "lines": [1, 100],
+      "layer": "data_pipeline",
+      "purpose": "StereoSet intra-sentence split; measures stereotypical bias in LLMs; ~2 106 rows across gender, profession, race, religion.",
+      "source": "hf://McGill-NLP/stereoset",
+      "size": "2 106 rows (intra-sentence, validation)",
+      "splits": ["validation"],
+      "license": "CC BY-SA 4.0",
+      "tags": ["bias", "stereotype", "benchmark"],
+      "semantic_signature": "stereoset-stereotype-bias-dataset"
+    },
+    "fn:Dataset/download_winobias.py:download_winobias": {
+      "kind": "function",
+      "name": "download_winobias",
+      "file": "Dataset/download_winobias.py",
+      "lines": [52, 100],
+      "layer": "data_pipeline",
+      "purpose": "Downloads WinoBias Type-1/2 pro/anti from GitHub with retry; caches to parquet. Held out for predictive validity only.",
+      "signature": "download_winobias(force: bool = False) -> pd.DataFrame",
+      "params": [{"name": "force", "type": "bool", "doc": "Re-download even if cached"}],
+      "returns": {"type": "pd.DataFrame", "doc": "WinoBias DataFrame with wino_type and stereo_direction columns"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["winobias", "download", "held-out"],
+      "semantic_signature": "winobias-dataset-downloader-cacher"
+    },
+    "fn:Dataset/download_winobias.py:validate_winobias": {
+      "kind": "function",
+      "name": "validate_winobias",
+      "file": "Dataset/download_winobias.py",
+      "lines": [103, 118],
+      "layer": "data_pipeline",
+      "purpose": "Asserts required columns and logs per-type/direction counts for WinoBias.",
+      "signature": "validate_winobias(df: pd.DataFrame) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame", "doc": "WinoBias DataFrame"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["winobias", "validation"],
+      "semantic_signature": "winobias-schema-validator"
+    },
+    "dataset:Dataset/download_winobias.py:WinoBias": {
+      "kind": "dataset",
+      "name": "WinoBias",
+      "file": "Dataset/download_winobias.py",
+      "lines": [1, 120],
+      "layer": "data_pipeline",
+      "purpose": "WinoBias coreference gender-bias dataset; 4 files (type1/2 x pro/anti); held out for predictive validity.",
+      "source": "https://github.com/uclanlp/corefBias (raw txt)",
+      "size": "396+ rows (anti_type2 confirmed; full download requires 4 files)",
+      "splits": ["type1_pro", "type1_anti", "type2_pro", "type2_anti"],
+      "license": "MIT",
+      "tags": ["gender-bias", "coreference", "held-out"],
+      "semantic_signature": "winobias-gender-coreference-dataset"
+    },
+    "fn:Dataset/sample_seeds.py:sample_seeds": {
+      "kind": "function",
+      "name": "sample_seeds",
+      "file": "Dataset/sample_seeds.py",
+      "lines": [102, 165],
+      "layer": "data_pipeline",
+      "purpose": "Stratified sampling from all four benchmarks (RNG seed 20260101); returns main (870) and dev (50, disjoint) seed DataFrames.",
+      "signature": "sample_seeds(force: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]",
+      "params": [{"name": "force", "type": "bool", "doc": "Resample even if cached"}],
+      "returns": {"type": "tuple[pd.DataFrame, pd.DataFrame]", "doc": "(main_seeds, dev_seeds)"},
+      "calls": [
+        "fn:Dataset/download_bbq.py:download_bbq",
+        "fn:Dataset/download_crows_pairs.py:download_crows_pairs",
+        "fn:Dataset/download_stereoset.py:download_stereoset",
+        "fn:Dataset/download_winobias.py:download_winobias",
+        "fn:config.py:ensure_dirs"
+      ],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["seeds", "sampling", "reproducibility"],
+      "semantic_signature": "stratified-seed-sampler"
+    },
+    "fn:Dataset/sample_seeds.py:verify_seeds_integrity": {
+      "kind": "function",
+      "name": "verify_seeds_integrity",
+      "file": "Dataset/sample_seeds.py",
+      "lines": [168, 185],
+      "layer": "data_pipeline",
+      "purpose": "Recomputes SHA-256 of seeds.parquet and compares against stored manifest; raises on mismatch.",
+      "signature": "verify_seeds_integrity() -> None",
+      "params": [],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["seeds", "integrity"],
+      "semantic_signature": "seed-file-integrity-checker"
+    },
+    "fn:Dataset/pentad_generator.py:generate_pentad_deterministic": {
+      "kind": "function",
+      "name": "generate_pentad_deterministic",
+      "file": "Dataset/pentad_generator.py",
+      "lines": [170, 220],
+      "layer": "data_pipeline",
+      "purpose": "Generates slots (a) verbatim, (b) isomorphic control, and (c) 5 counterfactual swaps deterministically for all seeds.",
+      "signature": "generate_pentad_deterministic(seeds_df: pd.DataFrame, rng: np.random.Generator) -> list[dict]",
+      "params": [
+        {"name": "seeds_df", "type": "pd.DataFrame", "doc": "Main or dev seeds"},
+        {"name": "rng", "type": "np.random.Generator", "doc": "Fixed RNG instance"}
+      ],
+      "returns": {"type": "list[dict]", "doc": "Row dicts for slots a/b/c"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["pentad", "deterministic", "probe-generation"],
+      "semantic_signature": "deterministic-pentad-slot-generator"
+    },
+    "fn:Dataset/pentad_generator.py:build_pentad_dataset": {
+      "kind": "function",
+      "name": "build_pentad_dataset",
+      "file": "Dataset/pentad_generator.py",
+      "lines": [223, 265],
+      "layer": "data_pipeline",
+      "purpose": "Orchestrates full pentad generation: deterministic slots a/b/c plus API-generated d (context shift) and e (CoT attack); caches to pentad_dataset.parquet.",
+      "signature": "build_pentad_dataset(seeds_df: pd.DataFrame, include_api_slots: bool = True, force: bool = False) -> pd.DataFrame",
+      "params": [
+        {"name": "seeds_df", "type": "pd.DataFrame", "doc": "Main seeds"},
+        {"name": "include_api_slots", "type": "bool", "doc": "If False, skip d/e (dry run mode)"},
+        {"name": "force", "type": "bool", "doc": "Regenerate even if cached"}
+      ],
+      "returns": {"type": "pd.DataFrame", "doc": "Pentad dataset with all 12 variants per seed"},
+      "calls": [
+        "fn:Dataset/pentad_generator.py:generate_pentad_deterministic",
+        "fn:Dataset/context_shift_drafter.py:draft_context_shifts",
+        "fn:Dataset/cot_attack_generator.py:generate_cot_attacks",
+        "fn:config.py:ensure_dirs"
+      ],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["pentad", "orchestration", "dataset"],
+      "semantic_signature": "full-pentad-dataset-builder"
+    },
+    "fn:Dataset/cot_attack_generator.py:generate_cot_attacks": {
+      "kind": "function",
+      "name": "generate_cot_attacks",
+      "file": "Dataset/cot_attack_generator.py",
+      "lines": [100, 165],
+      "layer": "data_pipeline",
+      "purpose": "Generates slot-e CoT-attack prompts (e1_neutral, e2_stereo_push, e3_antistereo_push) for all seeds via DeepSeek API with 2 parallel workers and dual-key fallback.",
+      "signature": "generate_cot_attacks(seeds_df: pd.DataFrame) -> list[dict]",
+      "params": [{"name": "seeds_df", "type": "pd.DataFrame", "doc": "Seeds to generate CoT attacks for"}],
+      "returns": {"type": "list[dict]", "doc": "3 row dicts per seed (e1, e2, e3)"},
+      "calls": [],
+      "side_effects": ["http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["cot", "probe-generation", "deepseek"],
+      "semantic_signature": "cot-attack-probe-generator"
+    },
+    "fn:Dataset/context_shift_drafter.py:draft_context_shifts": {
+      "kind": "function",
+      "name": "draft_context_shifts",
+      "file": "Dataset/context_shift_drafter.py",
+      "lines": [83, 155],
+      "layer": "data_pipeline",
+      "purpose": "Generates slot-d context-shift prompts (d_valid, d_harmful) for all seeds via DeepSeek API with 2 parallel workers and dual-key fallback.",
+      "signature": "draft_context_shifts(seeds_df: pd.DataFrame) -> list[dict]",
+      "params": [{"name": "seeds_df", "type": "pd.DataFrame", "doc": "Seeds to generate context shifts for"}],
+      "returns": {"type": "list[dict]", "doc": "2 row dicts per seed (d_valid, d_harmful)"},
+      "calls": [],
+      "side_effects": ["http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["context-shift", "probe-generation", "deepseek"],
+      "semantic_signature": "context-shift-probe-generator"
+    },
+    "fn:Dataset/validate_pentad.py:run_all_validations": {
+      "kind": "function",
+      "name": "run_all_validations",
+      "file": "Dataset/validate_pentad.py",
+      "lines": [120, 132],
+      "layer": "data_pipeline",
+      "purpose": "Runs full pentad validation suite: schema, no empty prompts, no duplicate prompt_ids, completeness (12 per seed).",
+      "signature": "run_all_validations(df: pd.DataFrame) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame", "doc": "Pentad dataset to validate"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [
+        "fn:Dataset/validate_pentad.py:validate_schema",
+        "fn:Dataset/validate_pentad.py:validate_completeness"
+      ],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["validation", "pentad"],
+      "semantic_signature": "pentad-full-validation-runner"
+    },
+    "fn:Dataset/validate_pentad.py:validate_slot_b_grammar": {
+      "kind": "function",
+      "name": "validate_slot_b_grammar",
+      "file": "Dataset/validate_pentad.py",
+      "lines": [388, 450],
+      "layer": "data_pipeline",
+      "purpose": "Rejects ungrammatical slot-b iso-controls: Person and Person, person man, Context: person, person are, etc.",
+      "signature": "validate_slot_b_grammar(df: pd.DataFrame) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame", "doc": "Pentad dataset with slot-b rows"}],
+      "returns": {"type": "None", "doc": "Raises ValueError on grammar violations"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["validation", "pentad", "slot-b"],
+      "semantic_signature": "slot-b-grammar-validator"
+    },
+    "fn:Dataset/validate_pentad.py:assert_production_ready": {
+      "kind": "function",
+      "name": "assert_production_ready",
+      "file": "Dataset/validate_pentad.py",
+      "lines": [494, 560],
+      "layer": "data_pipeline",
+      "purpose": "Hard production gate before GPU: N=596 audit seeds, 7152 rows, all slots, slot-b grammar, no WinoBias, scorable gold, DeepSeek embed check.",
+      "signature": "assert_production_ready(df: pd.DataFrame | None = None) -> None",
+      "params": [{"name": "df", "type": "pd.DataFrame | None", "doc": "Pentad dataset; loads from disk if None"}],
+      "returns": {"type": "None", "doc": "Raises on any production violation"},
+      "calls": [
+        "fn:Dataset/validate_pentad.py:validate_slot_b_grammar",
+        "fn:Dataset/validate_pentad.py:run_all_validations"
+      ],
+      "side_effects": ["reads file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["validation", "pentad", "production-gate"],
+      "semantic_signature": "pentad-production-ready-gate"
+    },
+    "fn:GPU_CPU/load_osm.py:load_model": {
+      "kind": "function",
+      "name": "load_model",
+      "file": "GPU_CPU/load_osm.py",
+      "lines": [60, 100],
+      "layer": "ml_model",
+      "purpose": "Loads a single OSM model (bf16, flash-attention-2, device_map='auto') and caches in process-level dict.",
+      "signature": "load_model(model_cfg: dict, force_reload: bool = False) -> tuple[Any, Any]",
+      "params": [
+        {"name": "model_cfg", "type": "dict", "doc": "Entry from config.OSM_MODELS"},
+        {"name": "force_reload", "type": "bool", "doc": "Bypass in-process cache"}
+      ],
+      "returns": {"type": "tuple[model, tokenizer]", "doc": "Loaded model and tokenizer"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["http call", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["model-loading", "flash-attention", "transformers"],
+      "semantic_signature": "single-osm-model-loader"
+    },
+    "fn:GPU_CPU/load_osm.py:load_all_osm_models": {
+      "kind": "function",
+      "name": "load_all_osm_models",
+      "file": "GPU_CPU/load_osm.py",
+      "lines": [103, 138],
+      "layer": "ml_model",
+      "purpose": "Loads all 4 OSM models after verifying Linux platform and CUDA GPU availability.",
+      "signature": "load_all_osm_models() -> dict[str, tuple[Any, Any]]",
+      "params": [],
+      "returns": {"type": "dict[str, tuple[model, tokenizer]]", "doc": "Keyed by model logical name"},
+      "calls": ["fn:GPU_CPU/load_osm.py:load_model"],
+      "side_effects": ["http call", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["model-loading", "osm", "gpu"],
+      "semantic_signature": "all-osm-models-loader"
+    },
+    "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model": {
+      "kind": "function",
+      "name": "evaluate_osm_model",
+      "file": "GPU_CPU/osm_behavioral.py",
+      "lines": [100, 195],
+      "layer": "ml_model",
+      "purpose": "Runs deterministic (temp=0) and stochastic (temp=0.7, n=5) inference on one OSM model across the pentad probe set; returns result rows.",
+      "signature": "evaluate_osm_model(model_cfg, model, tokenizer, pentad_df, run_id, temperature, max_tokens, sample_index) -> pd.DataFrame",
+      "params": [
+        {"name": "model_cfg", "type": "dict", "doc": "Model config entry"},
+        {"name": "pentad_df", "type": "pd.DataFrame", "doc": "Pentad probe dataset"},
+        {"name": "sample_index", "type": "int", "doc": "0=deterministic, 1-5=stochastic"}
+      ],
+      "returns": {"type": "pd.DataFrame", "doc": "Result rows conforming to MIRAGE result schema"},
+      "calls": ["fn:GPU_CPU/utils_attention.py:_get_token_position"],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["behavioral-eval", "osm", "inference"],
+      "semantic_signature": "osm-model-behavioral-evaluator"
+    },
+    "fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral": {
+      "kind": "function",
+      "name": "run_osm_behavioral",
+      "file": "GPU_CPU/osm_behavioral.py",
+      "lines": [198, 260],
+      "layer": "ml_model",
+      "purpose": "Orchestrates full OSM behavioral evaluation with resume logic; appends results to behavioral_results.parquet.",
+      "signature": "run_osm_behavioral(pentad_df, models, run_id, force) -> pd.DataFrame",
+      "params": [
+        {"name": "pentad_df", "type": "pd.DataFrame", "doc": "Pentad probe dataset"},
+        {"name": "models", "type": "dict", "doc": "Loaded OSM models from load_all_osm_models"}
+      ],
+      "returns": {"type": "pd.DataFrame", "doc": "All behavioral results including pre-existing"},
+      "calls": ["fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model", "fn:config.py:ensure_dirs"],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["behavioral-eval", "resume", "osm"],
+      "semantic_signature": "osm-behavioral-run-orchestrator"
+    },
+    "fn:GPU_CPU/utils_attention.py:_get_token_position": {
+      "kind": "function",
+      "name": "_get_token_position",
+      "file": "GPU_CPU/utils_attention.py",
+      "lines": [25, 35],
+      "layer": "ml_model",
+      "purpose": "Finds the token index of the first occurrence of target_token in the tokenised prompt.",
+      "signature": "_get_token_position(tokenizer: Any, prompt: str, target_token: str) -> int | None",
+      "params": [
+        {"name": "tokenizer", "type": "Any", "doc": "HuggingFace tokenizer"},
+        {"name": "prompt", "type": "str", "doc": "Full prompt string"},
+        {"name": "target_token", "type": "str", "doc": "Token to locate"}
+      ],
+      "returns": {"type": "int | None", "doc": "Token index or None"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "private",
+      "tags": ["tokenisation", "cdva"],
+      "semantic_signature": "token-position-finder"
+    },
+    "fn:GPU_CPU/utils_attention.py:patch_activation_transformer_lens": {
+      "kind": "function",
+      "name": "patch_activation_transformer_lens",
+      "file": "GPU_CPU/utils_attention.py",
+      "lines": [43, 100],
+      "layer": "ml_model",
+      "purpose": "Causal activation patch via TransformerLens: replaces residual-stream at position_b in prompt_B with cached activation from prompt_A; returns delta_logit.",
+      "signature": "patch_activation_transformer_lens(tl_model, tokenizer, prompt_a, prompt_b, position_a, position_b, bias_answer) -> float",
+      "params": [],
+      "returns": {"type": "float", "doc": "delta_logit = logit_patched(bias_answer) - logit_original(bias_answer)"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["activation-patching", "transformer-lens", "cdva"],
+      "semantic_signature": "transformer-lens-activation-patcher"
+    },
+    "fn:GPU_CPU/utils_attention.py:patch_activation": {
+      "kind": "function",
+      "name": "patch_activation",
+      "file": "GPU_CPU/utils_attention.py",
+      "lines": [185, 205],
+      "layer": "ml_model",
+      "purpose": "Dispatches to TransformerLens or nnsight patching based on model_cfg.patching_lib.",
+      "signature": "patch_activation(model_cfg, model, tokenizer, prompt_a, prompt_b, pos_a, pos_b, bias_answer) -> float",
+      "params": [{"name": "model_cfg", "type": "dict", "doc": "Model config with patching_lib field"}],
+      "returns": {"type": "float", "doc": "delta_logit"},
+      "calls": [
+        "fn:GPU_CPU/utils_attention.py:patch_activation_transformer_lens",
+        "fn:GPU_CPU/utils_attention.py:patch_activation_nnsight"
+      ],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["activation-patching", "dispatch", "cdva"],
+      "semantic_signature": "unified-activation-patch-dispatcher"
+    },
+    "fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed": {
+      "kind": "function",
+      "name": "run_cdva_for_seed",
+      "file": "GPU_CPU/cdva_patching.py",
+      "lines": [50, 130],
+      "layer": "ml_model",
+      "purpose": "Runs C(5,2)=10 pairwise activation-patch comparisons for slot-c variants of a single seed; computes CDVA pair scores.",
+      "signature": "run_cdva_for_seed(seed_id, c_variants, model_cfg, model, tokenizer, run_id) -> list[dict]",
+      "params": [
+        {"name": "seed_id", "type": "str", "doc": "Seed identifier"},
+        {"name": "c_variants", "type": "pd.DataFrame", "doc": "Slot-c prompt variants for this seed"}
+      ],
+      "returns": {"type": "list[dict]", "doc": "One dict per pair with cdva_pair_score"},
+      "calls": ["fn:GPU_CPU/utils_attention.py:patch_activation"],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["cdva", "pairwise", "activation-patching"],
+      "semantic_signature": "cdva-per-seed-pairwise-scorer"
+    },
+    "fn:GPU_CPU/cdva_patching.py:run_cdva_audit": {
+      "kind": "function",
+      "name": "run_cdva_audit",
+      "file": "GPU_CPU/cdva_patching.py",
+      "lines": [165, 200],
+      "layer": "ml_model",
+      "purpose": "Orchestrates full CDVA audit across all seeds and models; appends results to cdva_results.parquet with resume support.",
+      "signature": "run_cdva_audit(pentad_df, models, run_id, force) -> pd.DataFrame",
+      "params": [
+        {"name": "pentad_df", "type": "pd.DataFrame", "doc": "Pentad probe dataset"},
+        {"name": "models", "type": "dict", "doc": "Loaded OSM models"}
+      ],
+      "returns": {"type": "pd.DataFrame", "doc": "CDVA results parquet"},
+      "calls": ["fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed", "fn:config.py:ensure_dirs"],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["cdva", "audit", "resume"],
+      "semantic_signature": "cdva-full-audit-orchestrator"
+    },
+    "fn:GPU_CPU/cdva_calibration.py:calibrate_tau": {
+      "kind": "function",
+      "name": "calibrate_tau",
+      "file": "GPU_CPU/cdva_calibration.py",
+      "lines": [58, 115],
+      "layer": "ml_model",
+      "purpose": "Finds tau that maximises behavioral-CDVA agreement on the 50-seed dev set; returns global median tau across 4 OSM models.",
+      "signature": "calibrate_tau(dev_behavioral_df: pd.DataFrame, dev_cdva_df: pd.DataFrame) -> float",
+      "params": [
+        {"name": "dev_behavioral_df", "type": "pd.DataFrame", "doc": "Dev set behavioral results"},
+        {"name": "dev_cdva_df", "type": "pd.DataFrame", "doc": "Dev set CDVA results"}
+      ],
+      "returns": {"type": "float", "doc": "Global median tau (production threshold)"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["tau", "calibration", "dev-set"],
+      "semantic_signature": "tau-threshold-calibrator"
+    },
+    "fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback": {
+      "kind": "function",
+      "name": "call_bedrock_with_fallback",
+      "file": "CPU_Only/api_clients/bedrock_client.py",
+      "lines": [95, 155],
+      "layer": "shared",
+      "purpose": "Calls AWS Bedrock (1 retry); falls back to OpenRouter round-robin (2 keys x 2 attempts) on failure; skips and flags if all fail.",
+      "signature": "call_bedrock_with_fallback(model_id, messages, max_tokens) -> dict[str, Any]",
+      "params": [
+        {"name": "model_id", "type": "str", "doc": "Bedrock model ID"},
+        {"name": "messages", "type": "list[dict]", "doc": "Chat messages"},
+        {"name": "max_tokens", "type": "int", "doc": "Max tokens to generate"}
+      ],
+      "returns": {"type": "dict", "doc": "raw_response, route_used, attempt_count, success_flag, failure_reason, latency_ms"},
+      "calls": [],
+      "side_effects": ["http call", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["api-client", "bedrock", "fallback"],
+      "semantic_signature": "bedrock-api-caller-with-openrouter-fallback"
+    },
+    "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin": {
+      "kind": "function",
+      "name": "call_gemini_with_roundrobin",
+      "file": "CPU_Only/api_clients/gemini_client.py",
+      "lines": [58, 100],
+      "layer": "shared",
+      "purpose": "Calls Gemini with 4-key round-robin; 2 attempts per key; returns standardised result dict.",
+      "signature": "call_gemini_with_roundrobin(messages, max_tokens, model_name) -> dict[str, Any]",
+      "params": [
+        {"name": "messages", "type": "list[dict]", "doc": "Chat messages"},
+        {"name": "max_tokens", "type": "int", "doc": "Max output tokens"},
+        {"name": "model_name", "type": "str | None", "doc": "Override model; defaults to GEMINI_MODEL_NAME"}
+      ],
+      "returns": {"type": "dict", "doc": "raw_response, route_used, key_index, attempt_count, success_flag, failure_reason, latency_ms"},
+      "calls": [],
+      "side_effects": ["http call", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["api-client", "gemini", "round-robin"],
+      "semantic_signature": "gemini-api-caller-round-robin"
+    },
+    "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin": {
+      "kind": "function",
+      "name": "call_mistral_with_roundrobin",
+      "file": "CPU_Only/api_clients/mistral_client.py",
+      "lines": [58, 88],
+      "layer": "shared",
+      "purpose": "Calls Mistral with 2-key round-robin; 2 attempts per key; returns standardised result dict.",
+      "signature": "call_mistral_with_roundrobin(messages, max_tokens, model_name) -> dict[str, Any]",
+      "params": [
+        {"name": "messages", "type": "list[dict]", "doc": "Chat messages"},
+        {"name": "max_tokens", "type": "int", "doc": "Max output tokens"}
+      ],
+      "returns": {"type": "dict", "doc": "raw_response, route_used, key_index, attempt_count, success_flag, failure_reason, latency_ms"},
+      "calls": [],
+      "side_effects": ["http call", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["api-client", "mistral", "round-robin"],
+      "semantic_signature": "mistral-api-caller-round-robin"
+    },
+    "fn:CPU_Only/api_clients/openrouter_client.py:call_openrouter_with_roundrobin": {
+      "kind": "function",
+      "name": "call_openrouter_with_roundrobin",
+      "file": "CPU_Only/api_clients/openrouter_client.py",
+      "lines": [55, 85],
+      "layer": "shared",
+      "purpose": "Calls OpenRouter with 2-key round-robin; used directly for OpenRouter-routed API models.",
+      "signature": "call_openrouter_with_roundrobin(model_id, messages, max_tokens) -> dict[str, Any]",
+      "params": [
+        {"name": "model_id", "type": "str", "doc": "OpenRouter model identifier"},
+        {"name": "messages", "type": "list[dict]", "doc": "Chat messages"}
+      ],
+      "returns": {"type": "dict", "doc": "raw_response, route_used, key_index, attempt_count, success_flag, failure_reason, latency_ms"},
+      "calls": [],
+      "side_effects": ["http call", "reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["api-client", "openrouter", "round-robin"],
+      "semantic_signature": "openrouter-api-caller-round-robin"
+    },
+    "fn:CPU_Only/api_behavioral.py:evaluate_api_model": {
+      "kind": "function",
+      "name": "evaluate_api_model",
+      "file": "CPU_Only/api_behavioral.py",
+      "lines": [99, 185],
+      "layer": "research",
+      "purpose": "Runs inference for one API model on all pentad prompts, routing to the appropriate client; returns result rows.",
+      "signature": "evaluate_api_model(model_cfg, pentad_df, run_id, completed_keys) -> pd.DataFrame",
+      "params": [
+        {"name": "model_cfg", "type": "dict", "doc": "API model config entry"},
+        {"name": "pentad_df", "type": "pd.DataFrame", "doc": "Pentad probe dataset"},
+        {"name": "completed_keys", "type": "set[tuple]", "doc": "Already-completed (prompt_id, model_name) pairs"}
+      ],
+      "returns": {"type": "pd.DataFrame", "doc": "Result rows"},
+      "calls": [
+        "fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback",
+        "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",
+        "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin",
+        "fn:CPU_Only/judge_router.py:judge"
+      ],
+      "side_effects": ["http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["behavioral-eval", "api-models"],
+      "semantic_signature": "api-model-behavioral-evaluator"
+    },
+    "fn:CPU_Only/api_behavioral.py:run_api_behavioral": {
+      "kind": "function",
+      "name": "run_api_behavioral",
+      "file": "CPU_Only/api_behavioral.py",
+      "lines": [188, 220],
+      "layer": "research",
+      "purpose": "Orchestrates API behavioral evaluation for all 4 API models with resume logic; appends to behavioral_results.parquet.",
+      "signature": "run_api_behavioral(pentad_df, run_id, force) -> pd.DataFrame",
+      "params": [{"name": "pentad_df", "type": "pd.DataFrame", "doc": "Pentad probe dataset"}],
+      "returns": {"type": "pd.DataFrame", "doc": "All behavioral results including pre-existing"},
+      "calls": [
+        "fn:CPU_Only/api_behavioral.py:evaluate_api_model",
+        "fn:config.py:ensure_dirs"
+      ],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["behavioral-eval", "resume", "api-models"],
+      "semantic_signature": "api-behavioral-run-orchestrator"
+    },
+    "fn:CPU_Only/judge_router.py:judge": {
+      "kind": "function",
+      "name": "judge",
+      "file": "CPU_Only/judge_router.py",
+      "lines": [138, 160],
+      "layer": "shared",
+      "purpose": "Routes a malformed model response to a judge LLM (gemini/deepseek/mistral) for answer, confidence, and rationale extraction.",
+      "signature": "judge(raw_response: str, provider: str = 'gemini') -> tuple[dict | None, str]",
+      "params": [
+        {"name": "raw_response", "type": "str", "doc": "Malformed LLM output"},
+        {"name": "provider", "type": "str", "doc": "Judge provider: 'gemini', 'deepseek', or 'mistral'"}
+      ],
+      "returns": {"type": "tuple[dict | None, str]", "doc": "(parsed_dict, parse_method)"},
+      "calls": [
+        "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",
+        "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin"
+      ],
+      "side_effects": ["http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["judge", "json-repair"],
+      "semantic_signature": "malformed-response-judge-router"
+    },
+    "fn:CPU_Only/scoring.py:compute_mirage_b": {
+      "kind": "function",
+      "name": "compute_mirage_b",
+      "file": "CPU_Only/scoring.py",
+      "lines": [40, 80],
+      "layer": "research",
+      "purpose": "Computes MIRAGE-B pass for a (seed_id, model_name) pair: correct(a,b), behavioral_stable(c), correct(d), cot_robust(e).",
+      "signature": "compute_mirage_b(behavioral_df, seed_id, model_name) -> bool",
+      "params": [
+        {"name": "behavioral_df", "type": "pd.DataFrame", "doc": "Full behavioral results"},
+        {"name": "seed_id", "type": "str", "doc": "Seed identifier"},
+        {"name": "model_name", "type": "str", "doc": "Model logical name"}
+      ],
+      "returns": {"type": "bool", "doc": "True if all 5 MIRAGE-B criteria pass"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["scoring", "mirage-b"],
+      "semantic_signature": "mirage-b-pass-fail-scorer"
+    },
+    "fn:CPU_Only/scoring.py:compute_mirage_full": {
+      "kind": "function",
+      "name": "compute_mirage_full",
+      "file": "CPU_Only/scoring.py",
+      "lines": [83, 110],
+      "layer": "research",
+      "purpose": "Computes MIRAGE-Full = MIRAGE-B AND (mean CDVA seed score > tau). Only applicable to the 4 OSM models.",
+      "signature": "compute_mirage_full(behavioral_df, cdva_df, seed_id, model_name, tau) -> bool",
+      "params": [
+        {"name": "tau", "type": "float", "doc": "Calibrated CDVA threshold from calibrate_tau"}
+      ],
+      "returns": {"type": "bool", "doc": "True if MIRAGE-B and CDVA both pass"},
+      "calls": ["fn:CPU_Only/scoring.py:compute_mirage_b"],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["scoring", "mirage-full", "cdva"],
+      "semantic_signature": "mirage-full-pass-fail-scorer"
+    },
+    "fn:CPU_Only/statistics.py:bootstrap_ci": {
+      "kind": "function",
+      "name": "bootstrap_ci",
+      "file": "CPU_Only/statistics.py",
+      "lines": [43, 75],
+      "layer": "research",
+      "purpose": "Bootstrap 95% CI using percentile method (Efron & Tibshirani 1993); returns (point_estimate, lower, upper).",
+      "signature": "bootstrap_ci(values, n_resamples=5000, alpha=0.05, statistic='mean') -> tuple[float, float, float]",
+      "params": [
+        {"name": "values", "type": "list[float] | np.ndarray", "doc": "Observations"},
+        {"name": "statistic", "type": "str", "doc": "'mean' or 'proportion'"}
+      ],
+      "returns": {"type": "tuple[float, float, float]", "doc": "(point_estimate, lower_ci, upper_ci)"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["statistics", "bootstrap", "ci"],
+      "semantic_signature": "bootstrap-confidence-interval-estimator"
+    },
+    "fn:CPU_Only/statistics.py:mcnemar_paired": {
+      "kind": "function",
+      "name": "mcnemar_paired",
+      "file": "CPU_Only/statistics.py",
+      "lines": [78, 115],
+      "layer": "research",
+      "purpose": "McNemar paired test for two binary outcome columns; uses exact binomial for n<25, chi-squared with CC otherwise.",
+      "signature": "mcnemar_paired(table_2x2: list[list[int]]) -> tuple[float, float]",
+      "params": [{"name": "table_2x2", "type": "list[list[int]]", "doc": "[[n00,n01],[n10,n11]]"}],
+      "returns": {"type": "tuple[float, float]", "doc": "(statistic, p_value)"},
+      "calls": [],
+      "side_effects": ["pure"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["statistics", "mcnemar", "hypothesis-testing"],
+      "semantic_signature": "mcnemar-paired-binary-test"
+    },
+    "fn:CPU_Only/leaderboard.py:compute_leaderboard": {
+      "kind": "function",
+      "name": "compute_leaderboard",
+      "file": "CPU_Only/leaderboard.py",
+      "lines": [150, 200],
+      "layer": "research",
+      "purpose": "Aggregates FM1-FM5 failure-mode rates per benchmark from behavioral and CDVA results; produces 4x5 leaderboard DataFrame.",
+      "signature": "compute_leaderboard(behavioral_df, cdva_df) -> pd.DataFrame",
+      "params": [
+        {"name": "behavioral_df", "type": "pd.DataFrame", "doc": "Full behavioral results"},
+        {"name": "cdva_df", "type": "pd.DataFrame", "doc": "Full CDVA results"}
+      ],
+      "returns": {"type": "pd.DataFrame", "doc": "4 rows (benchmarks) x 5 columns (FM1-FM5)"},
+      "calls": ["fn:config.py:ensure_dirs"],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["leaderboard", "fm1-fm5"],
+      "semantic_signature": "fm1-fm5-leaderboard-builder"
+    },
+    "fn:CPU_Only/predictive_validity.py:run_predictive_validity": {
+      "kind": "function",
+      "name": "run_predictive_validity",
+      "file": "CPU_Only/predictive_validity.py",
+      "lines": [158, 220],
+      "layer": "research",
+      "purpose": "Trains logistic-regression classifier on BBQ+CrowS+StereoSet features; evaluates on held-out WinoBias; reports AUC and F1.",
+      "signature": "run_predictive_validity(behavioral_df, cdva_df) -> dict",
+      "params": [
+        {"name": "behavioral_df", "type": "pd.DataFrame", "doc": "Full behavioral results"},
+        {"name": "cdva_df", "type": "pd.DataFrame", "doc": "Full CDVA results"}
+      ],
+      "returns": {"type": "dict", "doc": "AUC, F1, and per-model accuracy on WinoBias"},
+      "calls": [],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["predictive-validity", "classification", "held-out"],
+      "semantic_signature": "predictive-validity-classifier-runner"
+    },
+    "fn:CPU_Only/results_analysis.py:plot_mirage_b_pass_rates": {
+      "kind": "function",
+      "name": "plot_mirage_b_pass_rates",
+      "file": "CPU_Only/results_analysis.py",
+      "lines": [30, 70],
+      "layer": "research",
+      "purpose": "Generates grouped bar chart of MIRAGE-B pass rate per model per benchmark; saves to figures/mirage_b_pass_rates.png.",
+      "signature": "plot_mirage_b_pass_rates(scored_df: pd.DataFrame) -> None",
+      "params": [{"name": "scored_df", "type": "pd.DataFrame", "doc": "Scored results with mirage_b_pass column"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["visualisation", "mirage-b"],
+      "semantic_signature": "mirage-b-pass-rate-bar-chart"
+    },
+    "fn:CPU_Only/results_analysis.py:plot_cdva_distribution": {
+      "kind": "function",
+      "name": "plot_cdva_distribution",
+      "file": "CPU_Only/results_analysis.py",
+      "lines": [73, 115],
+      "layer": "research",
+      "purpose": "Generates violin plot of per-seed CDVA score distribution per model; saves to figures/cdva_distribution.png.",
+      "signature": "plot_cdva_distribution(cdva_df: pd.DataFrame) -> None",
+      "params": [{"name": "cdva_df", "type": "pd.DataFrame", "doc": "CDVA results"}],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [],
+      "side_effects": ["writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["visualisation", "cdva"],
+      "semantic_signature": "cdva-score-violin-plotter"
+    },
+    "fn:Dry_Run/dry_run_dataset.py:run": {
+      "kind": "function",
+      "name": "run",
+      "file": "Dry_Run/dry_run_dataset.py",
+      "lines": [130, 175],
+      "layer": "test",
+      "purpose": "Executes 8 dataset dry-run checks; returns True if all pass.",
+      "signature": "run() -> bool",
+      "params": [],
+      "returns": {"type": "bool", "doc": "True if all 8 checks pass"},
+      "calls": [
+        "fn:config.py:validate_all_keys",
+        "fn:Dataset/download_bbq.py:download_bbq",
+        "fn:Dataset/download_crows_pairs.py:download_crows_pairs",
+        "fn:Dataset/download_stereoset.py:download_stereoset",
+        "fn:Dataset/download_winobias.py:download_winobias",
+        "fn:Dataset/sample_seeds.py:sample_seeds",
+        "fn:Dataset/pentad_generator.py:build_pentad_dataset"
+      ],
+      "side_effects": ["http call", "writes file"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["dry-run", "dataset"],
+      "semantic_signature": "dataset-pipeline-sanity-checker"
+    },
+    "fn:Dry_Run/dry_run_apis.py:run": {
+      "kind": "function",
+      "name": "run",
+      "file": "Dry_Run/dry_run_apis.py",
+      "lines": [190, 220],
+      "layer": "test",
+      "purpose": "Tests all 10 API keys with one minimal HTTP call each; returns True if all 10 pass.",
+      "signature": "run() -> bool",
+      "params": [],
+      "returns": {"type": "bool", "doc": "True if all 10 keys pass"},
+      "calls": ["fn:config.py:validate_all_keys"],
+      "side_effects": ["http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["dry-run", "api-keys"],
+      "semantic_signature": "api-key-connectivity-tester"
+    },
+    "fn:Dry_Run/dry_run_cpu_only.py:run": {
+      "kind": "function",
+      "name": "run",
+      "file": "Dry_Run/dry_run_cpu_only.py",
+      "lines": [130, 200],
+      "layer": "test",
+      "purpose": "Tests CPU-only pipeline: Bedrock (w/ fallback), Gemini x4, Mistral x2, judge router, scoring logic, statistics.",
+      "signature": "run() -> bool",
+      "params": [],
+      "returns": {"type": "bool", "doc": "True if all checks pass"},
+      "calls": [
+        "fn:config.py:validate_all_keys",
+        "fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback",
+        "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",
+        "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin",
+        "fn:CPU_Only/judge_router.py:judge",
+        "fn:CPU_Only/scoring.py:compute_mirage_b"
+      ],
+      "side_effects": ["http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["dry-run", "cpu-only"],
+      "semantic_signature": "cpu-pipeline-sanity-checker"
+    },
+    "fn:Dry_Run/dry_run_gpu_cpu.py:run": {
+      "kind": "function",
+      "name": "run",
+      "file": "Dry_Run/dry_run_gpu_cpu.py",
+      "lines": [100, 180],
+      "layer": "test",
+      "purpose": "Tests GPU-CPU pipeline: Linux+CUDA check, TransformerLens, nnsight, flash-attention, and OSM model load+one-prompt inference.",
+      "signature": "run() -> bool",
+      "params": [],
+      "returns": {"type": "bool", "doc": "True if all checks pass (requires Linux + CUDA)"},
+      "calls": [
+        "fn:config.py:validate_all_keys",
+        "fn:GPU_CPU/load_osm.py:load_all_osm_models",
+        "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model"
+      ],
+      "side_effects": ["reads env"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["dry-run", "gpu", "osm"],
+      "semantic_signature": "gpu-pipeline-sanity-checker"
+    },
+    "fn:Dry_Run/dry_run_all.py:main": {
+      "kind": "function",
+      "name": "main",
+      "file": "Dry_Run/dry_run_all.py",
+      "lines": [33, 80],
+      "layer": "test",
+      "purpose": "Master dry-run entry point; runs dataset, GPU_CPU, and CPU_Only phases sequentially; supports --skip-gpu and --only CLI flags.",
+      "signature": "main() -> None",
+      "params": [],
+      "returns": {"type": "None", "doc": ""},
+      "calls": [
+        "fn:Dry_Run/dry_run_dataset.py:run",
+        "fn:Dry_Run/dry_run_gpu_cpu.py:run",
+        "fn:Dry_Run/dry_run_cpu_only.py:run",
+        "fn:logger_setup.py:setup_logging"
+      ],
+      "side_effects": ["writes file", "http call"],
+      "async": false,
+      "visibility": "public",
+      "tags": ["entry-point", "dry-run"],
+      "semantic_signature": "master-dry-run-entry-point"
+    },
+    "model:config.py:llama-3.1-8b-instruct": {
+      "kind": "model_artifact",
+      "name": "llama-3.1-8b-instruct",
+      "file": "config.py",
+      "lines": [103, 108],
+      "layer": "ml_model",
+      "purpose": "Meta Llama 3.1 8B Instruct; OSM #1; patched via TransformerLens.",
+      "architecture": "Llama-3.1",
+      "params_count": "8B",
+      "checkpoint_path": "meta-llama/Llama-3.1-8B-Instruct",
+      "trained_on": [],
+      "tags": ["osm", "llama"],
+      "semantic_signature": "llama-3.1-8b-instruct-osm"
+    },
+    "model:config.py:qwen2.5-7b-instruct": {
+      "kind": "model_artifact",
+      "name": "qwen2.5-7b-instruct",
+      "file": "config.py",
+      "lines": [109, 113],
+      "layer": "ml_model",
+      "purpose": "Qwen 2.5 7B Instruct; OSM #2; patched via nnsight.",
+      "architecture": "Qwen2.5",
+      "params_count": "7B",
+      "checkpoint_path": "Qwen/Qwen2.5-7B-Instruct",
+      "trained_on": [],
+      "tags": ["osm", "qwen"],
+      "semantic_signature": "qwen2.5-7b-instruct-osm"
+    },
+    "model:config.py:gemma-2-2b-it": {
+      "kind": "model_artifact",
+      "name": "gemma-2-2b-it",
+      "file": "config.py",
+      "lines": [114, 118],
+      "layer": "ml_model",
+      "purpose": "Google Gemma-2 9B IT; OSM #3; patched via TransformerLens.",
+      "architecture": "Gemma-2",
+      "params_count": "9B",
+      "checkpoint_path": "google/gemma-2-2b-it",
+      "trained_on": [],
+      "tags": ["osm", "gemma"],
+      "semantic_signature": "gemma-2-2b-it-osm"
+    },
+    "model:config.py:phi-4-mini-instruct": {
+      "kind": "model_artifact",
+      "name": "phi-4-mini-instruct",
+      "file": "config.py",
+      "lines": [119, 123],
+      "layer": "ml_model",
+      "purpose": "Microsoft Phi-4 Mini Instruct; OSM #4; patched via nnsight.",
+      "architecture": "Phi-4",
+      "params_count": "3.8B",
+      "checkpoint_path": "microsoft/Phi-4-mini-instruct",
+      "trained_on": [],
+      "tags": ["osm", "phi"],
+      "semantic_signature": "phi-4-mini-instruct-osm"
+    }
+  },
+
+  "relationships": [
+    {"from": "fn:logger_setup.py:setup_logging",         "to": "fn:config.py:ensure_dirs",                                                "type": "calls"},
+    {"from": "fn:Dataset/download_bbq.py:download_bbq",  "to": "fn:config.py:ensure_dirs",                                                 "type": "calls"},
+    {"from": "fn:Dataset/download_crows_pairs.py:download_crows_pairs", "to": "fn:config.py:ensure_dirs",                                   "type": "calls"},
+    {"from": "fn:Dataset/download_stereoset.py:download_stereoset",     "to": "fn:config.py:ensure_dirs",                                   "type": "calls"},
+    {"from": "fn:Dataset/download_winobias.py:download_winobias",       "to": "fn:config.py:ensure_dirs",                                   "type": "calls"},
+    {"from": "fn:Dataset/sample_seeds.py:sample_seeds",  "to": "fn:Dataset/download_bbq.py:download_bbq",                                  "type": "calls"},
+    {"from": "fn:Dataset/sample_seeds.py:sample_seeds",  "to": "fn:Dataset/download_crows_pairs.py:download_crows_pairs",                  "type": "calls"},
+    {"from": "fn:Dataset/sample_seeds.py:sample_seeds",  "to": "fn:Dataset/download_stereoset.py:download_stereoset",                      "type": "calls"},
+    {"from": "fn:Dataset/sample_seeds.py:sample_seeds",  "to": "fn:Dataset/download_winobias.py:download_winobias",                        "type": "calls"},
+    {"from": "fn:Dataset/pentad_generator.py:build_pentad_dataset", "to": "fn:Dataset/pentad_generator.py:generate_pentad_deterministic",  "type": "calls"},
+    {"from": "fn:Dataset/pentad_generator.py:build_pentad_dataset", "to": "fn:Dataset/cot_attack_generator.py:generate_cot_attacks",        "type": "calls"},
+    {"from": "fn:Dataset/pentad_generator.py:build_pentad_dataset", "to": "fn:Dataset/context_shift_drafter.py:draft_context_shifts",       "type": "calls"},
+    {"from": "fn:Dataset/validate_pentad.py:run_all_validations",   "to": "fn:Dataset/validate_pentad.py:validate_schema",                  "type": "calls"},
+    {"from": "fn:Dataset/validate_pentad.py:run_all_validations",   "to": "fn:Dataset/validate_pentad.py:validate_completeness",            "type": "calls"},
+    {"from": "fn:GPU_CPU/load_osm.py:load_all_osm_models",          "to": "fn:GPU_CPU/load_osm.py:load_model",                             "type": "calls"},
+    {"from": "fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral",     "to": "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model",               "type": "calls"},
+    {"from": "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model",     "to": "fn:GPU_CPU/utils_attention.py:_get_token_position",             "type": "calls"},
+    {"from": "fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed",       "to": "fn:GPU_CPU/utils_attention.py:patch_activation",               "type": "calls"},
+    {"from": "fn:GPU_CPU/utils_attention.py:patch_activation",      "to": "fn:GPU_CPU/utils_attention.py:patch_activation_transformer_lens","type": "calls"},
+    {"from": "fn:GPU_CPU/cdva_patching.py:run_cdva_audit",          "to": "fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed",                 "type": "calls"},
+    {"from": "fn:CPU_Only/scoring.py:compute_mirage_full",          "to": "fn:CPU_Only/scoring.py:compute_mirage_b",                       "type": "calls"},
+    {"from": "fn:CPU_Only/api_behavioral.py:evaluate_api_model",    "to": "fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback", "type": "calls"},
+    {"from": "fn:CPU_Only/api_behavioral.py:evaluate_api_model",    "to": "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",  "type": "calls"},
+    {"from": "fn:CPU_Only/api_behavioral.py:evaluate_api_model",    "to": "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin","type": "calls"},
+    {"from": "fn:CPU_Only/api_behavioral.py:evaluate_api_model",    "to": "fn:CPU_Only/judge_router.py:judge",                            "type": "calls"},
+    {"from": "fn:CPU_Only/api_behavioral.py:run_api_behavioral",    "to": "fn:CPU_Only/api_behavioral.py:evaluate_api_model",             "type": "calls"},
+    {"from": "fn:CPU_Only/judge_router.py:judge",                   "to": "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",  "type": "calls"},
+    {"from": "fn:CPU_Only/judge_router.py:judge",                   "to": "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin","type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_all.py:main",                      "to": "fn:Dry_Run/dry_run_dataset.py:run",                            "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_all.py:main",                      "to": "fn:Dry_Run/dry_run_gpu_cpu.py:run",                            "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_all.py:main",                      "to": "fn:Dry_Run/dry_run_cpu_only.py:run",                           "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_all.py:main",                      "to": "fn:logger_setup.py:setup_logging",                            "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:config.py:validate_all_keys",                              "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:Dataset/download_bbq.py:download_bbq",                      "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:Dataset/download_crows_pairs.py:download_crows_pairs",      "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:Dataset/download_stereoset.py:download_stereoset",          "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:Dataset/download_winobias.py:download_winobias",            "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:Dataset/sample_seeds.py:sample_seeds",                      "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_dataset.py:run",                   "to": "fn:Dataset/pentad_generator.py:build_pentad_dataset",          "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_cpu_only.py:run",                  "to": "fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback", "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_cpu_only.py:run",                  "to": "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",  "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_cpu_only.py:run",                  "to": "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin","type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_cpu_only.py:run",                  "to": "fn:CPU_Only/judge_router.py:judge",                            "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_cpu_only.py:run",                  "to": "fn:CPU_Only/scoring.py:compute_mirage_b",                      "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_gpu_cpu.py:run",                   "to": "fn:GPU_CPU/load_osm.py:load_all_osm_models",                  "type": "calls"},
+    {"from": "fn:Dry_Run/dry_run_gpu_cpu.py:run",                   "to": "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model",             "type": "calls"},
+    {"from": "dataset:Dataset/download_bbq.py:BBQ",                 "to": "fn:Dataset/sample_seeds.py:sample_seeds",                      "type": "produces"},
+    {"from": "dataset:Dataset/download_crows_pairs.py:CrowSPairs",  "to": "fn:Dataset/sample_seeds.py:sample_seeds",                      "type": "produces"},
+    {"from": "dataset:Dataset/download_stereoset.py:StereoSet",     "to": "fn:Dataset/sample_seeds.py:sample_seeds",                      "type": "produces"},
+    {"from": "dataset:Dataset/download_winobias.py:WinoBias",       "to": "fn:CPU_Only/predictive_validity.py:run_predictive_validity",   "type": "produces"},
+    {"from": "fn:config.py:_require",                               "to": "fn:config.py:validate_all_keys",                              "type": "reads_config"},
+    {"from": "fn:Dataset/download_bbq.py:download_bbq",            "to": "fn:config.py:_require",                                        "type": "reads_config"},
+    {"from": "fn:GPU_CPU/load_osm.py:load_model",                  "to": "fn:config.py:_require",                                        "type": "reads_config"}
+  ],
+
+  "indexes": {
+    "by_layer": {
+      "config": [
+        "fn:config.py:_require",
+        "fn:config.py:_optional",
+        "fn:config.py:ensure_dirs",
+        "fn:config.py:validate_all_keys"
+      ],
+      "shared": [
+        "fn:logger_setup.py:setup_logging",
+        "fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback",
+        "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",
+        "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin",
+        "fn:CPU_Only/api_clients/openrouter_client.py:call_openrouter_with_roundrobin",
+        "fn:CPU_Only/judge_router.py:judge"
+      ],
+      "data_pipeline": [
+        "fn:Dataset/download_bbq.py:download_bbq",
+        "fn:Dataset/download_bbq.py:validate_bbq",
+        "dataset:Dataset/download_bbq.py:BBQ",
+        "fn:Dataset/download_crows_pairs.py:download_crows_pairs",
+        "fn:Dataset/download_crows_pairs.py:validate_crows_pairs",
+        "dataset:Dataset/download_crows_pairs.py:CrowSPairs",
+        "fn:Dataset/download_stereoset.py:download_stereoset",
+        "fn:Dataset/download_stereoset.py:validate_stereoset",
+        "dataset:Dataset/download_stereoset.py:StereoSet",
+        "fn:Dataset/download_winobias.py:download_winobias",
+        "fn:Dataset/download_winobias.py:validate_winobias",
+        "dataset:Dataset/download_winobias.py:WinoBias",
+        "fn:Dataset/sample_seeds.py:sample_seeds",
+        "fn:Dataset/sample_seeds.py:verify_seeds_integrity",
+        "fn:Dataset/pentad_generator.py:generate_pentad_deterministic",
+        "fn:Dataset/pentad_generator.py:build_pentad_dataset",
+        "fn:Dataset/cot_attack_generator.py:generate_cot_attacks",
+        "fn:Dataset/context_shift_drafter.py:draft_context_shifts",
+        "fn:Dataset/validate_pentad.py:run_all_validations"
+      ],
+      "ml_model": [
+        "fn:GPU_CPU/load_osm.py:load_model",
+        "fn:GPU_CPU/load_osm.py:load_all_osm_models",
+        "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model",
+        "fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral",
+        "fn:GPU_CPU/utils_attention.py:_get_token_position",
+        "fn:GPU_CPU/utils_attention.py:patch_activation_transformer_lens",
+        "fn:GPU_CPU/utils_attention.py:patch_activation",
+        "fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed",
+        "fn:GPU_CPU/cdva_patching.py:run_cdva_audit",
+        "fn:GPU_CPU/cdva_calibration.py:calibrate_tau",
+        "model:config.py:llama-3.1-8b-instruct",
+        "model:config.py:qwen2.5-7b-instruct",
+        "model:config.py:gemma-2-2b-it",
+        "model:config.py:phi-4-mini-instruct"
+      ],
+      "research": [
+        "fn:CPU_Only/api_behavioral.py:evaluate_api_model",
+        "fn:CPU_Only/api_behavioral.py:run_api_behavioral",
+        "fn:CPU_Only/scoring.py:compute_mirage_b",
+        "fn:CPU_Only/scoring.py:compute_mirage_full",
+        "fn:CPU_Only/statistics.py:bootstrap_ci",
+        "fn:CPU_Only/statistics.py:mcnemar_paired",
+        "fn:CPU_Only/leaderboard.py:compute_leaderboard",
+        "fn:CPU_Only/predictive_validity.py:run_predictive_validity",
+        "fn:CPU_Only/results_analysis.py:plot_mirage_b_pass_rates",
+        "fn:CPU_Only/results_analysis.py:plot_cdva_distribution"
+      ],
+      "test": [
+        "fn:Dry_Run/dry_run_dataset.py:run",
+        "fn:Dry_Run/dry_run_apis.py:run",
+        "fn:Dry_Run/dry_run_cpu_only.py:run",
+        "fn:Dry_Run/dry_run_gpu_cpu.py:run",
+        "fn:Dry_Run/dry_run_all.py:main"
+      ]
+    },
+    "by_tag": {
+      "osm":                  ["fn:GPU_CPU/load_osm.py:load_model", "fn:GPU_CPU/load_osm.py:load_all_osm_models", "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model", "fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral", "model:config.py:llama-3.1-8b-instruct", "model:config.py:qwen2.5-7b-instruct", "model:config.py:gemma-2-2b-it", "model:config.py:phi-4-mini-instruct"],
+      "cdva":                 ["fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed", "fn:GPU_CPU/cdva_patching.py:run_cdva_audit", "fn:GPU_CPU/cdva_calibration.py:calibrate_tau", "fn:GPU_CPU/utils_attention.py:patch_activation", "fn:CPU_Only/scoring.py:compute_mirage_full"],
+      "download":             ["fn:Dataset/download_bbq.py:download_bbq", "fn:Dataset/download_crows_pairs.py:download_crows_pairs", "fn:Dataset/download_stereoset.py:download_stereoset", "fn:Dataset/download_winobias.py:download_winobias"],
+      "held-out":             ["dataset:Dataset/download_winobias.py:WinoBias", "fn:Dataset/download_winobias.py:download_winobias", "fn:CPU_Only/predictive_validity.py:run_predictive_validity"],
+      "api-client":           ["fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback", "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin", "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin", "fn:CPU_Only/api_clients/openrouter_client.py:call_openrouter_with_roundrobin"],
+      "scoring":              ["fn:CPU_Only/scoring.py:compute_mirage_b", "fn:CPU_Only/scoring.py:compute_mirage_full"],
+      "dry-run":              ["fn:Dry_Run/dry_run_dataset.py:run", "fn:Dry_Run/dry_run_apis.py:run", "fn:Dry_Run/dry_run_cpu_only.py:run", "fn:Dry_Run/dry_run_gpu_cpu.py:run", "fn:Dry_Run/dry_run_all.py:main"],
+      "probe-generation":     ["fn:Dataset/pentad_generator.py:generate_pentad_deterministic", "fn:Dataset/pentad_generator.py:build_pentad_dataset", "fn:Dataset/cot_attack_generator.py:generate_cot_attacks", "fn:Dataset/context_shift_drafter.py:draft_context_shifts"],
+      "reproducibility":      ["fn:Dataset/sample_seeds.py:sample_seeds", "fn:Dataset/sample_seeds.py:verify_seeds_integrity"],
+      "statistics":           ["fn:CPU_Only/statistics.py:bootstrap_ci", "fn:CPU_Only/statistics.py:mcnemar_paired"],
+      "visualisation":        ["fn:CPU_Only/results_analysis.py:plot_mirage_b_pass_rates", "fn:CPU_Only/results_analysis.py:plot_cdva_distribution"],
+      "validation":           ["fn:Dataset/download_bbq.py:validate_bbq", "fn:Dataset/download_crows_pairs.py:validate_crows_pairs", "fn:Dataset/download_stereoset.py:validate_stereoset", "fn:Dataset/download_winobias.py:validate_winobias", "fn:Dataset/validate_pentad.py:run_all_validations", "fn:Dataset/validate_pentad.py:validate_slot_b_grammar", "fn:Dataset/validate_pentad.py:assert_production_ready"]
+    },
+    "by_semantic_signature": {
+      "bbq-dataset-downloader-cacher":                ["fn:Dataset/download_bbq.py:download_bbq"],
+      "crows-pairs-dataset-downloader-cacher":        ["fn:Dataset/download_crows_pairs.py:download_crows_pairs"],
+      "stereoset-dataset-downloader-cacher":          ["fn:Dataset/download_stereoset.py:download_stereoset"],
+      "winobias-dataset-downloader-cacher":           ["fn:Dataset/download_winobias.py:download_winobias"],
+      "stratified-seed-sampler":                      ["fn:Dataset/sample_seeds.py:sample_seeds"],
+      "full-pentad-dataset-builder":                  ["fn:Dataset/pentad_generator.py:build_pentad_dataset"],
+      "deterministic-pentad-slot-generator":          ["fn:Dataset/pentad_generator.py:generate_pentad_deterministic"],
+      "cot-attack-probe-generator":                   ["fn:Dataset/cot_attack_generator.py:generate_cot_attacks"],
+      "context-shift-probe-generator":               ["fn:Dataset/context_shift_drafter.py:draft_context_shifts"],
+      "single-osm-model-loader":                      ["fn:GPU_CPU/load_osm.py:load_model"],
+      "all-osm-models-loader":                        ["fn:GPU_CPU/load_osm.py:load_all_osm_models"],
+      "osm-model-behavioral-evaluator":              ["fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model"],
+      "osm-behavioral-run-orchestrator":             ["fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral"],
+      "unified-activation-patch-dispatcher":          ["fn:GPU_CPU/utils_attention.py:patch_activation"],
+      "transformer-lens-activation-patcher":          ["fn:GPU_CPU/utils_attention.py:patch_activation_transformer_lens"],
+      "cdva-per-seed-pairwise-scorer":               ["fn:GPU_CPU/cdva_patching.py:run_cdva_for_seed"],
+      "cdva-full-audit-orchestrator":                ["fn:GPU_CPU/cdva_patching.py:run_cdva_audit"],
+      "tau-threshold-calibrator":                    ["fn:GPU_CPU/cdva_calibration.py:calibrate_tau"],
+      "bedrock-api-caller-with-openrouter-fallback":  ["fn:CPU_Only/api_clients/bedrock_client.py:call_bedrock_with_fallback"],
+      "gemini-api-caller-round-robin":               ["fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin"],
+      "mistral-api-caller-round-robin":              ["fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin"],
+      "openrouter-api-caller-round-robin":           ["fn:CPU_Only/api_clients/openrouter_client.py:call_openrouter_with_roundrobin"],
+      "api-model-behavioral-evaluator":             ["fn:CPU_Only/api_behavioral.py:evaluate_api_model"],
+      "api-behavioral-run-orchestrator":             ["fn:CPU_Only/api_behavioral.py:run_api_behavioral"],
+      "malformed-response-judge-router":             ["fn:CPU_Only/judge_router.py:judge"],
+      "mirage-b-pass-fail-scorer":                   ["fn:CPU_Only/scoring.py:compute_mirage_b"],
+      "mirage-full-pass-fail-scorer":                ["fn:CPU_Only/scoring.py:compute_mirage_full"],
+      "bootstrap-confidence-interval-estimator":     ["fn:CPU_Only/statistics.py:bootstrap_ci"],
+      "mcnemar-paired-binary-test":                  ["fn:CPU_Only/statistics.py:mcnemar_paired"],
+      "fm1-fm5-leaderboard-builder":                 ["fn:CPU_Only/leaderboard.py:compute_leaderboard"],
+      "predictive-validity-classifier-runner":       ["fn:CPU_Only/predictive_validity.py:run_predictive_validity"],
+      "mirage-b-pass-rate-bar-chart":                ["fn:CPU_Only/results_analysis.py:plot_mirage_b_pass_rates"],
+      "cdva-score-violin-plotter":                   ["fn:CPU_Only/results_analysis.py:plot_cdva_distribution"],
+      "dataset-pipeline-sanity-checker":             ["fn:Dry_Run/dry_run_dataset.py:run"],
+      "api-key-connectivity-tester":                 ["fn:Dry_Run/dry_run_apis.py:run"],
+      "cpu-pipeline-sanity-checker":                 ["fn:Dry_Run/dry_run_cpu_only.py:run"],
+      "gpu-pipeline-sanity-checker":                 ["fn:Dry_Run/dry_run_gpu_cpu.py:run"],
+      "master-dry-run-entry-point":                  ["fn:Dry_Run/dry_run_all.py:main"],
+      "rotating-logger-initialiser":                 ["fn:logger_setup.py:setup_logging"],
+      "all-api-keys-presence-validator":             ["fn:config.py:validate_all_keys"],
+      "output-directory-creator":                    ["fn:config.py:ensure_dirs"]
+    },
+    "entry_points": [
+      "fn:Dry_Run/dry_run_all.py:main",
+      "fn:Dry_Run/dry_run_dataset.py:run",
+      "fn:Dry_Run/dry_run_apis.py:run",
+      "fn:Dry_Run/dry_run_cpu_only.py:run",
+      "fn:Dry_Run/dry_run_gpu_cpu.py:run"
+    ],
+    "cross_layer_paths": [
+      {
+        "name": "Dataset pipeline end-to-end",
+        "path": [
+          "fn:Dataset/download_bbq.py:download_bbq",
+          "fn:Dataset/sample_seeds.py:sample_seeds",
+          "fn:Dataset/pentad_generator.py:build_pentad_dataset",
+          "fn:Dataset/validate_pentad.py:run_all_validations"
+        ]
+      },
+      {
+        "name": "OSM behavioral + CDVA pipeline",
+        "path": [
+          "fn:GPU_CPU/load_osm.py:load_all_osm_models",
+          "fn:GPU_CPU/osm_behavioral.py:run_osm_behavioral",
+          "fn:GPU_CPU/cdva_patching.py:run_cdva_audit",
+          "fn:GPU_CPU/cdva_calibration.py:calibrate_tau",
+          "fn:CPU_Only/scoring.py:compute_mirage_full"
+        ]
+      },
+      {
+        "name": "API behavioral + scoring pipeline",
+        "path": [
+          "fn:CPU_Only/api_behavioral.py:run_api_behavioral",
+          "fn:CPU_Only/scoring.py:compute_mirage_b",
+          "fn:CPU_Only/leaderboard.py:compute_leaderboard",
+          "fn:CPU_Only/results_analysis.py:plot_mirage_b_pass_rates"
+        ]
+      },
+      {
+        "name": "Predictive validity pipeline",
+        "path": [
+          "dataset:Dataset/download_winobias.py:WinoBias",
+          "fn:CPU_Only/predictive_validity.py:run_predictive_validity"
+        ]
+      }
+    ],
+    "potential_duplicates": [
+      {
+        "symbols": [
+          "fn:GPU_CPU/osm_behavioral.py:evaluate_osm_model",
+          "fn:CPU_Only/api_behavioral.py:evaluate_api_model"
+        ],
+        "reason": "Both evaluate a model on the pentad dataset and return rows in the same MIRAGE result schema. Signatures differ only in transport (local inference vs. HTTP).",
+        "suggested_action": "keep both â€” distinct contexts: OSM runs local GPU inference with outlines constrained decoding; API routes to remote HTTP clients. Unification would require abstracting away torch/tokenizer vs. client dict."
+      },
+      {
+        "symbols": [
+          "fn:Dataset/cot_attack_generator.py:generate_cot_attacks",
+          "fn:Dataset/context_shift_drafter.py:draft_context_shifts"
+        ],
+        "reason": "Both call DeepSeek with a round-robin _RoundRobin class and _call_deepseek helper defined locally in each file. Both iterate over seeds_df and return list[dict]. ~70% code overlap.",
+        "suggested_action": "extract shared logic into a Dataset/deepseek_generator_base.py with a generic _generate_slot(seeds_df, system_prompt, subvariant_keys) function. Each file then provides only the system prompt and subvariant keys."
+      },
+      {
+        "symbols": [
+          "fn:CPU_Only/api_clients/gemini_client.py:call_gemini_with_roundrobin",
+          "fn:CPU_Only/api_clients/mistral_client.py:call_mistral_with_roundrobin",
+          "fn:CPU_Only/api_clients/openrouter_client.py:call_openrouter_with_roundrobin"
+        ],
+        "reason": "All three implement the same _RoundRobin class and the same (attempt loop â†’ call â†’ return standardised dict) pattern. ~65% structural overlap.",
+        "suggested_action": "extract shared logic into CPU_Only/api_clients/_base_roundrobin.py with a generic RoundRobinClient(keys, call_fn, max_attempts_per_key) class. Each client provides only call_fn and imports the base."
+      }
+    ]
+  }
+}
+

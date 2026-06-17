@@ -1,0 +1,11 @@
+# Secrets - never commit
+.env
+*.env
+!.env.example
+
+# Dry-run test artifacts and caches
+results/dryrun/
+results/quarantine/
+__pycache__/
+*.py[cod]
+.deploy_state.json

@@ -1,0 +1,33 @@
+# GPU_Remaining deps -- pinned to match the production MIRAGE run (README sec 9.4).
+# torch is installed separately in bootstrap.sh (cu124 index), before this file.
+transformers==4.50.3
+accelerate==0.34.0
+nnsight==0.3.7
+pandas==2.2.2
+pyarrow>=15
+numpy<2.0
+python-dotenv>=1.0
+requests>=2.31
+scipy>=1.11
+# transformer_lens 2.18.0 is the version that produced the production CDVA
+# results (README sec 9.4). It is installed --no-deps in bootstrap.sh so it does
+# NOT drag torch up to >=2.6 / transformers up to >=4.57 (its declared, overly
+# conservative pins). Its real runtime imports are pinned here instead:
+huggingface_hub>=0.23.2,<1.0
+beartype>=0.14.1,<0.15.0
+wandb>=0.13.5
+jaxtyping>=0.2.11
+fancy_einsum>=0.0.3
+typeguard>=4.2,<5.0
+rich>=12.6.0
+transformers-stream-generator>=0.0.5,<0.0.6
+better-abc>=0.0.3,<0.0.4
+datasets>=2.7.1
+tqdm>=4.64.1
+typing-extensions
+sentencepiece
+protobuf
+einops
+# flash-attn is installed from a precompiled wheel in bootstrap.sh:
+#   v2.8.3 + cu12 + torch2.5 + cxx11abiFALSE + cp312 (Python 3.12 / Ubuntu 24.04)
+#   -- optional; the code falls back to sdpa (numerically identical) if absent.

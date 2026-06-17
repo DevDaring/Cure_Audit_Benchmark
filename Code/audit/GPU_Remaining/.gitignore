@@ -1,0 +1,8 @@
+# Secrets and local state -- never commit
+.env
+.deploy_state.json
+__pycache__/
+*.pyc
+
+# Dry-run scratch (test artifacts removed after dry run passes)
+results/dryrun/

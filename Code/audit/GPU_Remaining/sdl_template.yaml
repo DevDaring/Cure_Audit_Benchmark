@@ -1,0 +1,57 @@
+---
+# Akash SDL template for the MIRAGE GPU_Remaining run.
+# deploy_akash.py renders the __PLACEHOLDERS__ (GPU model + secrets) at submit time;
+# the rendered copy with secrets is NEVER written to disk or committed.
+version: "2.0"
+
+services:
+  gpu:
+    image: nvidia/cuda:12.6.2-cudnn-devel-ubuntu24.04
+    command:
+      - bash
+      - -c
+      - >
+        apt-get update -y &&
+        apt-get install -y --no-install-recommends git ca-certificates &&
+        rm -rf /workspace/Audit_Benchmark &&
+        git clone https://github.com/DevDaring/Cure_Audit_Benchmark /workspace/Audit_Benchmark &&
+        cd /workspace/Audit_Benchmark/Code/audit/GPU_Remaining &&
+        bash bootstrap.sh 2>&1 | tee /workspace/boot.log
+    env:
+      - HUGGINGFACE_TOKEN=__HF_TOKEN__
+      - Github_Classic_Token=__GH_TOKEN__
+      - RANDOM_SEED=20260101
+    expose:
+      - port: 8080
+        as: 80
+        to:
+          - global: true
+
+profiles:
+  compute:
+    gpu:
+      resources:
+        cpu:
+          units: 8
+        memory:
+          size: 48Gi
+        storage:
+          - size: 120Gi
+        gpu:
+          units: 1
+          attributes:
+            vendor:
+              nvidia:
+                - model: __GPU_MODEL__
+  placement:
+    dcloud:
+      pricing:
+        gpu:
+          denom: uakt
+          amount: __MAX_PRICE__
+
+deployment:
+  gpu:
+    dcloud:
+      profile: gpu
+      count: 1

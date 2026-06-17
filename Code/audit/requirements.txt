@@ -1,0 +1,54 @@
+# MIRAGE pinned dependencies
+# Install order matters: torch first, then flash-attention via wheel.
+# See README.md Section 2.1 for verbatim install commands.
+
+# Core ML
+torch==2.5.1
+torchvision
+torchaudio
+numpy<2.0
+transformers==4.50.3
+accelerate==0.34.0
+datasets==2.16.0
+bitsandbytes==0.46.1
+
+# Activation patching libraries
+transformer_lens==2.9.0
+nnsight==0.3.7
+
+# Constrained decoding
+outlines==0.1.0
+
+# API clients
+boto3>=1.34
+google-generativeai>=0.8
+mistralai>=1.2
+openai>=1.50
+
+# Robust JSON parsing of model responses (fallback after json.loads, before judge API)
+json-repair>=0.30
+
+# Data
+pandas==2.2.2
+pyarrow>=15
+sentencepiece==0.2.0
+protobuf==4.25.0
+
+# Utilities
+tqdm==4.65.0
+python-dotenv==1.0.0
+requests==2.31.0
+pyyaml>=6.0
+
+# Statistics & ML
+scipy>=1.14
+statsmodels>=0.14
+scikit-learn>=1.5
+
+# Figures
+matplotlib>=3.9
+seaborn>=0.13
+
+# flash-attn installed separately via wheel:
+# wget https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl -O /tmp/flash_attn.whl
+# python3 -m pip install --no-deps /tmp/flash_attn.whl
