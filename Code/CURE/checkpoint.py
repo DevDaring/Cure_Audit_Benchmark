@@ -39,11 +39,12 @@ def git_configure(token: str, remote_url: str) -> None:
 
 
 def push_checkpoint(message: str) -> bool:
-    # Push only real results (parquets, STATUS, DONE). Never push logs, and never push
-    # the dry-run test results -- per the run contract.
-    _run(["git", "add", "-f", REL_RESULTS])
+    # Push real results (parquets, STATUS, DONE) AND the run logs, so a released VM
+    # can both RESUME (results + STATUS.json) and be DIAGNOSED (logs) on a fresh VM.
+    # Never push the dry-run test results or quarantine -- per the run contract.
+    _run(["git", "add", "-f", REL_RESULTS, REL_LOGS])
     _run(["git", "reset", "-q", "--", REL_RESULTS + "/dryrun", REL_RESULTS + "/quarantine"])
-    if not _run(["git", "status", "--porcelain", "--", REL_RESULTS]).stdout.strip():
+    if not _run(["git", "status", "--porcelain", "--", REL_RESULTS, REL_LOGS]).stdout.strip():
         return False
     _run(["git", "commit", "-q", "-m", message])
     _run(["git", "pull", "--rebase", "-q", "origin", GIT_BRANCH])
