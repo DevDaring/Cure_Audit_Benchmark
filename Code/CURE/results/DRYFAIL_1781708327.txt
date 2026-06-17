@@ -1,0 +1,86 @@
+2026-06-17 14:56:45,122 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-17 14:56:45,124 | INFO | cure.integrity | integrity: 0 files, 0 deduped, 0 quarantined
+2026-06-17 14:56:45,150 | INFO | cure.dry | secret scan clean
+2026-06-17 14:56:45,150 | INFO | cure.dry | DRY CHECK secret_scan          PASS
+2026-06-17 14:56:45,157 | INFO | cure.integrity | dedup cure_baselines_selftest.parquet: removed 1 duplicate rows
+2026-06-17 14:56:45,158 | WARNING | cure.integrity | quarantined corrupt parquet cure_recovery_corrupt.parquet: Could not open Parquet input source '<Buffer>': Parquet magic bytes not found in footer. Either the file is corrupted or
+2026-06-17 14:56:45,158 | INFO | cure.integrity | integrity: 2 files, 1 deduped, 1 quarantined
+2026-06-17 14:56:45,158 | INFO | cure.dry | integrity self-test: ok
+2026-06-17 14:56:45,158 | INFO | cure.dry | DRY CHECK integrity_selftest   PASS
+2026-06-17 14:56:54,255 | INFO | cure.dry | api gemini     key#0 model=gemini-2.5-flash -> bad_response
+2026-06-17 14:56:54,255 | INFO | cure.dry | api gemini     key#1 model=gemini-2.5-flash -> failed
+2026-06-17 14:56:54,255 | INFO | cure.dry | api gemini     key#2 model=gemini-2.5-flash -> bad_response
+2026-06-17 14:56:54,255 | INFO | cure.dry | api gemini     key#3 model=gemini-2.5-flash -> bad_response
+2026-06-17 14:56:54,255 | INFO | cure.dry | api deepseek   key#0 model=deepseek-chat -> ok
+2026-06-17 14:56:54,255 | INFO | cure.dry | api deepseek   key#1 model=deepseek-chat -> ok
+2026-06-17 14:56:54,255 | INFO | cure.dry | api mistral    key#0 model=mistral-small-latest -> ok
+2026-06-17 14:56:54,255 | INFO | cure.dry | api mistral    key#1 model=mistral-small-latest -> ok
+2026-06-17 14:56:54,256 | INFO | cure.dry | api openrouter key#0 model=google/gemini-2.5-flash -> ok
+2026-06-17 14:56:54,256 | INFO | cure.dry | api openrouter key#1 model=google/gemini-2.5-flash -> ok
+2026-06-17 14:56:54,256 | WARNING | cure.dry | configured judge tier 'gemini' has no working keys; using 'openrouter' for the whole run (same task, working keys; still no per-item fallback)
+2026-06-17 14:56:54,256 | INFO | cure.dry | DRY CHECK apis                 PASS
+2026-06-17 14:56:54,257 | INFO | load_osm | Loading model: gemma-2-2b-it (google/gemma-2-2b-it) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.03it/s]
+2026-06-17 14:56:56,738 | INFO | load_osm |   Model gemma-2-2b-it                       | attention impl: flash_attention_2
+2026-06-17 14:56:56,738 | INFO | load_osm | Model 'gemma-2-2b-it' loaded successfully.
+2026-06-17 14:56:57,148 | INFO | cure.dry | flash-attention forward pass ok; impl=flash_attention_2
+2026-06-17 14:56:57,320 | INFO | load_osm | Model 'gemma-2-2b-it' unloaded and VRAM freed.
+2026-06-17 14:56:57,367 | INFO | cure.dry | DRY CHECK flash_attention      PASS
+2026-06-17 14:56:57,672 | INFO | cure.dry | dry llama-3.1-8b-instruct: 6 pairs across datasets ['bbq', 'crows', 'stereo']
+2026-06-17 14:56:57,672 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.16s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.22s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.78s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.27s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.34s/it]
+2026-06-17 14:57:04,477 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
+2026-06-17 14:57:04,477 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
+2026-06-17 14:57:04,480 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+Moving model to device:  cuda
+2026-06-17 14:57:43,570 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
+2026-06-17 14:57:46,225 | INFO | cure.dry | dry baseline prompt_debias  llama-3.1-8b-instruct -> ok
+2026-06-17 14:57:49,292 | INFO | cure.dry | dry baseline generic_erase  llama-3.1-8b-instruct -> ok
+2026-06-17 14:57:51,853 | INFO | cure.dry | dry baseline meandiff_steer llama-3.1-8b-instruct -> ok
+2026-06-17 14:57:52,025 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
+2026-06-17 14:57:52,352 | INFO | cure.dry | dry qwen2.5-7b-instruct: 6 pairs across datasets ['bbq', 'crows', 'stereo']
+2026-06-17 14:57:52,352 | INFO | load_osm | Loading model: qwen2.5-7b-instruct (Qwen/Qwen2.5-7B-Instruct) ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:05,  1.71s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.58s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.34s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.32s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.39s/it]
+2026-06-17 14:57:59,389 | INFO | load_osm |   Model qwen2.5-7b-instruct                 | attention impl: flash_attention_2
+2026-06-17 14:57:59,390 | INFO | load_osm | Model 'qwen2.5-7b-instruct' loaded successfully.
+2026-06-17 14:57:59,422 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'Qwen/Qwen2.5-7B-Instruct' (cached).
+You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+2026-06-17 14:57:59,483 | WARNING | cure.exp | cache failed seed bbq_00dd6566: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:57:59,516 | WARNING | cure.exp | cache failed seed bbq_00dd6566: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:57:59,548 | WARNING | cure.exp | cache failed seed crows_0022ccf3: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:57:59,578 | WARNING | cure.exp | cache failed seed crows_0022ccf3: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:57:59,613 | WARNING | cure.exp | cache failed seed stereo_0252d67e: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:57:59,645 | WARNING | cure.exp | cache failed seed stereo_0252d67e: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:57:59,646 | ERROR | cure.dry | DRY FAIL: empty subspace for qwen2.5-7b-instruct
+2026-06-17 14:57:59,844 | INFO | load_osm | Model 'qwen2.5-7b-instruct' unloaded and VRAM freed.
+2026-06-17 14:58:00,164 | INFO | cure.dry | dry gemma-2-2b-it: 6 pairs across datasets ['bbq', 'crows', 'stereo']
+2026-06-17 14:58:00,164 | INFO | load_osm | Loading model: gemma-2-2b-it (google/gemma-2-2b-it) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.30it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.47it/s]
+2026-06-17 14:58:02,079 | INFO | load_osm |   Model gemma-2-2b-it                       | attention impl: flash_attention_2
+2026-06-17 14:58:02,079 | INFO | load_osm | Model 'gemma-2-2b-it' loaded successfully.
+2026-06-17 14:58:02,080 | INFO | utils_attention | Converting HF model 'google/gemma-2-2b-it' to HookedTransformer for CDVA patching ...
+Loaded pretrained model google/gemma-2-2b-it into HookedTransformer
+Moving model to device:  cuda
+2026-06-17 14:58:29,863 | INFO | utils_attention | HookedTransformer for 'google/gemma-2-2b-it' cached (device=cuda:0).
+2026-06-17 14:58:33,241 | INFO | cure.dry | dry baseline prompt_debias  gemma-2-2b-it -> ok
+2026-06-17 14:58:36,863 | INFO | cure.dry | dry baseline generic_erase  gemma-2-2b-it -> ok
+2026-06-17 14:58:40,397 | INFO | cure.dry | dry baseline meandiff_steer gemma-2-2b-it -> ok
+2026-06-17 14:58:40,574 | INFO | load_osm | Model 'gemma-2-2b-it' unloaded and VRAM freed.
+2026-06-17 14:58:40,873 | INFO | cure.dry | dry phi-4-mini-instruct: 6 pairs across datasets ['bbq', 'crows', 'stereo']
+2026-06-17 14:58:40,873 | INFO | load_osm | Loading model: phi-4-mini-instruct (microsoft/Phi-4-mini-instruct) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.74s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.33s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.39s/it]
+2026-06-17 14:58:45,855 | INFO | load_osm |   Model phi-4-mini-instruct                 | attention impl: flash_attention_2
+2026-06-17 14:58:45,855 | INFO | load_osm | Model 'phi-4-mini-instruct' loaded successfully.
+2026-06-17 14:58:45,923 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'microsoft/Phi-4-mini-instruct' (cached).
+You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+2026-06-17 14:58:45,981 | WARNING | cure.exp | cache failed seed bbq_00dd6566: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:58:46,017 | WARNING | cure.exp | cache failed seed bbq_00dd6566: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:58:46,055 | WARNING | cure.exp | cache failed seed crows_0022ccf3: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:58:46,092 | WARNING | cure.exp | cache failed seed crows_0022ccf3: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:58:46,129 | WARNING | cure.exp | cache failed seed stereo_0252d67e: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:58:46,166 | WARNING | cure.exp | cache failed seed stereo_0252d67e: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
+2026-06-17 14:58:46,168 | ERROR | cure.dry | DRY FAIL: empty subspace for phi-4-mini-instruct
+2026-06-17 14:58:46,373 | INFO | load_osm | Model 'phi-4-mini-instruct' unloaded and VRAM freed.
+2026-06-17 14:58:46,373 | INFO | cure.dry | DRY CHECK per_model_smoke      FAIL
+2026-06-17 14:58:46,373 | INFO | cure.dry | DRY RESULT: FAIL
