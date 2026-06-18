@@ -22,3 +22,18 @@
 2026-06-18 02:12:04,941 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'microsoft/Phi-4-mini-instruct' (cached).
 2026-06-18 02:19:07,985 | INFO | cure.run | diagnose phi-4-mini-instruct single-direction effect: {1: {'mean_erased': 0.5775, 'reduced_frac': 0.4267}, 2: {'mean_erased': 0.6308, 'reduced_frac': 0.4867}, 3: {'mean_erased': 0.6017, 'reduced_frac': 0.5267}, 4: {'mean_erased': 0.6388, 'reduced_frac': 0.4267}, 5: {'mean_erased': 0.6529, 'reduced_frac': 0.5133}, 6: {'mean_erased': 0.7462, 'reduced_frac': 0.4067}, 7: {'mean_erased': 0.7025, 'reduced_frac': 0.4267}, 8: {'mean_erased': 0.7696, 'reduced_frac': 0.4067}}
 2026-06-18 02:19:08,151 | INFO | load_osm | Model 'phi-4-mini-instruct' unloaded and VRAM freed.
+2026-06-18 02:19:10,476 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 02:19:10,476 | INFO | cure.run | DIAGNOSTIC COMPLETE
+2026-06-18 02:19:18,185 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 02:19:18,238 | INFO | cure.integrity | integrity: 20 files, 0 deduped, 0 quarantined
+2026-06-18 02:19:18,238 | INFO | cure.run | === baselines llama-3.1-8b-instruct : 10/10 methods to score ===
+2026-06-18 02:19:18,575 | INFO | cure.run | baselines llama-3.1-8b-instruct: validation-selected operating rank=8, eval n<=1000
+2026-06-18 02:19:18,576 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
+2026-06-18 02:19:23,847 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
+2026-06-18 02:19:23,847 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
+2026-06-18 02:19:23,850 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
+2026-06-18 02:19:59,485 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
+2026-06-18 02:23:54,273 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 02:24:17,630 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 02:30:00,844 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 02:30:27,512 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
