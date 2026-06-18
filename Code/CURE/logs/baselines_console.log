@@ -95,3 +95,22 @@ Moving model to device:  cuda
 2026-06-18 13:46:19,979 | INFO | cure.checkpoint | checkpoint push: ok
 2026-06-18 13:46:19,979 | INFO | cure.run | baseline nofreelunch    llama-3.1-8b-instruct -> crr=0.515 util=0.010
 2026-06-18 13:46:20,169 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
+2026-06-18 13:46:22,776 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 13:46:22,776 | INFO | cure.run | baselines llama-3.1-8b-instruct complete
+2026-06-18 13:46:22,777 | INFO | cure.run | === baselines qwen2.5-7b-instruct : 10/10 methods to score ===
+2026-06-18 13:46:23,164 | INFO | load_osm | Loading model: qwen2.5-7b-instruct (Qwen/Qwen2.5-7B-Instruct) ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.52s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.46s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.43s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.19s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.29s/it]
+2026-06-18 13:46:30,361 | INFO | load_osm |   Model qwen2.5-7b-instruct                 | attention impl: flash_attention_2
+2026-06-18 13:46:30,361 | INFO | load_osm | Model 'qwen2.5-7b-instruct' loaded successfully.
+2026-06-18 13:46:30,389 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'Qwen/Qwen2.5-7B-Instruct' (cached).
+You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
+  warnings.warn(
+2026-06-18 13:47:45,315 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 13:48:03,695 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
+  warnings.warn(
