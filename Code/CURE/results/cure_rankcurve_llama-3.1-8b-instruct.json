@@ -4,17 +4,17 @@
   "max_utility_cost": 0.15,
   "curve": {
     "1": {
-      "reduced_validation": null,
+      "reduced_validation": 0.493,
       "utility_cost": -0.02,
       "erased_acc": 0.74
     },
     "2": {
-      "reduced_validation": null,
+      "reduced_validation": 0.542,
       "utility_cost": 0.0465,
       "erased_acc": 0.6735
     },
     "4": {
-      "reduced_validation": null,
+      "reduced_validation": 0.577,
       "utility_cost": 0.1435,
       "erased_acc": 0.5765
     },
@@ -23,5 +23,6 @@
       "utility_cost": 0.105,
       "erased_acc": 0.615
     }
-  }
+  },
+  "note": "bias completed post-hoc from correct sweep; op_rank=8 was the live selection (also utility-safe)"
 }
