@@ -143,11 +143,16 @@ def per_model_smoke() -> bool:
             re = E.e3_reaudit(model, tok, cfg, pairs, basis)
             if re.empty:
                 log.error("DRY FAIL: empty re-audit for %s", cfg["name"]); ok = False
-            # validate EVERY comparative baseline builds a basis without crashing
-            # (a raised exception here fails the dry before the full baseline pass).
-            ctx = E.collect_acts(model, tok, cfg, pairs)
+            # validate the INDEPENDENT demographic signal that the baselines will use,
+            # then that EVERY baseline builds a basis on it without crashing (a raised
+            # exception here fails the dry before the full comparison pass).
+            dctx = E.collect_acts_demographic(model, tok, cfg)
+            ndiff = len(dctx.get("diffs", {}))
+            log.info("dry demographic signal %s: %d layers", cfg["name"], ndiff)
+            if ndiff == 0:
+                log.error("DRY FAIL: empty demographic signal for %s", cfg["name"]); ok = False
             for m in B.REGISTRY:
-                built = B.build_basis(m, model, tok, cfg, pairs, ctx=ctx)
+                built = B.build_basis(m, model, tok, cfg, pairs, ctx=dctx)
                 st = built.get("status", "ok")
                 nb = len(built.get("basis", {}) or {})
                 log.info("dry baseline %-14s %s -> status=%s layers=%d", m, cfg["name"], st, nb)

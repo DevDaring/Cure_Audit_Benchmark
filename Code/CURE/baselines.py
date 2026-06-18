@@ -56,24 +56,27 @@ def prompt_debias(model, tokenizer, cfg, pairs, ctx=None):
 
 
 def generic_erase(model, tokenizer, cfg, pairs, ctx=None, rank=2):
-    """Non-audit-guided LEACE: subspace from the variance of slot-a activations
-    (no counterfactual swap), to show that audit guidance matters."""
-    import pandas as pd
-    pentad = pd.read_parquet(C.PENTAD_PATH)
-    sa = pentad[(pentad["slot"] == "a") & (pentad["subvariant"] == "surface")].head(
-        min(len(pairs) * 2, C.SUBSPACE_PAIRS))
-    acts = {}
-    for _, r in sa.iterrows():
-        toks = tokenizer.encode(str(r["prompt_text"]))
-        pos = max(0, len(toks) - 1)
-        try:
-            c = erase.cache_resid(model, tokenizer, str(r["prompt_text"]), pos, cfg["patching_lib"])
-        except Exception:
+    """Non-guided erasure (PCA / LEACE WITHOUT contrastive supervision): erase the top
+    variance directions of generic activations. Uses the independent demographic-template
+    activations (NOT the audit's counterfactual swap), isolating the value of the causal
+    audit guidance that CURE adds."""
+    rank = rank or 2
+    c = _acts(model, tokenizer, cfg, pairs, ctx)
+    basis = {}
+    for layer in c["A"]:
+        allacts = c["A"].get(layer, []) + c["B"].get(layer, [])
+        if len(allacts) < 2:
             continue
-        for layer, v in c.items():
-            acts.setdefault(layer, []).append(v)
-    diffs = {layer: [v - np.mean(vs, axis=0) for v in vs] for layer, vs in acts.items() if len(vs) >= 2}
-    return {"kind": "erase", "basis": erase.subspace_from_diffs(diffs, rank)}
+        X = np.stack(allacts, 0).astype(np.float64)
+        X = X - X.mean(0, keepdims=True)
+        try:
+            _, _, Vt = np.linalg.svd(X, full_matrices=False)
+        except np.linalg.LinAlgError:
+            continue
+        b = _ortho(Vt[:min(rank, Vt.shape[0])])
+        if b is not None:
+            basis[layer] = b
+    return {"kind": "erase", "basis": basis}
 
 
 def meandiff_steer(model, tokenizer, cfg, pairs, ctx=None, rank=1):
@@ -264,23 +267,12 @@ def patchscopes(model, tokenizer, cfg, pairs, ctx=None, rank=None):
 def nofreelunch(model, tokenizer, cfg, pairs, ctx=None):
     """No-Free-Lunch suite (arXiv:2511.18635): logit-steering / activation-patching.
     Re-implemented as logit-space steering -- ablate, at every layer, the residual
-    direction that writes to the bias-answer unembedding (the logit-steering axis)."""
-    import torch
-    head = getattr(model, "lm_head", None)
-    W = head.weight if head is not None else model.get_output_embeddings().weight
-    W = W.detach().float().cpu().numpy()                       # vocab x d_model
-    rows = []
-    for pair in pairs[:C.SUBSPACE_PAIRS]:
-        ids = tokenizer.encode(str(pair.get("bias", "")), add_special_tokens=False)
-        if ids and 0 <= ids[0] < W.shape[0]:
-            rows.append(W[ids[0]])
-    if not rows:
+    direction that writes to demographic-group unembeddings. Independent of the audit
+    (the model's own unembedding plus a generic demographic term list)."""
+    u = E.demographic_logit_dirs(model, tokenizer)
+    if u is None:
         return {"kind": "steer", "basis": {}}
-    u = np.mean(np.stack(rows, 0), axis=0)
-    n = float(np.linalg.norm(u))
-    if n < 1e-8:
-        return {"kind": "steer", "basis": {}}
-    u = (u / n).reshape(1, -1).astype(np.float32)
+    u = u.reshape(1, -1).astype(np.float32)
     layers = list(_acts(model, tokenizer, cfg, pairs, ctx)["diffs"].keys())
     return {"kind": "steer", "basis": {L: u for L in layers}}
 

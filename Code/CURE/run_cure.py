@@ -176,7 +176,7 @@ def cmd_baselines():
     methods = ["cure"] + list(B.REGISTRY.keys())          # cure + 9 baselines
     for cfg in C.OSM_MODELS:
         name = cfg["name"]
-        out_name = f"cure_baselines_full_{name}.parquet"
+        out_name = f"cure_comparison_{name}.parquet"
         out_path = C.RESULTS / out_name
         rows, have = [], set()
         if integrity.parquet_nonempty(out_path):
@@ -206,22 +206,27 @@ def cmd_baselines():
 
         model, tok = load_model(cfg)
         try:
-            ctx = E.collect_acts(model, tok, cfg, sub_pairs)              # one shared pass
-            head_basis = erase.subspace_from_diffs(ctx["diffs"], op_rank)
+            # CURE alone uses the causal audit signal; every baseline uses an INDEPENDENT
+            # demographic-contrast signal (no cdva_results). Same operating rank, same
+            # eval pairs, same metric -- so the head-to-head isolates the signal.
+            ctx_audit = E.collect_acts(model, tok, cfg, sub_pairs)
+            ctx_indep = E.collect_acts_demographic(model, tok, cfg)
+            head_basis = erase.subspace_from_diffs(ctx_audit["diffs"], op_rank)
             base_acc = E.native_accuracy(model, tok, cfg, None, C.BASELINE_E4_LIMIT, C.E4_MAX_TOKENS)
             for m in todo:
                 try:
                     if m == "cure":
-                        basis, kind, status = head_basis, "audit_guided_erase", "ok"
+                        basis, kind, status, signal = head_basis, "audit_guided_erase", "ok", "audit_causal"
                     else:
-                        built = B.build_basis(m, model, tok, cfg, sub_pairs, ctx=ctx, rank=op_rank)
+                        signal = "independent_demographic"
+                        built = B.build_basis(m, model, tok, cfg, sub_pairs, ctx=ctx_indep, rank=op_rank)
                         if built.get("status") in ("pending", "error"):
                             rows.append({"method": m, "model_name": name, "status": built["status"],
-                                         "note": built.get("note", "")})
+                                         "signal": signal, "note": built.get("note", "")})
                             _save(pd.DataFrame(rows), out_name); continue
                         basis, kind, status = built.get("basis", {}), built.get("kind"), "ok"
                     row = {"method": m, "model_name": name, "status": status, "kind": kind,
-                           "erase_rank": op_rank}
+                           "signal": signal, "erase_rank": op_rank}
                     if not basis:
                         # prompt-only / empty: no activation edit by construction
                         row.update({"causal_residual_removed": 0.0, "utility_cost": 0.0, "n_pairs": 0})
@@ -278,6 +283,13 @@ def cmd_diagnose():
     from load_osm import load_model, unload_model
     from checkpoint import push_checkpoint
     targets = ["phi-4-mini-instruct", "qwen2.5-7b-instruct"]
+    diag_path = C.RESULTS / "anomaly_diagnostic.json"
+    if diag_path.exists():
+        try:
+            if all(t in json.loads(diag_path.read_text()) for t in targets):
+                log.info("anomaly diagnostic already complete; skipping"); return
+        except Exception:
+            pass
     report = {}
     for cfg in C.OSM_MODELS:
         name = cfg["name"]

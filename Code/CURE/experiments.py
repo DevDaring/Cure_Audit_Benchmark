@@ -100,6 +100,99 @@ def build_subspace(model, tokenizer, cfg, pairs, rank: int) -> dict:
     return erase.subspace_from_diffs(collect_diffs(model, tokenizer, cfg, pairs), rank)
 
 
+# ---------------------------------------------------------------------------
+# Independent baseline supervision.
+#
+# The comparative baselines (E5) must derive their debiasing direction from their OWN
+# signal, NEVER from the causal audit (cdva_results). Only CURE uses the audit's
+# counterfactual pairs. The baselines instead receive a generic protected-attribute
+# contrast built from neutral templates and demographic term pairs -- the standard
+# steering-vector / concept-erasure supervision, independent of this audit. This makes
+# the head-to-head a fair test: audit-guided (CURE) vs each method's own supervision.
+# ---------------------------------------------------------------------------
+
+_DEMOG_TEMPLATES = [
+    "{T} walked into the room.",
+    "I had a conversation with {T} yesterday.",
+    "The committee decided to hire {T}.",
+    "Everyone at the party noticed {T}.",
+    "{T} gave a presentation at work.",
+    "We invited {T} to the meeting.",
+    "The doctor examined {T}.",
+    "{T} applied for the position.",
+    "My neighbour introduced me to {T}.",
+    "The article was written about {T}.",
+]
+
+# Protected-attribute term pairs spanning the audited categories (gender, race,
+# religion, age, disability, sexual orientation, socioeconomic, nationality, appearance).
+_DEMOG_PAIRS = [
+    ("a man", "a woman"), ("he", "she"), ("the father", "the mother"),
+    ("the boy", "the girl"), ("the gentleman", "the lady"),
+    ("a White person", "a Black person"), ("a European person", "an African person"),
+    ("an Asian person", "a Hispanic person"), ("a Caucasian man", "an African American man"),
+    ("a Christian", "a Muslim"), ("a Christian person", "a Jewish person"),
+    ("a Hindu person", "a Muslim person"), ("a religious person", "an atheist"),
+    ("a Catholic", "a Buddhist"),
+    ("a young person", "an elderly person"), ("a teenager", "a senior citizen"),
+    ("a young man", "an old man"),
+    ("an able-bodied person", "a disabled person"),
+    ("a person without a disability", "a person with a disability"),
+    ("a healthy person", "a sick person"),
+    ("a straight person", "a gay person"), ("a heterosexual man", "a homosexual man"),
+    ("a straight woman", "a lesbian woman"),
+    ("a rich person", "a poor person"), ("a wealthy person", "a low-income person"),
+    ("an upper-class person", "a working-class person"),
+    ("an American", "an immigrant"), ("a local", "a foreigner"),
+    ("a thin person", "an overweight person"), ("an attractive person", "an unattractive person"),
+    ("a tall person", "a short person"),
+]
+
+
+def collect_acts_demographic(model, tokenizer, cfg) -> dict:
+    """Independent demographic-contrast cache (templates x term pairs), used to supervise
+    the comparative baselines WITHOUT touching the causal audit. Returns the same shape as
+    collect_acts: {"A","B","diffs"} at the protected (last) position."""
+    lib = cfg["patching_lib"]
+    A, B, diffs = {}, {}, {}
+    for ta, tb in _DEMOG_PAIRS:
+        for tmpl in _DEMOG_TEMPLATES:
+            pa = tmpl.format(T=ta); pb = tmpl.format(T=tb)
+            posa = max(0, len(tokenizer.encode(pa)) - 1)
+            posb = max(0, len(tokenizer.encode(pb)) - 1)
+            try:
+                ca = erase.cache_resid(model, tokenizer, pa, posa, lib)
+                cb = erase.cache_resid(model, tokenizer, pb, posb, lib)
+            except Exception as exc:
+                log.warning("demographic cache failed (%s|%s): %s", ta, tb, str(exc)[:80])
+                continue
+            for layer in ca:
+                if layer in cb:
+                    A.setdefault(layer, []).append(ca[layer])
+                    B.setdefault(layer, []).append(cb[layer])
+                    diffs.setdefault(layer, []).append(ca[layer] - cb[layer])
+    return {"A": A, "B": B, "diffs": diffs}
+
+
+def demographic_logit_dirs(model, tokenizer):
+    """Unembedding-space steering direction from the demographic term pairs (independent
+    of the audit). Mean of (group-A token - group-B token) unembedding rows, normalised."""
+    head = getattr(model, "lm_head", None)
+    W = head.weight if head is not None else model.get_output_embeddings().weight
+    W = W.detach().float().cpu().numpy()
+    rows = []
+    for ta, tb in _DEMOG_PAIRS:
+        ia = tokenizer.encode(" " + ta.split()[-1], add_special_tokens=False)
+        ib = tokenizer.encode(" " + tb.split()[-1], add_special_tokens=False)
+        if ia and ib and ia[0] < W.shape[0] and ib[0] < W.shape[0]:
+            rows.append(W[ia[0]] - W[ib[0]])
+    if not rows:
+        return None
+    u = np.mean(np.stack(rows, 0), axis=0)
+    n = float(np.linalg.norm(u))
+    return (u / n).astype(np.float32) if n > 1e-8 else None
+
+
 def collect_acts(model, tokenizer, cfg, pairs) -> dict:
     """One caching pass returning slot-a and slot-b activations AND their diffs.
 
