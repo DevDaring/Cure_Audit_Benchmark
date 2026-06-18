@@ -178,3 +178,17 @@ You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokeni
 2026-06-18 08:05:21,800 | INFO | cure.checkpoint | checkpoint push: ok
 2026-06-18 08:05:21,801 | INFO | cure.run | baseline nofreelunch    qwen2.5-7b-instruct -> crr=0.451 util=0.050
 2026-06-18 08:05:22,141 | INFO | load_osm | Model 'qwen2.5-7b-instruct' unloaded and VRAM freed.
+2026-06-18 08:05:24,835 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 08:05:24,835 | INFO | cure.run | baselines qwen2.5-7b-instruct complete
+2026-06-18 08:05:24,836 | INFO | cure.run | === baselines gemma-2-2b-it : 10/10 methods to score ===
+2026-06-18 08:05:25,213 | INFO | cure.run | baselines gemma-2-2b-it: validation-selected operating rank=8, eval n<=1000
+2026-06-18 08:05:25,213 | INFO | load_osm | Loading model: gemma-2-2b-it (google/gemma-2-2b-it) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.91s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.00s/it]
+2026-06-18 08:05:29,201 | INFO | load_osm |   Model gemma-2-2b-it                       | attention impl: flash_attention_2
+2026-06-18 08:05:29,201 | INFO | load_osm | Model 'gemma-2-2b-it' loaded successfully.
+2026-06-18 08:05:29,204 | INFO | utils_attention | Converting HF model 'google/gemma-2-2b-it' to HookedTransformer for CDVA patching ...
+Loaded pretrained model google/gemma-2-2b-it into HookedTransformer
+Moving model to device:  cuda
+2026-06-18 08:05:51,364 | INFO | utils_attention | HookedTransformer for 'google/gemma-2-2b-it' cached (device=cuda:0).
+2026-06-18 08:10:53,676 | INFO | osm_behavioral | OSM gemma-2-2b-it: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 08:11:19,334 | INFO | osm_behavioral | OSM gemma-2-2b-it: 200/200 prompts done (sample_index=0, batch_size=8).
