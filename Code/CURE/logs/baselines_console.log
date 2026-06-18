@@ -27,3 +27,9 @@ Moving model to device:  cuda
   warnings.warn(
 2026-06-18 02:39:11,651 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 02:39:37,783 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 02:39:40,011 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 02:39:40,011 | INFO | cure.run | baseline generic_erase  llama-3.1-8b-instruct -> crr=0.472 util=0.075
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+2026-06-18 02:45:19,274 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 02:45:45,454 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
