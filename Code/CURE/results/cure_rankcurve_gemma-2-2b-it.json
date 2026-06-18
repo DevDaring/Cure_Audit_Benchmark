@@ -1,0 +1,27 @@
+{
+  "model_name": "gemma-2-2b-it",
+  "operating_rank": 1,
+  "max_utility_cost": 0.15,
+  "curve": {
+    "1": {
+      "reduced_validation": 0.487,
+      "utility_cost": 0.3111,
+      "erased_acc": 0.3389
+    },
+    "2": {
+      "reduced_validation": 0.504,
+      "utility_cost": 0.4871,
+      "erased_acc": 0.1629
+    },
+    "4": {
+      "reduced_validation": 0.528,
+      "utility_cost": 0.3896,
+      "erased_acc": 0.2604
+    },
+    "8": {
+      "reduced_validation": 0.534,
+      "utility_cost": 0.5314,
+      "erased_acc": 0.1186
+    }
+  }
+}
