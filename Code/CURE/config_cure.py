@@ -163,6 +163,13 @@ E4_LIMIT = int(_e4) if _e4 else None
 # curve (E4_LIMIT) purely for tractability on the four-model x ten-method grid.
 BASELINE_E4_LIMIT = int(os.environ.get("CURE_BASELINE_E4_LIMIT", "200"))
 
+# Utility-aware operating rank: the per-model rank is the one that removes the MOST
+# bias among ranks whose native-accuracy drop stays at or below this cap. If no rank
+# meets the cap (the bias is entangled with critical/massive-activation directions),
+# the rank with the SMALLEST utility cost is used, so CURE never trades the whole model
+# away. One rank per model is then used for every CURE number AND the baselines.
+MAX_UTILITY_COST = float(os.environ.get("CURE_MAX_UTILITY_COST", "0.10"))
+
 # Causal threshold tau: reuse the audit default (75th percentile of |C|).
 TAU = float(os.environ.get("CURE_TAU", "0.7644"))
 

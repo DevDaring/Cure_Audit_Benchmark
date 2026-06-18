@@ -151,8 +151,12 @@ def per_model_smoke() -> bool:
             log.info("dry demographic signal %s: %d layers", cfg["name"], ndiff)
             if ndiff == 0:
                 log.error("DRY FAIL: empty demographic signal for %s", cfg["name"]); ok = False
+            # build EVERY baseline on the SMALL audit ctx (few pairs) so sae_debias skips its
+            # slow per-layer training in the dry; the demographic build above already validates
+            # the real signal, and nofreelunch/generic_erase exercise their own paths regardless.
+            actx = E.collect_acts(model, tok, cfg, pairs)
             for m in B.REGISTRY:
-                built = B.build_basis(m, model, tok, cfg, pairs, ctx=dctx)
+                built = B.build_basis(m, model, tok, cfg, pairs, ctx=actx)
                 st = built.get("status", "ok")
                 nb = len(built.get("basis", {}) or {})
                 log.info("dry baseline %-14s %s -> status=%s layers=%d", m, cfg["name"], st, nb)

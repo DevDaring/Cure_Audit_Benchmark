@@ -158,6 +158,45 @@ def _select_op_rank(name: str) -> int:
         return C.HEADLINE_RANK
 
 
+def _utility_aware_rank(model, tok, cfg, name, bases, base_acc):
+    """Per-model operating rank: remove the MOST bias among ranks whose native-accuracy
+    drop stays <= MAX_UTILITY_COST. Bias-per-rank comes from the validation sweep
+    (cure_recovery_sweep, RANDOM_SEED); utility-per-rank is measured fresh here. If no rank
+    meets the cap (bias entangled with critical/massive-activation directions), the rank
+    with the SMALLEST utility cost is chosen, so CURE never trades the whole model away.
+    Returns (op_rank, curve)."""
+    bias = {}
+    p = C.RESULTS / f"cure_recovery_sweep_{name}.parquet"
+    if integrity.parquet_nonempty(p):
+        try:
+            sw = pd.read_parquet(p)
+            sw = sw.assign(_r=(sw["erased_commutator"] < sw["orig_commutator"]).astype(float))
+            g = sw.groupby("erase_rank")["_r"].mean()
+            bias = {int(r): float(g.loc[r]) for r in g.index}
+        except Exception as exc:
+            log.warning("sweep bias read failed for %s: %s", name, str(exc)[:80])
+    curve = {}
+    for r in C.ERASE_RANKS:
+        if r not in bases:
+            continue
+        acc = E.native_accuracy(model, tok, cfg, bases[r], C.BASELINE_E4_LIMIT, C.E4_MAX_TOKENS)
+        uc = (base_acc - acc) if (np.isfinite(base_acc) and np.isfinite(acc)) else None
+        br = bias.get(r, float("nan"))
+        curve[r] = {"reduced_validation": (round(br, 4) if br == br else None),
+                    "utility_cost": (round(float(uc), 4) if uc is not None else None),
+                    "erased_acc": (round(float(acc), 4) if np.isfinite(acc) else None)}
+    ranks = [r for r in C.ERASE_RANKS if r in curve]
+    safe = [r for r in ranks if curve[r]["utility_cost"] is not None
+            and curve[r]["utility_cost"] <= C.MAX_UTILITY_COST]
+    if safe:
+        op_rank = max(safe, key=lambda r: (curve[r]["reduced_validation"]
+                                           if curve[r]["reduced_validation"] is not None else -1.0))
+    else:
+        op_rank = min(ranks, key=lambda r: (curve[r]["utility_cost"]
+                                            if curve[r]["utility_cost"] is not None else float("inf")))
+    return op_rank, {str(k): v for k, v in curve.items()}
+
+
 def cmd_baselines():
     """E5+ : the full comparison of CURE against all nine baselines under ONE harness.
 
@@ -176,7 +215,7 @@ def cmd_baselines():
     methods = ["cure"] + list(B.REGISTRY.keys())          # cure + 9 baselines
     for cfg in C.OSM_MODELS:
         name = cfg["name"]
-        out_name = f"cure_comparison_{name}.parquet"
+        out_name = f"cure_final_{name}.parquet"
         out_path = C.RESULTS / out_name
         rows, have = [], set()
         if integrity.parquet_nonempty(out_path):
@@ -196,23 +235,27 @@ def cmd_baselines():
         if not pairs:
             log.error("no pairs for %s; skipping", name); continue
         sub_pairs = E.stratified_subset(pairs, C.SUBSPACE_PAIRS, C.RANDOM_SEED)
-        # Operating rank is chosen on the validation sweep (the RANDOM_SEED subset), and
-        # the comparison is then scored on a DIFFERENT sample (RANDOM_SEED+7), so the rank
-        # is never selected and evaluated on the same pairs.
-        op_rank = _select_op_rank(name)
         eval_pairs = E.stratified_subset(pairs, C.SWEEP_SUBSET, C.RANDOM_SEED + 7)
-        log.info("baselines %s: validation-selected operating rank=%d, eval n<=%d",
-                 name, op_rank, C.SWEEP_SUBSET)
 
         model, tok = load_model(cfg)
         try:
             # CURE alone uses the causal audit signal; every baseline uses an INDEPENDENT
-            # demographic-contrast signal (no cdva_results). Same operating rank, same
-            # eval pairs, same metric -- so the head-to-head isolates the signal.
+            # demographic-contrast signal (no cdva_results). ONE utility-aware operating
+            # rank (below) is shared by cure AND the baselines, and the comparison is scored
+            # on eval_pairs (RANDOM_SEED+7) -- disjoint from the rank-selection sweep.
             ctx_audit = E.collect_acts(model, tok, cfg, sub_pairs)
             ctx_indep = E.collect_acts_demographic(model, tok, cfg)
-            head_basis = erase.subspace_from_diffs(ctx_audit["diffs"], op_rank)
             base_acc = E.native_accuracy(model, tok, cfg, None, C.BASELINE_E4_LIMIT, C.E4_MAX_TOKENS)
+            # Utility-aware operating rank: most bias removed among ranks with utility cost
+            # <= MAX_UTILITY_COST (else the least-damaging rank). ONE rank for all methods.
+            bases = erase.bases_at_ranks(ctx_audit["diffs"], C.ERASE_RANKS)
+            op_rank, rank_curve = _utility_aware_rank(model, tok, cfg, name, bases, base_acc)
+            (C.RESULTS / f"cure_rankcurve_{name}.json").write_text(
+                json.dumps({"model_name": name, "operating_rank": op_rank,
+                            "max_utility_cost": C.MAX_UTILITY_COST, "curve": rank_curve}, indent=2),
+                encoding="utf-8")
+            log.info("baselines %s: utility-aware operating rank=%d | curve=%s", name, op_rank, rank_curve)
+            head_basis = bases[op_rank]
             for m in todo:
                 try:
                     if m == "cure":
