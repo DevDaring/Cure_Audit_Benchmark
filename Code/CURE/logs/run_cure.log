@@ -28,3 +28,7 @@
 2026-06-18 10:03:16,088 | INFO | cure.checkpoint | checkpoint push: ok
 2026-06-18 10:08:11,372 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 10:08:34,800 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 10:08:38,200 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 10:08:38,200 | INFO | cure.run | baseline generic_erase  llama-3.1-8b-instruct -> crr=0.480 util=-0.015
+2026-06-18 10:13:35,617 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 10:13:59,869 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
