@@ -65,3 +65,6 @@
 2026-06-18 13:41:52,338 | INFO | cure.run | baseline patchscopes    llama-3.1-8b-instruct -> crr=0.828 util=-0.010
 2026-06-18 13:45:51,380 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 13:46:16,856 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 13:46:19,979 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 13:46:19,979 | INFO | cure.run | baseline nofreelunch    llama-3.1-8b-instruct -> crr=0.515 util=0.010
+2026-06-18 13:46:20,169 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
