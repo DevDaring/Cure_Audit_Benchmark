@@ -1,2 +1,0 @@
-FA_OK=0
---- verify.log tail ---
