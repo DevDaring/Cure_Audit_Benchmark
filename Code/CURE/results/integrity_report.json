@@ -1,5 +1,7 @@
 {
   "checked": [
+    "cure_baselines_full_llama-3.1-8b-instruct.parquet",
+    "cure_baselines_full_qwen2.5-7b-instruct.parquet",
     "cure_baselines_gemma-2-2b-it.parquet",
     "cure_baselines_llama-3.1-8b-instruct.parquet",
     "cure_baselines_phi-4-mini-instruct.parquet",
@@ -23,5 +25,5 @@
   ],
   "deduped": {},
   "quarantined": [],
-  "ts": "2026-06-18T02:19:18Z"
+  "ts": "2026-06-18T06:00:35Z"
 }
