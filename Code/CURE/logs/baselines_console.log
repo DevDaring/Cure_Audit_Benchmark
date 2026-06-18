@@ -73,3 +73,6 @@ Moving model to device:  cuda
   warnings.warn(
 2026-06-18 07:16:52,554 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 07:17:17,943 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 07:17:21,104 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 07:17:21,104 | INFO | cure.run | baseline nofreelunch    llama-3.1-8b-instruct -> crr=0.515 util=0.010
+2026-06-18 07:17:21,307 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
