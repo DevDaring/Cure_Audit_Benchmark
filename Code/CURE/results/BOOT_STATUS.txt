@@ -1,1 +1,1 @@
-setup complete; starting dry-run @ Thu Jun 18 12:08:06 UTC 2026
+dry-run rc=0 PASSED; cleaning test artifacts @ Thu Jun 18 12:34:39 UTC 2026
