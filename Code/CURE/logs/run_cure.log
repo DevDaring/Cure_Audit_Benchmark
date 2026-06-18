@@ -4,3 +4,26 @@
 2026-06-18 15:27:32,842 | INFO | cure.run | model qwen2.5-7b-instruct already complete; skipping
 2026-06-18 15:27:32,842 | INFO | cure.run | model gemma-2-2b-it already complete; skipping
 2026-06-18 15:27:32,842 | INFO | cure.run | model phi-4-mini-instruct already complete; skipping
+2026-06-18 15:27:34,661 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 15:27:34,661 | INFO | cure.run | ALL MODELS COMPLETE
+2026-06-18 15:27:40,977 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 15:27:40,978 | INFO | cure.run | anomaly diagnostic already complete; skipping
+2026-06-18 15:27:48,100 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 15:27:48,121 | INFO | cure.integrity | integrity: 8 files, 0 deduped, 0 quarantined
+2026-06-18 15:27:48,122 | INFO | cure.run | === baselines llama-3.1-8b-instruct : 10/10 methods to score ===
+2026-06-18 15:27:48,396 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
+2026-06-18 15:27:52,878 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
+2026-06-18 15:27:52,879 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
+2026-06-18 15:27:52,881 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
+2026-06-18 15:28:27,345 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
+2026-06-18 15:31:33,468 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:31:56,903 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:34:04,391 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:34:30,397 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:35:00,905 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:35:34,830 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:36:08,694 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:36:41,329 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:37:09,739 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:37:36,371 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 15:37:36,376 | INFO | cure.run | baselines llama-3.1-8b-instruct: utility-aware operating rank=8 | curve={'1': {'reduced_validation': None, 'utility_cost': -0.02, 'erased_acc': 0.74}, '2': {'reduced_validation': None, 'utility_cost': 0.0465, 'erased_acc': 0.6735}, '4': {'reduced_validation': None, 'utility_cost': 0.1435, 'erased_acc': 0.5765}, '8': {'reduced_validation': 0.56, 'utility_cost': 0.105, 'erased_acc': 0.615}}

@@ -4,3 +4,5 @@
 2026-06-18 15:27:32,842 | INFO | cure.run | model qwen2.5-7b-instruct already complete; skipping
 2026-06-18 15:27:32,842 | INFO | cure.run | model gemma-2-2b-it already complete; skipping
 2026-06-18 15:27:32,842 | INFO | cure.run | model phi-4-mini-instruct already complete; skipping
+2026-06-18 15:27:34,661 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 15:27:34,661 | INFO | cure.run | ALL MODELS COMPLETE

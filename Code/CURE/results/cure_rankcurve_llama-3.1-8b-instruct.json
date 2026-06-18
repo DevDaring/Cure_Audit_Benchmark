@@ -1,0 +1,27 @@
+{
+  "model_name": "llama-3.1-8b-instruct",
+  "operating_rank": 8,
+  "max_utility_cost": 0.15,
+  "curve": {
+    "1": {
+      "reduced_validation": null,
+      "utility_cost": -0.02,
+      "erased_acc": 0.74
+    },
+    "2": {
+      "reduced_validation": null,
+      "utility_cost": 0.0465,
+      "erased_acc": 0.6735
+    },
+    "4": {
+      "reduced_validation": null,
+      "utility_cost": 0.1435,
+      "erased_acc": 0.5765
+    },
+    "8": {
+      "reduced_validation": 0.56,
+      "utility_cost": 0.105,
+      "erased_acc": 0.615
+    }
+  }
+}
