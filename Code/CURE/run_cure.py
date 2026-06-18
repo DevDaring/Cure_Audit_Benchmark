@@ -186,6 +186,8 @@ def _utility_aware_rank(model, tok, cfg, name, bases, base_acc):
                     "utility_cost": (round(float(uc), 4) if uc is not None else None),
                     "erased_acc": (round(float(acc), 4) if np.isfinite(acc) else None)}
     ranks = [r for r in C.ERASE_RANKS if r in curve]
+    if not ranks:                                       # no usable subspace -> safe fallback
+        return (C.HEADLINE_RANK if C.HEADLINE_RANK in bases else (min(bases) if bases else C.HEADLINE_RANK)), {}
     safe = [r for r in ranks if curve[r]["utility_cost"] is not None
             and curve[r]["utility_cost"] <= C.MAX_UTILITY_COST]
     if safe:
