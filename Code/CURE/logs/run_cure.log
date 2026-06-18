@@ -62,3 +62,11 @@
 2026-06-18 11:02:50,739 | INFO | cure.checkpoint | checkpoint push: ok
 2026-06-18 11:02:50,740 | INFO | cure.run | baseline nofreelunch    llama-3.1-8b-instruct -> crr=0.515 util=0.010
 2026-06-18 11:02:50,961 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
+2026-06-18 11:02:53,848 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 11:02:53,849 | INFO | cure.run | baselines llama-3.1-8b-instruct complete
+2026-06-18 11:02:53,849 | INFO | cure.run | === baselines qwen2.5-7b-instruct : 10/10 methods to score ===
+2026-06-18 11:02:54,249 | INFO | cure.run | baselines qwen2.5-7b-instruct: validation-selected operating rank=8, eval n<=1000
+2026-06-18 11:02:54,249 | INFO | load_osm | Loading model: qwen2.5-7b-instruct (Qwen/Qwen2.5-7B-Instruct) ...
+2026-06-18 11:03:01,612 | INFO | load_osm |   Model qwen2.5-7b-instruct                 | attention impl: flash_attention_2
+2026-06-18 11:03:01,612 | INFO | load_osm | Model 'qwen2.5-7b-instruct' loaded successfully.
+2026-06-18 11:03:01,638 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'Qwen/Qwen2.5-7B-Instruct' (cached).
