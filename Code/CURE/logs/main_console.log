@@ -1,8 +1,6 @@
-2026-06-18 06:00:35,611 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
-2026-06-18 06:00:35,672 | INFO | cure.integrity | integrity: 22 files, 0 deduped, 0 quarantined
-2026-06-18 06:00:35,673 | INFO | cure.run | model llama-3.1-8b-instruct already complete; skipping
-2026-06-18 06:00:35,674 | INFO | cure.run | model qwen2.5-7b-instruct already complete; skipping
-2026-06-18 06:00:35,674 | INFO | cure.run | model gemma-2-2b-it already complete; skipping
-2026-06-18 06:00:35,674 | INFO | cure.run | model phi-4-mini-instruct already complete; skipping
-2026-06-18 06:00:37,849 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 06:00:37,849 | INFO | cure.run | ALL MODELS COMPLETE
+2026-06-18 09:47:52,986 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 09:47:53,011 | INFO | cure.integrity | integrity: 8 files, 0 deduped, 0 quarantined
+2026-06-18 09:47:53,012 | INFO | cure.run | model llama-3.1-8b-instruct already complete; skipping
+2026-06-18 09:47:53,013 | INFO | cure.run | model qwen2.5-7b-instruct already complete; skipping
+2026-06-18 09:47:53,013 | INFO | cure.run | model gemma-2-2b-it already complete; skipping
+2026-06-18 09:47:53,013 | INFO | cure.run | model phi-4-mini-instruct already complete; skipping

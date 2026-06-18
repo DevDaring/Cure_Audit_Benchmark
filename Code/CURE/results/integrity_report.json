@@ -1,29 +1,15 @@
 {
   "checked": [
-    "cure_baselines_full_llama-3.1-8b-instruct.parquet",
-    "cure_baselines_full_qwen2.5-7b-instruct.parquet",
-    "cure_baselines_gemma-2-2b-it.parquet",
-    "cure_baselines_llama-3.1-8b-instruct.parquet",
-    "cure_baselines_phi-4-mini-instruct.parquet",
-    "cure_baselines_qwen2.5-7b-instruct.parquet",
     "cure_prognosis_gemma-2-2b-it.parquet",
     "cure_prognosis_llama-3.1-8b-instruct.parquet",
     "cure_prognosis_phi-4-mini-instruct.parquet",
     "cure_prognosis_qwen2.5-7b-instruct.parquet",
-    "cure_recovery_gemma-2-2b-it.parquet",
-    "cure_recovery_llama-3.1-8b-instruct.parquet",
-    "cure_recovery_phi-4-mini-instruct.parquet",
-    "cure_recovery_qwen2.5-7b-instruct.parquet",
     "cure_recovery_sweep_gemma-2-2b-it.parquet",
     "cure_recovery_sweep_llama-3.1-8b-instruct.parquet",
     "cure_recovery_sweep_phi-4-mini-instruct.parquet",
-    "cure_recovery_sweep_qwen2.5-7b-instruct.parquet",
-    "cure_utility_gemma-2-2b-it.parquet",
-    "cure_utility_llama-3.1-8b-instruct.parquet",
-    "cure_utility_phi-4-mini-instruct.parquet",
-    "cure_utility_qwen2.5-7b-instruct.parquet"
+    "cure_recovery_sweep_qwen2.5-7b-instruct.parquet"
   ],
   "deduped": {},
   "quarantined": [],
-  "ts": "2026-06-18T06:00:52Z"
+  "ts": "2026-06-18T09:47:52Z"
 }
