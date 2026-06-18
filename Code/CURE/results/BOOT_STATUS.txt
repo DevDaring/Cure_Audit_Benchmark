@@ -1,1 +1,1 @@
-diagnostic done; starting baseline comparison @ Thu Jun 18 15:27:41 UTC 2026
+baselines attempt 1 running @ Thu Jun 18 15:27:42 UTC 2026
