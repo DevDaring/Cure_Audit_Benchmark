@@ -161,7 +161,12 @@ while true; do
   push_status "main attempt $ATTEMPT exited non-zero: $(tail -5 "$CURE/logs/main_console.log" | tr '\n' ' ' | tail -c 300)"
   echo "[bootstrap] main exited non-zero; retry in 60s"; sleep 60
 done
-push_status "main phase COMPLETE; starting baseline comparison"
+push_status "main phase COMPLETE; running phi anomaly diagnostic"
+
+echo "[bootstrap] DIAGNOSE (why phi is rank-anomalous; non-fatal)"
+python3 run_cure.py --mode diagnose > "$CURE/logs/diagnose_console.log" 2>&1 || echo "[bootstrap] diagnose non-fatal error"
+tail -15 "$CURE/logs/diagnose_console.log" 2>/dev/null || true
+push_status "diagnostic done; starting baseline comparison"
 
 echo "[bootstrap] BASELINES run (cure + 9 baselines, one harness; restart supervisor)"
 BATTEMPT=0

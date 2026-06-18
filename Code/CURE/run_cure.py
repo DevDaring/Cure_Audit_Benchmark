@@ -262,9 +262,85 @@ def cmd_baselines():
     log.info("ALL BASELINES COMPLETE")
 
 
+def cmd_diagnose():
+    """Diagnose the per-model rank non-monotonicity (why phi-4-mini spikes at rank 4).
+
+    For phi and a healthy contrast (qwen), on a held-out 150-pair sample, measure:
+      (a) the effect of erasing EACH diff-SVD direction in isolation (which single
+          direction, when removed, raises the commutator);
+      (b) the cumulative rank 1..8 curve at fine granularity;
+      (c) the mid-layer singular spectrum;
+      (d) whether the peak coordinate of each direction lands on a high-variance
+          ('massive activation') residual dimension -- the usual cause of erasure
+          instability in some models.
+    Writes results/anomaly_diagnostic.json.
+    """
+    from load_osm import load_model, unload_model
+    from checkpoint import push_checkpoint
+    targets = ["phi-4-mini-instruct", "qwen2.5-7b-instruct"]
+    report = {}
+    for cfg in C.OSM_MODELS:
+        name = cfg["name"]
+        if name not in targets:
+            continue
+        log.info("=== diagnose %s ===", name)
+        pairs = E._load_pairs(cfg, limit=None)
+        if not pairs:
+            continue
+        sub = E.stratified_subset(pairs, C.SUBSPACE_PAIRS, C.RANDOM_SEED)
+        diag = E.stratified_subset(pairs, 150, C.RANDOM_SEED + 7)
+        model, tok = load_model(cfg)
+        try:
+            ctx = E.collect_acts(model, tok, cfg, sub)
+            full = erase._svd_components(ctx["diffs"])             # {layer: Vt all comps}
+            layers = sorted(full.keys())
+            orig_mean = None
+            per_dir = {}
+            for k in range(8):                                    # erase ONE direction k
+                basis = {L: full[L][k:k + 1, :] for L in layers if full[L].shape[0] > k}
+                if not basis:
+                    continue
+                re = E.e3_reaudit(model, tok, cfg, diag, basis)
+                if len(re):
+                    orig_mean = round(float(re["orig_commutator"].mean()), 4)
+                    per_dir[k + 1] = {
+                        "mean_erased": round(float(re["erased_commutator"].mean()), 4),
+                        "reduced_frac": round(float((re["erased_commutator"] < re["orig_commutator"]).mean()), 4)}
+            cumulative = {}
+            for r in range(1, 9):                                 # erase top-r cumulatively
+                basis = {L: full[L][:r, :] for L in layers}
+                re = E.e3_reaudit(model, tok, cfg, diag, basis)
+                if len(re):
+                    cumulative[r] = {
+                        "mean_erased": round(float(re["erased_commutator"].mean()), 4),
+                        "reduced_frac": round(float((re["erased_commutator"] < re["orig_commutator"]).mean()), 4)}
+            midL = layers[len(layers) // 2]
+            X = np.stack(ctx["diffs"][midL], 0); X = X - X.mean(0, keepdims=True)
+            sv = np.linalg.svd(X, compute_uv=False)
+            A = np.stack(ctx["A"][midL], 0)
+            top_massive = [int(d) for d in np.argsort(A.var(0))[::-1][:5]]
+            align = {}
+            for k in range(min(8, full[midL].shape[0])):
+                v = full[midL][k]; am = int(np.abs(v).argmax())
+                align[k + 1] = {"peak_dim": am, "peak_abs": round(float(np.abs(v).max()), 3),
+                                "hits_massive_dim": am in top_massive}
+            report[name] = {"orig_commutator_mean": orig_mean, "erase_single_direction": per_dir,
+                            "cumulative_rank_curve": cumulative, "midlayer": int(midL),
+                            "singular_values_midlayer": [round(float(x), 3) for x in sv[:10]],
+                            "massive_dims_midlayer": top_massive, "direction_peak_alignment": align}
+            log.info("diagnose %s single-direction effect: %s", name, per_dir)
+        except Exception as exc:
+            log.error("diagnose %s raised: %s", name, str(exc)[:200])
+        finally:
+            unload_model(name)
+        (C.RESULTS / "anomaly_diagnostic.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+        push_checkpoint(f"diagnostic: {name} anomaly analysis")
+    log.info("DIAGNOSTIC COMPLETE")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=["dry", "main", "baselines"], required=True)
+    ap.add_argument("--mode", choices=["dry", "main", "baselines", "diagnose"], required=True)
     args = ap.parse_args()
 
     # verify both patching libraries import before any work (fail loud)
@@ -279,6 +355,9 @@ def main():
         sys.exit(0 if dry_checks.run_all() else 1)
     if args.mode == "baselines":
         cmd_baselines()
+        return
+    if args.mode == "diagnose":
+        cmd_diagnose()
         return
     cmd_main()
 
