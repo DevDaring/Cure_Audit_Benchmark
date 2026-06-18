@@ -235,11 +235,12 @@ def hsal(model, tokenizer, cfg, pairs, ctx=None, rank=None):
     return {"kind": "erase", "basis": basis}
 
 
-def patchscopes(model, tokenizer, cfg, pairs, ctx=None):
+def patchscopes(model, tokenizer, cfg, pairs, ctx=None, rank=None):
     """Faithful-Patchscopes (arXiv:2602.00300) is a representation-inspection method;
     adapted here to debiasing by reading the protected-attribute direction from the swap
     and ablating it at the layers with the strongest read-out (largest diff energy),
     a localised erasure. Documented as an adaptation of an inspection method."""
+    rank = rank or C.HEADLINE_RANK
     diffs = _acts(model, tokenizer, cfg, pairs, ctx)["diffs"]
     energy = {L: float(np.mean([np.linalg.norm(v) for v in vs]))
               for L, vs in diffs.items() if len(vs) >= 2}
@@ -256,7 +257,7 @@ def patchscopes(model, tokenizer, cfg, pairs, ctx=None):
             _, _, Vt = np.linalg.svd(X, full_matrices=False)
         except np.linalg.LinAlgError:
             continue
-        basis[layer] = Vt[:min(C.HEADLINE_RANK, Vt.shape[0]), :].astype(np.float32)
+        basis[layer] = Vt[:min(rank, Vt.shape[0]), :].astype(np.float32)
     return {"kind": "erase", "basis": basis}
 
 
@@ -284,11 +285,21 @@ def nofreelunch(model, tokenizer, cfg, pairs, ctx=None):
     return {"kind": "steer", "basis": {L: u for L in layers}}
 
 
-def build_basis(method, model, tokenizer, cfg, pairs, ctx=None) -> dict:
-    """Build one method's basis (or marker), passing the shared activation cache.
-    Returns {"kind", "basis"} on success or {"status": "pending"/"error", "note"}."""
+# Subspace-erasure baselines whose erased rank should track CURE's per-model operating
+# rank for a controlled comparison. Steering (fairsteer, meandiff, nofreelunch) and
+# feature/scope methods (sae_debias, biasgym) keep their native single-direction /
+# self-selected configurations; prompt_debias edits nothing.
+_RANK_AWARE = {"generic_erase", "hsal", "patchscopes"}
+
+
+def build_basis(method, model, tokenizer, cfg, pairs, ctx=None, rank=None) -> dict:
+    """Build one method's basis (or marker), passing the shared activation cache. Rank-
+    aware erasure baselines receive the per-model operating rank. Returns {"kind","basis"}
+    on success or {"status": "pending"/"error", "note"}."""
     fn = REGISTRY[method]
     try:
+        if method in _RANK_AWARE and rank is not None:
+            return fn(model, tokenizer, cfg, pairs, ctx=ctx, rank=rank)
         return fn(model, tokenizer, cfg, pairs, ctx=ctx)
     except NotImplementedError as exc:
         return {"status": "pending", "note": str(exc)[:160]}

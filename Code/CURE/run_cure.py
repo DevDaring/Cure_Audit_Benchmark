@@ -141,6 +141,23 @@ def cmd_main():
     log.info("ALL MODELS COMPLETE")
 
 
+def _select_op_rank(name: str) -> int:
+    """Per-model operating rank, chosen on the validation sweep: the rank that reduces
+    the commutator for the largest fraction of pairs (ties -> the smaller rank, which
+    costs less utility). Falls back to HEADLINE_RANK if the sweep is unavailable."""
+    p = C.RESULTS / f"cure_recovery_sweep_{name}.parquet"
+    if not integrity.parquet_nonempty(p):
+        return C.HEADLINE_RANK
+    try:
+        sw = pd.read_parquet(p)
+        sw = sw.assign(_reduced=(sw["erased_commutator"] < sw["orig_commutator"]).astype(float))
+        red = sw.groupby("erase_rank")["_reduced"].mean()
+        return int(red.sort_index().idxmax())          # first (smallest) rank on ties
+    except Exception as exc:
+        log.warning("op-rank selection for %s failed (%s); using HEADLINE_RANK", name, str(exc)[:80])
+        return C.HEADLINE_RANK
+
+
 def cmd_baselines():
     """E5+ : the full comparison of CURE against all nine baselines under ONE harness.
 
@@ -179,31 +196,37 @@ def cmd_baselines():
         if not pairs:
             log.error("no pairs for %s; skipping", name); continue
         sub_pairs = E.stratified_subset(pairs, C.SUBSPACE_PAIRS, C.RANDOM_SEED)
-        sweep_pairs = E.stratified_subset(pairs, C.SWEEP_SUBSET, C.RANDOM_SEED)
+        # Operating rank is chosen on the validation sweep (the RANDOM_SEED subset), and
+        # the comparison is then scored on a DIFFERENT sample (RANDOM_SEED+7), so the rank
+        # is never selected and evaluated on the same pairs.
+        op_rank = _select_op_rank(name)
+        eval_pairs = E.stratified_subset(pairs, C.SWEEP_SUBSET, C.RANDOM_SEED + 7)
+        log.info("baselines %s: validation-selected operating rank=%d, eval n<=%d",
+                 name, op_rank, C.SWEEP_SUBSET)
 
         model, tok = load_model(cfg)
         try:
             ctx = E.collect_acts(model, tok, cfg, sub_pairs)              # one shared pass
-            head_basis = erase.subspace_from_diffs(ctx["diffs"], C.HEADLINE_RANK)
+            head_basis = erase.subspace_from_diffs(ctx["diffs"], op_rank)
             base_acc = E.native_accuracy(model, tok, cfg, None, C.BASELINE_E4_LIMIT, C.E4_MAX_TOKENS)
             for m in todo:
                 try:
                     if m == "cure":
                         basis, kind, status = head_basis, "audit_guided_erase", "ok"
                     else:
-                        built = B.build_basis(m, model, tok, cfg, sub_pairs, ctx=ctx)
+                        built = B.build_basis(m, model, tok, cfg, sub_pairs, ctx=ctx, rank=op_rank)
                         if built.get("status") in ("pending", "error"):
                             rows.append({"method": m, "model_name": name, "status": built["status"],
                                          "note": built.get("note", "")})
                             _save(pd.DataFrame(rows), out_name); continue
                         basis, kind, status = built.get("basis", {}), built.get("kind"), "ok"
                     row = {"method": m, "model_name": name, "status": status, "kind": kind,
-                           "erase_rank": C.HEADLINE_RANK}
+                           "erase_rank": op_rank}
                     if not basis:
                         # prompt-only / empty: no activation edit by construction
                         row.update({"causal_residual_removed": 0.0, "utility_cost": 0.0, "n_pairs": 0})
                     else:
-                        re = E.e3_reaudit(model, tok, cfg, sweep_pairs, basis)
+                        re = E.e3_reaudit(model, tok, cfg, eval_pairs, basis)
                         if len(re):
                             row["causal_residual_removed"] = float(
                                 (re["erased_commutator"] < re["orig_commutator"]).mean())
