@@ -8,3 +8,13 @@
 You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
 2026-06-18 02:11:59,087 | INFO | cure.run | diagnose qwen2.5-7b-instruct single-direction effect: {1: {'mean_erased': 0.924, 'reduced_frac': 0.5067}, 2: {'mean_erased': 1.0141, 'reduced_frac': 0.46}, 3: {'mean_erased': 0.9292, 'reduced_frac': 0.54}, 4: {'mean_erased': 0.9665, 'reduced_frac': 0.5467}, 5: {'mean_erased': 0.9738, 'reduced_frac': 0.4733}, 6: {'mean_erased': 0.999, 'reduced_frac': 0.44}, 7: {'mean_erased': 0.9599, 'reduced_frac': 0.4933}, 8: {'mean_erased': 0.9247, 'reduced_frac': 0.4933}}
 2026-06-18 02:11:59,239 | INFO | load_osm | Model 'qwen2.5-7b-instruct' unloaded and VRAM freed.
+2026-06-18 02:12:01,533 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 02:12:01,533 | INFO | cure.run | === diagnose phi-4-mini-instruct ===
+2026-06-18 02:12:01,912 | INFO | load_osm | Loading model: phi-4-mini-instruct (microsoft/Phi-4-mini-instruct) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.41it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.87it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.78it/s]
+2026-06-18 02:12:04,939 | INFO | load_osm |   Model phi-4-mini-instruct                 | attention impl: flash_attention_2
+2026-06-18 02:12:04,939 | INFO | load_osm | Model 'phi-4-mini-instruct' loaded successfully.
+2026-06-18 02:12:04,941 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'microsoft/Phi-4-mini-instruct' (cached).
+You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+2026-06-18 02:19:07,985 | INFO | cure.run | diagnose phi-4-mini-instruct single-direction effect: {1: {'mean_erased': 0.5775, 'reduced_frac': 0.4267}, 2: {'mean_erased': 0.6308, 'reduced_frac': 0.4867}, 3: {'mean_erased': 0.6017, 'reduced_frac': 0.5267}, 4: {'mean_erased': 0.6388, 'reduced_frac': 0.4267}, 5: {'mean_erased': 0.6529, 'reduced_frac': 0.5133}, 6: {'mean_erased': 0.7462, 'reduced_frac': 0.4067}, 7: {'mean_erased': 0.7025, 'reduced_frac': 0.4267}, 8: {'mean_erased': 0.7696, 'reduced_frac': 0.4067}}
+2026-06-18 02:19:08,151 | INFO | load_osm | Model 'phi-4-mini-instruct' unloaded and VRAM freed.
