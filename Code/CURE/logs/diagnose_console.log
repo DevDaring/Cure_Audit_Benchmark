@@ -1,2 +1,2 @@
-2026-06-18 06:00:44,521 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
-2026-06-18 06:00:44,522 | INFO | cure.run | anomaly diagnostic already complete; skipping
+2026-06-18 09:48:03,654 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 09:48:03,655 | INFO | cure.run | anomaly diagnostic already complete; skipping

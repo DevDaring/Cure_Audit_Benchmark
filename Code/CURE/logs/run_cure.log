@@ -4,3 +4,20 @@
 2026-06-18 09:47:53,013 | INFO | cure.run | model qwen2.5-7b-instruct already complete; skipping
 2026-06-18 09:47:53,013 | INFO | cure.run | model gemma-2-2b-it already complete; skipping
 2026-06-18 09:47:53,013 | INFO | cure.run | model phi-4-mini-instruct already complete; skipping
+2026-06-18 09:47:56,568 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 09:47:56,569 | INFO | cure.run | ALL MODELS COMPLETE
+2026-06-18 09:48:03,654 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 09:48:03,655 | INFO | cure.run | anomaly diagnostic already complete; skipping
+2026-06-18 09:48:12,633 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 09:48:12,656 | INFO | cure.integrity | integrity: 8 files, 0 deduped, 0 quarantined
+2026-06-18 09:48:12,657 | INFO | cure.run | === baselines llama-3.1-8b-instruct : 10/10 methods to score ===
+2026-06-18 09:48:12,944 | INFO | cure.run | baselines llama-3.1-8b-instruct: validation-selected operating rank=8, eval n<=1000
+2026-06-18 09:48:12,944 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
+2026-06-18 09:48:17,425 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
+2026-06-18 09:48:17,425 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
+2026-06-18 09:48:17,428 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
+2026-06-18 09:48:50,466 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
+2026-06-18 09:53:42,146 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 09:54:06,246 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 10:00:05,958 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 10:00:33,344 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
