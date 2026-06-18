@@ -1,16 +1,10 @@
-2026-06-18 02:05:39,349 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
-2026-06-18 02:05:39,407 | INFO | cure.integrity | integrity: 20 files, 0 deduped, 0 quarantined
-2026-06-18 02:05:39,408 | INFO | cure.run | model llama-3.1-8b-instruct already complete; skipping
-2026-06-18 02:05:39,408 | INFO | cure.run | model qwen2.5-7b-instruct already complete; skipping
-2026-06-18 02:05:39,408 | INFO | cure.run | model gemma-2-2b-it already complete; skipping
-2026-06-18 02:05:39,408 | INFO | cure.run | model phi-4-mini-instruct already complete; skipping
-2026-06-18 02:05:41,619 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:05:41,619 | INFO | cure.run | ALL MODELS COMPLETE
 2026-06-18 02:05:47,637 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
 2026-06-18 02:05:47,638 | INFO | cure.run | === diagnose qwen2.5-7b-instruct ===
 2026-06-18 02:05:47,921 | INFO | load_osm | Loading model: qwen2.5-7b-instruct (Qwen/Qwen2.5-7B-Instruct) ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:02,  1.21it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:01<00:01,  1.52it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:01<00:00,  1.68it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.82it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.69it/s]
 2026-06-18 02:05:51,790 | INFO | load_osm |   Model qwen2.5-7b-instruct                 | attention impl: flash_attention_2
 2026-06-18 02:05:51,790 | INFO | load_osm | Model 'qwen2.5-7b-instruct' loaded successfully.
 2026-06-18 02:05:51,793 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'Qwen/Qwen2.5-7B-Instruct' (cached).
+You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
 2026-06-18 02:11:59,087 | INFO | cure.run | diagnose qwen2.5-7b-instruct single-direction effect: {1: {'mean_erased': 0.924, 'reduced_frac': 0.5067}, 2: {'mean_erased': 1.0141, 'reduced_frac': 0.46}, 3: {'mean_erased': 0.9292, 'reduced_frac': 0.54}, 4: {'mean_erased': 0.9665, 'reduced_frac': 0.5467}, 5: {'mean_erased': 0.9738, 'reduced_frac': 0.4733}, 6: {'mean_erased': 0.999, 'reduced_frac': 0.44}, 7: {'mean_erased': 0.9599, 'reduced_frac': 0.4933}, 8: {'mean_erased': 0.9247, 'reduced_frac': 0.4933}}
 2026-06-18 02:11:59,239 | INFO | load_osm | Model 'qwen2.5-7b-instruct' unloaded and VRAM freed.
