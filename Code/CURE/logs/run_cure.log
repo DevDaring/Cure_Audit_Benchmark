@@ -35,3 +35,5 @@
 2026-06-18 10:14:03,189 | INFO | cure.checkpoint | checkpoint push: ok
 2026-06-18 10:14:03,190 | INFO | cure.run | baseline meandiff_steer llama-3.1-8b-instruct -> crr=0.491 util=0.000
 2026-06-18 10:18:05,044 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 10:18:20,175 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 10:18:30,178 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
