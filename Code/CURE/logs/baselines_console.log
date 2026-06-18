@@ -192,3 +192,6 @@ Moving model to device:  cuda
 2026-06-18 08:05:51,364 | INFO | utils_attention | HookedTransformer for 'google/gemma-2-2b-it' cached (device=cuda:0).
 2026-06-18 08:10:53,676 | INFO | osm_behavioral | OSM gemma-2-2b-it: 104/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 08:11:19,334 | INFO | osm_behavioral | OSM gemma-2-2b-it: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 08:16:19,434 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 08:19:46,949 | INFO | osm_behavioral | OSM gemma-2-2b-it: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 08:20:30,062 | INFO | osm_behavioral | OSM gemma-2-2b-it: 200/200 prompts done (sample_index=0, batch_size=8).
