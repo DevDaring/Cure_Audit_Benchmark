@@ -104,3 +104,5 @@ You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokeni
 2026-06-18 03:48:37,176 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 03:48:39,239 | INFO | cure.checkpoint | checkpoint push: ok
 2026-06-18 03:48:39,239 | INFO | cure.run | baseline cure           qwen2.5-7b-instruct -> crr=0.517 util=0.795
+2026-06-18 03:48:40,968 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 03:48:40,968 | INFO | cure.run | baseline prompt_debias  qwen2.5-7b-instruct -> crr=0.000 util=0.000
