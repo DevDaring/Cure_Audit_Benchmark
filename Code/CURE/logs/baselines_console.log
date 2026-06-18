@@ -66,3 +66,5 @@ Moving model to device:  cuda
   warnings.warn(
 2026-06-18 13:15:53,197 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
 2026-06-18 13:16:15,054 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 13:16:18,236 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-18 13:16:18,237 | INFO | cure.run | baseline biasgym        llama-3.1-8b-instruct -> crr=0.488 util=-0.025
