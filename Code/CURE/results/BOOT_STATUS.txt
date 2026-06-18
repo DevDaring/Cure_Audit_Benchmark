@@ -1,1 +1,1 @@
-baselines attempt 1 running @ Thu Jun 18 15:27:42 UTC 2026
+ALL COMPLETE (cure + baselines) @ Thu Jun 18 20:23:07 UTC 2026
