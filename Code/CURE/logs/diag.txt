@@ -6,7 +6,7 @@ device NVIDIA H100 80GB HBM3 | capability (9, 0)
 === flash_attn cxx11abiTRUE ===
 Collecting flash-attn==2.8.3+cu12torch2.5cxx11abiTRUE
   Downloading https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiTRUE-cp312-cp312-linux_x86_64.whl (256.0 MB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 256.0/256.0 MB 6.2 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 256.0/256.0 MB 8.1 MB/s eta 0:00:00
 Installing collected packages: flash-attn
 Successfully installed flash-attn-2.8.3
 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
@@ -21,7 +21,7 @@ import_exit=1 (139=segfault, 132=illegal-instruction, 1=ImportError)
 === flash_attn cxx11abiFALSE ===
 Collecting flash-attn==2.8.3+cu12torch2.5cxx11abiFALSE
   Downloading https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl (256.0 MB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 256.0/256.0 MB 8.1 MB/s eta 0:00:00
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 256.0/256.0 MB 6.5 MB/s eta 0:00:00
 Installing collected packages: flash-attn
   Attempting uninstall: flash-attn
     Found existing installation: flash_attn 2.8.3
