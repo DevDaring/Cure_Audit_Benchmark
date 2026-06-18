@@ -1,1 +1,1 @@
-container started (nvidia-smi: GPU 0: NVIDIA H100 80GB HBM3 (UUID: GPU-90cd9714-3858-7da9-3c1c-bedc691b4fe9)) @ Thu Jun 18 14:53:29 UTC 2026
+setup complete; starting dry-run @ Thu Jun 18 15:01:53 UTC 2026
