@@ -1,1 +1,1 @@
-main phase COMPLETE; running phi anomaly diagnostic @ Thu Jun 18 15:27:35 UTC 2026
+diagnostic done; starting baseline comparison @ Thu Jun 18 15:27:41 UTC 2026
