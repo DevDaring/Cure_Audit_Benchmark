@@ -1,0 +1,27 @@
+{
+  "model_name": "qwen2.5-7b-instruct",
+  "operating_rank": 4,
+  "max_utility_cost": 0.1,
+  "curve": {
+    "1": {
+      "reduced_validation": null,
+      "utility_cost": null,
+      "erased_acc": null
+    },
+    "2": {
+      "reduced_validation": null,
+      "utility_cost": null,
+      "erased_acc": null
+    },
+    "4": {
+      "reduced_validation": null,
+      "utility_cost": 0.795,
+      "erased_acc": 0.0
+    },
+    "8": {
+      "reduced_validation": 0.535,
+      "utility_cost": 0.795,
+      "erased_acc": 0.0
+    }
+  }
+}
