@@ -1,158 +1,20 @@
-2026-06-18 02:19:18,185 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
-2026-06-18 02:19:18,238 | INFO | cure.integrity | integrity: 20 files, 0 deduped, 0 quarantined
-2026-06-18 02:19:18,238 | INFO | cure.run | === baselines llama-3.1-8b-instruct : 10/10 methods to score ===
-2026-06-18 02:19:18,575 | INFO | cure.run | baselines llama-3.1-8b-instruct: validation-selected operating rank=8, eval n<=1000
-2026-06-18 02:19:18,576 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:02,  1.06it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.32s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.34s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.14it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.02s/it]
-2026-06-18 02:19:23,847 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
-2026-06-18 02:19:23,847 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
-2026-06-18 02:19:23,850 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
+2026-06-18 06:00:52,212 | INFO | cure.run | patching libs OK: transformer_lens=2.18.0 nnsight=0.3.7
+2026-06-18 06:00:52,271 | INFO | cure.integrity | integrity: 22 files, 0 deduped, 0 quarantined
+2026-06-18 06:00:52,271 | INFO | cure.run | === baselines llama-3.1-8b-instruct : 10/10 methods to score ===
+2026-06-18 06:00:52,608 | INFO | cure.run | baselines llama-3.1-8b-instruct: validation-selected operating rank=8, eval n<=1000
+2026-06-18 06:00:52,608 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.12s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.10s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:02<00:00,  1.06it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.55it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.27it/s]
+2026-06-18 06:00:57,057 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
+2026-06-18 06:00:57,058 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
+2026-06-18 06:00:57,060 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
 Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
 Moving model to device:  cuda
-2026-06-18 02:19:59,485 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
+2026-06-18 06:01:36,714 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
 /usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
   warnings.warn(
-2026-06-18 02:23:54,273 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:24:17,630 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 06:07:02,797 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 06:07:26,180 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
 /usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
   warnings.warn(
-2026-06-18 02:30:00,844 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:30:27,512 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:30:29,612 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:30:29,612 | INFO | cure.run | baseline cure           llama-3.1-8b-instruct -> crr=0.587 util=0.105
-2026-06-18 02:30:31,633 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:30:31,633 | INFO | cure.run | baseline prompt_debias  llama-3.1-8b-instruct -> crr=0.000 util=0.000
-2026-06-18 02:34:21,183 | INFO | cure.checkpoint | checkpoint push: ok
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 02:39:11,651 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:39:37,783 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:39:40,011 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:39:40,011 | INFO | cure.run | baseline generic_erase  llama-3.1-8b-instruct -> crr=0.472 util=0.075
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 02:45:19,274 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:45:45,454 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:45:47,673 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:45:47,673 | INFO | cure.run | baseline meandiff_steer llama-3.1-8b-instruct -> crr=0.526 util=-0.020
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 02:49:23,574 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:49:45,038 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:50:09,777 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 02:50:12,111 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 02:50:12,111 | INFO | cure.run | baseline fairsteer      llama-3.1-8b-instruct -> crr=0.523 util=-0.030
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 03:00:28,373 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:00:57,928 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:00:59,944 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:00:59,945 | INFO | cure.run | baseline biasgym        llama-3.1-8b-instruct -> crr=0.586 util=0.118
-2026-06-18 03:04:26,047 | INFO | cure.checkpoint | checkpoint push: ok
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 03:08:19,991 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:08:45,408 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:08:47,731 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:08:47,731 | INFO | cure.run | baseline sae_debias     llama-3.1-8b-instruct -> crr=0.534 util=-0.010
-2026-06-18 03:19:28,226 | INFO | cure.checkpoint | checkpoint push: ok
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 03:23:52,748 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:24:19,072 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:24:21,275 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:24:21,275 | INFO | cure.run | baseline hsal           llama-3.1-8b-instruct -> crr=0.585 util=0.110
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 03:30:33,142 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:30:56,604 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:30:58,660 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:30:58,660 | INFO | cure.run | baseline patchscopes    llama-3.1-8b-instruct -> crr=0.857 util=-0.010
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-2026-06-18 03:34:30,353 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:34:48,761 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:35:14,320 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:35:16,484 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:35:16,485 | INFO | cure.run | baseline nofreelunch    llama-3.1-8b-instruct -> crr=0.516 util=0.495
-2026-06-18 03:35:16,655 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
-2026-06-18 03:35:18,605 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:35:18,605 | INFO | cure.run | baselines llama-3.1-8b-instruct complete
-2026-06-18 03:35:18,605 | INFO | cure.run | === baselines qwen2.5-7b-instruct : 10/10 methods to score ===
-2026-06-18 03:35:18,981 | INFO | cure.run | baselines qwen2.5-7b-instruct: validation-selected operating rank=8, eval n<=1000
-2026-06-18 03:35:18,981 | INFO | load_osm | Loading model: qwen2.5-7b-instruct (Qwen/Qwen2.5-7B-Instruct) ...
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.62s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.51s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.47s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.20s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.31s/it]
-2026-06-18 03:35:26,177 | INFO | load_osm |   Model qwen2.5-7b-instruct                 | attention impl: flash_attention_2
-2026-06-18 03:35:26,178 | INFO | load_osm | Model 'qwen2.5-7b-instruct' loaded successfully.
-2026-06-18 03:35:26,206 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'Qwen/Qwen2.5-7B-Instruct' (cached).
-You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 03:37:37,762 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:37:56,105 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 03:44:24,208 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:48:37,176 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:48:39,239 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:48:39,239 | INFO | cure.run | baseline cure           qwen2.5-7b-instruct -> crr=0.517 util=0.795
-2026-06-18 03:48:40,968 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:48:40,968 | INFO | cure.run | baseline prompt_debias  qwen2.5-7b-instruct -> crr=0.000 util=0.000
-2026-06-18 03:49:33,983 | INFO | cure.checkpoint | checkpoint push: ok
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 03:52:32,837 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:52:55,220 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 03:52:58,030 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 03:52:58,030 | INFO | cure.run | baseline generic_erase  qwen2.5-7b-instruct -> crr=0.497 util=0.200
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 04:00:48,973 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 04:04:36,287 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 04:05:16,894 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:05:19,343 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 04:05:19,343 | INFO | cure.run | baseline meandiff_steer qwen2.5-7b-instruct -> crr=0.475 util=nan
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 04:07:28,689 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:07:48,399 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:07:50,721 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 04:07:50,721 | INFO | cure.run | baseline fairsteer      qwen2.5-7b-instruct -> crr=0.477 util=0.030
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 04:12:39,936 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:13:42,265 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:13:44,802 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 04:13:44,802 | INFO | cure.run | baseline biasgym        qwen2.5-7b-instruct -> crr=0.539 util=0.795
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.8` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
-  warnings.warn(
-/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:650: UserWarning: `do_sample` is set to `False`. However, `top_k` is set to `20` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_k`.
-  warnings.warn(
-2026-06-18 04:17:16,780 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:17:38,525 | INFO | osm_behavioral | OSM qwen2.5-7b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
-2026-06-18 04:17:40,785 | INFO | cure.checkpoint | checkpoint push: ok
-2026-06-18 04:17:40,785 | INFO | cure.run | baseline sae_debias     qwen2.5-7b-instruct -> crr=0.466 util=0.065
+2026-06-18 06:13:34,822 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/200 prompts done (sample_index=0, batch_size=8).
+2026-06-18 06:14:01,535 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/200 prompts done (sample_index=0, batch_size=8).
