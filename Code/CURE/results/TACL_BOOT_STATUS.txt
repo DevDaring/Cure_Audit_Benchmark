@@ -1,1 +1,1 @@
-container started (GPU 0: NVIDIA RTX 5880 Ada Generation (UUID: GPU-061b563f-d26e-b73e-81d6-0755aa70dd61)) @ Fri Jun 19 11:40:03 UTC 2026
+setup complete; starting TACL dry-run (2 instances) @ Fri Jun 19 11:44:15 UTC 2026
