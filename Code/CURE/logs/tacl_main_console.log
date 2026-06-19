@@ -247,3 +247,23 @@ Moving model to device:  cuda
 2026-06-19 14:49:42,762 | INFO | osm_behavioral | OSM gemma-2-2b-it: 600/800 prompts done (sample_index=0, batch_size=8).
 2026-06-19 14:50:16,629 | INFO | osm_behavioral | OSM gemma-2-2b-it: 704/800 prompts done (sample_index=0, batch_size=8).
 2026-06-19 14:50:47,808 | INFO | osm_behavioral | OSM gemma-2-2b-it: 800/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:50:49,648 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-19 14:50:49,648 | INFO | cure.tacl | sae_debias   gemma-2-2b-it | heldout_crr=0.383 behav_acc=0.4813 flip=0.6125
+2026-06-19 14:50:49,875 | INFO | load_osm | Model 'gemma-2-2b-it' unloaded and VRAM freed.
+2026-06-19 14:50:49,876 | INFO | cure.tacl | tacl_extra gemma-2-2b-it complete
+2026-06-19 14:50:50,488 | INFO | cure.tacl | === phi-4-mini-instruct | op_rank=1 | train_seeds=329 test_seeds=267 test_pairs(eval)=600 ===
+2026-06-19 14:50:50,488 | INFO | load_osm | Loading model: phi-4-mini-instruct (microsoft/Phi-4-mini-instruct) ...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.34it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.79it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.71it/s]
+2026-06-19 14:50:52,878 | INFO | load_osm |   Model phi-4-mini-instruct                 | attention impl: flash_attention_2
+2026-06-19 14:50:52,879 | INFO | load_osm | Model 'phi-4-mini-instruct' loaded successfully.
+2026-06-19 14:50:52,881 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'microsoft/Phi-4-mini-instruct' (cached).
+You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+2026-06-19 14:55:23,384 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 104/160 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:56:14,545 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 104/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:56:45,077 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 200/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:57:17,958 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 304/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:57:48,857 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 400/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:58:21,911 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 504/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:58:52,268 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 600/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:59:25,032 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 704/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:59:55,220 | INFO | osm_behavioral | OSM phi-4-mini-instruct: 800/800 prompts done (sample_index=0, batch_size=8).
