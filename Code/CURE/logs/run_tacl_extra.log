@@ -49,3 +49,12 @@
 2026-06-19 12:41:47,021 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 600/800 prompts done (sample_index=0, batch_size=8).
 2026-06-19 12:42:22,569 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 704/800 prompts done (sample_index=0, batch_size=8).
 2026-06-19 12:42:55,207 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 800/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:42:56,968 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-19 12:42:56,968 | INFO | cure.tacl | sae_debias   llama-3.1-8b-instruct | heldout_crr=0.497 behav_acc=0.7375 flip=0.4062
+2026-06-19 12:42:57,226 | INFO | load_osm | Model 'llama-3.1-8b-instruct' unloaded and VRAM freed.
+2026-06-19 12:42:57,226 | INFO | cure.tacl | tacl_extra llama-3.1-8b-instruct complete
+2026-06-19 12:42:57,827 | INFO | cure.tacl | === qwen2.5-7b-instruct | op_rank=4 | train_seeds=329 test_seeds=267 test_pairs(eval)=600 ===
+2026-06-19 12:42:57,827 | INFO | load_osm | Loading model: qwen2.5-7b-instruct (Qwen/Qwen2.5-7B-Instruct) ...
+2026-06-19 12:43:00,872 | INFO | load_osm |   Model qwen2.5-7b-instruct                 | attention impl: flash_attention_2
+2026-06-19 12:43:00,873 | INFO | load_osm | Model 'qwen2.5-7b-instruct' loaded successfully.
+2026-06-19 12:43:00,875 | INFO | utils_attention | Creating nnsight LanguageModel wrapper for 'Qwen/Qwen2.5-7B-Instruct' (cached).
