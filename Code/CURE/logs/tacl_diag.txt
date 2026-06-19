@@ -1,0 +1,20 @@
+NVIDIA RTX 5880 Ada Generation, 575.64.03
+python 3.12.3 | torch 2.5.1+cu124 | cuda 12.4 | avail True | cxx11abi False
+device NVIDIA RTX 5880 Ada Generation | cap (8, 9)
+Collecting flash-attn==2.8.3+cu12torch2.5cxx11abiTRUE
+  Downloading https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiTRUE-cp312-cp312-linux_x86_64.whl (256.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 256.0/256.0 MB 22.4 MB/s eta 0:00:00
+Installing collected packages: flash-attn
+Successfully installed flash-attn-2.8.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+Collecting flash-attn==2.8.3+cu12torch2.5cxx11abiFALSE
+  Downloading https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl (256.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 256.0/256.0 MB 20.3 MB/s eta 0:00:00
+Installing collected packages: flash-attn
+  Attempting uninstall: flash-attn
+    Found existing installation: flash_attn 2.8.3
+    Uninstalling flash_attn-2.8.3:
+      Successfully uninstalled flash_attn-2.8.3
+Successfully installed flash-attn-2.8.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+TL 2.18.0 nnsight 0.3.7 flash_attn 2.8.3

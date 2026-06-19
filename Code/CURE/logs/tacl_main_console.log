@@ -1,0 +1,23 @@
+2026-06-19 12:00:33,506 | INFO | cure.integrity | integrity: 12 files, 0 deduped, 0 quarantined
+2026-06-19 12:00:34,045 | INFO | cure.tacl | === llama-3.1-8b-instruct | op_rank=8 | train_seeds=329 test_seeds=267 test_pairs(eval)=600 ===
+2026-06-19 12:00:34,045 | INFO | load_osm | Loading model: llama-3.1-8b-instruct (meta-llama/Llama-3.1-8B-Instruct) ...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:02,  1.11it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:01<00:01,  1.24it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:02<00:00,  1.30it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.88it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.58it/s]
+2026-06-19 12:00:37,431 | INFO | load_osm |   Model llama-3.1-8b-instruct               | attention impl: flash_attention_2
+2026-06-19 12:00:37,431 | INFO | load_osm | Model 'llama-3.1-8b-instruct' loaded successfully.
+2026-06-19 12:00:37,437 | INFO | utils_attention | Converting HF model 'meta-llama/Llama-3.1-8B-Instruct' to HookedTransformer for CDVA patching ...
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+Moving model to device:  cuda
+2026-06-19 12:01:10,338 | INFO | utils_attention | HookedTransformer for 'meta-llama/Llama-3.1-8B-Instruct' cached (device=cuda:0).
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+2026-06-19 12:09:19,326 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/160 prompts done (sample_index=0, batch_size=8).
+/usr/local/lib/python3.12/dist-packages/transformers/generation/configuration_utils.py:633: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+2026-06-19 12:10:11,812 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 104/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:10:42,707 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 200/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:11:16,258 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 304/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:11:47,659 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 400/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:12:21,723 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 504/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:12:52,982 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 600/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:13:26,417 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 704/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 12:13:57,314 | INFO | osm_behavioral | OSM llama-3.1-8b-instruct: 800/800 prompts done (sample_index=0, batch_size=8).

@@ -1,5 +1,9 @@
 {
   "checked": [
+    "cure_final_gemma-2-2b-it.parquet",
+    "cure_final_llama-3.1-8b-instruct.parquet",
+    "cure_final_phi-4-mini-instruct.parquet",
+    "cure_final_qwen2.5-7b-instruct.parquet",
     "cure_prognosis_gemma-2-2b-it.parquet",
     "cure_prognosis_llama-3.1-8b-instruct.parquet",
     "cure_prognosis_phi-4-mini-instruct.parquet",
@@ -11,5 +15,5 @@
   ],
   "deduped": {},
   "quarantined": [],
-  "ts": "2026-06-18T15:27:48Z"
+  "ts": "2026-06-19T12:00:33Z"
 }
