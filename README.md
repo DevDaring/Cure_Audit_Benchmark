@@ -17,7 +17,7 @@ this file alone.
 | Folder | Role | Summary |
 |--------|------|---------|
 | `Code/audit` | Diagnosis | The causal discriminative-validity audit. A five-slot behavioural probe (the pentad) plus a causal intervention (CDVA) that patches the protected-attribute representation and reads the change in the answer logit. Produces the validity leaderboard and the residual of items that pass behaviourally yet fail causally. |
-| `Code/CURE`  | Repair   | Uses the audit's causal direction to erase the protected subspace at inference, re-runs the audit to confirm removal, measures the utility cost, and compares against six recent debiasing methods. Also fits the relation between the audit score and the repair effort. |
+| `Code/CURE`  | Repair   | Uses the audit's causal direction to erase the protected subspace at inference, re-runs the audit to confirm removal, measures the utility cost at a utility-aware operating rank, and compares against eight debiasing methods that read an independent demographic signal. Also fits the relation between the audit score and the repair effort. |
 
 The repair runs on the same four open models, the same three datasets, and the same
 causal stack as the audit, so every comparison is fair.
@@ -30,14 +30,21 @@ causal stack as the audit, so every comparison is fair.
    not predict the causal outcome. There is an invisible residual: items that look fair
    but compute unfairly, which no behavioural audit can detect.
 2. Cure. The same causal direction that detects the bias is projected out of the
-   residual stream at the protected position. Re-running the audit shows the commutator
-   collapses toward zero, while native accuracy is preserved.
+   residual stream at the protected position. Re-running the audit shows the residual
+   commutator drop. CURE removes more causal bias than the eight baselines on three of
+   the four models, but the gain sits on a fairness-utility frontier: on the severest
+   model the audited bias subspace coincides with massive-activation directions, so
+   removing it costs task accuracy. The repair pays its cost at a utility-aware operating
+   rank, and reports that cost honestly rather than hiding it.
 3. Prognosis. The audit score predicts the repair effort, so an auditor can estimate the
-   cost of fixing a model from the audit alone.
+   cost of fixing a model from the audit alone. Per pair the audit score forecasts the
+   rank needed to repair it (Spearman 0.58 to 0.63); per model the audit severity tracks
+   the utility cost of repair.
 
-The headline claim: CURE removes the causal failures that no behavioural method can
-detect, beats six recent debiasing methods on the same models and data, and the audit
-score forecasts the repair effort.
+The headline claim: CURE removes causal failures that no behavioural method can detect,
+removes more causal bias than eight recent debiasing methods on most models, and the
+audit score forecasts both the effort and the cost of repair. The full write-up is the
+TACL submission in `Submission2/` (see `Submission2/submission_notes.md`).
 
 ---
 
@@ -129,9 +136,9 @@ The experiments:
 |----|-----------|--------|
 | E1 | Extract the bias subspace from the audit counterfactual activations | per-(model, rank) basis |
 | E2 | Surgical erasure at the protected position | inference hook |
-| E3 | Re-audit the erased model | `cure_recovery_*.parquet` |
-| E4 | Utility cost across erasure rank | `cure_utility_*.parquet` |
-| E5 | Six recent baselines, same models and data | `cure_baselines_*.parquet` |
+| E3 | Re-audit the erased model | `cure_recovery_sweep_*.parquet` |
+| E4 | Utility cost across erasure rank; pick the utility-aware operating rank | `cure_rankcurve_*.json` |
+| E5 | Eight debiasing baselines on an independent demographic signal | `cure_final_*.parquet` |
 | E6 | Audit score versus repair effort | `cure_prognosis_*.parquet`, `.json` |
 
 ### Cost controls (safe, statistically sound)
@@ -146,12 +153,16 @@ thousand pairs, which gives tight confidence intervals for the prognosis and the
 comparison. Knobs (with safe defaults) in `.env`: `CURE_HEADLINE_RANK`,
 `CURE_SUBSPACE_PAIRS`, `CURE_SWEEP_SUBSET`, `CURE_E4_MAX_TOKENS`, `CURE_E4_LIMIT`.
 
-The six comparative baselines: FairSteer (arXiv:2504.14492), BiasGym (arXiv:2508.08855),
-SAE-Debias (arXiv:2511.00177), H-SAL (arXiv:2606.12088), Faithful-Patchscopes
-(arXiv:2602.00300), and the No Free Lunch suite (arXiv:2511.18635). Three in-stack
-baselines (prompt debiasing, generic non-audit-guided erasure, mean-difference steering)
-run out of the box; the published-method adapters in `Code/CURE/baselines.py` carry
+The eight baselines all derive their bias direction from an independent set of 310
+demographic-contrast templates, not from the audit pairs, so CURE alone reads the causal
+audit signal and any advantage isolates the value of that signal. They are: prompt
+self-debiasing, generic non-audit-guided erasure, mean-difference steering, FairSteer
+(arXiv:2504.14492), BiasGym (arXiv:2508.08855), SAE-Debias (arXiv:2511.00177), H-SAL
+(arXiv:2606.12088), and logit-space steering from the No Free Lunch study
+(arXiv:2511.18635). The published-method adapters in `Code/CURE/baselines.py` carry
 citations and are wired with the official code or a faithful re-implementation.
+Faithful-Patchscopes (arXiv:2602.00300) is implemented but kept out of the head-to-head,
+since its layer-localisation mechanism is not comparable on the shared erasure protocol.
 
 ---
 
@@ -186,6 +197,7 @@ Code/
     bootstrap.sh         GPU VM entrypoint
     requirements_cure.txt
     .env.example
+Submission2/             the TACL paper (LaTeX), figures, references, submission_notes.md
 README.md                this file
 ```
 
