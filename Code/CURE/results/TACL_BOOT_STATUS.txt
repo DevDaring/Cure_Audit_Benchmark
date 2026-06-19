@@ -1,1 +1,1 @@
-setup complete; starting TACL dry-run (2 instances) @ Fri Jun 19 11:44:15 UTC 2026
+dry rc=0 PASSED; cleaning test artifacts @ Fri Jun 19 12:00:26 UTC 2026
