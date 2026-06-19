@@ -235,3 +235,5 @@ Moving model to device:  cuda
 2026-06-19 14:38:59,405 | INFO | osm_behavioral | OSM gemma-2-2b-it: 600/800 prompts done (sample_index=0, batch_size=8).
 2026-06-19 14:39:33,922 | INFO | osm_behavioral | OSM gemma-2-2b-it: 704/800 prompts done (sample_index=0, batch_size=8).
 2026-06-19 14:40:05,519 | INFO | osm_behavioral | OSM gemma-2-2b-it: 800/800 prompts done (sample_index=0, batch_size=8).
+2026-06-19 14:40:07,202 | INFO | cure.checkpoint | checkpoint push: ok
+2026-06-19 14:40:07,202 | INFO | cure.tacl | generic_erase gemma-2-2b-it | heldout_crr=0.425 behav_acc=0.4062 flip=0.75
