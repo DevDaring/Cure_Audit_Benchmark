@@ -1,14 +1,37 @@
-# CURE: Causal Audit and Repair of Bias Benchmarks
+# CURE: Causal Audit and Repair of Social Bias in Language Models
 
-CURE is a two-stage instrument for large language model fairness. It first audits a
-bias benchmark to find items whose decision routes through a protected attribute, even
-when the surface answer looks fair, and it then repairs that routing with a surgical,
-inference-time intervention confirmed by the same causal test. The audit half lives in
-`Code/audit`; the repair half, and the comparison against recent debiasing methods,
-lives in `Code/CURE`.
+CURE is a two-stage instrument for language-model fairness. It first **audits** a bias
+benchmark to find the items whose answer routes causally through a protected attribute,
+even when the surface answer looks fair. It then **repairs** that routing by erasing the
+audited direction, and re-audits to confirm. The audit score doubles as the repair
+target, so one causal signal does both jobs.
 
-This repository is a one-stop solution. A reader can reproduce the whole pipeline from
-this file alone.
+The audit half lives in `Code/audit`. The repair half, the comparison against recent
+debiasing methods, the prognosis, and the held-out and behavioural tests live in
+`Code/CURE`. A reader can reproduce the whole pipeline from this file alone.
+
+---
+
+## 0. Honest headline (read this first)
+
+The contribution is the **causal audit and its prognosis**, not a debiasing method.
+
+1. **Audit.** A benchmark score hides a large validity gap. The causal commutator finds
+   items that look fair but compute unfairly, which no behavioural audit can detect.
+2. **Prognosis.** The audit score predicts how hard a model is to repair. Per pair the
+   audit score predicts the erasure rank needed (Spearman 0.58 to 0.63 over 508 pairs per
+   model); per model a severer audit tracks a costlier repair.
+3. **Repair is conditional, not general.** Erasing the audited subspace removes the
+   causal signal, and the removal **generalises to held-out seeds** (CURE removes the most
+   causal swap effect out of sample on all four models). But an **independent behavioural
+   test** shows the same erasure **lowers task accuracy and raises answer inconsistency**
+   on every model. The audited direction is **load-bearing**: it overlaps the
+   massive-activation structure the model computes with. So linear erasure is a
+   conditional repair, and the audit says in advance when it is safe.
+
+The mechanism is massive-activation entanglement. On Qwen2.5-7B the leading bias
+direction peaks on hidden dimension 458, a massive-activation dimension, where the
+mid-layer singular spectrum shows a near 70-fold gap (32,895 against 466).
 
 ---
 
@@ -16,67 +39,155 @@ this file alone.
 
 | Folder | Role | Summary |
 |--------|------|---------|
-| `Code/audit` | Diagnosis | The causal discriminative-validity audit. A five-slot behavioural probe (the pentad) plus a causal intervention (CDVA) that patches the protected-attribute representation and reads the change in the answer logit. Produces the validity leaderboard and the residual of items that pass behaviourally yet fail causally. |
-| `Code/CURE`  | Repair   | Uses the audit's causal direction to erase the protected subspace at inference, re-runs the audit to confirm removal, measures the utility cost at a utility-aware operating rank, and compares against eight debiasing methods that read an independent demographic signal. Also fits the relation between the audit score and the repair effort. |
+| `Code/audit` | Diagnosis | The causal discriminative-validity audit. A behavioural probe over the five-slot "pentad" plus a causal intervention (CDVA) that patches the protected-attribute residual at every layer and reads the change in the answer logit. Produces the validity leaderboard, the commutator results, and the residual of items that pass behaviourally yet fail causally. |
+| `Code/CURE`  | Repair + study | Estimates the bias subspace from the audit's counterfactual activations, erases it at inference, re-audits, measures the utility cost, compares against eight recent debiasing methods on an independent signal, fits the audit-to-repair prognosis, and runs the held-out and behavioural rebuttal tests. |
 
 The repair runs on the same four open models, the same three datasets, and the same
 causal stack as the audit, so every comparison is fair.
 
----
-
-## 2. The result story: diagnose, then cure
-
-1. Diagnose. A benchmark score hides a large validity gap, and behavioural signals do
-   not predict the causal outcome. There is an invisible residual: items that look fair
-   but compute unfairly, which no behavioural audit can detect.
-2. Cure. The same causal direction that detects the bias is projected out of the
-   residual stream at the protected position. Re-running the audit shows the residual
-   commutator drop. CURE removes more causal bias than the eight baselines on three of
-   the four models, but the gain sits on a fairness-utility frontier: on the severest
-   model the audited bias subspace coincides with massive-activation directions, so
-   removing it costs task accuracy. The repair pays its cost at a utility-aware operating
-   rank, and reports that cost honestly rather than hiding it.
-3. Prognosis. The audit score predicts the repair effort, so an auditor can estimate the
-   cost of fixing a model from the audit alone. Per pair the audit score forecasts the
-   rank needed to repair it (Spearman 0.58 to 0.63); per model the audit severity tracks
-   the utility cost of repair.
-
-The headline claim: CURE removes causal failures that no behavioural method can detect,
-removes more causal bias than eight recent debiasing methods on most models, and the
-audit score forecasts both the effort and the cost of repair. The full write-up is the
-TACL submission in `Submission2/` (see `Submission2/submission_notes.md`).
+**Models** (all instruction-tuned): Llama-3.1-8B and Gemma-2-2B via TransformerLens;
+Qwen2.5-7B and Phi-4-mini via NNsight. **Datasets**: BBQ, CrowS-Pairs, StereoSet, folded
+into a 596-seed "pentad" over ten demographic axes.
 
 ---
 
-## 3. Environment (exact)
+## 2. The audit: procedure (`Code/audit`)
 
-The operating system must match the precompiled flash-attention wheel.
+### 2.1 The pentad dataset
+Each seed is a template with a demographic slot, expanded into five slots (a to e) and
+several sub-variants (`Dataset/seeds/pentad_dataset.parquet`). Slot `a` carries the clean
+(disambiguated) prompt; slot `c` carries the demographic swaps used by the commutator;
+other slots add surface and order controls. Gold answers are attached per prompt.
 
-- OS: Ubuntu 24.04 LTS, x86_64 (CUDA image `nvidia/cuda:12.6.2-cudnn-devel-ubuntu24.04`).
-- Python: 3.12.
-- Torch: `torch==2.5.1` from the cu124 index.
-- CUDA: 12.x.
-- GPU: a single 24 GB or larger card is enough for the 2 to 8 billion parameter models.
-- No virtual environment. Install globally with `--break-system-packages`.
+### 2.2 Behavioural evaluation
+`GPU_CPU/osm_behavioral.py::evaluate_osm_model` runs each model on the prompts with
+greedy decoding, then parses the option answer. Parsing is deterministic first, with a
+judge model as a fallback only when the deterministic parse fails (Section 7). This gives
+the native pass rate and the behavioural fairness signals.
 
-Install sequence (also automated by `Code/CURE/bootstrap.sh`):
+### 2.3 The causal commutator (CDVA)
+`GPU_CPU/cdva_patching.py` is the heart of the audit. For a counterfactual pair, the
+demographic token is swapped (`a -> b`). Activation patching writes the residual stream at
+the swapped-token position, taken from the run on `a`, into the run on `b` **at every
+decoder layer**, then reads the change in the gold-option logit:
 
-```bash
-pip3 install --break-system-packages torch==2.5.1 --index-url https://download.pytorch.org/whl/cu124
-pip3 install --break-system-packages -r Code/CURE/requirements_cure.txt
-pip3 install --break-system-packages --no-deps transformer_lens==2.18.0
-# precompiled flash-attention (do not build from source)
-wget -q https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl -O /tmp/fa.whl
-pip3 install --break-system-packages --no-deps /tmp/fa.whl
+```
+C(a, b) = logit_gold( swap(a -> b) ) - logit_gold( a )      # the commutator
 ```
 
-Flash-attention is required for run speed. The dry run verifies it with a real forward
-pass and fails loud if it is missing. A debug override `CURE_ALLOW_SDPA=1` exists but
-logs a loud warning and runs slowly.
+A model that satisfies causal swap invariance returns `C ~ 0` for swaps that should not
+change the answer. A large `|C|` means the prediction moves with the protected attribute.
+The threshold `tau = 0.7644` is the 75th percentile of `|C|` over all audited pairs.
+
+### 2.4 Aggregates
+- **Severity** = mean `|C|` over a model's pairs.
+- **Commutativity index** = fraction of seeds whose every pair stays below `tau`.
+- **Validity gap** = native pass rate minus the causal-audit-robust pass rate; it measures
+  how much a benchmark overstates a model's fairness.
+
+### 2.5 Run the audit
+```bash
+cd Code/audit
+python3 GPU_CPU/run_gpu_pipeline.py     # behavioural eval + CDVA patching (GPU)
+python3 run_cpu_full.py                 # scoring, leaderboard, statistics (CPU)
+```
+Outputs land in `Code/audit/results/` (`cdva_results.parquet`, `behavioral_results.parquet`,
+`leaderboard.parquet`, `validity_gap_leaderboard.parquet`, `scored_results.parquet`).
 
 ---
 
-## 4. Secrets and the `.env` contract
+## 3. The repair: procedure (`Code/CURE`)
+
+The repair reuses the audit's counterfactual activations. All steps are inference only;
+there is no fine-tuning.
+
+| ID | Step | File | Output |
+|----|------|------|--------|
+| E1 | Estimate the bias subspace: collect the per-layer activation difference at the swapped position, SVD, take the top-`r` directions. The SVD is computed once and sliced to every rank. | `erase.py` (`bases_at_ranks`) | per-(layer, rank) basis |
+| E2 | Erase: project the residual at the swapped position onto the complement of the rank-`r` subspace, **at every decoder layer** (LEACE-style concept scrubbing). | `erase.py` (`ErasureContext`, `erased_commutator`) | inference hook |
+| E3 | Re-audit: recompute the commutator under erasure. | `experiments.py` (`e3_reaudit`) | `cure_recovery_*.parquet` |
+| E4 | Utility: four-option accuracy under erasure, the drop from the unedited model. | `experiments.py` (`native_accuracy`) | `cure_utility_*.parquet` |
+| E5 | Compare against eight debiasing baselines. | `baselines.py` | `cure_final_*.parquet` |
+| E6 | Prognosis: regress the per-pair audit score on the erasure rank needed to repair it. | `experiments.py` (`e6_prognosis`) | `cure_prognosis_*.{parquet,json}` |
+
+### 3.1 Utility-aware operating rank
+`run_cure.py::_utility_aware_rank` picks, per model, the rank that removes the most bias
+among ranks whose accuracy drop stays at or below `MAX_UTILITY_COST` (0.15). If no rank
+meets the budget, because the bias is entangled with directions the model needs, the
+least-damaging rank is used. One rank per model fixes every reported number
+(`cure_rankcurve_*.json`). The operating ranks are Llama 8, Qwen 4, Gemma 1, Phi 1.
+
+### 3.2 Fair baselines on an independent signal
+The eight baselines (`baselines.py`) derive their bias direction from an **independent**
+set of 310 demographic-contrast templates, not from the audit pairs. They are faithful
+re-implementations on one shared erasure-or-steering protocol: prompt self-debias,
+generic erase, mean-difference steering, FairSteer, BiasGym, SAE-Debias, H-SAL, and
+logit-space steering. **CURE alone reads the causal audit signal**, so any advantage
+isolates the value of that signal, not the implementation.
+
+### 3.3 Run the repair
+```bash
+cd Code/CURE
+python3 run_cure.py --mode dry        # validate the whole environment on two pairs
+python3 run_cure.py --mode main       # E1-E6 for all four models, 15-min GitHub checkpoints
+python3 run_cure.py --mode baselines  # CURE vs eight baselines under one harness
+python3 run_cure.py --mode diagnose   # massive-activation diagnostic (anomaly_diagnostic.json)
+```
+
+---
+
+## 4. Held-out and behavioural rebuttal (`run_tacl_extra.py`)
+
+This run answers two reviewer objections without re-fitting the headline run.
+
+- **Held-out (out-of-sample).** The CURE subspace is fitted on a **train** split of seeds
+  and the causal residual removed is scored on a **disjoint test** split. CURE removes the
+  most causal swap effect out of sample on all four models (Llama 0.55, Qwen 0.55, Gemma
+  0.48, Phi 0.43), so the removal is not an in-sample artefact.
+- **Independent behavioural readout.** On the same held-out seeds the model is generated
+  under erasure and scored by two output-level metrics that do **not** use the commutator:
+  disambiguated accuracy, and the answer-flip rate (the fraction of seeds whose generated
+  answer changes across demographic sub-variants). CURE lowers accuracy and raises the
+  flip rate on every model; the gentle baselines preserve both. Removing the audited
+  causal direction therefore does not produce behavioural fairness.
+
+```bash
+cd Code/CURE
+python3 run_tacl_extra.py --mode dry    # two seeds per split, every model
+python3 run_tacl_extra.py --mode main   # full held-out + behavioural run, 15-min checkpoints
+```
+Outputs: `results/tacl_extra_<model>.parquet` (per method: held-out bias removed,
+behavioural accuracy, behavioural flip rate).
+
+---
+
+## 5. Environment (exact)
+
+The OS must match the precompiled flash-attention wheel.
+
+- OS: Ubuntu 24.04 LTS, x86_64 (CUDA image `nvidia/cuda:12.6.2-cudnn-devel-ubuntu24.04`).
+- Python 3.12, Torch `2.5.1` (cu124), CUDA 12.x driver, a single 24 GB or larger GPU
+  (48 GB removes all memory headroom worries for the 8B models).
+- No virtual environment; install globally with `--break-system-packages`.
+
+```bash
+pip3 install --break-system-packages torch==2.5.1 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+pip3 install --break-system-packages -r Code/CURE/requirements_cure.txt --extra-index-url https://download.pytorch.org/whl/cu124
+pip3 install --break-system-packages --no-deps transformer_lens==2.18.0
+# precompiled flash-attention (do not build from source)
+pip3 install --break-system-packages --no-deps \
+  https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.5cxx11abiFALSE-cp312-cp312-linux_x86_64.whl
+```
+
+Cloud GPU bootstrap scripts are provided: `Code/CURE/bootstrap.sh` (full audit+repair)
+and `Code/CURE/vast_tacl_bootstrap.sh` (held-out+behavioural). Both pin the environment
+above, download the four models, run the dry check, then the main run, with 15-minute
+GitHub checkpoints. Flash-attention is verified by a real forward pass; the dry run fails
+loud if it is missing.
+
+---
+
+## 6. Secrets and the `.env` contract
 
 Every key is read from the environment. No secret is ever written into a tracked file.
 Copy `Code/CURE/.env.example` to `Code/CURE/.env` and fill the values. The `.env` is
@@ -87,137 +198,77 @@ git-ignored and never pushed.
 | `HUGGINGFACE_TOKEN` | Model download. |
 | `Github_Classic_Token` | Checkpoint pushes. |
 | `RANDOM_SEED` | Reproducibility (default 20260101). |
-| `GEMINI_API_KEY_1..4` | Primary judge, gemini-2.5-flash (the four Gemini / GCP keys). |
-| `DEEPSEEK_API_KEY_1..2` | Secondary judge, deepseek-chat. |
-| `MISTRAL_API_KEY1..2` | Tertiary judge, mistral-small-latest. |
-| `OPENROUTER_API_KEY_1..2` | Alternative gateway. |
-| `AWS_ACCESS_KEY`, `AWS_SECRET_KEY` | Required by the audit config; unused by CURE (dummy values are fine). |
+| `GEMINI_API_KEY_1..4` | Primary judge, gemini-2.5-flash. |
+| `DEEPSEEK_API_KEY_1..2`, `MISTRAL_API_KEY1..2`, `OPENROUTER_API_KEY_1..2` | Fallback judge tiers. |
+| `AWS_ACCESS_KEY`, `AWS_SECRET_KEY` | Required by the audit config; unused by CURE. |
 
 ---
 
-## 5. Judge and answer-extraction design
+## 7. Judge and answer-extraction design
 
-The judge is used to extract a structured answer when the deterministic JSON parse fails,
-and for any model-as-judge step. One active tier is chosen by `CURE_JUDGE_PROVIDER`
-(default `gemini`). Keys are round-robined within the active tier. There is no automatic
-fallback between tiers: if the active tier fails for an item, the item is recorded as a
-judge failure and logged. This keeps every judgement in a run from one model, which
-protects reproducibility.
-
-| Tier | Provider | Model | Keys |
-|------|----------|-------|------|
-| Primary | Google Gemini | gemini-2.5-flash | `GEMINI_API_KEY_1..4` |
-| Secondary | DeepSeek | deepseek-chat | `DEEPSEEK_API_KEY_1..2` |
-| Tertiary | Mistral | mistral-small-latest | `MISTRAL_API_KEY1..2` |
-| Gateway | OpenRouter | configurable | `OPENROUTER_API_KEY_1..2` |
+The judge extracts a structured answer only when the deterministic JSON parse fails. One
+active tier is chosen by `CURE_JUDGE_PROVIDER` (default `gemini`); keys are round-robined
+within the tier. There is no automatic fallback between tiers, so every judgement in a run
+comes from one model, which protects reproducibility.
 
 ---
 
-## 6. How to run
+## 8. Results (where each number comes from)
 
-```bash
-cd Code/CURE
-python3 run_cure.py --mode dry     # validate the whole environment on two pairs
-python3 run_cure.py --mode main    # run E1 to E6 for all four models
-```
-
-The dry run validates: API connectivity across every provider and key, the per-model
-code path on two pairs for all four models, flash-attention by a real forward pass, a
-secret scan of the tracked tree, and an integrity self-test. It exits non-zero on any
-failure.
-
-The main run checkpoints to GitHub every 15 minutes and after each model. Resume skips
-any unit whose result parquet is present and non-empty, so a released VM restarts from
-the last correct results. A `results/DONE` marker is written when all models complete.
-
-The experiments:
-
-| ID | Experiment | Output |
-|----|-----------|--------|
-| E1 | Extract the bias subspace from the audit counterfactual activations | per-(model, rank) basis |
-| E2 | Surgical erasure at the protected position | inference hook |
-| E3 | Re-audit the erased model | `cure_recovery_sweep_*.parquet` |
-| E4 | Utility cost across erasure rank; pick the utility-aware operating rank | `cure_rankcurve_*.json` |
-| E5 | Eight debiasing baselines on an independent demographic signal | `cure_final_*.parquet` |
-| E6 | Audit score versus repair effort | `cure_prognosis_*.parquet`, `.json` |
-
-### Cost controls (safe, statistically sound)
-
-The run is expedited without weakening any reported number. The bias subspace is
-estimated once from a bounded subset and sliced to every rank (no per-rank
-re-extraction). The headline residual-removed and the per-model recovery run on the
-full pair set at one operating rank, so they keep the full audit sample and stay in
-harmony with the audit. The multi-rank sweep, the fairness-utility curve, and the
-six-baseline head-to-head run on a fixed-seed, benchmark-stratified subset of about a
-thousand pairs, which gives tight confidence intervals for the prognosis and the
-comparison. Knobs (with safe defaults) in `.env`: `CURE_HEADLINE_RANK`,
-`CURE_SUBSPACE_PAIRS`, `CURE_SWEEP_SUBSET`, `CURE_E4_MAX_TOKENS`, `CURE_E4_LIMIT`.
-
-The eight baselines all derive their bias direction from an independent set of 310
-demographic-contrast templates, not from the audit pairs, so CURE alone reads the causal
-audit signal and any advantage isolates the value of that signal. They are: prompt
-self-debiasing, generic non-audit-guided erasure, mean-difference steering, FairSteer
-(arXiv:2504.14492), BiasGym (arXiv:2508.08855), SAE-Debias (arXiv:2511.00177), H-SAL
-(arXiv:2606.12088), and logit-space steering from the No Free Lunch study
-(arXiv:2511.18635). The published-method adapters in `Code/CURE/baselines.py` carry
-citations and are wired with the official code or a faithful re-implementation.
-Faithful-Patchscopes (arXiv:2602.00300) is implemented but kept out of the head-to-head,
-since its layer-localisation mechanism is not comparable on the shared erasure protocol.
+- **Audit validity gaps** (up to 0.51 on BBQ for Qwen2.5-7B): `audit/results/validity_gap_leaderboard.parquet`.
+- **Severity, commutativity, per-axis `|C|`**: `audit/results/cdva_results.parquet`.
+- **Headline repair (in-distribution)**: `CURE/results/cure_final_<model>.parquet`.
+- **Operating rank per model**: `CURE/results/cure_rankcurve_<model>.json`.
+- **Prognosis** (Spearman 0.58-0.63): `CURE/results/cure_prognosis_<model>.{parquet,json}`.
+- **Held-out + behavioural**: `CURE/results/tacl_extra_<model>.parquet`.
+- **Massive-activation mechanism**: `CURE/results/anomaly_diagnostic.json`.
 
 ---
 
-## 7. Integrity guarantees
+## 9. Integrity and resume
 
-Every run starts with `integrity.py`, which checks each result parquet for corruption
-(corrupt files are quarantined and recomputed) and removes duplicate primary keys, then
-writes `results/integrity_report.json`. Dry-run test artifacts under `results/dryrun` are
-never pushed.
+Every run starts with `integrity.py`, which quarantines corrupt parquets (recomputed
+next run) and removes duplicate primary keys. The checkpoint pusher (`checkpoint.py`)
+force-adds `results/` and `logs/` every 15 minutes and after each unit, but never the
+dry-run test results or the quarantine. A released VM resumes from the last pushed,
+de-duplicated results.
 
 ---
 
-## 8. Repository map
+## 10. Repository map
 
 ```
 Code/
-  audit/                 the causal discriminative-validity audit (diagnosis)
-    GPU_CPU/             behavioural evaluation and CDVA patching
-    CPU_Only/            scoring, statistics, leaderboard
-    Dataset/             pentad generator and seed manifests
-    results/             behavioural and CDVA result artifacts
-  CURE/                  the repair extension (this work)
-    run_cure.py          single entry point (dry, main)
-    config_cure.py       loads .env, reuses the audit models and dataset
-    judge_api.py         judge and answer extraction (round-robin, no cross-tier fallback)
-    erase.py             E1 subspace extraction, E2 erasure hooks
-    experiments.py       E3 re-audit, E4 utility, E6 prognosis
-    baselines.py         E5 comparative methods
-    integrity.py         duplicate and corruption checks
-    checkpoint.py        resume-safe 15-minute GitHub pushes
-    dry_checks.py        all dry-run validations
-    bootstrap.sh         GPU VM entrypoint
-    requirements_cure.txt
-    .env.example
-Submission2/             the TACL paper (LaTeX), figures, references, submission_notes.md
-README.md                this file
+  audit/                  the causal discriminative-validity audit (diagnosis)
+    Dataset/seeds/        the pentad dataset
+    GPU_CPU/              behavioural evaluation (osm_behavioral) and CDVA patching (cdva_patching)
+    CPU_Only/             scoring, statistics, leaderboard
+    results/              cdva_results, behavioral_results, leaderboards
+  CURE/                   the repair, comparison, prognosis, and rebuttal (this work)
+    erase.py              E1 subspace extraction, E2 erasure hooks (all layers)
+    experiments.py        E3 re-audit, E4 utility, E6 prognosis, demographic signal
+    baselines.py          E5 eight baselines on the independent signal
+    run_cure.py           entry point (dry, main, baselines, diagnose)
+    run_tacl_extra.py     held-out + behavioural rebuttal (dry, main)
+    config_cure.py        loads .env, reuses the audit models and dataset
+    judge_api.py          judge and answer extraction (round-robin, no cross-tier fallback)
+    integrity.py          duplicate and corruption checks
+    checkpoint.py         resume-safe 15-minute GitHub pushes
+    bootstrap.sh          GPU VM entrypoint (full audit+repair)
+    vast_tacl_bootstrap.sh GPU VM entrypoint (held-out+behavioural)
+    results/              all repair, prognosis, and rebuttal artifacts
+README.md                 this file
 ```
 
 ---
 
-## 9. Troubleshooting
+## 11. Citations
 
-- Flash-attention import fails: the wheel must match the OS, Python, torch, and CUDA. The
-  pinned wheel targets Ubuntu 24.04, Python 3.12, torch 2.5.x, CUDA 12.x. Change the
-  wheel tag if you change any of these.
-- A judge key is dead: the dry-run `results/dryrun/api_check.json` reports each key. The
-  run does not cross tiers; switch `CURE_JUDGE_PROVIDER` or replace the key.
-- A quarantined parquet: a corrupt result is moved to `results/quarantine` and recomputed
-  on the next run; no action is needed.
-
----
-
-## 10. Citations
-
-The repair builds on LEACE concept erasure (Belrose et al. 2023, arXiv:2306.03819),
-activation patching (Meng et al. 2022, arXiv:2202.05262), and the interventional account
-of explanation (Pearl 2009). The audit half is the causal discriminative-validity audit
+The repair builds on LEACE concept erasure (Belrose et al. 2023, arXiv:2306.03819) and
+activation patching (Meng et al. 2022, arXiv:2202.05262; Zhang and Nanda 2025,
+arXiv:2309.16042), grounded in the interventional account of explanation (Pearl 2009).
+The load-bearing reading of the audited direction follows the massive-activation
+literature (Sun et al. 2024, arXiv:2402.17762; Yu et al. 2024, arXiv:2411.07191; Oh et
+al. 2024, arXiv:2410.01866). The eight baselines carry their own citations in
+`Code/CURE/baselines.py`. The audit half is the causal discriminative-validity audit
 described in the accompanying paper.
