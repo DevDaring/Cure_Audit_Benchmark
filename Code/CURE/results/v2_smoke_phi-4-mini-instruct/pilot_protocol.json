@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:21:18Z",
+  "generated_utc": "2026-09-13T13:05:39Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -17,10 +17,10 @@
   "models": {
     "phi-4-mini-instruct": {
       "hf_id": "microsoft/Phi-4-mini-instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Phi3ForCausalLM",
       "dtype": "torch.bfloat16",
-      "sec_load": 11.980201482772827,
+      "sec_load": 10.319453954696655,
       "basis": {
         "n_fit_pairs_used": 8,
         "n_fit_pairs_skipped": 0,
@@ -28,7 +28,7 @@
         "estimator": "centred_svd",
         "rank": 1,
         "site": "span (all tokens)",
-        "sec_fit": 4.905701398849487
+        "sec_fit": 2.356618881225586
       },
       "identity_checks": {
         "tol": 0.001,
@@ -45,9 +45,9 @@
         "dtype": "torch.bfloat16",
         "pass_all": true
       },
-      "n_items_this_run": 35,
-      "sec_model_total": 128.53620314598083
+      "n_items_this_run": 0,
+      "sec_model_total": 15.170172452926636
     }
   },
-  "sec_wall_total": 128.8083233833313
+  "sec_wall_total": 15.416949033737183
 }
