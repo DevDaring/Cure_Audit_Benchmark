@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T06:13:38Z",
+  "generated_utc": "2026-09-13T06:15:55Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "gemma-2-2b-it": {
-      "sec_load": 78.90054416656494,
+      "sec_load": 64.10027289390564,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "google/gemma-2-2b-it",
@@ -275,10 +275,10 @@
       },
       "n_items_this_run": {
         "dev": 0,
-        "test": 110
+        "test": 0
       },
-      "sec_model_total": 101.40628385543823
+      "sec_model_total": 84.30864930152893
     }
   },
-  "sec_wall_total": 104.2957751750946
+  "sec_wall_total": 87.29797530174255
 }
