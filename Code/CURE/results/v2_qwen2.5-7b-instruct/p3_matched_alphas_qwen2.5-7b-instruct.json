@@ -1,0 +1,160 @@
+{
+  "target_energy": 0.020956941670296166,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.00030543846715108696,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_2": {
+      "alpha": 1.0,
+      "energy": 0.0002240061832009982,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_3": {
+      "alpha": 1.0,
+      "energy": 0.00022052678209996159,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "neutral": {
+      "alpha": 1.0,
+      "energy": 0.0029235652889008164,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.107059857789041,
+      "energy": 0.0007055866730728208,
+      "feasible": true,
+      "trace": [
+        [
+          0.107059857789041,
+          0.0007055866730728208
+        ],
+        [
+          0.13000125588669265,
+          0.0009054372551460392
+        ],
+        [
+          0.15294265398434428,
+          0.0011109574019659166
+        ],
+        [
+          0.17588405208199592,
+          0.001322479388283552
+        ],
+        [
+          0.1988254501796476,
+          0.001538628117586766
+        ]
+      ],
+      "target": 0.0004902133665640716,
+      "energy_at_alpha1": 0.020956941670296166,
+      "control_energy_at_alpha1": 0.0004902133665640716
+    },
+    "random_2": {
+      "alpha": 0.0761288271173001,
+      "energy": 0.00044153590606395727,
+      "feasible": true,
+      "trace": [
+        [
+          0.0761288271173001,
+          0.00044153590606395727
+        ],
+        [
+          0.09244214721386441,
+          0.000580849005839434
+        ],
+        [
+          0.10875546731042872,
+          0.0007199499246907009
+        ],
+        [
+          0.125068787406993,
+          0.0008627407591273965
+        ],
+        [
+          0.14138210750355734,
+          0.0010082872406242606
+        ]
+      ],
+      "target": 0.0002478735018370463,
+      "energy_at_alpha1": 0.020956941670296166,
+      "control_energy_at_alpha1": 0.0002478735018370463
+    },
+    "random_3": {
+      "alpha": 0.07060294096406683,
+      "energy": 0.00039579560785680954,
+      "feasible": true,
+      "trace": [
+        [
+          0.07060294096406683,
+          0.00039579560785680954
+        ],
+        [
+          0.085732142599224,
+          0.0005226864851304654
+        ],
+        [
+          0.10086134423438119,
+          0.0006521282437622404
+        ],
+        [
+          0.11599054586953836,
+          0.0007839441179382763
+        ],
+        [
+          0.13111974750469554,
+          0.0009158269786643589
+        ]
+      ],
+      "target": 0.0002131951931246754,
+      "energy_at_alpha1": 0.020956941670296166,
+      "control_energy_at_alpha1": 0.0002131951931246754
+    },
+    "neutral": {
+      "alpha": 0.6357012889062155,
+      "energy": 0.00840383624615595,
+      "feasible": true,
+      "trace": [
+        [
+          0.4449909022343508,
+          0.004628080466598746
+        ],
+        [
+          0.5403460955702831,
+          0.0063293996483230345
+        ],
+        [
+          0.6357012889062155,
+          0.00840383624615595
+        ],
+        [
+          0.7310564822421477,
+          0.010973017937066187
+        ],
+        [
+          0.8264116755780802,
+          0.01403011574700794
+        ]
+      ],
+      "target": 0.008469038137548561,
+      "energy_at_alpha1": 0.020956941670296166,
+      "control_energy_at_alpha1": 0.008469038137548561
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 60,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_qwen2.5-7b-instruct/p2_basis_qwen2.5-7b-instruct_chat_random_ortho_1.npz",
+    "random_2": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_qwen2.5-7b-instruct/p2_basis_qwen2.5-7b-instruct_chat_random_ortho_2.npz",
+    "random_3": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_qwen2.5-7b-instruct/p2_basis_qwen2.5-7b-instruct_chat_random_ortho_3.npz",
+    "neutral": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_qwen2.5-7b-instruct/p2_basis_qwen2.5-7b-instruct_chat_neutral_contrast.npz"
+  }
+}
