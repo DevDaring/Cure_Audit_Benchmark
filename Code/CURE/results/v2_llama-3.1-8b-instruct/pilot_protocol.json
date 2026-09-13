@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:39:55Z",
+  "generated_utc": "2026-09-13T08:11:25Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -17,10 +17,10 @@
   "models": {
     "llama-3.1-8b-instruct": {
       "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "LlamaForCausalLM",
       "dtype": "torch.bfloat16",
-      "sec_load": 12.606719970703125,
+      "sec_load": 12.563051462173462,
       "basis": {
         "n_fit_pairs_used": 200,
         "n_fit_pairs_skipped": 0,
@@ -28,7 +28,7 @@
         "estimator": "centred_svd",
         "rank": 1,
         "site": "span (all tokens)",
-        "sec_fit": 141.30262184143066
+        "sec_fit": 40.02225685119629
       },
       "identity_checks": {
         "tol": 0.001,
@@ -45,9 +45,9 @@
         "dtype": "torch.bfloat16",
         "pass_all": true
       },
-      "n_items_this_run": 280,
-      "sec_model_total": 1116.6949849128723
+      "n_items_this_run": 0,
+      "sec_model_total": 55.311612606048584
     }
   },
-  "sec_wall_total": 1117.1508667469025
+  "sec_wall_total": 55.59557056427002
 }
