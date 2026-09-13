@@ -1,1 +1,1 @@
-[full] P3 massive test starting @ Sun Sep 13 20:49:45 UTC 2026
+ALL COMPLETE for phi-4-mini-instruct @ Sun Sep 13 21:11:09 UTC 2026
