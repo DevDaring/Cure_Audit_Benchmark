@@ -1,1 +1,1 @@
-SMOKE sequence starting (2-3 seeds through every stage) @ Sun Sep 13 06:11:08 UTC 2026
+[smoke] P1 pilot starting @ Sun Sep 13 06:11:14 UTC 2026
