@@ -887,7 +887,8 @@ def main(argv=None) -> None:
         t_load = time.time()
         cfg, model, tok = P1.load(mname)
         mrec = proto["models"].setdefault(mname, {})
-        mrec.update({"sec_load": time.time() - t_load, "torch": _ver("torch"), "transformers": _ver("transformers")})
+        mrec.update({"sec_load": time.time() - t_load, "torch": _ver("torch"), "transformers": _ver("transformers"),
+                     **{k: cfg.get(k) for k in ("hf_id", "attn_implementation", "model_class", "dtype")}})
         try:
             elig = pd.read_csv(K.OUT_P0 / "pair_sets" / f"{mname}_eligible.csv")
             elig_keys = set(zip(elig["seed_id"], elig["subvariant_A"], elig["subvariant_B"]))

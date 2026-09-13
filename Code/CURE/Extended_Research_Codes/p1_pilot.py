@@ -162,9 +162,12 @@ def fit_pairs(model: str, n: int, seed: int) -> list[dict]:
 def load(model_name: str):
     import config_cure as C
     from load_osm import load_model
-    cfg = C.model_cfg(model_name)
+    cfg = dict(C.model_cfg(model_name))
     model, tok = load_model(cfg)
     model.eval()
+    cfg["attn_implementation"] = getattr(model.config, "_attn_implementation", None)
+    cfg["model_class"] = type(model).__name__
+    cfg["dtype"] = str(next(model.parameters()).dtype)
     return cfg, model, tok
 
 
@@ -358,6 +361,8 @@ def main() -> None:
         t_load = time.time()
         cfg, model, tok = load(mname)
         mrec = proto["models"].setdefault(mname, {})
+
+        mrec.update({k: cfg.get(k) for k in ("hf_id", "attn_implementation", "model_class", "dtype")})
         mrec["sec_load"] = time.time() - t_load
         try:
             elig = pd.read_csv(K.OUT_P0 / "pair_sets" / f"{mname}_eligible.csv")

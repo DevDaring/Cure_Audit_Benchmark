@@ -195,11 +195,17 @@ def load_model(model_cfg: dict, force_reload: bool = False) -> tuple[Any, Any]:
 
     logger.info("Loading model: %s (%s) ...", name, hf_id)
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        hf_id,
-        token=HUGGINGFACE_TOKEN,
-        trust_remote_code=True,
-    )
+    # Native transformers implementations first (all four models have one: Llama, Qwen2,
+    # Gemma2, Phi3). Remote code is a fallback only: Phi-4-mini's hub modelling file predates
+    # transformers 5 and fails in post_init there ('list' object has no attribute 'keys').
+    def _tok(remote: bool):
+        return AutoTokenizer.from_pretrained(hf_id, token=HUGGINGFACE_TOKEN, trust_remote_code=remote)
+
+    try:
+        tokenizer = _tok(False)
+    except Exception as exc:
+        logger.warning("native tokenizer failed for %s (%s); using remote code", name, str(exc)[:120])
+        tokenizer = _tok(True)
 
     # flash_attention_2 is preferred for speed, but transformers raises rather than
     # degrading when the package is absent, which takes the whole run down. The TIST
@@ -207,25 +213,40 @@ def load_model(model_cfg: dict, force_reload: bool = False) -> tuple[Any, Any]:
     # wheel therefore did not install either, and all four models failed to load while
     # the run still exited zero. Fall back to sdpa, which is numerically equivalent for
     # the forward passes this codebase performs and merely slower.
-    def _load(attn_impl: str):
+    def _load(attn_impl: str, remote: bool):
         return AutoModelForCausalLM.from_pretrained(
             hf_id,
             token=HUGGINGFACE_TOKEN,
             torch_dtype=torch.bfloat16,
             attn_implementation=attn_impl,
             device_map={"": 0},
-            trust_remote_code=True,
+            trust_remote_code=remote,
         )
 
-    try:
-        model = _load("flash_attention_2")
-    except (ImportError, ValueError, RuntimeError) as exc:
-        logger.warning(
-            "flash_attention_2 unavailable for %s (%s); falling back to sdpa",
-            name, str(exc)[:160],
-        )
-        model = _load("sdpa")
+    model = None
+    for remote in (False, True):
+        try:
+            model = _load("flash_attention_2", remote)
+        except (ImportError, ValueError, RuntimeError) as exc:
+            logger.warning(
+                "flash_attention_2 unavailable for %s (remote=%s: %s); falling back to sdpa",
+                name, remote, str(exc)[:160],
+            )
+            try:
+                model = _load("sdpa", remote)
+            except Exception as exc2:
+                logger.warning("sdpa load failed for %s (remote=%s): %s", name, remote, str(exc2)[:160])
+                model = None
+        except Exception as exc:
+            logger.warning("load failed for %s (remote=%s): %s", name, remote, str(exc)[:160])
+            model = None
+        if model is not None:
+            break
+    if model is None:
+        raise RuntimeError("could not load %s with native or remote code" % hf_id)
     model.eval()
+    logger.info("%s loaded: attn=%s remote_code=%s", name,
+                getattr(model.config, "_attn_implementation", "?"), remote)
 
     _verify_flash_attention(model, name)
     _LOADED_MODELS[name] = (model, tokenizer)
