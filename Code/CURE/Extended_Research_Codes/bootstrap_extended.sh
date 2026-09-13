@@ -84,7 +84,7 @@ PY
 git config --global --add safe.directory "$REPO"
 git -C "$REPO" config user.name "CURE Runner"
 git -C "$REPO" config user.email "koushikdeb2009@gmail.com"
-git -C "$REPO" config pull.rebase true
+git -C "$REPO" config pull.rebase false   # a rebase checks out the upstream tip first, rewriting this VM's live result files under the running stage; a merge never touches files upstream did not change
 if [ -n "${Github_Classic_Token:-}" ]; then
   git -C "$REPO" remote set-url origin "https://${Github_Classic_Token}@github.com/DevDaring/Cure_Audit_Benchmark.git"
 fi
@@ -101,7 +101,7 @@ git_sync_push() {   # $1 = commit message; adds what is already staged; serialis
     git -C "$REPO" checkout -q -- Code/CURE/results/reanalysis_v2 >/dev/null 2>&1 || true
     git -C "$REPO" add -u -- Code/CURE/results >/dev/null 2>&1 || true
     git -C "$REPO" commit -q -m "$1 (tracked result files)" >/dev/null 2>&1 || true
-    git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1 || git -C "$REPO" rebase --abort >/dev/null 2>&1
+    git -C "$REPO" pull --no-rebase --no-edit -q origin main >/dev/null 2>&1 || git -C "$REPO" merge --abort >/dev/null 2>&1
     git -C "$REPO" push -q origin main >/dev/null 2>&1 && { echo "[ext] pushed: $1"; return 0; }
     n=$((n+1)); sleep $((10 * n))
   done
@@ -217,7 +217,7 @@ refresh_control() {
   ( flock 9; git -C "$REPO" checkout -q -- Code/CURE/results/reanalysis_v2 >/dev/null 2>&1 || true
     git -C "$REPO" add -u -- Code/CURE/results >/dev/null 2>&1 || true
     git -C "$REPO" commit -q -m "ext[$MODEL]: tracked result files before pull" >/dev/null 2>&1 || true
-    git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1 || git -C "$REPO" rebase --abort >/dev/null 2>&1 ) 9>"$LOCK"
+    git -C "$REPO" pull --no-rebase --no-edit -q origin main >/dev/null 2>&1 || git -C "$REPO" merge --abort >/dev/null 2>&1 ) 9>"$LOCK"
   if [ -f "$REPO/$CONTROL_REL" ]; then
     # shellcheck disable=SC1090
     set -a; . "$REPO/$CONTROL_REL"; set +a

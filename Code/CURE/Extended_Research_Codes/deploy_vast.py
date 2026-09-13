@@ -223,7 +223,7 @@ sleep 3; pkill -9 -f "[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.
 echo "stage processes left: $(pgrep -fc '[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.py')"
 while IFS= read -r -d '' kv; do case "$kv" in EXT_*=*|HUGGINGFACE_TOKEN=*|Github_Classic_Token=*|RANDOM_SEED=*) export "$kv";; esac; done < /proc/1/environ
 cd /workspace/Cure_Audit_Benchmark && git checkout -q -- Code/CURE/results/reanalysis_v2 2>/dev/null; git clean -fdq Code/CURE/results/reanalysis_v2 2>/dev/null
-git pull -q --rebase origin main >/dev/null 2>&1
+git pull --no-rebase --no-edit -q origin main >/dev/null 2>&1
 nohup bash "Code/CURE/Extended_Research_Codes/${S}" > /workspace/ext_boot.log 2>&1 &
 sleep 5; echo "model=$EXT_MODEL running=$(pgrep -fc "^bash .*${S}$") head=$(git log --oneline -1 | cut -c1-50)"
 '''
@@ -266,7 +266,7 @@ def cmd_migrate(args):
         "cd /workspace/Cure_Audit_Benchmark && ( flock 9; git checkout -q -- Code/CURE/results/reanalysis_v2 2>/dev/null; "
         "find Code/CURE/results/v2_* -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git add -f >/dev/null 2>&1; "
         "git add -u -- Code/CURE/results >/dev/null 2>&1; git commit -q -m 'ext[%s]: pre-migration checkpoint' >/dev/null 2>&1; "
-        "git pull --rebase -q origin main >/dev/null 2>&1 || git rebase --abort; git push -q origin main >/dev/null 2>&1 && echo PUSHED || echo PUSH_FAILED ) 9>/tmp/ext_git.lock") % args.model, timeout=300))
+        "git pull --no-rebase --no-edit -q origin main >/dev/null 2>&1 || git merge --abort; git push -q origin main >/dev/null 2>&1 && echo PUSHED || echo PUSH_FAILED ) 9>/tmp/ext_git.lock") % args.model, timeout=300))
     # stop the old stage so it cannot push anything after this point (it would race the new VM)
     ssh_run(int(old["instance_id"]), "pkill -f '[r]un_all.py'; pkill -f '[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.py'; S=$(printf '%s%s' 'boot' 'strap_extended.sh'); pkill -f \"^bash .*${S}$\"; echo stopped", timeout=60)
     args.models = [args.model]; args.replace = True

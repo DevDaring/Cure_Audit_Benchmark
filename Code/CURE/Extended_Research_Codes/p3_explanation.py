@@ -1419,7 +1419,14 @@ def write_report(out: Path, account: str, models: list[str], phase: str, extras:
 def done_keys(path: Path) -> set:
     if not path.exists():
         return set()
-    d = pd.read_parquet(path, columns=KEY_COLS)
+    d = None
+    for attempt in range(5):                 # a git checkout can rewrite the file for an instant
+        try:
+            d = pd.read_parquet(path, columns=KEY_COLS); break
+        except Exception:
+            if attempt == 4:
+                raise
+            time.sleep(2 + 3 * attempt)
     return set(map(tuple, d.to_numpy().tolist()))
 
 

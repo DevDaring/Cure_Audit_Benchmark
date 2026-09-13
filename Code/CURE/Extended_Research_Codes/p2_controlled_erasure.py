@@ -830,10 +830,21 @@ class Budget:
         return self.remaining() <= 0
 
 
+def _read_parquet_retry(path: Path, **kw) -> pd.DataFrame:
+    """A git checkout on the VM can rewrite a result file for an instant; retry the read."""
+    for attempt in range(5):
+        try:
+            return pd.read_parquet(path, **kw)
+        except Exception:
+            if attempt == 4:
+                raise
+            time.sleep(2 + 3 * attempt)
+
+
 def done_keys(path: Path) -> set:
     if not path.exists():
         return set()
-    d = pd.read_parquet(path, columns=KEY_COLS)
+    d = _read_parquet_retry(path, columns=KEY_COLS)
     return set(map(tuple, d.to_numpy().tolist()))
 
 
@@ -842,7 +853,7 @@ def cap_done_keys(path: Path) -> set:
     them (e.g. after a dataset-id fix)."""
     if not path.exists():
         return set()
-    d = pd.read_parquet(path, columns=["model_name", "phase", "cond_id", "probe", "status"])
+    d = _read_parquet_retry(path, columns=["model_name", "phase", "cond_id", "probe", "status"])
     d = d[~d["status"].isin(["error", "unavailable"])]
     return set(zip(d["model_name"], d["phase"], d["cond_id"], d["probe"]))
 
@@ -1042,7 +1053,7 @@ def _run_capability(model, tok, args, mname, phase, conds, store, cap_path, cap_
         rows += out
     if rows and cap_path.exists():
         # a retried probe replaces its earlier error/unavailable row
-        prev = pd.read_parquet(cap_path)
+        prev = _read_parquet_retry(cap_path)
         new_keys = {(r["model_name"], r["phase"], r["cond_id"], r["probe"]) for r in rows}
         stale = prev.apply(lambda r: (r["model_name"], r["phase"], r["cond_id"], r["probe"]) in new_keys
                            and r["status"] in ("error", "unavailable"), axis=1)

@@ -125,7 +125,10 @@ def check_liveness(model: str, rec: dict, inst: dict) -> dict:
 # ---------------------------------------------------------------- results
 
 def git_pull_clone() -> None:
-    subprocess.run(["git", "-C", str(CLONE), "pull", "-q", "--rebase", "origin", "main"], capture_output=True, text=True)
+    """The clone is a read mirror plus the merged results/v2 we push; a failed merged push
+    must never leave it behind the remote, so it is hard-reset to origin/main every time."""
+    subprocess.run(["git", "-C", str(CLONE), "fetch", "-q", "origin", "main"], capture_output=True, text=True)
+    subprocess.run(["git", "-C", str(CLONE), "reset", "-q", "--hard", "origin/main"], capture_output=True, text=True)
 
 
 def manifest_split() -> dict[str, str]:
@@ -298,7 +301,7 @@ cd /workspace/Cure_Audit_Benchmark || exit 3
   git add -u -- Code/CURE/results >/dev/null 2>&1
   git add -f "Code/CURE/results/EXT_STATUS_$EXT_MODEL.txt" >/dev/null 2>&1
   git commit -q -m "ext-results[$EXT_MODEL]: hourly check push" >/dev/null 2>&1 || true
-  git pull --rebase -q origin main >/dev/null 2>&1 || git rebase --abort >/dev/null 2>&1
+  git pull --no-rebase --no-edit -q origin main >/dev/null 2>&1 || git merge --abort >/dev/null 2>&1
   git push -q origin main >/dev/null 2>&1 && echo PUSHED || echo PUSH_FAILED
 ) 9>/tmp/ext_git.lock
 """
@@ -329,14 +332,15 @@ def push_merged(models: list[str]) -> str:
     if n == 0:
         return "nothing to merge yet"
     man = M.merge(M.per_model_dirs())
+    tok = D.E.get("Github_Classic_Token", "")
+    g = lambda *a: subprocess.run(["git", "-C", str(CLONE)] + list(a), capture_output=True, text=True)
+    g("remote", "set-url", "origin", f"https://{tok}@github.com/DevDaring/Cure_Audit_Benchmark.git")
+    g("fetch", "-q", "origin", "main"); g("reset", "-q", "--hard", "origin/main")     # start from the remote tip
     dst = src / "v2"
     dst.mkdir(parents=True, exist_ok=True)
     for p in (K.RESULTS / "v2").rglob("*"):
         if p.is_file() and p.suffix != ".md":
             t = dst / p.relative_to(K.RESULTS / "v2"); t.parent.mkdir(parents=True, exist_ok=True); shutil.copy2(p, t)
-    tok = D.E.get("Github_Classic_Token", "")
-    g = lambda *a: subprocess.run(["git", "-C", str(CLONE)] + list(a), capture_output=True, text=True)
-    g("remote", "set-url", "origin", f"https://{tok}@github.com/DevDaring/Cure_Audit_Benchmark.git")
     files = [str(p.relative_to(CLONE)) for p in dst.rglob("*") if p.is_file() and p.suffix != ".md"]
     if files:
         g("add", "-f", *files)
@@ -346,8 +350,13 @@ def push_merged(models: list[str]) -> str:
         return "REFUSED: markdown or env staged"
     msg = "merged results/v2 (hourly check): %d files from %d VMs" % (len(files), n)
     g("commit", "-q", "-m", msg)
-    g("pull", "--rebase", "-q", "origin", "main")
-    r = g("push", "-q", "origin", "main")
+    import time as _t
+    for attempt in range(5):
+        g("pull", "--rebase", "-q", "origin", "main")
+        r = g("push", "-q", "origin", "main")
+        if r.returncode == 0:
+            break
+        _t.sleep(5 + 5 * attempt)
     g("remote", "set-url", "origin", "https://github.com/DevDaring/Cure_Audit_Benchmark.git")
     return ("pushed %d files (%d merged, %d warnings)" % (len(files), len(man["files"]), len(man["warnings"]))) if r.returncode == 0 else "push failed: " + D.scrub(r.stderr)[-200:]
 

@@ -311,13 +311,28 @@ def done_keys(path) -> set:
 
 
 def append_rows(path, rows: list[dict]):
+    """Append rows to a parquet file. Read and write are retried: a git checkout on the VM can
+    rewrite the file for an instant, and the write goes to a temporary file that is renamed
+    into place so a reader never sees a half-written file."""
     if not rows:
         return
+    import os, time as _t
     new = pd.DataFrame(rows)
-    if path.exists():
-        old = pd.read_parquet(path)
-        new = pd.concat([old, new], ignore_index=True)
-    new.to_parquet(path, index=False)
+    for attempt in range(5):
+        try:
+            if path.exists():
+                old = pd.read_parquet(path)
+                out = pd.concat([old, new], ignore_index=True)
+            else:
+                out = new
+            tmp = path.with_suffix(path.suffix + ".tmp")
+            out.to_parquet(tmp, index=False)
+            os.replace(tmp, path)
+            return
+        except Exception as exc:
+            if attempt == 4:
+                raise
+            _t.sleep(2 + 3 * attempt)
 
 
 def main() -> None:
