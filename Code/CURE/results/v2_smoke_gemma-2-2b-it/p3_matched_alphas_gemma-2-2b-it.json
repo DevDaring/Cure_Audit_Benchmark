@@ -1,0 +1,49 @@
+{
+  "target_energy": 0.007911599786433472,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.00040696718557295023,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.16842943404322525,
+      "energy": 0.0009960310243933876,
+      "feasible": true,
+      "trace": [
+        [
+          0.16842943404322525,
+          0.0009960310243933876
+        ],
+        [
+          0.20452145562391638,
+          0.0012451273974238364
+        ],
+        [
+          0.24061347720460752,
+          0.0014928501715259068
+        ],
+        [
+          0.2767054987852986,
+          0.0017150035807961892
+        ],
+        [
+          0.3127975203659898,
+          0.0019423795305371528
+        ]
+      ],
+      "target": 0.000458040846601072,
+      "energy_at_alpha1": 0.007911599786433472,
+      "control_energy_at_alpha1": 0.000458040846601072
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 3,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_smoke_gemma-2-2b-it/p2_basis_gemma-2-2b-it_chat_random_ortho_1.npz"
+  }
+}

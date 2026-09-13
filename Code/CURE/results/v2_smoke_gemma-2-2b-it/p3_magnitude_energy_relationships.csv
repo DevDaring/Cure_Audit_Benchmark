@@ -1,0 +1,10 @@
+model_name,phase,scope,x,y,spearman,lo,hi,n,n_seeds
+gemma-2-2b-it,dev,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.7999999999999999,-1.0,-0.7777777777777777,9,3
+gemma-2-2b-it,dev,all_edited_conditions,energy_total_A,acc_loss_A,,,,9,3
+gemma-2-2b-it,dev,all_edited_conditions,energy_total_A,absC_change,-0.6166666666666666,-1.0,0.5,9,3
+gemma-2-2b-it,dev,targeted_only,energy_total_A,p_gold_loss_A,-0.7714285714285715,-1.0,-0.7714285714285715,6,3
+gemma-2-2b-it,dev,targeted_only,energy_total_A,acc_loss_A,,,,6,3
+gemma-2-2b-it,dev,targeted_only,energy_total_A,absC_change,-0.48571428571428577,-1.0,1.0,6,3
+gemma-2-2b-it,dev,random_only,energy_total_A,p_gold_loss_A,,,,3,3
+gemma-2-2b-it,dev,random_only,energy_total_A,acc_loss_A,,,,3,3
+gemma-2-2b-it,dev,random_only,energy_total_A,absC_change,,,,3,3
