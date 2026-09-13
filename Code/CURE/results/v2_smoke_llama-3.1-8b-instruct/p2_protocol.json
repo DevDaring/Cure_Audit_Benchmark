@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:31:38Z",
+  "generated_utc": "2026-09-13T08:08:17Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,11 +42,11 @@
   ],
   "models": {
     "llama-3.1-8b-instruct": {
-      "sec_load": 12.855036735534668,
+      "sec_load": 12.0148606300354,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "LlamaForCausalLM",
       "dtype": "torch.bfloat16",
       "bases": {
@@ -290,11 +290,11 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 130,
+        "dev": 0,
         "test": 120
       },
-      "sec_model_total": 198.33902525901794
+      "sec_model_total": 42.85279726982117
     }
   },
-  "sec_wall_total": 198.88617515563965
+  "sec_wall_total": 43.153260707855225
 }
