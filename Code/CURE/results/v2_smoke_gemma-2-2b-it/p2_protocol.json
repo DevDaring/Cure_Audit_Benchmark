@@ -1,0 +1,258 @@
+{
+  "generated_utc": "2026-09-13T04:36:32Z",
+  "fmt": "chat",
+  "site": "span",
+  "source_state": "sequential",
+  "ranks": [
+    1,
+    2,
+    4
+  ],
+  "alpha_screen_dev": [
+    0.0,
+    0.25,
+    0.5,
+    1.0
+  ],
+  "capability_policy": "all",
+  "n_fit_pairs": 8,
+  "n_dev_seeds": 2,
+  "n_test_seeds": 2,
+  "max_new_tokens": 8,
+  "gpu_hours_cap": 1.0,
+  "edit_definition": "h'_{l,t} = h_{l,t} - alpha * U_l^T U_l h_{l,t}        for t in S, for every layer l in L\n  U_l : k x d orthonormal rows (basis_by_layer[l]); alpha in [0, 1]; S = the edited token\n  positions of the sequence, chosen by a SITE policy:\n    \"span\"        every token of the demographic span (all tokens, not only the first) in\n                  the prompt; nothing is edited at decode steps, because the span has already\n                  been processed and its edited hidden states are what the cache holds.\n    \"last_token\"  the legacy ErasureContext behaviour: the last position of the prefill and\n                  every newly generated token. Kept ONLY as a labelled diagnostic condition.\n    \"all\"         every position of the prefill and every generated token (global policy,\n                  the only one that can touch an external capability prompt with no span).\n  Source-state convention for the commutator (audit):\n    \"sequential\"  the edit hooks are ACTIVE while the source prompt is run, so the cached\n                  activation at layer l already reflects edits at layers < l, and the same\n                  hooks are active during the patched and clean runs of the target prompt.\n                  This is one forward pass per condition on one backend, and it is what the\n                  behavioural generation also experiences. It is the canonical convention.\n    \"frozen\"      the source prompt is run WITHOUT hooks, each cached vector is projected\n                  numerically, then injected. Kept as the legacy-TL diagnostic.",
+  "sentence_pref_protocol": "loglik_sum over full option strings; the QA recast is not the native CrowS-Pairs / StereoSet protocol",
+  "confirmatory": [
+    [
+      "C1",
+      "cure vs unedited on D (paired absolute |C| change), demographic pairs"
+    ],
+    [
+      "C2",
+      "cure vs unedited on generation accuracy (attempted denominator)"
+    ],
+    [
+      "C3",
+      "cure vs mean of three rank-matched random controls on D"
+    ],
+    [
+      "C4",
+      "cure vs mean of three rank-matched random controls on generation accuracy"
+    ]
+  ],
+  "models": {
+    "gemma-2-2b-it": {
+      "sec_load": 7.392643690109253,
+      "torch": "2.5.1+cu124",
+      "transformers": "5.17.0",
+      "hf_id": "google/gemma-2-2b-it",
+      "attn_implementation": "sdpa",
+      "model_class": "Gemma2ForCausalLM",
+      "dtype": "torch.bfloat16",
+      "bases": {
+        "status": {
+          "cure_centred_svd": "ok",
+          "uncentred_svd": "ok",
+          "mean_difference": "ok",
+          "random_ortho_1": "ok",
+          "random_ortho_2": "ok",
+          "random_ortho_3": "ok",
+          "neutral_contrast": "insufficient",
+          "leace_faithful": "ok",
+          "leace_sequential": "ok"
+        },
+        "info": {
+          "cure_centred_svd": {
+            "n_fit_pairs_requested": 8,
+            "n_fit_pairs_used": 8,
+            "n_span_tokens": 8,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 2.6897530555725098,
+            "n_fit_pairs_neutral_type": 1,
+            "estimator": "centred_svd"
+          },
+          "uncentred_svd": {
+            "n_fit_pairs_requested": 8,
+            "n_fit_pairs_used": 8,
+            "n_span_tokens": 8,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 2.6897530555725098,
+            "n_fit_pairs_neutral_type": 1,
+            "estimator": "uncentred_svd"
+          },
+          "mean_difference": {
+            "n_fit_pairs_requested": 8,
+            "n_fit_pairs_used": 8,
+            "n_span_tokens": 8,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 2.6897530555725098,
+            "n_fit_pairs_neutral_type": 1,
+            "estimator": "mean_difference",
+            "rank": 1
+          },
+          "random_ortho_1": {
+            "estimator": "random_orthonormal",
+            "seed": 20260913,
+            "layers": 26,
+            "d": 2304
+          },
+          "random_ortho_2": {
+            "estimator": "random_orthonormal",
+            "seed": 20260914,
+            "layers": 26,
+            "d": 2304
+          },
+          "random_ortho_3": {
+            "estimator": "random_orthonormal",
+            "seed": 20260915,
+            "layers": 26,
+            "d": 2304
+          },
+          "neutral_contrast": {
+            "n_neutral_pairs": 8,
+            "min_required": 30,
+            "note": "fewer neutral fit pairs than the predeclared minimum; condition skipped"
+          },
+          "leace_faithful": {
+            "protocol": "frozen (fitted on unedited activations)",
+            "n": 16,
+            "concept_erasure_version": "0.2.4",
+            "sec_fit": 0.8181049823760986,
+            "actual_rank_by_layer": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1,
+              "10": 1,
+              "11": 1,
+              "12": 1,
+              "13": 1,
+              "14": 1,
+              "15": 1,
+              "16": 1,
+              "17": 1,
+              "18": 1,
+              "19": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "23": 1,
+              "24": 1,
+              "25": 1
+            },
+            "labels": "0 = side A, 1 = side B of the swap",
+            "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+          },
+          "leace_sequential": {
+            "protocol": "sequential",
+            "n_items": 16,
+            "n_layers_requested": 26,
+            "n_layers_fitted": 26,
+            "complete": true,
+            "n_forward_passes": 416,
+            "sec": 64.13951206207275,
+            "concept_erasure_version": "0.2.4",
+            "shrinkage": true,
+            "sec_fit": 64.41662192344666,
+            "actual_rank_by_layer": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1,
+              "10": 1,
+              "11": 1,
+              "12": 1,
+              "13": 1,
+              "14": 1,
+              "15": 1,
+              "16": 1,
+              "17": 1,
+              "18": 1,
+              "19": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "23": 1,
+              "24": 1,
+              "25": 1
+            },
+            "labels": "0 = side A, 1 = side B of the swap",
+            "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+          }
+        },
+        "fit_id": {
+          "cure_centred_svd": "dcf3c45c3e82f210f20a1f01d5792d0dd20c887c09e7dcd3008fb5db3dd2e3bb",
+          "uncentred_svd": "a6897a956a843c8622cf9f69bd5671857adc979cfd429e73c99357e9e4ebf455",
+          "mean_difference": "d034cb996e3b22e73069edee1312ec56523bf867f85dcc61b371d3df1c647a3d",
+          "random_ortho_1": "5d5810834ea2ea8d382ec5748eaf6b76f610c504956d30271098252b7ba91d54",
+          "random_ortho_2": "86eeef89bc4ba3350bede00ebe6dd3659bf86a4ff9915822345e5b680f99ccf0",
+          "random_ortho_3": "fe8f85999301f99ed4fe3467ab251adde9b9c74ef238bf92fb4fc79bedf2c1d8",
+          "leace_faithful": "da5f896665ab2e69826902a3fcadb43914e193088489b0daa03770284eaef0cb",
+          "leace_sequential": "b32c0952c55fae0678e3eadad78e90a25b2e57b78aaab47214a7a546b3a016e2"
+        },
+        "max_rank": 4
+      },
+      "identity_checks": {
+        "tol": 0.001,
+        "max_abs_logit_dev_alpha0": 0.0,
+        "pass_alpha0": true,
+        "max_abs_logit_dev_rank0": 0.0,
+        "pass_rank0": true,
+        "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
+        "pass_nonspan_untouched": true,
+        "max_abs_hidden_dev_span_first_edited_layer": 0.4609375,
+        "span_actually_edited": true,
+        "decode_step_edits_under_span_policy": 0,
+        "pass_no_decode_edit_under_span": true,
+        "dtype": "torch.bfloat16",
+        "pass_all": true
+      },
+      "conditions": {
+        "dev": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a0.25",
+          "cure_centred_svd_r1_a0.5",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "uncentred_svd_r1_a0.95_matched",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "leace_sequential_r1_a0.95_matched",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r0_a0"
+        ]
+      },
+      "n_items_this_run": {
+        "dev": 120
+      },
+      "sec_model_total": 253.5907757282257
+    }
+  },
+  "sec_wall_total": 253.91998648643494
+}
