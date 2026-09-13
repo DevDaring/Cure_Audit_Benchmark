@@ -11,3 +11,15 @@ phi-4-mini-instruct,dev,random_only,energy_total_A,absC_change,0.086501304892495
 phi-4-mini-instruct,dev,neutral_only,energy_total_A,p_gold_loss_A,0.10068136027153314,-0.17416007169782363,0.3660288165656852,58,60
 phi-4-mini-instruct,dev,neutral_only,energy_total_A,acc_loss_A,0.015870587135204547,-0.07683704818995071,0.10166342642579546,58,60
 phi-4-mini-instruct,dev,neutral_only,energy_total_A,absC_change,-0.0004637677258395694,-0.25949454575585484,0.2657284466020566,60,60
+phi-4-mini-instruct,test,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.1341218865584737,-0.19672858878294963,-0.07099690654448744,1413,160
+phi-4-mini-instruct,test,all_edited_conditions,energy_total_A,acc_loss_A,-0.08672696030149792,-0.15958282202949875,-0.022109961709835823,1413,160
+phi-4-mini-instruct,test,all_edited_conditions,energy_total_A,absC_change,-0.08318350060968363,-0.1353115311712384,-0.03553693958904532,1440,160
+phi-4-mini-instruct,test,targeted_only,energy_total_A,p_gold_loss_A,-0.176013027609784,-0.2545667929723187,-0.1021009527906614,785,160
+phi-4-mini-instruct,test,targeted_only,energy_total_A,acc_loss_A,-0.11009982983889982,-0.19019932741750845,-0.03352061540578852,785,160
+phi-4-mini-instruct,test,targeted_only,energy_total_A,absC_change,-0.08897024231966057,-0.15685527542637684,-0.026897999364855027,800,160
+phi-4-mini-instruct,test,random_only,energy_total_A,p_gold_loss_A,0.06407204968824758,-0.006861553492128498,0.14282436446541982,471,160
+phi-4-mini-instruct,test,random_only,energy_total_A,acc_loss_A,-0.005994630656349378,-0.08434438494314446,0.0613016261302282,471,160
+phi-4-mini-instruct,test,random_only,energy_total_A,absC_change,-0.017222877266025952,-0.08435383183172704,0.049012146507485504,480,160
+phi-4-mini-instruct,test,neutral_only,energy_total_A,p_gold_loss_A,0.12055325090629691,-0.03051805275054324,0.27707873151693263,157,160
+phi-4-mini-instruct,test,neutral_only,energy_total_A,acc_loss_A,0.11142478989410366,-0.0442987786472869,0.2330611369340564,157,160
+phi-4-mini-instruct,test,neutral_only,energy_total_A,absC_change,-0.12305079254343768,-0.28541023749892747,0.042956681280611544,160,160
