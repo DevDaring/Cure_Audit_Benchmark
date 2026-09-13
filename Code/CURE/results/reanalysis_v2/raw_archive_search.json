@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-12T16:56:18Z",
+  "generated_utc": "2026-09-13T04:10:05Z",
   "behavioral_archive": {
     "file": "Code\\audit\\results\\behavioral_results.parquet",
     "exists": true,
@@ -35,7 +35,7 @@
   },
   "run_logs": {
     "Code\\CURE\\logs\\extended_research.log": {
-      "bytes": 33007,
+      "bytes": 52809,
       "lines_with_tacl": 0,
       "lines_with_e4": 0,
       "lines_with_parsed_answer": 0,

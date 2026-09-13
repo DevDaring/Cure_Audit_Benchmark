@@ -383,8 +383,9 @@ def main() -> None:
     K.write_csv(df, P0 / "evidence_ledger.csv")
     (P0 / "evidence_ledger.md").write_text(to_markdown(rows), encoding="utf-8")
     contract = K.REPO / "Submission2" / "Evidence_Contract.md"
+    contract.parent.mkdir(parents=True, exist_ok=True)      # absent on a VM clone (Submission2 is not pushed)
     contract.write_text(evidence_contract(rows), encoding="utf-8")
-    log.info("wrote %s", contract.relative_to(K.REPO))
+    log.info("wrote %s", K.rel(contract))
     pd.set_option("display.width", 200); pd.set_option("display.max_colwidth", 70)
     print("\n=== EVIDENCE LEDGER ===")
     print(df[["claim_id", "status", "manuscript_quote"]].to_string(index=False))
