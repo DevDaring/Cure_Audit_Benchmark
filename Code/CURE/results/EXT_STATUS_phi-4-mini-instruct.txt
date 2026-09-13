@@ -1,1 +1,1 @@
-container started (NVIDIA A100-SXM4-40GB, 40960 MiB) @ Sun Sep 13 04:03:18 UTC 2026
+FATAL: P0 failed rc=1 @ Sun Sep 13 04:04:01 UTC 2026
