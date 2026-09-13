@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T08:18:14Z",
+  "generated_utc": "2026-09-13T13:10:24Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "gemma-2-2b-it": {
-      "sec_load": 7.0292980670928955,
+      "sec_load": 6.956114053726196,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "google/gemma-2-2b-it",
@@ -257,16 +257,248 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 6050
+        "dev": 10
       },
-      "sec_model_total": 8977.407855272293
+      "sec_model_total": 22.218048334121704
+    },
+    "llama-3.1-8b-instruct": {
+      "sec_load": 11.466157913208008,
+      "torch": "2.5.1+cu124",
+      "transformers": "5.17.0",
+      "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
+      "attn_implementation": "flash_attention_2",
+      "model_class": "LlamaForCausalLM",
+      "dtype": "torch.bfloat16",
+      "bases": {
+        "status": {
+          "cure_centred_svd": "ok",
+          "uncentred_svd": "ok",
+          "mean_difference": "ok",
+          "random_ortho_1": "ok",
+          "random_ortho_2": "ok",
+          "random_ortho_3": "ok",
+          "neutral_contrast": "ok",
+          "leace_faithful": "ok",
+          "leace_sequential": "ok"
+        },
+        "info": {
+          "cure_centred_svd": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 328,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 154.04333329200745,
+            "n_fit_pairs_neutral_type": 54,
+            "estimator": "centred_svd"
+          },
+          "uncentred_svd": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 328,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 154.04333329200745,
+            "n_fit_pairs_neutral_type": 54,
+            "estimator": "uncentred_svd"
+          },
+          "mean_difference": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 328,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 154.04333329200745,
+            "n_fit_pairs_neutral_type": 54,
+            "estimator": "mean_difference",
+            "rank": 1
+          },
+          "random_ortho_1": {
+            "estimator": "random_orthonormal",
+            "seed": 20260913,
+            "layers": 32,
+            "d": 4096
+          },
+          "random_ortho_2": {
+            "estimator": "random_orthonormal",
+            "seed": 20260914,
+            "layers": 32,
+            "d": 4096
+          },
+          "random_ortho_3": {
+            "estimator": "random_orthonormal",
+            "seed": 20260915,
+            "layers": 32,
+            "d": 4096
+          },
+          "neutral_contrast": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 300,
+            "site": "span (all tokens, truncated to shorter span)",
+            "estimator": "centred_svd on neutral pairs",
+            "sec_collect": 160.74039936065674,
+            "benchmarks": {
+              "bbq": 300
+            },
+            "note": "token count is recorded (n_span_tokens); lexical-frequency matching to the demographic fit pairs is NOT performed, see report; neutral swaps exist only where the benchmark has a 'person'-style variant (BBQ in the current pentad)"
+          },
+          "leace_faithful": {
+            "protocol": "frozen (fitted on unedited activations)",
+            "n": 656,
+            "concept_erasure_version": "0.2.4",
+            "sec_fit": 8.248186349868774,
+            "actual_rank_by_layer": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1,
+              "10": 1,
+              "11": 1,
+              "12": 1,
+              "13": 1,
+              "14": 1,
+              "15": 1,
+              "16": 1,
+              "17": 1,
+              "18": 1,
+              "19": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "23": 1,
+              "24": 1,
+              "25": 1,
+              "26": 1,
+              "27": 1,
+              "28": 1,
+              "29": 1,
+              "30": 1,
+              "31": 1
+            },
+            "labels": "0 = side A, 1 = side B of the swap",
+            "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+          },
+          "leace_sequential": {
+            "protocol": "sequential",
+            "n_items": 600,
+            "n_layers_requested": 32,
+            "n_layers_fitted": 32,
+            "complete": true,
+            "n_forward_passes": 19200,
+            "sec": 4214.440789699554,
+            "concept_erasure_version": "0.2.4",
+            "shrinkage": true,
+            "sec_fit": 4214.944718837738,
+            "actual_rank_by_layer": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1,
+              "10": 1,
+              "11": 1,
+              "12": 1,
+              "13": 1,
+              "14": 1,
+              "15": 1,
+              "16": 1,
+              "17": 1,
+              "18": 1,
+              "19": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "23": 1,
+              "24": 1,
+              "25": 1,
+              "26": 1,
+              "27": 1,
+              "28": 1,
+              "29": 1,
+              "30": 1,
+              "31": 1
+            },
+            "labels": "0 = side A, 1 = side B of the swap",
+            "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+          }
+        },
+        "fit_id": {
+          "cure_centred_svd": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+          "uncentred_svd": "4b48919c5bfdca85ec214826c1fa306fb321977bc05a0a14b0d972a9dc2c270a",
+          "mean_difference": "7ff4c485aa546340ad912952475d0436620732264f2b4d384872920fbf72bf71",
+          "random_ortho_1": "4d2797700009cd46194a66e5c2cc585535053f109aabd6d2efce1bd66bbe3b74",
+          "random_ortho_2": "94c7220f0c13a245cdbd6488890a0b83a228b88d135a5b84a2692e3248fdbb50",
+          "random_ortho_3": "dc8220d7b2a0afdf3a5b5ff94ac0917f1b5c4f4078d06f7111d8377be5fef475",
+          "neutral_contrast": "2664bc376a817e0b2794d64d71dec2ce3cf2707520a58642229acda6364b4d8a",
+          "leace_faithful": "8268d856a9cf3f874260d72510cffadb8b617497d6059063220184279bc67e56",
+          "leace_sequential": "c0f8270b2a1f979729c198e1da6da7fb68815372e82477598d8221216c753af0"
+        },
+        "max_rank": 4
+      },
+      "identity_checks": {
+        "tol": 0.001,
+        "max_abs_logit_dev_alpha0": 0.0,
+        "pass_alpha0": true,
+        "max_abs_logit_dev_rank0": 0.0,
+        "pass_rank0": true,
+        "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
+        "pass_nonspan_untouched": true,
+        "max_abs_hidden_dev_span_first_edited_layer": 0.013427734375,
+        "span_actually_edited": true,
+        "decode_step_edits_under_span_policy": 0,
+        "pass_no_decode_edit_under_span": true,
+        "dtype": "torch.bfloat16",
+        "pass_all": true
+      },
+      "conditions": {
+        "dev": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a0.25",
+          "cure_centred_svd_r1_a0.5",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r1_a1",
+          "neutral_contrast_r2_a1",
+          "neutral_contrast_r4_a1"
+        ]
+      },
+      "n_items_this_run": {
+        "dev": 340
+      },
+      "sec_model_total": 2504.2943036556244
     },
     "phi-4-mini-instruct": {
-      "sec_load": 10.65298843383789,
+      "sec_load": 10.11562967300415,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "microsoft/Phi-4-mini-instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Phi3ForCausalLM",
       "dtype": "torch.bfloat16",
       "bases": {
@@ -489,16 +721,16 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 6050
+        "dev": 0
       },
-      "sec_model_total": 23299.118921279907
+      "sec_model_total": 14.15301251411438
     },
     "qwen2.5-7b-instruct": {
-      "sec_load": 10.04637336730957,
+      "sec_load": 9.930020809173584,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "Qwen/Qwen2.5-7B-Instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Qwen2ForCausalLM",
       "dtype": "torch.bfloat16",
       "bases": {
@@ -713,12 +945,12 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 6050
+        "dev": 0
       },
-      "sec_model_total": 15814.119500160217
+      "sec_model_total": 12.960696697235107
     }
   },
-  "sec_wall_total": 8977.728367328644,
+  "sec_wall_total": 22.517558097839355,
   "merged_from": [
     "gemma-2-2b-it",
     "llama-3.1-8b-instruct",
@@ -726,6 +958,14 @@
     "qwen2.5-7b-instruct"
   ],
   "top_level_differences": [
+    {
+      "vm": "llama-3.1-8b-instruct",
+      "key": "generated_utc"
+    },
+    {
+      "vm": "llama-3.1-8b-instruct",
+      "key": "sec_wall_total"
+    },
     {
       "vm": "phi-4-mini-instruct",
       "key": "generated_utc"
