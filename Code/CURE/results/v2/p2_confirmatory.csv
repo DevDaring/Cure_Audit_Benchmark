@@ -1,8 +1,8 @@
 model_name,phase,id,comparison,statistic,label,point,lo,hi,p_boot,n_seeds,p_holm,reject_0.05_holm
-gemma-2-2b-it,test,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,confirmatory,0.1309748823924731,0.0490533644153225,0.221655535954301,0.002,93,0.006,True
-gemma-2-2b-it,test,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),confirmatory,0.053763440860215,0.0053763440860215,0.1075268817204301,0.033,93,0.066,False
-gemma-2-2b-it,test,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,confirmatory,0.1463574918794803,0.0630573450450828,0.2335650262866822,0.0005,93,0.002,True
-gemma-2-2b-it,test,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,confirmatory,0.050179211469534,0.003584229390681,0.1039426523297491,0.039,93,0.066,False
+gemma-2-2b-it,test,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,confirmatory,0.114178466796875,0.0436518859863281,0.186120376586914,0.002,160,0.004,True
+gemma-2-2b-it,test,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),confirmatory,0.065625,0.021875,0.10625,0.001,160,0.004,True
+gemma-2-2b-it,test,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,confirmatory,0.1087375124295552,0.038084888656934,0.182576344013214,0.003,160,0.004,True
+gemma-2-2b-it,test,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,confirmatory,0.0625,0.0208333333333333,0.1052083333333333,0.001,160,0.004,True
 gemma-2-2b-it,dev,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,"exploratory (dev; same four comparisons, not confirmatory)",0.1342529296875,0.0461259765625,0.2245863037109375,0.003,100,0.006,True
 gemma-2-2b-it,dev,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),"exploratory (dev; same four comparisons, not confirmatory)",0.115,0.045,0.18,0.0005,100,0.002,True
 gemma-2-2b-it,dev,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.1301069132486979,0.0462585169474283,0.2183313674926757,0.003,100,0.006,True
@@ -19,10 +19,10 @@ phi-4-mini-instruct,dev,C1,"cure vs unedited on D (paired absolute |C| change), 
 phi-4-mini-instruct,dev,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),"exploratory (dev; same four comparisons, not confirmatory)",-0.02,-0.085,0.035,0.558,100,0.814,False
 phi-4-mini-instruct,dev,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.1685416666666666,0.1024895833333333,0.2437604166666666,0.0005,100,0.002,True
 phi-4-mini-instruct,dev,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",-0.0233333333333333,-0.0833333333333333,0.0316666666666666,0.407,100,0.814,False
-qwen2.5-7b-instruct,test,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,confirmatory,0.0250964465442004,-0.0643509323532516,0.1090963415197423,0.564,111,1.0,False
-qwen2.5-7b-instruct,test,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),confirmatory,0.0315315315315315,-0.0045045045045045,0.072072072072072,0.127,111,0.381,False
-qwen2.5-7b-instruct,test,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,confirmatory,0.0177560983835398,-0.0760879287490615,0.1085415722729565,0.708,111,1.0,False
-qwen2.5-7b-instruct,test,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,confirmatory,0.042042042042042,0.0045045045045045,0.0795795795795795,0.028,111,0.112,False
+qwen2.5-7b-instruct,test,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,confirmatory,0.0758014678955078,0.0044759082794189,0.1456663608551024,0.035,160,0.14,False
+qwen2.5-7b-instruct,test,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),confirmatory,0.0125,-0.021875,0.046875,0.507,160,0.507,False
+qwen2.5-7b-instruct,test,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,confirmatory,0.0644596099853515,-0.0071087106068928,0.1336957613627115,0.077,160,0.2309999999999999,False
+qwen2.5-7b-instruct,test,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,confirmatory,0.01875,-0.0146093749999999,0.053125,0.226,160,0.452,False
 qwen2.5-7b-instruct,dev,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,"exploratory (dev; same four comparisons, not confirmatory)",0.1047128295898437,0.0252528991699218,0.1976906127929687,0.013,100,0.048,True
 qwen2.5-7b-instruct,dev,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),"exploratory (dev; same four comparisons, not confirmatory)",0.025,-0.02,0.07,0.31,100,0.62,False
 qwen2.5-7b-instruct,dev,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.0961211013793945,0.0209300918579101,0.1815434567133584,0.012,100,0.048,True
