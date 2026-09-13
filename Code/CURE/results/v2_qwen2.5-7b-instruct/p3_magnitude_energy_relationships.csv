@@ -1,0 +1,13 @@
+model_name,phase,scope,x,y,spearman,lo,hi,n,n_seeds
+qwen2.5-7b-instruct,dev,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.12687483787080187,-0.22798306104844077,-0.014412380897640985,522,60
+qwen2.5-7b-instruct,dev,all_edited_conditions,energy_total_A,acc_loss_A,-0.02844188475077299,-0.14920058423121346,0.12922843438267728,522,60
+qwen2.5-7b-instruct,dev,all_edited_conditions,energy_total_A,absC_change,-0.048251430623186896,-0.16597723691424607,0.06159422607928933,540,60
+qwen2.5-7b-instruct,dev,targeted_only,energy_total_A,p_gold_loss_A,-0.24266612051202902,-0.3742264820733063,-0.09854664404167016,290,60
+qwen2.5-7b-instruct,dev,targeted_only,energy_total_A,acc_loss_A,-0.03738867510291197,-0.20010020767422326,0.18246401102154253,290,60
+qwen2.5-7b-instruct,dev,targeted_only,energy_total_A,absC_change,-0.10618517056763636,-0.23968757525178175,0.031149390345744037,300,60
+qwen2.5-7b-instruct,dev,random_only,energy_total_A,p_gold_loss_A,0.10585285318991478,-0.01060344911790574,0.2188689481169429,174,60
+qwen2.5-7b-instruct,dev,random_only,energy_total_A,acc_loss_A,-0.04768005978937029,-0.09773966565414687,-0.03254514539380515,174,60
+qwen2.5-7b-instruct,dev,random_only,energy_total_A,absC_change,-0.029172075638366404,-0.1428578567945878,0.08544424662283355,180,60
+qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,p_gold_loss_A,0.03042281249879202,-0.2547372359015814,0.27100257920664705,58,60
+qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,acc_loss_A,0.08552483067304673,-0.1435307175811677,0.2969839849211266,58,60
+qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,absC_change,-0.21529226213045285,-0.42957915533790036,0.031661316582422855,60,60
