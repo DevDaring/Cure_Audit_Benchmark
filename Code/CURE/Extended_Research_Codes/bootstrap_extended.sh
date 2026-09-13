@@ -195,9 +195,29 @@ run_stage() {  # $1 label, $2 log name, rest = command; non-zero after 3 failed 
   done
 }
 
+# Remote control: Code/CURE/results/EXT_CONTROL_${MODEL}.env in the repo (pushed from the
+# author's machine) is sourced before every stage. It may set EXT_EXTEND_RANKS, EXT_SKIP_P1,
+# EXT_SKIP_P2, EXT_SKIP_P3, EXT_P1_HOURS, EXT_P2_DEV_HOURS, EXT_P2_TEST_HOURS, EXT_P3_HOURS,
+# EXT_P3_ACCOUNTS ("magnitude depth massive") and EXT_STOP=1 (finish the current stage, push,
+# then idle).
+CONTROL_REL="Code/CURE/results/EXT_CONTROL_${MODEL}.env"
+refresh_control() {
+  ( flock 9; git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1 || git -C "$REPO" rebase --abort >/dev/null 2>&1 ) 9>"$LOCK"
+  if [ -f "$REPO/$CONTROL_REL" ]; then
+    # shellcheck disable=SC1090
+    set -a; . "$REPO/$CONTROL_REL"; set +a
+    echo "[ext] control file applied: $(tr '\n' ' ' < "$REPO/$CONTROL_REL")"
+  fi
+  if [ "${EXT_STOP:-0}" = "1" ]; then
+    push_results "stopped by control file"; push_status "STOPPED by EXT_CONTROL (EXT_STOP=1); idle"
+    sleep infinity
+  fi
+}
+
 # run_sequence smoke|full : P1, P2 dev, P2 test, P3 x {magnitude, depth, massive} x {dev, test}
 run_sequence() {
   local MODE=$1 P1F P2F P3F EXTEND DEVCAP TESTCAP ACC PH
+  refresh_control
   if [ "$MODE" = "smoke" ]; then
     export EXT_V2_DIR="v2_smoke_${MODEL}"
     P1F="--n-per-bench 1 --n-fit-pairs 8 --gpu-hours-cap 1"
@@ -220,19 +240,30 @@ run_sequence() {
     run_stage "$TAG P1" "ext_${MODE}_p1" python3 run_all.py --stage p1 --models "$MODEL" -- $P1F || return 1
     push_results "$TAG P1 pilot"
   fi
+  refresh_control
+  if [ "$MODE" = "full" ]; then
+    EXTEND=""; [ "${EXT_EXTEND_RANKS:-1}" = "1" ] && EXTEND="--extend-ranks"
+    P2F="--match-energy $EXTEND --leace-sequential --capability-policy ${EXT_CAP_POLICY:-all}"
+    DEVCAP="${EXT_P2_DEV_HOURS:-24}"; TESTCAP="${EXT_P2_TEST_HOURS:-24}"
+  fi
   if [ "${EXT_SKIP_P2:-0}" != "1" ]; then
     push_status "$TAG P2 dev starting"
     run_stage "$TAG P2-dev" "ext_${MODE}_p2_dev" python3 run_all.py --stage p2 --phase dev --models "$MODEL" \
         --gpu-hours-cap "$DEVCAP" -- $P2F || return 1
     push_results "$TAG P2 dev"
+    refresh_control
     push_status "$TAG P2 test starting"
     run_stage "$TAG P2-test" "ext_${MODE}_p2_test" python3 run_all.py --stage p2 --phase test --models "$MODEL" \
         --gpu-hours-cap "$TESTCAP" -- $P2F || return 1
     push_results "$TAG P2 test"
   fi
+  refresh_control
+  if [ "$MODE" = "full" ]; then P3F="--gpu-hours-cap ${EXT_P3_HOURS:-10}"; fi
   if [ "${EXT_SKIP_P3:-0}" != "1" ]; then
-    for ACC in magnitude depth massive; do
+    for ACC in ${EXT_P3_ACCOUNTS:-magnitude depth massive}; do
       for PH in dev test; do
+        refresh_control
+        [ "${EXT_SKIP_P3:-0}" = "1" ] && break 2
         push_status "$TAG P3 $ACC $PH starting"
         run_stage "$TAG P3-$ACC-$PH" "ext_${MODE}_p3_${ACC}_${PH}" python3 run_all.py --stage p3 --account "$ACC" \
             --phase "$PH" --models "$MODEL" -- $P3F || return 1
