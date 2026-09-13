@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T06:11:21Z",
+  "generated_utc": "2026-09-13T07:01:40Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -20,7 +20,7 @@
       "attn_implementation": "flash_attention_2",
       "model_class": "Gemma2ForCausalLM",
       "dtype": "torch.bfloat16",
-      "sec_load": 71.90047478675842,
+      "sec_load": 7.8597917556762695,
       "basis": {
         "n_fit_pairs_used": 8,
         "n_fit_pairs_skipped": 0,
@@ -28,7 +28,7 @@
         "estimator": "centred_svd",
         "rank": 1,
         "site": "span (all tokens)",
-        "sec_fit": 22.106813669204712
+        "sec_fit": 1.2190794944763184
       },
       "identity_checks": {
         "tol": 0.001,
@@ -46,8 +46,8 @@
         "pass_all": true
       },
       "n_items_this_run": 0,
-      "sec_model_total": 110.00013494491577
+      "sec_model_total": 11.338062524795532
     }
   },
-  "sec_wall_total": 112.60092186927795
+  "sec_wall_total": 11.766472101211548
 }
