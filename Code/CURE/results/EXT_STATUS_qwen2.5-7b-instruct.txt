@@ -1,1 +1,1 @@
-[smoke] P1 attempt 2 exited non-zero:     raise EnvironmentError( OSError: Required environment variable 'DEEPSEEK_API_KEY_2' is missing or empty. Check your .env file at /workspace/Cure_Audit_Benchmark/Code/audit/.env. [exit 1 in 1s]  @ Sun Sep 13 04:15:13 UTC 2026
+container started (NVIDIA RTX A6000, 49140 MiB) @ Sun Sep 13 04:15:58 UTC 2026
