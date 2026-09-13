@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:39:55Z",
+  "generated_utc": "2026-09-13T04:55:43Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -15,6 +15,39 @@
   "gpu_hours_cap": 6.0,
   "edit_definition": "h'_{l,t} = h_{l,t} - alpha * U_l^T U_l h_{l,t}        for t in S, for every layer l in L\n  U_l : k x d orthonormal rows (basis_by_layer[l]); alpha in [0, 1]; S = the edited token\n  positions of the sequence, chosen by a SITE policy:\n    \"span\"        every token of the demographic span (all tokens, not only the first) in\n                  the prompt; nothing is edited at decode steps, because the span has already\n                  been processed and its edited hidden states are what the cache holds.\n    \"last_token\"  the legacy ErasureContext behaviour: the last position of the prefill and\n                  every newly generated token. Kept ONLY as a labelled diagnostic condition.\n    \"all\"         every position of the prefill and every generated token (global policy,\n                  the only one that can touch an external capability prompt with no span).\n  Source-state convention for the commutator (audit):\n    \"sequential\"  the edit hooks are ACTIVE while the source prompt is run, so the cached\n                  activation at layer l already reflects edits at layers < l, and the same\n                  hooks are active during the patched and clean runs of the target prompt.\n                  This is one forward pass per condition on one backend, and it is what the\n                  behavioural generation also experiences. It is the canonical convention.\n    \"frozen\"      the source prompt is run WITHOUT hooks, each cached vector is projected\n                  numerically, then injected. Kept as the legacy-TL diagnostic.",
   "models": {
+    "gemma-2-2b-it": {
+      "hf_id": "google/gemma-2-2b-it",
+      "attn_implementation": "sdpa",
+      "model_class": "Gemma2ForCausalLM",
+      "dtype": "torch.bfloat16",
+      "sec_load": 7.314452648162842,
+      "basis": {
+        "n_fit_pairs_used": 200,
+        "n_fit_pairs_skipped": 0,
+        "n_diff_vectors": 225,
+        "estimator": "centred_svd",
+        "rank": 1,
+        "site": "span (all tokens)",
+        "sec_fit": 1275.7488799095154
+      },
+      "identity_checks": {
+        "tol": 0.001,
+        "max_abs_logit_dev_alpha0": 0.0,
+        "pass_alpha0": true,
+        "max_abs_logit_dev_rank0": 0.0,
+        "pass_rank0": true,
+        "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
+        "pass_nonspan_untouched": true,
+        "max_abs_hidden_dev_span_first_edited_layer": 3.734375,
+        "span_actually_edited": true,
+        "decode_step_edits_under_span_policy": 0,
+        "pass_no_decode_edit_under_span": true,
+        "dtype": "torch.bfloat16",
+        "pass_all": true
+      },
+      "n_items_this_run": 280,
+      "sec_model_total": 1763.7704617977142
+    },
     "llama-3.1-8b-instruct": {
       "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
       "attn_implementation": "sdpa",
@@ -115,7 +148,7 @@
       "sec_model_total": 965.169011592865
     }
   },
-  "sec_wall_total": 1117.1508667469025,
+  "sec_wall_total": 1764.0931084156036,
   "merged_from": [
     "gemma-2-2b-it",
     "llama-3.1-8b-instruct",
@@ -123,6 +156,14 @@
     "qwen2.5-7b-instruct"
   ],
   "top_level_differences": [
+    {
+      "vm": "llama-3.1-8b-instruct",
+      "key": "generated_utc"
+    },
+    {
+      "vm": "llama-3.1-8b-instruct",
+      "key": "sec_wall_total"
+    },
     {
       "vm": "phi-4-mini-instruct",
       "key": "generated_utc"
