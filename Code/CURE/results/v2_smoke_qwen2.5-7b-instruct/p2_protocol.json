@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:20:42Z",
+  "generated_utc": "2026-09-13T04:25:21Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "qwen2.5-7b-instruct": {
-      "sec_load": 11.247565984725952,
+      "sec_load": 10.204089164733887,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "Qwen/Qwen2.5-7B-Instruct",
@@ -248,13 +248,37 @@
           "random_ortho_3_r2_a1",
           "random_ortho_3_r4_a1",
           "neutral_contrast_r0_a0"
+        ],
+        "test": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r0_a0"
         ]
       },
       "n_items_this_run": {
-        "dev": 110
+        "dev": 110,
+        "test": 100
       },
-      "sec_model_total": 271.56711173057556
+      "sec_model_total": 124.76423144340515
     }
   },
-  "sec_wall_total": 271.83501076698303
+  "sec_wall_total": 125.02580428123474
 }
