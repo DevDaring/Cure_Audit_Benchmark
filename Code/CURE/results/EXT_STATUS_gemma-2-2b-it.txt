@@ -1,1 +1,1 @@
-[full] P2-test attempt 1 exited non-zero: ror.pxi", line 92, in pyarrow.lib.check_status pyarrow.lib.ArrowInvalid: Could not open Parquet input source '<Buffer>': Parquet magic bytes not found in footer. Either the file is corrupted or this is not a parquet file. [exit 1 in 5592s]  @ Sun Sep 13 12:21:17 UTC 2026
+container started (NVIDIA L40S, 46068 MiB) @ Sun Sep 13 13:03:41 UTC 2026
