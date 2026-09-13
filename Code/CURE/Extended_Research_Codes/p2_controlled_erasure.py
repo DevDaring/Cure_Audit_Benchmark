@@ -29,7 +29,9 @@ Design (Next_Plan.md P2, item by item)
     leace_faithful      LEACE (Belrose et al. 2023) via the official concept_erasure package,
                         fitted on the same span-position activations with label = swap side,
                         applied as its exact affine map (p2_leace_faithful.LeaceAffineEdit);
-                        frozen fitting by default, --leace-sequential for concept scrubbing.
+                        frozen fitting, always.
+    leace_sequential    the same package fitted by concept scrubbing (layer l on activations
+                        already edited by layers < l), only with --leace-sequential.
                         status = "unavailable" if the package is not installed
     random_ortho_{1,2,3} random orthonormal subspaces of matched rank at the same layers,
                         seeds RANDOM_SEED_V2 + {1, 2, 3}
@@ -139,9 +141,11 @@ PAIR_TYPES = ["demographic", "identity", "neutral"]
 SENTENCE_PREF_BENCHMARKS = ("crows_pairs", "stereoset")
 
 FAMILIES = ["unedited", "identity_alpha0", "cure_centred_svd", "uncentred_svd", "mean_difference",
-            "leace_faithful", "random_ortho_1", "random_ortho_2", "random_ortho_3", "neutral_contrast"]
+            "leace_faithful", "leace_sequential", "random_ortho_1", "random_ortho_2", "random_ortho_3",
+            "neutral_contrast"]
 RANDOM_FAMILIES = ["random_ortho_1", "random_ortho_2", "random_ortho_3"]
-CONTROL_FAMILIES = ["uncentred_svd", "mean_difference", "leace_faithful"] + RANDOM_FAMILIES + ["neutral_contrast"]
+LEACE_FAMILIES = ["leace_faithful", "leace_sequential"]   # frozen fit; concept-scrubbing fit
+CONTROL_FAMILIES = ["uncentred_svd", "mean_difference"] + LEACE_FAMILIES + RANDOM_FAMILIES + ["neutral_contrast"]
 RANKED_FAMILIES = ["cure_centred_svd", "uncentred_svd", "neutral_contrast"] + RANDOM_FAMILIES
 BASIS_OF = {f: f for f in FAMILIES}
 BASIS_OF["identity_alpha0"] = "cure_centred_svd"
@@ -177,7 +181,7 @@ class Cond:
     def kind(self) -> str:
         if self.family == "unedited":
             return "none"
-        return "affine" if self.family == "leace_faithful" else "proj"
+        return "affine" if self.family in LEACE_FAMILIES else "proj"
 
 
 def build_conditions(phase: str, ranks: list[int], store: "BasisStore", matched: dict | None,
@@ -286,7 +290,8 @@ class BasisStore:
     def __init__(self, model: str, fmt: str):
         self.model, self.fmt = model, fmt
         self.proj: dict[str, dict[int, np.ndarray]] = {}
-        self.leace: dict[int, dict] | None = None
+        self.leace: dict[int, dict] | None = None          # leace_faithful  (frozen fit)
+        self.leace_seq: dict[int, dict] | None = None      # leace_sequential (concept scrubbing)
         self.status: dict[str, str] = {}
         self.info: dict[str, dict] = {}
         self.fit_id: dict[str, str] = {}
@@ -302,9 +307,13 @@ class BasisStore:
     def rows(self, name: str, rank: int) -> dict[int, np.ndarray]:
         return {l: r[:rank] for l, r in self.proj[name].items()}
 
+    def erasers(self, family: str) -> dict[int, dict] | None:
+        return {"leace_faithful": self.leace, "leace_sequential": self.leace_seq}.get(family)
+
     def natural_rank(self, family: str) -> int:
-        if family == "leace_faithful" and self.leace:
-            return int(max(e.get("actual_rank", 0) for e in self.leace.values()))
+        er = self.erasers(family) if family in LEACE_FAMILIES else None
+        if er:
+            return int(max(e.get("actual_rank", 0) for e in er.values()))
         return 1
 
     def add_proj(self, name: str, basis: dict[int, np.ndarray], info: dict) -> None:
@@ -319,13 +328,16 @@ class BasisStore:
         for name, basis in self.proj.items():
             np.savez_compressed(self.path(name), **{str(l): b for l, b in basis.items()})
             self.fit_id[name] = K.sha256(self.path(name))
-        if self.leace:
-            import p2_leace_faithful as LF
-            np.savez_compressed(self.path("leace_faithful"), **LF.erasers_to_npz_dict(self.leace))
-            self.fit_id["leace_faithful"] = K.sha256(self.path("leace_faithful"))
+        import p2_leace_faithful as LF
+        leace_files = []
+        for fam in LEACE_FAMILIES:
+            er = self.erasers(fam)
+            if er:
+                np.savez_compressed(self.path(fam), **LF.erasers_to_npz_dict(er))
+                self.fit_id[fam] = K.sha256(self.path(fam)); leace_files.append(fam)
         rec = {"model": self.model, "fmt": self.fmt, "max_rank": self.max_rank, "status": self.status,
                "info": self.info, "fit_id": self.fit_id, "saved_utc": K.utc_now(),
-               "files": {n: str(self.path(n).name) for n in list(self.proj) + (["leace_faithful"] if self.leace else [])}}
+               "files": {n: str(self.path(n).name) for n in list(self.proj) + leace_files}}
         K.write_json(rec, self.manifest_path)
 
     @classmethod
@@ -340,11 +352,15 @@ class BasisStore:
             if not st.path(name).exists():
                 return None
             z = np.load(st.path(name))
-            if name == "leace_faithful":
+            if name in LEACE_FAMILIES:
                 import p2_leace_faithful as LF
-                st.leace = LF.erasers_from_npz(z)
-                for l, e in st.leace.items():
-                    e["actual_rank"] = int(st.info.get("leace_faithful", {}).get("actual_rank_by_layer", {}).get(str(l), LF._effective_rank(e["proj_left"])))
+                er = LF.erasers_from_npz(z)
+                for l, e in er.items():
+                    e["actual_rank"] = int(st.info.get(name, {}).get("actual_rank_by_layer", {}).get(str(l), LF._effective_rank(e["proj_left"])))
+                if name == "leace_faithful":
+                    st.leace = er
+                else:
+                    st.leace_seq = er
             else:
                 st.proj[name] = {int(k): z[k] for k in z.files}
         return st
@@ -426,26 +442,37 @@ def _fit_neutral(model, tok, args, mname: str, c: pd.DataFrame, store: BasisStor
 
 
 def _fit_leace(model, tok, args, fp, c, acts, labels, store: BasisStore, budget) -> None:
+    """leace_faithful: fitted on the unedited activations (frozen protocol), always.
+    leace_sequential: concept scrubbing, layer l fitted on activations already edited by the
+    erasers of layers < l, only with --leace-sequential (L forward passes per prompt)."""
     import p2_leace_faithful as LF
     if not LF.leace_available():
-        store.mark("leace_faithful", "unavailable", {"note": LF.PIP_HINT})
-        log.warning("leace_faithful unavailable: %s", LF.PIP_HINT); return
-    t0 = time.time()
+        for fam in LEACE_FAMILIES:
+            store.mark(fam, "unavailable", {"note": LF.PIP_HINT})
+        log.warning("LEACE unavailable: %s", LF.PIP_HINT); return
     dev = str(next(model.parameters()).device)
     sysm = P1.system_prompt() if args.fmt == "chat" else None
-    if args.leace_sequential:
-        erasers, info = LF.fit_leace_sequential(model, tok, args.fmt, fp, c, system=sysm,
-                                                time_budget_s=max(0.0, budget.remaining()))
-        if not info["complete"]:
-            store.mark("leace_faithful", "partial", info); return
-    else:
-        erasers = LF.fit_leace_erasers(acts, labels, device=dev)
-        info = {"protocol": "frozen (fitted on unedited activations)", "n": int(len(labels)),
-                "concept_erasure_version": LF.leace_version()}
-    info.update({"sec_fit": time.time() - t0, "labels": "0 = side A, 1 = side B of the swap",
-                 "actual_rank_by_layer": {str(l): int(e["actual_rank"]) for l, e in erasers.items()},
-                 "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"})
+    common = {"labels": "0 = side A, 1 = side B of the swap",
+              "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"}
+
+    t0 = time.time()
+    erasers = LF.fit_leace_erasers(acts, labels, device=dev)
+    info = {"protocol": "frozen (fitted on unedited activations)", "n": int(len(labels)),
+            "concept_erasure_version": LF.leace_version(), "sec_fit": time.time() - t0,
+            "actual_rank_by_layer": {str(l): int(e["actual_rank"]) for l, e in erasers.items()}, **common}
     store.leace = erasers; store.status["leace_faithful"] = "ok"; store.info["leace_faithful"] = info
+
+    if not args.leace_sequential:
+        store.mark("leace_sequential", "skipped", {"note": "run with --leace-sequential to fit by concept scrubbing"})
+        return
+    t0 = time.time()
+    seq, sinfo = LF.fit_leace_sequential(model, tok, args.fmt, fp, c, system=sysm,
+                                         time_budget_s=max(0.0, budget.remaining()))
+    sinfo.update({"sec_fit": time.time() - t0,
+                  "actual_rank_by_layer": {str(l): int(e["actual_rank"]) for l, e in seq.items()}, **common})
+    if not sinfo["complete"]:
+        store.mark("leace_sequential", "partial", sinfo); return
+    store.leace_seq = seq; store.status["leace_sequential"] = "ok"; store.info["leace_sequential"] = sinfo
 
 
 # ---------------------------------------------------------------------------
@@ -460,7 +487,9 @@ def make_factory(model, store: BasisStore, cond: Cond, site: str = SITE):
         return None
     if cond.kind == "affine":
         import p2_leace_faithful as LF
-        er = store.leace
+        er = store.erasers(cond.family)
+        if not er:
+            return None
         return lambda: LF.LeaceAffineEdit(model, er, alpha=cond.alpha, site=site)
     rows = store.rows(BASIS_OF[cond.family], cond.rank)
     return lambda: I.HookedEdit(model, rows, alpha=cond.alpha, site=site)
@@ -819,6 +848,8 @@ def parse_args(argv=None):
     ap.add_argument("--refit", action="store_true", help="ignore cached bases")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--summarise-only", action="store_true")
+    ap.add_argument("--n-mmlu", type=int, default=None, help="MMLU questions per capability probe (default %d)" % N_MMLU)
+    ap.add_argument("--n-wiki-tokens", type=int, default=None, help="WikiText-2 tokens per probe (default %d)" % N_WIKI_TOKENS)
     args = ap.parse_args(argv)
     args.rank_list = sorted(set([1] + (EXTENDED_RANKS if args.extend_ranks else []) + list(args.ranks)))
     if args.smoke:
@@ -966,6 +997,8 @@ def _run_capability(model, tok, args, mname, phase, conds, store, cap_path, cap_
     """Capability rows per condition; edits for policy=all are rebuilt with site='all'."""
     rows = []
     n_mmlu, n_wiki = (8, 2048) if args.smoke else (N_MMLU, N_WIKI_TOKENS)
+    n_mmlu = args.n_mmlu if args.n_mmlu else n_mmlu
+    n_wiki = args.n_wiki_tokens if args.n_wiki_tokens else n_wiki
     for cond in [x for x in conds if x.status == "ok"]:
         if budget.exceeded():
             log.warning("cap reached before capability %s %s", phase, cond.cond_id); break
@@ -1227,12 +1260,15 @@ def _gate_for_model(summ: pd.DataFrame, mname: str) -> list[str]:
         if any(similar):
             verdict = ("report NON-SPECIFIC PERTURBATION, not demographic-computation entanglement: a %s shows damage "
                        "whose point estimate lies inside the cure interval" % label)
-    le = s[s["cond_id"].str.startswith("leace_faithful")]
-    if not le.empty:
+    for fam in LEACE_FAMILIES:
+        le = s[s["cond_id"].str.startswith(fam)]
+        if le.empty:
+            continue
         ld = le.iloc[0].to_dict()
         lines.append("  - %s: D = %s; delta gen accuracy = %s" % (ld["cond_id"], _fmt_ci(ld, "D"), _fmt_ci(ld, "d_gen_acc_attempted")))
         if _excludes_zero(ld, "d_gen_acc_attempted") is False and (_excludes_zero(ld, "D") and ld["D"] > 0):
-            verdict += "; actual LEACE suppresses without an established accuracy loss, so NARROW the conclusion to the studied projection protocol"
+            verdict += ("; actual LEACE (%s) suppresses without an established accuracy loss, so NARROW the "
+                        "conclusion to the studied projection protocol" % ("frozen" if fam == "leace_faithful" else "sequential"))
     lines.append("- **Verdict:** %s." % verdict)
     return lines
 

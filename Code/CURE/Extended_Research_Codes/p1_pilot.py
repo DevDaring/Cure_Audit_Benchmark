@@ -315,11 +315,14 @@ def append_rows(path, rows: list[dict]):
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--models", nargs="*", default=["qwen2.5-7b-instruct", "llama-3.1-8b-instruct"])
+    ap_defaults_models = ["qwen2.5-7b-instruct", "llama-3.1-8b-instruct"]
+    ap.add_argument("--models", nargs="*", default=ap_defaults_models)
     ap.add_argument("--fmt", choices=["chat", "raw"], default="chat")
     ap.add_argument("--gpu-hours-cap", type=float, default=8.0)
     ap.add_argument("--seeds-file", default=None, help="manually checked seed list (csv with seed_id)")
-    ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--smoke", action="store_true", help="2 seeds per benchmark (gemma-2-2b-it unless --models is given)")
+    ap.add_argument("--n-per-bench", type=int, default=None, help="seeds per benchmark (default %d)" % N_PILOT_PER_BENCH)
+    ap.add_argument("--n-fit-pairs", type=int, default=N_FIT_PAIRS)
     ap.add_argument("--report-only", action="store_true")
     args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -331,8 +334,8 @@ def main() -> None:
 
     t_start = time.time()
     cap_s = args.gpu_hours_cap * 3600.0
-    models = ["gemma-2-2b-it"] if args.smoke else args.models
-    n_per = 2 if args.smoke else N_PILOT_PER_BENCH
+    models = args.models if (args.models and args.models != ap_defaults_models) or not args.smoke else ["gemma-2-2b-it"]
+    n_per = args.n_per_bench if args.n_per_bench else (2 if args.smoke else N_PILOT_PER_BENCH)
     seeds_df = pd.read_csv(args.seeds_file) if args.seeds_file else select_seeds(n_per, K.RANDOM_SEED_V2)
     c, surface = _pentad_c()
     seeds_df = seeds_df.merge(surface[["prompt_text"]].rename(columns={"prompt_text": "surface_prompt"}),
@@ -362,7 +365,7 @@ def main() -> None:
 
             # basis on the FIT split
             t0 = time.time()
-            fp = fit_pairs(mname, 8 if args.smoke else N_FIT_PAIRS, K.RANDOM_SEED_V2)
+            fp = fit_pairs(mname, 8 if args.smoke else args.n_fit_pairs, K.RANDOM_SEED_V2)
             basis, binfo = estimate_basis(model, tok, args.fmt, fp, c, RANK)
             binfo["sec_fit"] = time.time() - t0
             mrec["basis"] = binfo

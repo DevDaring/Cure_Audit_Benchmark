@@ -49,7 +49,7 @@ OUT = K.RESULTS / "v2"
 def per_model_dirs() -> dict[str, Path]:
     dirs = {}
     for d in sorted(K.RESULTS.glob("v2_*")):
-        if d.is_dir():
+        if d.is_dir() and not d.name.startswith("v2_smoke_"):
             dirs[d.name[3:]] = d
     return dirs
 

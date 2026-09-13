@@ -10,8 +10,12 @@
 #   P0 (CPU)    evidence repair, regenerated locally for the manifests (deterministic; the
 #               committed copy is restored afterwards so git stays clean)
 #   tests (CPU) the edit's functional tests, must print ALL PASS
+#   SMOKE       every GPU stage below on the REAL model with 2-3 seeds and tiny probes, into
+#               results/v2_smoke_${EXT_MODEL}; any failure stops here with a FATAL status so
+#               the code can be fixed before the paid run starts (merge_v2.py ignores smoke dirs)
 #   P1  (GPU)   24-seed protocol pilot for this model
-#   P2  (GPU)   dev phase with energy matching and the rank ladder, then the test phase
+#   P2  (GPU)   dev phase (energy matching, rank ladder, frozen + sequential LEACE, capability
+#               probes), then the test phase
 #   P3  (GPU)   magnitude, depth and massive-activation accounts, dev then test
 #   done        DONE marker pushed; container kept alive for inspection until destroyed
 #
@@ -101,7 +105,7 @@ _push_status_locked() {
 _push_results_locked() {
   # every non-markdown file under this VM's own output directory (incremental parquet rows
   # included, so a stage interrupted by a credit stop keeps its finished items)
-  find "$V2" -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git -C "$REPO" add -f >/dev/null 2>&1
+  find "$CURE/results/$EXT_V2_DIR" -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git -C "$REPO" add -f >/dev/null 2>&1
   git -C "$REPO" add -f "$STATUS_REL" >/dev/null 2>&1
   git_sync_push "ext-results[$MODEL]: $1"
 }
@@ -175,12 +179,10 @@ hf = C.model_cfg(sys.argv[1])["hf_id"]; print("downloading", hf, flush=True)
 snapshot_download(hf, token=C.HUGGINGFACE_TOKEN)
 print("present")
 PY
-push_status "setup complete; GPU stages starting"
-checkpoint_loop &
-CKPT_PID=$!
+push_status "setup complete"
 
 # ---------------------------------------------------------------- stage runner (retry x3, resume-aware)
-run_stage() {  # $1 label, $2 log name, rest = command
+run_stage() {  # $1 label, $2 log name, rest = command; non-zero after 3 failed attempts
   local label=$1 logn=$2; shift 2
   local attempt=0
   while true; do
@@ -193,39 +195,74 @@ run_stage() {  # $1 label, $2 log name, rest = command
   done
 }
 
-EXTEND=""; [ "${EXT_EXTEND_RANKS:-1}" = "1" ] && EXTEND="--extend-ranks"
-CAP=${EXT_CAP_POLICY:-all}
+# run_sequence smoke|full : P1, P2 dev, P2 test, P3 x {magnitude, depth, massive} x {dev, test}
+run_sequence() {
+  local MODE=$1 P1F P2F P3F EXTEND DEVCAP TESTCAP ACC PH
+  if [ "$MODE" = "smoke" ]; then
+    export EXT_V2_DIR="v2_smoke_${MODEL}"
+    P1F="--n-per-bench 1 --n-fit-pairs 8 --gpu-hours-cap 1"
+    P2F="--n-dev 2 --n-test 2 --n-fit-pairs 8 --match-energy --match-energy-prompts 2 --max-new-tokens 8 --n-mmlu 4 --n-wiki-tokens 1024 --capability-policy all --extend-ranks --leace-sequential"
+    P3F="--n-seeds 2 --n-fit-pairs 8 --n-random-draws 1 --n-massive 2 --gpu-hours-cap 1"
+    DEVCAP=1; TESTCAP=1
+  else
+    export EXT_V2_DIR="v2_${MODEL}"
+    P1F="--gpu-hours-cap ${EXT_P1_HOURS:-6}"
+    EXTEND=""; [ "${EXT_EXTEND_RANKS:-1}" = "1" ] && EXTEND="--extend-ranks"
+    P2F="--match-energy $EXTEND --leace-sequential --capability-policy ${EXT_CAP_POLICY:-all}"
+    P3F="--gpu-hours-cap ${EXT_P3_HOURS:-10}"
+    DEVCAP="${EXT_P2_DEV_HOURS:-24}"; TESTCAP="${EXT_P2_TEST_HOURS:-24}"
+  fi
+  mkdir -p "$CURE/results/$EXT_V2_DIR"
+  local TAG="[$MODE]"
 
-if [ "${EXT_SKIP_P1:-0}" != "1" ]; then
-  push_status "P1 pilot starting (cap ${EXT_P1_HOURS:-6}h)"
-  run_stage "P1" ext_p1 python3 run_all.py --stage p1 --models "$MODEL" --gpu-hours-cap "${EXT_P1_HOURS:-6}"
-  push_results "P1 pilot"
-fi
-
-if [ "${EXT_SKIP_P2:-0}" != "1" ]; then
-  push_status "P2 dev starting (cap ${EXT_P2_DEV_HOURS:-24}h, ${EXTEND:-no rank ladder}, capability=$CAP)"
-  run_stage "P2-dev" ext_p2_dev python3 run_all.py --stage p2 --phase dev --models "$MODEL" \
-      --match-energy $EXTEND --capability-policy "$CAP" --gpu-hours-cap "${EXT_P2_DEV_HOURS:-24}"
-  push_results "P2 dev"
-  push_status "P2 test starting (cap ${EXT_P2_TEST_HOURS:-24}h)"
-  run_stage "P2-test" ext_p2_test python3 run_all.py --stage p2 --phase test --models "$MODEL" \
-      --match-energy $EXTEND --capability-policy "$CAP" --gpu-hours-cap "${EXT_P2_TEST_HOURS:-24}"
-  push_results "P2 test"
-fi
-
-if [ "${EXT_SKIP_P3:-0}" != "1" ]; then
-  for ACC in magnitude depth massive; do
-    for PH in dev test; do
-      push_status "P3 $ACC $PH starting (cap ${EXT_P3_HOURS:-10}h)"
-      run_stage "P3-$ACC-$PH" "ext_p3_${ACC}_${PH}" python3 run_all.py --stage p3 --account "$ACC" --phase "$PH" \
-          --models "$MODEL" --gpu-hours-cap "${EXT_P3_HOURS:-10}"
-      push_results "P3 $ACC $PH"
+  if [ "${EXT_SKIP_P1:-0}" != "1" ]; then
+    push_status "$TAG P1 pilot starting"
+    run_stage "$TAG P1" "ext_${MODE}_p1" python3 run_all.py --stage p1 --models "$MODEL" -- $P1F || return 1
+    push_results "$TAG P1 pilot"
+  fi
+  if [ "${EXT_SKIP_P2:-0}" != "1" ]; then
+    push_status "$TAG P2 dev starting"
+    run_stage "$TAG P2-dev" "ext_${MODE}_p2_dev" python3 run_all.py --stage p2 --phase dev --models "$MODEL" \
+        --gpu-hours-cap "$DEVCAP" -- $P2F || return 1
+    push_results "$TAG P2 dev"
+    push_status "$TAG P2 test starting"
+    run_stage "$TAG P2-test" "ext_${MODE}_p2_test" python3 run_all.py --stage p2 --phase test --models "$MODEL" \
+        --gpu-hours-cap "$TESTCAP" -- $P2F || return 1
+    push_results "$TAG P2 test"
+  fi
+  if [ "${EXT_SKIP_P3:-0}" != "1" ]; then
+    for ACC in magnitude depth massive; do
+      for PH in dev test; do
+        push_status "$TAG P3 $ACC $PH starting"
+        run_stage "$TAG P3-$ACC-$PH" "ext_${MODE}_p3_${ACC}_${PH}" python3 run_all.py --stage p3 --account "$ACC" \
+            --phase "$PH" --models "$MODEL" -- $P3F || return 1
+        push_results "$TAG P3 $ACC $PH"
+      done
     done
-  done
+  fi
+  return 0
+}
+
+# ---------------------------------------------------------------- SMOKE first (real model, tiny sample)
+push_status "SMOKE sequence starting (2-3 seeds through every stage)"
+if run_sequence smoke; then
+  push_status "SMOKE PASSED; full run starting"
+else
+  push_status "FATAL: SMOKE FAILED (see the EXT_STATUS history and logs/ext_smoke_*.log on the VM)"
+  echo "[ext] smoke failed; container kept alive for inspection"; sleep infinity
 fi
 
-kill "$CKPT_PID" >/dev/null 2>&1 || true
-date -u > "$V2/DONE_${MODEL}.txt"
-push_results "ALL STAGES DONE"
-push_status "ALL COMPLETE for $MODEL"
+# ---------------------------------------------------------------- FULL run
+checkpoint_loop &
+CKPT_PID=$!
+if run_sequence full; then
+  kill "$CKPT_PID" >/dev/null 2>&1 || true
+  date -u > "$CURE/results/$EXT_V2_DIR/DONE_${MODEL}.txt"
+  push_results "ALL STAGES DONE"
+  push_status "ALL COMPLETE for $MODEL"
+else
+  kill "$CKPT_PID" >/dev/null 2>&1 || true
+  push_results "partial (a full-run stage gave up)"
+  push_status "FATAL: a full-run stage gave up after 3 attempts; outputs so far are pushed"
+fi
 echo "[ext] done; container kept alive"; sleep infinity
