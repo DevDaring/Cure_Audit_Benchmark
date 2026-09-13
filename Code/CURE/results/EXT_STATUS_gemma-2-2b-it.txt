@@ -1,1 +1,1 @@
-container started (NVIDIA L40S, 46068 MiB) @ Sun Sep 13 03:42:13 UTC 2026
+FATAL: P0 failed rc=1 @ Sun Sep 13 03:43:26 UTC 2026
