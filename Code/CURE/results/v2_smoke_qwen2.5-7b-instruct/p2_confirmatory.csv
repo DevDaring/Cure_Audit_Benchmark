@@ -1,0 +1,5 @@
+model_name,phase,id,comparison,statistic,label,point,lo,hi,p_boot,n_seeds,p_holm,reject_0.05_holm
+qwen2.5-7b-instruct,dev,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,"exploratory (dev; same four comparisons, not confirmatory)",0.0390625,-0.015625,0.09375,0.474,2,1.0,False
+qwen2.5-7b-instruct,dev,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),"exploratory (dev; same four comparisons, not confirmatory)",0.0,0.0,0.0,1.0,2,1.0,False
+qwen2.5-7b-instruct,dev,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.008473078409830803,-0.014303843180338394,0.03125,0.474,2,1.0,False
+qwen2.5-7b-instruct,dev,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.0,0.0,0.0,1.0,2,1.0,False
