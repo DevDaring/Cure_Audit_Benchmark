@@ -207,7 +207,11 @@ def api_destroy(iid: int) -> tuple[int, str]:
 
 RESTART_CMD = r'''
 S=$(printf '%s%s' 'boot' 'strap_extended.sh')
-pkill -f "^bash .*${S}$" >/dev/null 2>&1; pkill -x sleep >/dev/null 2>&1; sleep 1
+pkill -f "^bash .*${S}$" >/dev/null 2>&1; pkill -x sleep >/dev/null 2>&1
+# the stage processes are children the bootstrap does not take down with it
+pkill -f "[r]un_all.py" >/dev/null 2>&1; pkill -f "[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.py" >/dev/null 2>&1
+sleep 3; pkill -9 -f "[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.py" >/dev/null 2>&1; sleep 1
+echo "stage processes left: $(pgrep -fc '[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.py')"
 while IFS= read -r -d '' kv; do case "$kv" in EXT_*=*|HUGGINGFACE_TOKEN=*|Github_Classic_Token=*|RANDOM_SEED=*) export "$kv";; esac; done < /proc/1/environ
 cd /workspace/Cure_Audit_Benchmark && git checkout -q -- Code/CURE/results/reanalysis_v2 2>/dev/null; git clean -fdq Code/CURE/results/reanalysis_v2 2>/dev/null
 git pull -q --rebase origin main >/dev/null 2>&1
