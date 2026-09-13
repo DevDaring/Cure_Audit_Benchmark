@@ -475,11 +475,30 @@ def write_report(per_item, proto_path) -> None:
                  energy_gen=("energy_gen", "mean"), sec=("sec_total", "mean")).reset_index()
     lines += ["## Per-condition means (n = pilot items)", "", summ.round(3).to_markdown(index=False), ""]
     # decision gate
+    # identity pairs (a == b): every convention that is a clean null gives |C| == 0 here. The
+    # frozen source state (legacy TransformerLens) injects the CLEAN run's projected activation
+    # into the SEQUENTIALLY edited run, so it is not null even on identity pairs: its |C|
+    # measures the edit's own through-depth effect, not the demographic contrast.
+    idp = d[d["pair_type"] == "identity"].groupby(["model_name", "condition"])["absC"].agg(["max", "mean", "size"]).reset_index()
+    if len(idp):
+        lines += ["## Identity pairs (a == b): |C| by condition", "",
+                  "A convention that is a clean null must give 0 here. span_frozen_r1 (legacy TransformerLens "
+                  "source state) injects the clean run's projected activation into the sequentially edited run, "
+                  "so a non-zero value there is the edit's own through-depth effect, not a demographic effect; "
+                  "the sequential convention used by every other edited condition is null by construction.", "",
+                  idp.round(4).to_markdown(index=False), ""]
     lines += ["## Decision gate (Next_Plan.md P1)", ""]
     for m in d["model_name"].unique():
         dm = d[(d["model_name"] == m) & (d["pair_type"] == "demographic")]
+        # the edited conditions run in ONE prompt format; the unedited reference is restricted to
+        # that format (unedited is additionally audited in the other format for the record)
+        fmts = dm[dm["condition"] != "unedited"]["fmt"].dropna().unique() if "fmt" in dm else []
+        ref_fmt = fmts[0] if len(fmts) else None
         def mean_of(cond, col):
-            x = dm[dm["condition"] == cond][col]
+            x = dm[dm["condition"] == cond]
+            if cond == "unedited" and ref_fmt is not None and "fmt" in x:
+                x = x[x["fmt"] == ref_fmt]
+            x = x[col]
             return float(x.mean()) if len(x) else float("nan")
         un_c, sp_c, lt_c = (mean_of(c_, "absC") for c_ in ("unedited", "span_seq_r1", "last_token_r1"))
         un_a, sp_a, lt_a = (mean_of(c_, "gen_correct_A") for c_ in ("unedited", "span_seq_r1", "last_token_r1"))
