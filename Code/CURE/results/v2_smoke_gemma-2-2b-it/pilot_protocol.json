@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:31:25Z",
+  "generated_utc": "2026-09-13T06:11:21Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -16,7 +16,11 @@
   "edit_definition": "h'_{l,t} = h_{l,t} - alpha * U_l^T U_l h_{l,t}        for t in S, for every layer l in L\n  U_l : k x d orthonormal rows (basis_by_layer[l]); alpha in [0, 1]; S = the edited token\n  positions of the sequence, chosen by a SITE policy:\n    \"span\"        every token of the demographic span (all tokens, not only the first) in\n                  the prompt; nothing is edited at decode steps, because the span has already\n                  been processed and its edited hidden states are what the cache holds.\n    \"last_token\"  the legacy ErasureContext behaviour: the last position of the prefill and\n                  every newly generated token. Kept ONLY as a labelled diagnostic condition.\n    \"all\"         every position of the prefill and every generated token (global policy,\n                  the only one that can touch an external capability prompt with no span).\n  Source-state convention for the commutator (audit):\n    \"sequential\"  the edit hooks are ACTIVE while the source prompt is run, so the cached\n                  activation at layer l already reflects edits at layers < l, and the same\n                  hooks are active during the patched and clean runs of the target prompt.\n                  This is one forward pass per condition on one backend, and it is what the\n                  behavioural generation also experiences. It is the canonical convention.\n    \"frozen\"      the source prompt is run WITHOUT hooks, each cached vector is projected\n                  numerically, then injected. Kept as the legacy-TL diagnostic.",
   "models": {
     "gemma-2-2b-it": {
-      "sec_load": 8.2897469997406,
+      "hf_id": "google/gemma-2-2b-it",
+      "attn_implementation": "flash_attention_2",
+      "model_class": "Gemma2ForCausalLM",
+      "dtype": "torch.bfloat16",
+      "sec_load": 71.90047478675842,
       "basis": {
         "n_fit_pairs_used": 8,
         "n_fit_pairs_skipped": 0,
@@ -24,7 +28,7 @@
         "estimator": "centred_svd",
         "rank": 1,
         "site": "span (all tokens)",
-        "sec_fit": 23.150162935256958
+        "sec_fit": 22.106813669204712
       },
       "identity_checks": {
         "tol": 0.001,
@@ -41,9 +45,9 @@
         "dtype": "torch.bfloat16",
         "pass_all": true
       },
-      "n_items_this_run": 35,
-      "sec_model_total": 84.90548253059387
+      "n_items_this_run": 0,
+      "sec_model_total": 110.00013494491577
     }
   },
-  "sec_wall_total": 85.20392727851868
+  "sec_wall_total": 112.60092186927795
 }
