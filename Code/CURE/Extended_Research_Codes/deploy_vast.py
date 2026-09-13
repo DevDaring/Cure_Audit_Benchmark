@@ -14,6 +14,7 @@ Usage
   python deploy_vast.py launch --models qwen2.5-7b-instruct llama-3.1-8b-instruct gemma-2-2b-it phi-4-mini-instruct
   python deploy_vast.py status                      # instance state + last GitHub status line per model
   python deploy_vast.py logs --model qwen2.5-7b-instruct
+  python deploy_vast.py restart [--model M]         # pull + relaunch the bootstrap (resume-aware)
   python deploy_vast.py destroy [--model M]         # all, or one
 
 Offer filter (Next_Plan.md Section 5: one suitable GPU per model, measured memory): a single
@@ -204,6 +205,41 @@ def api_destroy(iid: int) -> tuple[int, str]:
         return e.code, e.read().decode()[:160]
 
 
+RESTART_CMD = r'''
+S=$(printf '%s%s' 'boot' 'strap_extended.sh')
+pkill -f "^bash .*${S}$" >/dev/null 2>&1; pkill -x sleep >/dev/null 2>&1; sleep 1
+while IFS= read -r -d '' kv; do case "$kv" in EXT_*=*|HUGGINGFACE_TOKEN=*|Github_Classic_Token=*|RANDOM_SEED=*) export "$kv";; esac; done < /proc/1/environ
+cd /workspace/Cure_Audit_Benchmark && git checkout -q -- Code/CURE/results/reanalysis_v2 2>/dev/null; git clean -fdq Code/CURE/results/reanalysis_v2 2>/dev/null
+git pull -q --rebase origin main >/dev/null 2>&1
+nohup bash "Code/CURE/Extended_Research_Codes/${S}" > /workspace/ext_boot.log 2>&1 &
+sleep 5; echo "model=$EXT_MODEL running=$(pgrep -fc "^bash .*${S}$") head=$(git log --oneline -1 | cut -c1-50)"
+'''
+
+
+def ssh_run(iid: int, cmd: str, timeout: int = 120) -> str:
+    """Run a command on an instance over SSH with the account's registered RSA key."""
+    out = vast("ssh-url", str(iid), raw=False, check=False).strip()
+    m = re.search(r"ssh://root@([\w.\-]+):(\d+)", out)
+    if not m:
+        return "no ssh url"
+    r = subprocess.run(["ssh", "-i", str(Path.home() / ".ssh" / "id_rsa"), "-o", "StrictHostKeyChecking=no",
+                        "-o", "BatchMode=yes", "-o", "ConnectTimeout=25", "-p", m.group(2), f"root@{m.group(1)}", cmd],
+                       capture_output=True, text=True, timeout=timeout)
+    lines = [l for l in scrub(r.stdout).strip().splitlines() if l and "vast.ai" not in l and "Have fun" not in l]
+    return " | ".join(lines) if r.returncode == 0 else "ssh error: " + scrub(r.stderr)[-160:]
+
+
+def cmd_restart(args):
+    """Kill the bootstrap (and its idle sleep), pull the latest code, and start it again with the
+    container's injected environment. The bootstrap is resume-aware, so finished stages are
+    not repeated. The script name is assembled at runtime so pkill never matches this shell."""
+    st = load_state()
+    for model in ([args.model] if args.model else list(st)):
+        iid = st.get(model, {}).get("instance_id")
+        if iid:
+            print("%-24s %s" % (model, ssh_run(int(iid), RESTART_CMD)))
+
+
 def cmd_destroy(args):
     st = load_state()
     targets = [args.model] if args.model else list(st)
@@ -231,9 +267,10 @@ def main():
     l.add_argument("--cap-policy", default="all")
     g = sub.add_parser("logs"); g.add_argument("--model", required=True); g.add_argument("--tail", default="200")
     d = sub.add_parser("destroy"); d.add_argument("--model", default=None)
+    rs = sub.add_parser("restart"); rs.add_argument("--model", default=None)
     args = ap.parse_args()
     {"check": cmd_check, "offers": cmd_offers, "launch": cmd_launch, "status": cmd_status,
-     "logs": cmd_logs, "destroy": cmd_destroy}[args.cmd](args)
+     "logs": cmd_logs, "destroy": cmd_destroy, "restart": cmd_restart}[args.cmd](args)
 
 
 if __name__ == "__main__":
