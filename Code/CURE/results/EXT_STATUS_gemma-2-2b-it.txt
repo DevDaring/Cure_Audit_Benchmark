@@ -1,1 +1,1 @@
-[smoke] P3 massive test starting @ Sun Sep 13 04:55:18 UTC 2026
+SMOKE PASSED; full run starting @ Sun Sep 13 04:55:38 UTC 2026
