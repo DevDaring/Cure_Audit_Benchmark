@@ -225,7 +225,7 @@ def parse_answer(text: str, prompt: str) -> tuple[int | None, str]:
         cand = text.strip().splitlines()[0].strip() if text.strip() else ""
     if not cand:
         return None, "empty_output"
-    cl = cand.lower().strip().strip(".")
+    cl = cand.lower().strip().strip(".").strip().strip('"').strip("'").strip()   # a bare quoted letter: "B"
     for i, (letter, otext) in enumerate(opts):
         if cl == otext.lower().strip() or cl == f"({letter.lower()})" or cl == letter.lower() \
            or cl.startswith(f"({letter.lower()})"):

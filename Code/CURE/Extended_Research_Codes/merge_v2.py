@@ -25,7 +25,8 @@ After merging, the summaries and reports are regenerated from the merged rows:
   p3_explanation.py --account <a> --report-only for every account that has rows.
 
 Usage
-  python merge_v2.py                  # results/v2_* -> results/v2, then rebuild reports
+  python merge_v2.py                  # results/v2_* -> results/v2, re-parse generations, rebuild reports
+  python merge_v2.py --judge          # ... plus the DeepSeek judge on the residual unmapped generations
   python merge_v2.py --no-reports
 """
 
@@ -154,6 +155,9 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-reports", action="store_true")
     ap.add_argument("--no-reparse", action="store_true", help="skip re-deriving the generation readout from gen_raw")
+    ap.add_argument("--judge", action="store_true",
+                    help="after merging, map the generations the deterministic parser leaves UNMAPPED with the "
+                         "DeepSeek judge (judge_unmapped.py); judged rows are labelled gen_parse_X = 'judge'")
     args = ap.parse_args()
     dirs = per_model_dirs()
     if not dirs:
@@ -167,6 +171,10 @@ def main() -> None:
     for w in man["warnings"]:
         log.warning(w)
     log.info("%d files merged into %s", len(man["files"]), K.rel(OUT))
+    if args.judge:
+        import judge_unmapped as J
+        for rec in J.judge_dir(OUT):
+            log.info("judge: %s", rec)
     if not args.no_reports:
         rebuild_reports()
 

@@ -11,3 +11,4 @@ __pycache__/
 .deploy_state.json
 .vast_ext_state.json
 .onstart_*.sh
+judge_cache.json
