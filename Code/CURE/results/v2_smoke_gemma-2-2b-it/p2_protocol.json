@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:36:32Z",
+  "generated_utc": "2026-09-13T04:40:55Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "gemma-2-2b-it": {
-      "sec_load": 7.392643690109253,
+      "sec_load": 7.54365086555481,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "google/gemma-2-2b-it",
@@ -246,13 +246,39 @@
           "random_ortho_3_r2_a1",
           "random_ortho_3_r4_a1",
           "neutral_contrast_r0_a0"
+        ],
+        "test": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "uncentred_svd_r1_a0.95_matched",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "leace_sequential_r1_a0.95_matched",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r0_a0"
         ]
       },
       "n_items_this_run": {
-        "dev": 120
+        "dev": 120,
+        "test": 110
       },
-      "sec_model_total": 253.5907757282257
+      "sec_model_total": 124.69252228736877
     }
   },
-  "sec_wall_total": 253.91998648643494
+  "sec_wall_total": 125.03574585914612
 }
