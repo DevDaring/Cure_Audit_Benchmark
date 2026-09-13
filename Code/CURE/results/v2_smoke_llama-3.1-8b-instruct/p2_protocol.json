@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T08:09:07Z",
+  "generated_utc": "2026-09-13T13:05:03Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "llama-3.1-8b-instruct": {
-      "sec_load": 11.822120428085327,
+      "sec_load": 11.963454008102417,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
@@ -293,8 +293,8 @@
         "dev": 0,
         "test": 0
       },
-      "sec_model_total": 15.24452519416809
+      "sec_model_total": 15.361328125
     }
   },
-  "sec_wall_total": 15.564497232437134
+  "sec_wall_total": 15.611870765686035
 }
