@@ -45,6 +45,9 @@ export HF_HOME=${HF_HOME:-"$WORK/hf"}
 export DEBIAN_FRONTEND=noninteractive
 export PYTHONUNBUFFERED=1
 export TOKENIZERS_PARALLELISM=false
+# an oversubscribed BLAS pool made numpy SVDs pathologically slow on these VMs (850% CPU, GPU
+# idle); cap the CPU-side linear-algebra threads
+export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4 NUMEXPR_NUM_THREADS=4
 PIP="pip3 install --break-system-packages --no-cache-dir"
 
 MODEL=${EXT_MODEL:?EXT_MODEL is required}

@@ -401,18 +401,23 @@ def fit_bases(model, tok, args, mname: str, c: pd.DataFrame, budget) -> BasisSto
     t0 = time.time()
     fp = P1.fit_pairs(mname, args.n_fit_pairs, args.seed)
     diffs, acts, labels, info = collect_fit_activations(model, tok, args.fmt, fp, c)
+    log.info("fit_bases %s: activations collected for %d pairs in %.0fs", mname, len(fp), time.time() - t0)
     info.update({"sec_collect": time.time() - t0, "n_fit_pairs_neutral_type": int(sum(
         is_neutral_token(a) != is_neutral_token(b) for a, b in
         ((_swap(c, p["seed_id"], p["subvariant_A"]), _swap(c, p["seed_id"], p["subvariant_B"])) for p in fp)))})
     layers = sorted(diffs); d = int(next(iter(acts.values())).shape[1])
+    t1 = time.time()
     store.add_proj("cure_centred_svd", I.basis_centred_svd(diffs, store.max_rank), {**info, "estimator": "centred_svd"})
     store.add_proj("uncentred_svd", I.basis_uncentred_svd(diffs, store.max_rank), {**info, "estimator": "uncentred_svd"})
     store.add_proj("mean_difference", I.basis_mean_difference(diffs), {**info, "estimator": "mean_difference", "rank": 1})
     for k, fam in enumerate(RANDOM_FAMILIES, start=1):
         store.add_proj(fam, I.basis_random(d, layers, store.max_rank, args.seed + k),
                        {"estimator": "random_orthonormal", "seed": args.seed + k, "layers": len(layers), "d": d})
-    _fit_neutral(model, tok, args, mname, c, store)
-    _fit_leace(model, tok, args, fp, c, acts, labels, store, budget)
+    log.info("fit_bases %s: SVD / mean-difference / random bases in %.0fs", mname, time.time() - t1)
+    t1 = time.time(); _fit_neutral(model, tok, args, mname, c, store)
+    log.info("fit_bases %s: neutral basis in %.0fs", mname, time.time() - t1)
+    t1 = time.time(); _fit_leace(model, tok, args, fp, c, acts, labels, store, budget)
+    log.info("fit_bases %s: LEACE (frozen + optional sequential) in %.0fs", mname, time.time() - t1)
     del acts, diffs
     store.save()
     return store

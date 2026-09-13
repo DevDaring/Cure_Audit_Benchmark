@@ -14,7 +14,8 @@ numpy>=1.26
 scipy>=1.11
 scikit-learn>=1.5
 datasets>=2.19          # P2 external utility: cais/mmlu subset, wikitext-2-raw-v1
-concept-erasure>=0.2.4  # P2 faithful LEACE (EleutherAI); pinned version recorded at runtime
+concept-erasure>=0.2.4
+einops>=0.7            # transformers' flash_attention_2 path imports it; without it FA2 silently falls back to SDPA  # P2 faithful LEACE (EleutherAI); pinned version recorded at runtime
 tabulate>=0.9           # pandas .to_markdown in reports
 sentencepiece
 protobuf

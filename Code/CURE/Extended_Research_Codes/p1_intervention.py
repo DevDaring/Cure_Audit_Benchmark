@@ -495,27 +495,39 @@ def identity_checks(model, tok, texts: list[str], basis_by_layer: dict, span_pos
 # basis estimators (kept minimal here; P2 adds LEACE, random and neutral controls)
 # ---------------------------------------------------------------------------
 
+def _right_singular_rows(X: np.ndarray, rank: int) -> np.ndarray:
+    """Leading `rank` right singular vectors of X (n x d) as rows. On a CUDA machine the SVD
+    runs on the GPU: numpy's LAPACK path with an oversubscribed BLAS thread pool took tens of
+    minutes for 28 layers of 656 x 3584 on the rented VMs while the GPU sat idle."""
+    import torch
+    if torch.cuda.is_available():
+        with torch.no_grad():
+            Xt = torch.as_tensor(X, dtype=torch.float32, device="cuda")
+            _, _, vh = torch.linalg.svd(Xt, full_matrices=False)
+            return vh[:min(rank, vh.shape[0])].float().cpu().numpy()
+    _, _, vt = np.linalg.svd(X.astype(np.float64), full_matrices=False)
+    return vt[:min(rank, vt.shape[0])].astype(np.float32)
+
+
 def basis_centred_svd(diffs_by_layer: dict[int, list[np.ndarray]], rank: int) -> dict:
     """The shipped CURE estimator: leading right singular vectors of CENTRED differences."""
     out = {}
     for l, ds in diffs_by_layer.items():
         if len(ds) < 2:
             continue
-        X = np.stack(ds, 0).astype(np.float64)
+        X = np.stack(ds, 0).astype(np.float32)
         X = X - X.mean(0, keepdims=True)
-        _, _, vt = np.linalg.svd(X, full_matrices=False)
-        out[l] = vt[:min(rank, vt.shape[0])].astype(np.float32)
+        out[l] = _right_singular_rows(X, rank)
     return out
 
 
 def basis_uncentred_svd(diffs_by_layer: dict[int, list[np.ndarray]], rank: int) -> dict:
+    """Leading right singular vectors of the UNCENTRED differences (keeps the mean contrast)."""
     out = {}
     for l, ds in diffs_by_layer.items():
         if len(ds) < 2:
             continue
-        X = np.stack(ds, 0).astype(np.float64)
-        _, _, vt = np.linalg.svd(X, full_matrices=False)
-        out[l] = vt[:min(rank, vt.shape[0])].astype(np.float32)
+        out[l] = _right_singular_rows(np.stack(ds, 0).astype(np.float32), rank)
     return out
 
 
