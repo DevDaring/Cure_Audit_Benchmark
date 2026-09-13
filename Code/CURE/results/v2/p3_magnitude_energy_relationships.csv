@@ -35,3 +35,15 @@ qwen2.5-7b-instruct,dev,random_only,energy_total_A,absC_change,-0.02917207563836
 qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,p_gold_loss_A,0.030422812498792,-0.2547372359015814,0.271002579206647,58,60
 qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,acc_loss_A,0.0855248306730467,-0.1435307175811677,0.2969839849211266,58,60
 qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,absC_change,-0.2152922621304528,-0.4295791553379003,0.0316613165824228,60,60
+qwen2.5-7b-instruct,test,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.1178686098619674,-0.1864332687845851,-0.0524273287831147,1413,160
+qwen2.5-7b-instruct,test,all_edited_conditions,energy_total_A,acc_loss_A,-0.0731143691248695,-0.1436882205124381,-0.0011376952630757,1413,160
+qwen2.5-7b-instruct,test,all_edited_conditions,energy_total_A,absC_change,-0.0135930434696728,-0.0781646705627702,0.0484135735512274,1440,160
+qwen2.5-7b-instruct,test,targeted_only,energy_total_A,p_gold_loss_A,-0.1550549344813325,-0.2378203863166604,-0.0810354711787481,785,160
+qwen2.5-7b-instruct,test,targeted_only,energy_total_A,acc_loss_A,-0.1060846081521227,-0.1868939407444441,-0.020619485068153,785,160
+qwen2.5-7b-instruct,test,targeted_only,energy_total_A,absC_change,-0.046845666299811,-0.1317523533016652,0.034842036898832,800,160
+qwen2.5-7b-instruct,test,random_only,energy_total_A,p_gold_loss_A,-0.0668695806993019,-0.1345380537686938,0.0044924070299332,471,160
+qwen2.5-7b-instruct,test,random_only,energy_total_A,acc_loss_A,0.0122055313837148,-0.044268105967958,0.0766147842370213,471,160
+qwen2.5-7b-instruct,test,random_only,energy_total_A,absC_change,-0.0269554253599807,-0.1082433854843957,0.0568910714667799,480,160
+qwen2.5-7b-instruct,test,neutral_only,energy_total_A,p_gold_loss_A,0.0058825855157383,-0.1461652106223736,0.1544324498667356,157,160
+qwen2.5-7b-instruct,test,neutral_only,energy_total_A,acc_loss_A,0.1637346101312626,0.0705805554538868,0.2585347939463462,157,160
+qwen2.5-7b-instruct,test,neutral_only,energy_total_A,absC_change,0.0581325167108987,-0.1004064937841471,0.2098469221314779,160,160
