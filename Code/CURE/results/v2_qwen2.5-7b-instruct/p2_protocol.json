@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:47:14Z",
+  "generated_utc": "2026-09-13T13:08:40Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,11 +42,11 @@
   ],
   "models": {
     "qwen2.5-7b-instruct": {
-      "sec_load": 10.04637336730957,
+      "sec_load": 9.930020809173584,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "Qwen/Qwen2.5-7B-Instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Qwen2ForCausalLM",
       "dtype": "torch.bfloat16",
       "bases": {
@@ -261,10 +261,10 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 6050
+        "dev": 0
       },
-      "sec_model_total": 15814.119500160217
+      "sec_model_total": 12.960696697235107
     }
   },
-  "sec_wall_total": 15814.426634550095
+  "sec_wall_total": 13.193427562713623
 }

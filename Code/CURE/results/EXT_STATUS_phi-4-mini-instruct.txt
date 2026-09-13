@@ -1,1 +1,1 @@
-[smoke] P3 depth dev starting @ Sun Sep 13 13:08:22 UTC 2026
+[full] P2 test starting @ Sun Sep 13 13:11:08 UTC 2026

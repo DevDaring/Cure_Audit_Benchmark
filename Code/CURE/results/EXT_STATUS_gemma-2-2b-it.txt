@@ -1,1 +1,1 @@
-SMOKE PASSED; full run starting @ Sun Sep 13 13:08:42 UTC 2026
+[full] P2 test starting @ Sun Sep 13 13:10:56 UTC 2026
