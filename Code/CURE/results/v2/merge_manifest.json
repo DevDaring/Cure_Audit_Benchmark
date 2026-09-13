@@ -1,0 +1,9 @@
+{
+  "sources": {
+    "phi-4-mini-instruct": "D:\\PhD\\Audit_Benchmark\\Code\\CURE\\results\\v2_phi-4-mini-instruct"
+  },
+  "files": {
+    "environment_phi-4-mini-instruct.txt": "copied from phi-4-mini-instruct"
+  },
+  "warnings": []
+}
