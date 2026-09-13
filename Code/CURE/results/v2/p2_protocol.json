@@ -520,7 +520,7 @@
       "sec_model_total": 2504.2943036556244
     },
     "phi-4-mini-instruct": {
-      "sec_load": 10.11562967300415,
+      "sec_load": 10.117004156112671,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "microsoft/Phi-4-mini-instruct",
@@ -744,12 +744,38 @@
           "neutral_contrast_r1_a1",
           "neutral_contrast_r2_a1",
           "neutral_contrast_r4_a1"
+        ],
+        "test": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r1_a1",
+          "neutral_contrast_r2_a1",
+          "neutral_contrast_r4_a1"
         ]
       },
       "n_items_this_run": {
-        "dev": 0
+        "dev": 0,
+        "test": 7110
       },
-      "sec_model_total": 14.15301251411438
+      "sec_model_total": 24307.916012763977
     },
     "qwen2.5-7b-instruct": {
       "sec_load": 10.203608512878418,
