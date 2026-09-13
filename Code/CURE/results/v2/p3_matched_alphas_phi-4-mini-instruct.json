@@ -1,0 +1,160 @@
+{
+  "target_energy": 0.041325008236564396,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.00044373470365515177,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_2": {
+      "alpha": 1.0,
+      "energy": 0.0002467208977841354,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_3": {
+      "alpha": 1.0,
+      "energy": 0.00025420356439154716,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "neutral": {
+      "alpha": 1.0,
+      "energy": 0.0034285498745809163,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.10573051422467868,
+      "energy": 0.0006868917334867132,
+      "feasible": true,
+      "trace": [
+        [
+          0.08707218818502949,
+          0.0004998074657907955
+        ],
+        [
+          0.10573051422467868,
+          0.0006868917334867132
+        ],
+        [
+          0.12438884026432785,
+          0.0008970414999418428
+        ],
+        [
+          0.143047166303977,
+          0.0011308997874763063
+        ],
+        [
+          0.16170549234362622,
+          0.0013891936979846466
+        ]
+      ],
+      "target": 0.0006394046439796633,
+      "energy_at_alpha1": 0.041325008236564396,
+      "control_energy_at_alpha1": 0.0006394046439796633
+    },
+    "random_2": {
+      "alpha": 0.060341174910992404,
+      "energy": 0.00027231871042880933,
+      "feasible": true,
+      "trace": [
+        [
+          0.060341174910992404,
+          0.00027231871042880933
+        ],
+        [
+          0.07327142667763364,
+          0.0003763371313218678
+        ],
+        [
+          0.08620167844427487,
+          0.0004917544618837375
+        ],
+        [
+          0.0991319302109161,
+          0.0006174322679547431
+        ],
+        [
+          0.11206218197755734,
+          0.0007556936559139826
+        ]
+      ],
+      "target": 0.00030707495227884596,
+      "energy_at_alpha1": 0.041325008236564396,
+      "control_energy_at_alpha1": 0.00030707495227884596
+    },
+    "random_3": {
+      "alpha": 0.0558875130393964,
+      "energy": 0.00024001593114254225,
+      "feasible": true,
+      "trace": [
+        [
+          0.0558875130393964,
+          0.00024001593114254225
+        ],
+        [
+          0.06786340869069563,
+          0.00033151867490848044
+        ],
+        [
+          0.07983930434199486,
+          0.0004336870303982672
+        ],
+        [
+          0.09181519999329409,
+          0.000545434232428504
+        ],
+        [
+          0.10379109564459332,
+          0.0006675297430923681
+        ]
+      ],
+      "target": 0.0002634185999511023,
+      "energy_at_alpha1": 0.041325008236564396,
+      "control_energy_at_alpha1": 0.0002634185999511023
+    },
+    "neutral": {
+      "alpha": 0.3416524773673709,
+      "energy": 0.005074268027974263,
+      "feasible": true,
+      "trace": [
+        [
+          0.23915673415715963,
+          0.0027379694653365677
+        ],
+        [
+          0.2904046057622653,
+          0.003852025383630707
+        ],
+        [
+          0.3416524773673709,
+          0.005074268027974263
+        ],
+        [
+          0.39290034897247655,
+          0.006411799111251319
+        ],
+        [
+          0.4441482205775822,
+          0.007850562393406108
+        ]
+      ],
+      "target": 0.004823720073336035,
+      "energy_at_alpha1": 0.041325008236564396,
+      "control_energy_at_alpha1": 0.004823720073336035
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 60,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_phi-4-mini-instruct/p2_basis_phi-4-mini-instruct_chat_random_ortho_1.npz",
+    "random_2": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_phi-4-mini-instruct/p2_basis_phi-4-mini-instruct_chat_random_ortho_2.npz",
+    "random_3": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_phi-4-mini-instruct/p2_basis_phi-4-mini-instruct_chat_random_ortho_3.npz",
+    "neutral": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_phi-4-mini-instruct/p2_basis_phi-4-mini-instruct_chat_neutral_contrast.npz"
+  }
+}
