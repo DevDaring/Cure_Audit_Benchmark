@@ -1,1 +1,1 @@
-[smoke] P3 massive test starting @ Sun Sep 13 13:07:30 UTC 2026
+[full] P1 pilot starting @ Sun Sep 13 13:07:47 UTC 2026
