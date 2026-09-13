@@ -1,0 +1,49 @@
+{
+  "target_energy": 0.020627711207885157,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.0004197830721066713,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.21067500373384315,
+      "energy": 0.0006524776162052417,
+      "feasible": true,
+      "trace": [
+        [
+          0.12823695879451322,
+          0.0002860726166713172
+        ],
+        [
+          0.15571630710762321,
+          0.000388083437868233
+        ],
+        [
+          0.18319565542073318,
+          0.0005110434124910043
+        ],
+        [
+          0.21067500373384315,
+          0.0006524776162052417
+        ],
+        [
+          0.23815435204695315,
+          0.0008078727471435469
+        ]
+      ],
+      "target": 0.0006922793582977212,
+      "energy_at_alpha1": 0.020627711207885157,
+      "control_energy_at_alpha1": 0.0006922793582977212
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 3,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_smoke_phi-4-mini-instruct/p2_basis_phi-4-mini-instruct_chat_random_ortho_1.npz"
+  }
+}

@@ -1,0 +1,10 @@
+model_name,phase,scope,x,y,spearman,lo,hi,n,n_seeds
+phi-4-mini-instruct,dev,all_edited_conditions,energy_total_A,p_gold_loss_A,0.11666666666666665,-0.5,1.0,9,3
+phi-4-mini-instruct,dev,all_edited_conditions,energy_total_A,acc_loss_A,,,,9,3
+phi-4-mini-instruct,dev,all_edited_conditions,energy_total_A,absC_change,0.029880715233359844,-0.8660254037844386,0.8660254037844386,9,3
+phi-4-mini-instruct,dev,targeted_only,energy_total_A,p_gold_loss_A,0.2571428571428572,-1.0,1.0,6,3
+phi-4-mini-instruct,dev,targeted_only,energy_total_A,acc_loss_A,,,,6,3
+phi-4-mini-instruct,dev,targeted_only,energy_total_A,absC_change,-0.16903085094570333,-1.0,1.0,6,3
+phi-4-mini-instruct,dev,random_only,energy_total_A,p_gold_loss_A,,,,3,3
+phi-4-mini-instruct,dev,random_only,energy_total_A,acc_loss_A,,,,3,3
+phi-4-mini-instruct,dev,random_only,energy_total_A,absC_change,,,,3,3
