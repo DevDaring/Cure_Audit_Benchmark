@@ -1,0 +1,270 @@
+{
+  "generated_utc": "2026-09-13T04:47:14Z",
+  "fmt": "chat",
+  "site": "span",
+  "source_state": "sequential",
+  "ranks": [
+    1,
+    2,
+    4
+  ],
+  "alpha_screen_dev": [
+    0.0,
+    0.25,
+    0.5,
+    1.0
+  ],
+  "capability_policy": "all",
+  "n_fit_pairs": 300,
+  "n_dev_seeds": 100,
+  "n_test_seeds": 160,
+  "max_new_tokens": 48,
+  "gpu_hours_cap": 24.0,
+  "edit_definition": "h'_{l,t} = h_{l,t} - alpha * U_l^T U_l h_{l,t}        for t in S, for every layer l in L\n  U_l : k x d orthonormal rows (basis_by_layer[l]); alpha in [0, 1]; S = the edited token\n  positions of the sequence, chosen by a SITE policy:\n    \"span\"        every token of the demographic span (all tokens, not only the first) in\n                  the prompt; nothing is edited at decode steps, because the span has already\n                  been processed and its edited hidden states are what the cache holds.\n    \"last_token\"  the legacy ErasureContext behaviour: the last position of the prefill and\n                  every newly generated token. Kept ONLY as a labelled diagnostic condition.\n    \"all\"         every position of the prefill and every generated token (global policy,\n                  the only one that can touch an external capability prompt with no span).\n  Source-state convention for the commutator (audit):\n    \"sequential\"  the edit hooks are ACTIVE while the source prompt is run, so the cached\n                  activation at layer l already reflects edits at layers < l, and the same\n                  hooks are active during the patched and clean runs of the target prompt.\n                  This is one forward pass per condition on one backend, and it is what the\n                  behavioural generation also experiences. It is the canonical convention.\n    \"frozen\"      the source prompt is run WITHOUT hooks, each cached vector is projected\n                  numerically, then injected. Kept as the legacy-TL diagnostic.",
+  "sentence_pref_protocol": "loglik_sum over full option strings; the QA recast is not the native CrowS-Pairs / StereoSet protocol",
+  "confirmatory": [
+    [
+      "C1",
+      "cure vs unedited on D (paired absolute |C| change), demographic pairs"
+    ],
+    [
+      "C2",
+      "cure vs unedited on generation accuracy (attempted denominator)"
+    ],
+    [
+      "C3",
+      "cure vs mean of three rank-matched random controls on D"
+    ],
+    [
+      "C4",
+      "cure vs mean of three rank-matched random controls on generation accuracy"
+    ]
+  ],
+  "models": {
+    "qwen2.5-7b-instruct": {
+      "sec_load": 10.04637336730957,
+      "torch": "2.5.1+cu124",
+      "transformers": "5.17.0",
+      "hf_id": "Qwen/Qwen2.5-7B-Instruct",
+      "attn_implementation": "sdpa",
+      "model_class": "Qwen2ForCausalLM",
+      "dtype": "torch.bfloat16",
+      "bases": {
+        "status": {
+          "cure_centred_svd": "ok",
+          "uncentred_svd": "ok",
+          "mean_difference": "ok",
+          "random_ortho_1": "ok",
+          "random_ortho_2": "ok",
+          "random_ortho_3": "ok",
+          "neutral_contrast": "ok",
+          "leace_faithful": "ok",
+          "leace_sequential": "ok"
+        },
+        "info": {
+          "cure_centred_svd": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 328,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 88.91084599494934,
+            "n_fit_pairs_neutral_type": 54,
+            "estimator": "centred_svd"
+          },
+          "uncentred_svd": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 328,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 88.91084599494934,
+            "n_fit_pairs_neutral_type": 54,
+            "estimator": "uncentred_svd"
+          },
+          "mean_difference": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 328,
+            "site": "span (all tokens, truncated to shorter span)",
+            "sec_collect": 88.91084599494934,
+            "n_fit_pairs_neutral_type": 54,
+            "estimator": "mean_difference",
+            "rank": 1
+          },
+          "random_ortho_1": {
+            "estimator": "random_orthonormal",
+            "seed": 20260913,
+            "layers": 28,
+            "d": 3584
+          },
+          "random_ortho_2": {
+            "estimator": "random_orthonormal",
+            "seed": 20260914,
+            "layers": 28,
+            "d": 3584
+          },
+          "random_ortho_3": {
+            "estimator": "random_orthonormal",
+            "seed": 20260915,
+            "layers": 28,
+            "d": 3584
+          },
+          "neutral_contrast": {
+            "n_fit_pairs_requested": 300,
+            "n_fit_pairs_used": 300,
+            "n_span_tokens": 300,
+            "site": "span (all tokens, truncated to shorter span)",
+            "estimator": "centred_svd on neutral pairs",
+            "sec_collect": 96.934978723526,
+            "benchmarks": {
+              "bbq": 300
+            },
+            "note": "token count is recorded (n_span_tokens); lexical-frequency matching to the demographic fit pairs is NOT performed, see report; neutral swaps exist only where the benchmark has a 'person'-style variant (BBQ in the current pentad)"
+          },
+          "leace_faithful": {
+            "protocol": "frozen (fitted on unedited activations)",
+            "n": 656,
+            "concept_erasure_version": "0.2.4",
+            "sec_fit": 5.034410238265991,
+            "actual_rank_by_layer": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1,
+              "10": 1,
+              "11": 1,
+              "12": 1,
+              "13": 1,
+              "14": 1,
+              "15": 1,
+              "16": 1,
+              "17": 1,
+              "18": 1,
+              "19": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "23": 1,
+              "24": 1,
+              "25": 1,
+              "26": 1,
+              "27": 1
+            },
+            "labels": "0 = side A, 1 = side B of the swap",
+            "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+          },
+          "leace_sequential": {
+            "protocol": "sequential",
+            "n_items": 600,
+            "n_layers_requested": 28,
+            "n_layers_fitted": 28,
+            "complete": true,
+            "n_forward_passes": 16800,
+            "sec": 2050.4035720825195,
+            "concept_erasure_version": "0.2.4",
+            "shrinkage": true,
+            "sec_fit": 2050.8124895095825,
+            "actual_rank_by_layer": {
+              "0": 1,
+              "1": 1,
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 1,
+              "9": 1,
+              "10": 1,
+              "11": 1,
+              "12": 1,
+              "13": 1,
+              "14": 1,
+              "15": 1,
+              "16": 1,
+              "17": 1,
+              "18": 1,
+              "19": 1,
+              "20": 1,
+              "21": 1,
+              "22": 1,
+              "23": 1,
+              "24": 1,
+              "25": 1,
+              "26": 1,
+              "27": 1
+            },
+            "labels": "0 = side A, 1 = side B of the swap",
+            "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+          }
+        },
+        "fit_id": {
+          "cure_centred_svd": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+          "uncentred_svd": "f164d9fb2152ef7445478e3c0fe71ac0e8bc3ebfb031d73f3a438aca51ae8a6c",
+          "mean_difference": "0842cf1344c3f3d4b3bdc72a032607fffcede8e8794392e6b05028c1f4586670",
+          "random_ortho_1": "ef63c0f93c9cb7c1354f4b5dbc8ca7983ebd628def760c38a6edaeba3bdf46fe",
+          "random_ortho_2": "257af5bac5677075316b7b3f11e224b146327ba4599944efd1cbe981e46d0c02",
+          "random_ortho_3": "d58d25fbfb8105580101262656a7b3814c4d28b976ba5bcb5aa53fc931614fc6",
+          "neutral_contrast": "9e348b2178e2c7488fe77fa06918ce89df4ba200c5a3711e30fe126e5a57dfa1",
+          "leace_faithful": "9ba037d7b8ab0895a74be6773fbf94102c7a31c09741a0b38add0c649a7f70f2",
+          "leace_sequential": "3af4cd027b8bdc80937e752e1c9f8dbd5097c830f63724e61b7c44cbf7e40f88"
+        },
+        "max_rank": 4
+      },
+      "identity_checks": {
+        "tol": 0.001,
+        "max_abs_logit_dev_alpha0": 0.0,
+        "pass_alpha0": true,
+        "max_abs_logit_dev_rank0": 0.0,
+        "pass_rank0": true,
+        "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
+        "pass_nonspan_untouched": true,
+        "max_abs_hidden_dev_span_first_edited_layer": 0.1015625,
+        "span_actually_edited": true,
+        "decode_step_edits_under_span_policy": 0,
+        "pass_no_decode_edit_under_span": true,
+        "dtype": "torch.bfloat16",
+        "pass_all": true
+      },
+      "conditions": {
+        "dev": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a0.25",
+          "cure_centred_svd_r1_a0.5",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r1_a1",
+          "neutral_contrast_r2_a1",
+          "neutral_contrast_r4_a1"
+        ]
+      },
+      "n_items_this_run": {
+        "dev": 6050
+      },
+      "sec_model_total": 15814.119500160217
+    }
+  },
+  "sec_wall_total": 15814.426634550095
+}
