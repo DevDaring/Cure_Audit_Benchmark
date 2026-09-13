@@ -291,7 +291,8 @@ cd /workspace/Cure_Audit_Benchmark || exit 3
 ( flock 9
   git checkout -q -- Code/CURE/results/reanalysis_v2 >/dev/null 2>&1 || true
   find Code/CURE/results/v2_* -type f ! -name '*.md' ! -name '*.log' -print0 2>/dev/null | xargs -0 -r git add -f >/dev/null 2>&1
-  git add -f Code/CURE/results/EXT_STATUS_*.txt >/dev/null 2>&1
+  git add -u -- Code/CURE/results >/dev/null 2>&1
+  git add -f "Code/CURE/results/EXT_STATUS_$EXT_MODEL.txt" >/dev/null 2>&1
   git commit -q -m "ext-results[$EXT_MODEL]: hourly check push" >/dev/null 2>&1 || true
   git pull --rebase -q origin main >/dev/null 2>&1 || git rebase --abort >/dev/null 2>&1
   git push -q origin main >/dev/null 2>&1 && echo PUSHED || echo PUSH_FAILED
