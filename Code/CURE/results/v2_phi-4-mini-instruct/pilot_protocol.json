@@ -1,0 +1,53 @@
+{
+  "generated_utc": "2026-09-13T04:35:41Z",
+  "fmt": "chat",
+  "rank": 1,
+  "conditions": [
+    "unedited",
+    "identity_alpha0",
+    "span_seq_r1",
+    "span_frozen_r1",
+    "last_token_r1"
+  ],
+  "n_seeds": 24,
+  "seeds_manually_checked": false,
+  "max_new_tokens": 48,
+  "gpu_hours_cap": 6.0,
+  "edit_definition": "h'_{l,t} = h_{l,t} - alpha * U_l^T U_l h_{l,t}        for t in S, for every layer l in L\n  U_l : k x d orthonormal rows (basis_by_layer[l]); alpha in [0, 1]; S = the edited token\n  positions of the sequence, chosen by a SITE policy:\n    \"span\"        every token of the demographic span (all tokens, not only the first) in\n                  the prompt; nothing is edited at decode steps, because the span has already\n                  been processed and its edited hidden states are what the cache holds.\n    \"last_token\"  the legacy ErasureContext behaviour: the last position of the prefill and\n                  every newly generated token. Kept ONLY as a labelled diagnostic condition.\n    \"all\"         every position of the prefill and every generated token (global policy,\n                  the only one that can touch an external capability prompt with no span).\n  Source-state convention for the commutator (audit):\n    \"sequential\"  the edit hooks are ACTIVE while the source prompt is run, so the cached\n                  activation at layer l already reflects edits at layers < l, and the same\n                  hooks are active during the patched and clean runs of the target prompt.\n                  This is one forward pass per condition on one backend, and it is what the\n                  behavioural generation also experiences. It is the canonical convention.\n    \"frozen\"      the source prompt is run WITHOUT hooks, each cached vector is projected\n                  numerically, then injected. Kept as the legacy-TL diagnostic.",
+  "models": {
+    "phi-4-mini-instruct": {
+      "hf_id": "microsoft/Phi-4-mini-instruct",
+      "attn_implementation": "sdpa",
+      "model_class": "Phi3ForCausalLM",
+      "dtype": "torch.bfloat16",
+      "sec_load": 10.755835056304932,
+      "basis": {
+        "n_fit_pairs_used": 200,
+        "n_fit_pairs_skipped": 0,
+        "n_diff_vectors": 220,
+        "estimator": "centred_svd",
+        "rank": 1,
+        "site": "span (all tokens)",
+        "sec_fit": 91.27126359939575
+      },
+      "identity_checks": {
+        "tol": 0.001,
+        "max_abs_logit_dev_alpha0": 0.0,
+        "pass_alpha0": true,
+        "max_abs_logit_dev_rank0": 0.0,
+        "pass_rank0": true,
+        "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
+        "pass_nonspan_untouched": true,
+        "max_abs_hidden_dev_span_first_edited_layer": 0.48046875,
+        "span_actually_edited": true,
+        "decode_step_edits_under_span_policy": 0,
+        "pass_no_decode_edit_under_span": true,
+        "dtype": "torch.bfloat16",
+        "pass_all": true
+      },
+      "n_items_this_run": 280,
+      "sec_model_total": 993.5732049942017
+    }
+  },
+  "sec_wall_total": 993.8319063186646
+}
