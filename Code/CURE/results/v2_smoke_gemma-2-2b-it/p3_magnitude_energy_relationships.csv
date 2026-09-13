@@ -8,3 +8,12 @@ gemma-2-2b-it,dev,targeted_only,energy_total_A,absC_change,-0.48571428571428577,
 gemma-2-2b-it,dev,random_only,energy_total_A,p_gold_loss_A,,,,3,3
 gemma-2-2b-it,dev,random_only,energy_total_A,acc_loss_A,,,,3,3
 gemma-2-2b-it,dev,random_only,energy_total_A,absC_change,,,,3,3
+gemma-2-2b-it,test,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.08571428571428573,-1.0,0.5000000000000001,6,2
+gemma-2-2b-it,test,all_edited_conditions,energy_total_A,acc_loss_A,,,,6,2
+gemma-2-2b-it,test,all_edited_conditions,energy_total_A,absC_change,0.2571428571428572,0.2571428571428572,1.0,6,2
+gemma-2-2b-it,test,targeted_only,energy_total_A,p_gold_loss_A,0.19999999999999998,-1.0,1.0,4,2
+gemma-2-2b-it,test,targeted_only,energy_total_A,acc_loss_A,,,,4,2
+gemma-2-2b-it,test,targeted_only,energy_total_A,absC_change,0.39999999999999997,0.39999999999999997,1.0,4,2
+gemma-2-2b-it,test,random_only,energy_total_A,p_gold_loss_A,,,,2,2
+gemma-2-2b-it,test,random_only,energy_total_A,acc_loss_A,,,,2,2
+gemma-2-2b-it,test,random_only,energy_total_A,absC_change,,,,2,2
