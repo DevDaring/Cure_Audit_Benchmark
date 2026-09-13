@@ -1,0 +1,49 @@
+{
+  "target_energy": 0.004270072230109828,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.0002626465263606204,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.17296697435283484,
+      "energy": 0.0002563411621726708,
+      "feasible": true,
+      "trace": [
+        [
+          0.17296697435283484,
+          0.0002563411621726708
+        ],
+        [
+          0.2100313259998709,
+          0.0003283128202528173
+        ],
+        [
+          0.24709567764690693,
+          0.0004088114820928697
+        ],
+        [
+          0.28416002929394296,
+          0.0004931071105728714
+        ],
+        [
+          0.321224380940979,
+          0.0005894246514890619
+        ]
+      ],
+      "target": 0.0002607146997046886,
+      "energy_at_alpha1": 0.004270072230109828,
+      "control_energy_at_alpha1": 0.0002607146997046886
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 3,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_smoke_llama-3.1-8b-instruct/p2_basis_llama-3.1-8b-instruct_chat_random_ortho_1.npz"
+  }
+}
