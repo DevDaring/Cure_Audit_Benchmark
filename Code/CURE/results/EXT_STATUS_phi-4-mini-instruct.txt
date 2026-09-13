@@ -1,1 +1,1 @@
-[smoke] P1 attempt 2 exited non-zero:                                                ^^^^^^^^^^^^^^^^^ AttributeError: 'list' object has no attribute 'keys' [exit 1 in 10s]  @ Sun Sep 13 04:19:13 UTC 2026
+container started (NVIDIA A100-SXM4-40GB, 40960 MiB) @ Sun Sep 13 04:20:04 UTC 2026
