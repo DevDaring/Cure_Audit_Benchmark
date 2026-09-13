@@ -62,8 +62,11 @@ echo "[ext] write Code/CURE/.env from injected secrets (gitignored, VM-local)"
 python3 - <<'PY'
 import os
 real = ["HUGGINGFACE_TOKEN", "Github_Classic_Token", "RANDOM_SEED"]
-dummy = ["AWS_ACCESS_KEY", "AWS_SECRET_KEY", "GEMINI_API_KEY_1", "DEEPSEEK_API_KEY_1",
-         "MISTRAL_API_KEY1", "OPENROUTER_API_KEY_1"]      # names the audit config expects; unused
+# every name Code/audit/config.py _require()s; none of them is used by the extended package,
+# but config_cure imports that config, so placeholders must exist
+dummy = ["AWS_ACCESS_KEY", "AWS_SECRET_KEY", "DEEPSEEK_API_KEY_1", "DEEPSEEK_API_KEY_2",
+         "GEMINI_API_KEY_1", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3", "GEMINI_API_KEY_4",
+         "MISTRAL_API_KEY1", "MISTRAL_API_KEY2", "OPENROUTER_API_KEY_1", "OPENROUTER_API_KEY_2"]
 with open("../.env", "w") as f:
     for k in real:
         v = os.environ.get(k, "")
