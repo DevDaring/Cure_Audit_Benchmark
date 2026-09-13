@@ -1,0 +1,160 @@
+{
+  "target_energy": 0.016116197807004993,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.0004683307065933858,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_2": {
+      "alpha": 1.0,
+      "energy": 0.00046413389516334507,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_3": {
+      "alpha": 1.0,
+      "energy": 0.00041634504702330326,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "neutral": {
+      "alpha": 1.0,
+      "energy": 0.006466533614953509,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.11595390090808685,
+      "energy": 0.0005949216293305813,
+      "feasible": true,
+      "trace": [
+        [
+          0.11595390090808685,
+          0.0005949216293305813
+        ],
+        [
+          0.1408011653883912,
+          0.0007596770983924647
+        ],
+        [
+          0.16564842986869552,
+          0.0009302476568990945
+        ],
+        [
+          0.19049569434899982,
+          0.001108502181728457
+        ],
+        [
+          0.21534295882930418,
+          0.0012986837719310754
+        ]
+      ],
+      "target": 0.0004422188354623013,
+      "energy_at_alpha1": 0.016116197807004993,
+      "control_energy_at_alpha1": 0.0004422188354623013
+    },
+    "random_2": {
+      "alpha": 0.12305948966817343,
+      "energy": 0.0006423508203989474,
+      "feasible": true,
+      "trace": [
+        [
+          0.12305948966817343,
+          0.0006423508203989474
+        ],
+        [
+          0.14942938031135347,
+          0.0008189171017039979
+        ],
+        [
+          0.1757992709545335,
+          0.0010029206925591303
+        ],
+        [
+          0.2021691615977135,
+          0.0011981984011486394
+        ],
+        [
+          0.22853905224089355,
+          0.0014046644204720445
+        ]
+      ],
+      "target": 0.0004980772764972142,
+      "energy_at_alpha1": 0.016116197807004993,
+      "control_energy_at_alpha1": 0.0004980772764972142
+    },
+    "random_3": {
+      "alpha": 0.09786473707477843,
+      "energy": 0.00047791994822970563,
+      "feasible": true,
+      "trace": [
+        [
+          0.09786473707477843,
+          0.00047791994822970563
+        ],
+        [
+          0.11883575216223094,
+          0.00061371590631418
+        ],
+        [
+          0.13980676724968347,
+          0.0007529556877840944
+        ],
+        [
+          0.16077778233713597,
+          0.000897467931264463
+        ],
+        [
+          0.18174879742458852,
+          0.001045280196598369
+        ]
+      ],
+      "target": 0.00031500610915479837,
+      "energy_at_alpha1": 0.016116197807004993,
+      "control_energy_at_alpha1": 0.00031500610915479837
+    },
+    "neutral": {
+      "alpha": 0.7403859572468737,
+      "energy": 0.009101920789961939,
+      "feasible": true,
+      "trace": [
+        [
+          0.5182701700728116,
+          0.004817553008870272
+        ],
+        [
+          0.6293280636598426,
+          0.006769401907164393
+        ],
+        [
+          0.7403859572468737,
+          0.009101920789961939
+        ],
+        [
+          0.8514438508339047,
+          0.011819131365676345
+        ],
+        [
+          0.9625017444209358,
+          0.01493191144053293
+        ]
+      ],
+      "target": 0.008834438161569834,
+      "energy_at_alpha1": 0.016116197807004993,
+      "control_energy_at_alpha1": 0.008834438161569834
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 60,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_gemma-2-2b-it/p2_basis_gemma-2-2b-it_chat_random_ortho_1.npz",
+    "random_2": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_gemma-2-2b-it/p2_basis_gemma-2-2b-it_chat_random_ortho_2.npz",
+    "random_3": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_gemma-2-2b-it/p2_basis_gemma-2-2b-it_chat_random_ortho_3.npz",
+    "neutral": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_gemma-2-2b-it/p2_basis_gemma-2-2b-it_chat_neutral_contrast.npz"
+  }
+}
