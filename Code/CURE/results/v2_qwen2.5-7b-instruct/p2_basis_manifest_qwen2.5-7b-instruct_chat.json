@@ -1,0 +1,181 @@
+{
+  "model": "qwen2.5-7b-instruct",
+  "fmt": "chat",
+  "max_rank": 4,
+  "status": {
+    "cure_centred_svd": "ok",
+    "uncentred_svd": "ok",
+    "mean_difference": "ok",
+    "random_ortho_1": "ok",
+    "random_ortho_2": "ok",
+    "random_ortho_3": "ok",
+    "neutral_contrast": "ok",
+    "leace_faithful": "ok",
+    "leace_sequential": "ok"
+  },
+  "info": {
+    "cure_centred_svd": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 328,
+      "site": "span (all tokens, truncated to shorter span)",
+      "sec_collect": 88.91084599494934,
+      "n_fit_pairs_neutral_type": 54,
+      "estimator": "centred_svd"
+    },
+    "uncentred_svd": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 328,
+      "site": "span (all tokens, truncated to shorter span)",
+      "sec_collect": 88.91084599494934,
+      "n_fit_pairs_neutral_type": 54,
+      "estimator": "uncentred_svd"
+    },
+    "mean_difference": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 328,
+      "site": "span (all tokens, truncated to shorter span)",
+      "sec_collect": 88.91084599494934,
+      "n_fit_pairs_neutral_type": 54,
+      "estimator": "mean_difference",
+      "rank": 1
+    },
+    "random_ortho_1": {
+      "estimator": "random_orthonormal",
+      "seed": 20260913,
+      "layers": 28,
+      "d": 3584
+    },
+    "random_ortho_2": {
+      "estimator": "random_orthonormal",
+      "seed": 20260914,
+      "layers": 28,
+      "d": 3584
+    },
+    "random_ortho_3": {
+      "estimator": "random_orthonormal",
+      "seed": 20260915,
+      "layers": 28,
+      "d": 3584
+    },
+    "neutral_contrast": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 300,
+      "site": "span (all tokens, truncated to shorter span)",
+      "estimator": "centred_svd on neutral pairs",
+      "sec_collect": 96.934978723526,
+      "benchmarks": {
+        "bbq": 300
+      },
+      "note": "token count is recorded (n_span_tokens); lexical-frequency matching to the demographic fit pairs is NOT performed, see report; neutral swaps exist only where the benchmark has a 'person'-style variant (BBQ in the current pentad)"
+    },
+    "leace_faithful": {
+      "protocol": "frozen (fitted on unedited activations)",
+      "n": 656,
+      "concept_erasure_version": "0.2.4",
+      "sec_fit": 5.034410238265991,
+      "actual_rank_by_layer": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1,
+        "19": 1,
+        "20": 1,
+        "21": 1,
+        "22": 1,
+        "23": 1,
+        "24": 1,
+        "25": 1,
+        "26": 1,
+        "27": 1
+      },
+      "labels": "0 = side A, 1 = side B of the swap",
+      "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+    },
+    "leace_sequential": {
+      "protocol": "sequential",
+      "n_items": 600,
+      "n_layers_requested": 28,
+      "n_layers_fitted": 28,
+      "complete": true,
+      "n_forward_passes": 16800,
+      "sec": 2050.4035720825195,
+      "concept_erasure_version": "0.2.4",
+      "shrinkage": true,
+      "sec_fit": 2050.8124895095825,
+      "actual_rank_by_layer": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1,
+        "17": 1,
+        "18": 1,
+        "19": 1,
+        "20": 1,
+        "21": 1,
+        "22": 1,
+        "23": 1,
+        "24": 1,
+        "25": 1,
+        "26": 1,
+        "27": 1
+      },
+      "labels": "0 = side A, 1 = side B of the swap",
+      "applied_as": "exact affine map eraser(x) at the span positions (LeaceAffineEdit)"
+    }
+  },
+  "fit_id": {
+    "cure_centred_svd": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+    "uncentred_svd": "f164d9fb2152ef7445478e3c0fe71ac0e8bc3ebfb031d73f3a438aca51ae8a6c",
+    "mean_difference": "0842cf1344c3f3d4b3bdc72a032607fffcede8e8794392e6b05028c1f4586670",
+    "random_ortho_1": "ef63c0f93c9cb7c1354f4b5dbc8ca7983ebd628def760c38a6edaeba3bdf46fe",
+    "random_ortho_2": "257af5bac5677075316b7b3f11e224b146327ba4599944efd1cbe981e46d0c02",
+    "random_ortho_3": "d58d25fbfb8105580101262656a7b3814c4d28b976ba5bcb5aa53fc931614fc6",
+    "neutral_contrast": "9e348b2178e2c7488fe77fa06918ce89df4ba200c5a3711e30fe126e5a57dfa1",
+    "leace_faithful": "9ba037d7b8ab0895a74be6773fbf94102c7a31c09741a0b38add0c649a7f70f2",
+    "leace_sequential": "3af4cd027b8bdc80937e752e1c9f8dbd5097c830f63724e61b7c44cbf7e40f88"
+  },
+  "saved_utc": "2026-09-13T05:58:19Z",
+  "files": {
+    "cure_centred_svd": "p2_basis_qwen2.5-7b-instruct_chat_cure_centred_svd.npz",
+    "uncentred_svd": "p2_basis_qwen2.5-7b-instruct_chat_uncentred_svd.npz",
+    "mean_difference": "p2_basis_qwen2.5-7b-instruct_chat_mean_difference.npz",
+    "random_ortho_1": "p2_basis_qwen2.5-7b-instruct_chat_random_ortho_1.npz",
+    "random_ortho_2": "p2_basis_qwen2.5-7b-instruct_chat_random_ortho_2.npz",
+    "random_ortho_3": "p2_basis_qwen2.5-7b-instruct_chat_random_ortho_3.npz",
+    "neutral_contrast": "p2_basis_qwen2.5-7b-instruct_chat_neutral_contrast.npz",
+    "leace_faithful": "p2_basis_qwen2.5-7b-instruct_chat_leace_faithful.npz",
+    "leace_sequential": "p2_basis_qwen2.5-7b-instruct_chat_leace_sequential.npz"
+  }
+}
