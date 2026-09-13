@@ -1,0 +1,10 @@
+{
+  "n_fit_pairs_used": 120,
+  "n_fit_pairs_given": 120,
+  "block": 4,
+  "rank": 1,
+  "alpha": 1.0,
+  "n_forward_passes": 1920,
+  "estimator": "centred_svd, sequential",
+  "fit_split": "fit (split_manifest.csv)"
+}
