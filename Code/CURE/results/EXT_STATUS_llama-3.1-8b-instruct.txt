@@ -1,1 +1,1 @@
-[smoke] P1 pilot starting @ Sun Sep 13 04:14:31 UTC 2026
+[smoke] P1 attempt 1 exited non-zero:     raise EnvironmentError( OSError: Required environment variable 'DEEPSEEK_API_KEY_2' is missing or empty. Check your .env file at /workspace/Cure_Audit_Benchmark/Code/audit/.env. [exit 1 in 1s]  @ Sun Sep 13 04:14:33 UTC 2026
