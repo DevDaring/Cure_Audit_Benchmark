@@ -89,6 +89,8 @@ git_sync_push() {   # $1 = commit message; adds what is already staged; serialis
   local n=0
   git -C "$REPO" commit -q -m "$1" >/dev/null 2>&1 || true
   while [ $n -lt 6 ]; do
+    # P0 regenerates reanalysis_v2 byte-differently (line endings); restore the committed copy
+    git -C "$REPO" checkout -q -- Code/CURE/results/reanalysis_v2 >/dev/null 2>&1 || true
     git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1 || git -C "$REPO" rebase --abort >/dev/null 2>&1
     git -C "$REPO" push -q origin main >/dev/null 2>&1 && { echo "[ext] pushed: $1"; return 0; }
     n=$((n+1)); sleep $((10 * n))
@@ -202,7 +204,8 @@ run_stage() {  # $1 label, $2 log name, rest = command; non-zero after 3 failed 
 # then idle).
 CONTROL_REL="Code/CURE/results/EXT_CONTROL_${MODEL}.env"
 refresh_control() {
-  ( flock 9; git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1 || git -C "$REPO" rebase --abort >/dev/null 2>&1 ) 9>"$LOCK"
+  ( flock 9; git -C "$REPO" checkout -q -- Code/CURE/results/reanalysis_v2 >/dev/null 2>&1 || true
+    git -C "$REPO" pull --rebase -q origin main >/dev/null 2>&1 || git -C "$REPO" rebase --abort >/dev/null 2>&1 ) 9>"$LOCK"
   if [ -f "$REPO/$CONTROL_REL" ]; then
     # shellcheck disable=SC1090
     set -a; . "$REPO/$CONTROL_REL"; set +a

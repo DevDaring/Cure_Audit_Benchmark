@@ -192,14 +192,28 @@ def cmd_logs(args):
     print(vast("logs", str(iid), "--tail", str(args.tail), raw=False, check=False)[-6000:])
 
 
+def api_destroy(iid: int) -> tuple[int, str]:
+    """The CLI's `destroy instance` asks for interactive confirmation; the REST call does not."""
+    import urllib.request, urllib.error
+    req = urllib.request.Request(f"https://console.vast.ai/api/v0/instances/{iid}/", method="DELETE")
+    req.add_header("Authorization", "Bearer " + KEY); req.add_header("Accept", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.status, r.read().decode()[:120]
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode()[:160]
+
+
 def cmd_destroy(args):
     st = load_state()
     targets = [args.model] if args.model else list(st)
     for model in targets:
         iid = st.get(model, {}).get("instance_id")
         if iid:
-            print(model, "destroy", iid, "->", vast("destroy", "instance", str(iid), check=False).strip()[:120])
-            st.pop(model, None)
+            code, body = api_destroy(int(iid))
+            print(model, "destroy", iid, "->", code, scrub(body))
+            if code == 200:
+                st.pop(model, None)
     save_state(st)
 
 

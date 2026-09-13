@@ -1,0 +1,16 @@
+float,quantity,source_file
+tab:protocol,seed and pair counts per split,Code/CURE/results/cure_final_llama-3.1-8b-instruct.parquet
+tab:protocol,prognosis seed count,Code/CURE/results/cure_prognosis_llama-3.1-8b-instruct.parquet
+tab:gap,native and audit-robust pass rate per benchmark,Code/audit/results/validity_gap_leaderboard.parquet
+tab:h2h,"bias removed and utility cost, Llama-3.1-8B",Code/CURE/results/cure_final_llama-3.1-8b-instruct.parquet
+tab:h2h,"bias removed and utility cost, Qwen2.5-7B",Code/CURE/results/cure_final_qwen2.5-7b-instruct.parquet
+tab:h2h,"bias removed and utility cost, Gemma-2-2B",Code/CURE/results/cure_final_gemma-2-2b-it.parquet
+tab:h2h,"bias removed and utility cost, Phi-4-mini",Code/CURE/results/cure_final_phi-4-mini-instruct.parquet
+tab:behav,"held-out removal, accuracy and flip rate, Llama-3.1-8B",Code/CURE/results/tacl_extra_llama-3.1-8b-instruct.parquet
+tab:behav,"held-out removal, accuracy and flip rate, Qwen2.5-7B",Code/CURE/results/tacl_extra_qwen2.5-7b-instruct.parquet
+tab:behav,"held-out removal, accuracy and flip rate, Gemma-2-2B",Code/CURE/results/tacl_extra_gemma-2-2b-it.parquet
+tab:behav,"held-out removal, accuracy and flip rate, Phi-4-mini",Code/CURE/results/tacl_extra_phi-4-mini-instruct.parquet
+tab:rank,bias removed and utility cost at every tested rank,Code/CURE/results/reanalysis/rank_curve.csv
+tab:prog,"Spearman, censoring, and separation of hard-to-erase seeds",Code/CURE/results/reanalysis/prognosis_seed_level.csv
+tab:prog,split-half held-out separation,Code/CURE/results/reanalysis/prognosis_heldout.csv
+tab:mech,single-direction erasure diagnostic,Code/CURE/results/anomaly_diagnostic.json

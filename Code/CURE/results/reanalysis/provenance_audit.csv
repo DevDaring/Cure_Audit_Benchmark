@@ -1,0 +1,9 @@
+quantity,claimed,actual,match,source,note
+"prognosis n, Llama-3.1-8B",508,508,True,cure_prognosis_llama-3.1-8b-instruct.parquet,manuscript says pairs; these are seeds
+"prognosis n, Qwen2.5-7B",508,508,True,cure_prognosis_qwen2.5-7b-instruct.parquet,manuscript says pairs; these are seeds
+"prognosis n, Gemma-2-2B",508,508,True,cure_prognosis_gemma-2-2b-it.parquet,manuscript says pairs; these are seeds
+"prognosis n, Phi-4-mini",508,508,True,cure_prognosis_phi-4-mini-instruct.parquet,manuscript says pairs; these are seeds
+head-to-head pair set,1000,1000,True,cure_final_llama-3.1-8b-instruct.parquet,
+methods compared,9,10,False,cure_final_llama-3.1-8b-instruct.parquet,CURE plus eight baselines
+held-out test pairs,600,600,True,tacl_extra_llama-3.1-8b-instruct.parquet,
+behavioural seeds,160,160,True,tacl_extra_llama-3.1-8b-instruct.parquet,
