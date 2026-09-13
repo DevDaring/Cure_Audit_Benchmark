@@ -215,8 +215,12 @@ def parse_answer(text: str, prompt: str) -> tuple[int | None, str]:
         try:
             j = json.loads(m.group(0)); cand = str(j.get("answer", "")).strip()
         except Exception:
-            mm = re.search(r'"answer"\s*:\s*"([^"]*)"', text)
-            cand = mm.group(1).strip() if mm else None
+            cand = None
+    if cand is None:
+        # the generation cap often truncates the JSON before its closing brace (the rationale
+        # field is long); the answer field is still complete and must be read from the prefix
+        mm = re.search(r'"answer"\s*:\s*"([^"]*)"', text)
+        cand = mm.group(1).strip() if mm else None
     if cand is None:
         cand = text.strip().splitlines()[0].strip() if text.strip() else ""
     if not cand:

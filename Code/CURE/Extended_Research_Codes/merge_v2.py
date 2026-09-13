@@ -153,10 +153,15 @@ def rebuild_reports() -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-reports", action="store_true")
+    ap.add_argument("--no-reparse", action="store_true", help="skip re-deriving the generation readout from gen_raw")
     args = ap.parse_args()
     dirs = per_model_dirs()
     if not dirs:
         log.error("no results/v2_* directories to merge"); sys.exit(2)
+    if not args.no_reparse:
+        import reparse_generations as RP
+        for m, d in dirs.items():
+            RP.reparse_dir(d)          # same parser for every row, whenever it was produced
     log.info("merging %s", ", ".join(dirs))
     man = merge(dirs)
     for w in man["warnings"]:

@@ -176,6 +176,9 @@ def check_p2(model: str, d: Path, split: dict, smoke: bool) -> dict:
         return {"present": False}
     df = pd.read_parquet(p)
     tag = "smoke " if smoke else ""
+    if "status" in df:      # status rows (a condition that could not run) carry placeholder keys
+        out["status_rows"] = df[df["status"] != "ok"]["cond_id"].value_counts().to_dict() if "cond_id" in df else int((df["status"] != "ok").sum())
+        df = df[df["status"] == "ok"]
     out.update({"present": True, "rows": len(df),
                 "phases": df["phase"].value_counts().to_dict() if "phase" in df else {},
                 "conditions": df["condition"].value_counts().to_dict() if "condition" in df else {},
