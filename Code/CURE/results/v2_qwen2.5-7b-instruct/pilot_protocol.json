@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:31:03Z",
+  "generated_utc": "2026-09-13T13:07:59Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -17,10 +17,10 @@
   "models": {
     "qwen2.5-7b-instruct": {
       "hf_id": "Qwen/Qwen2.5-7B-Instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Qwen2ForCausalLM",
       "dtype": "torch.bfloat16",
-      "sec_load": 9.900364398956299,
+      "sec_load": 9.990494966506958,
       "basis": {
         "n_fit_pairs_used": 200,
         "n_fit_pairs_skipped": 0,
@@ -28,7 +28,7 @@
         "estimator": "centred_svd",
         "rank": 1,
         "site": "span (all tokens)",
-        "sec_fit": 346.1577706336975
+        "sec_fit": 24.775541305541992
       },
       "identity_checks": {
         "tol": 0.001,
@@ -38,16 +38,16 @@
         "pass_rank0": true,
         "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
         "pass_nonspan_untouched": true,
-        "max_abs_hidden_dev_span_first_edited_layer": 1.0,
+        "max_abs_hidden_dev_span_first_edited_layer": 0.984375,
         "span_actually_edited": true,
         "decode_step_edits_under_span_policy": 0,
         "pass_no_decode_edit_under_span": true,
         "dtype": "torch.bfloat16",
         "pass_all": true
       },
-      "n_items_this_run": 280,
-      "sec_model_total": 965.169011592865
+      "n_items_this_run": 0,
+      "sec_model_total": 36.84208083152771
     }
   },
-  "sec_wall_total": 965.433121919632
+  "sec_wall_total": 37.05440020561218
 }
