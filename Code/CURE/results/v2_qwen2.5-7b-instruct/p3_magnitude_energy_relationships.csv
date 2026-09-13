@@ -11,3 +11,15 @@ qwen2.5-7b-instruct,dev,random_only,energy_total_A,absC_change,-0.02917207563836
 qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,p_gold_loss_A,0.03042281249879202,-0.2547372359015814,0.27100257920664705,58,60
 qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,acc_loss_A,0.08552483067304673,-0.1435307175811677,0.2969839849211266,58,60
 qwen2.5-7b-instruct,dev,neutral_only,energy_total_A,absC_change,-0.21529226213045285,-0.42957915533790036,0.031661316582422855,60,60
+qwen2.5-7b-instruct,test,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.11786860986196741,-0.18643326878458516,-0.052427328783114714,1413,160
+qwen2.5-7b-instruct,test,all_edited_conditions,energy_total_A,acc_loss_A,-0.07311436912486954,-0.14368822051243813,-0.0011376952630757007,1413,160
+qwen2.5-7b-instruct,test,all_edited_conditions,energy_total_A,absC_change,-0.013593043469672867,-0.07816467056277027,0.0484135735512274,1440,160
+qwen2.5-7b-instruct,test,targeted_only,energy_total_A,p_gold_loss_A,-0.15505493448133256,-0.23782038631666044,-0.08103547117874817,785,160
+qwen2.5-7b-instruct,test,targeted_only,energy_total_A,acc_loss_A,-0.1060846081521227,-0.1868939407444441,-0.020619485068153007,785,160
+qwen2.5-7b-instruct,test,targeted_only,energy_total_A,absC_change,-0.046845666299811094,-0.1317523533016652,0.03484203689883202,800,160
+qwen2.5-7b-instruct,test,random_only,energy_total_A,p_gold_loss_A,-0.06686958069930196,-0.13453805376869388,0.004492407029933263,471,160
+qwen2.5-7b-instruct,test,random_only,energy_total_A,acc_loss_A,0.012205531383714854,-0.04426810596795808,0.07661478423702137,471,160
+qwen2.5-7b-instruct,test,random_only,energy_total_A,absC_change,-0.026955425359980783,-0.1082433854843957,0.056891071466779915,480,160
+qwen2.5-7b-instruct,test,neutral_only,energy_total_A,p_gold_loss_A,0.005882585515738336,-0.14616521062237367,0.1544324498667356,157,160
+qwen2.5-7b-instruct,test,neutral_only,energy_total_A,acc_loss_A,0.16373461013126267,0.07058055545388683,0.2585347939463462,157,160
+qwen2.5-7b-instruct,test,neutral_only,energy_total_A,absC_change,0.058132516710898745,-0.10040649378414718,0.2098469221314779,160,160
