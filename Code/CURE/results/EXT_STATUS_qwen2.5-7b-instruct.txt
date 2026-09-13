@@ -1,1 +1,1 @@
-[smoke] P3 magnitude test starting @ Sun Sep 13 04:27:57 UTC 2026
+[smoke] P3 depth dev starting @ Sun Sep 13 04:28:20 UTC 2026
