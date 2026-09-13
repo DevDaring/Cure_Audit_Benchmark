@@ -47,3 +47,6 @@ Thumbs.db
 /CHANGELOG_corrections.md
 /Code/MIRAGE_MASTER_PROMPT.md
 /Code/*.md
+
+# Never push markdown reports or notes from the CURE tree (paper text lives elsewhere)
+Code/CURE/**/*.md

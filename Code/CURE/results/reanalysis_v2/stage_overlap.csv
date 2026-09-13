@@ -1,0 +1,13 @@
+model_name,stage_a,stage_b,pairs_a,pairs_b,pairs_shared,seeds_a,seeds_b,seeds_shared,seed_share_of_b_seen_in_a,basis
+llama-3.1-8b-instruct,fit,sweep,600,1000,600,390,505,390,0.7722772277227723,structural: fit is a prefix-subset of sweep by construction
+llama-3.1-8b-instruct,fit,eval_headtohead,600,1000,86,390,485,316,0.6515463917525773,replay only; exact draw unverified (see NOTE_reconstruction)
+llama-3.1-8b-instruct,sweep,eval_headtohead,1000,1000,145,505,485,409,0.843298969072165,replay only; exact draw unverified (see NOTE_reconstruction)
+qwen2.5-7b-instruct,fit,sweep,600,1000,600,390,505,390,0.7722772277227723,structural: fit is a prefix-subset of sweep by construction
+qwen2.5-7b-instruct,fit,eval_headtohead,600,1000,86,390,485,316,0.6515463917525773,replay only; exact draw unverified (see NOTE_reconstruction)
+qwen2.5-7b-instruct,sweep,eval_headtohead,1000,1000,145,505,485,409,0.843298969072165,replay only; exact draw unverified (see NOTE_reconstruction)
+gemma-2-2b-it,fit,sweep,600,1000,600,390,505,390,0.7722772277227723,structural: fit is a prefix-subset of sweep by construction
+gemma-2-2b-it,fit,eval_headtohead,600,1000,86,390,485,316,0.6515463917525773,replay only; exact draw unverified (see NOTE_reconstruction)
+gemma-2-2b-it,sweep,eval_headtohead,1000,1000,145,505,485,409,0.843298969072165,replay only; exact draw unverified (see NOTE_reconstruction)
+phi-4-mini-instruct,fit,sweep,600,1000,600,390,505,390,0.7722772277227723,structural: fit is a prefix-subset of sweep by construction
+phi-4-mini-instruct,fit,eval_headtohead,600,1000,86,390,485,316,0.6515463917525773,replay only; exact draw unverified (see NOTE_reconstruction)
+phi-4-mini-instruct,sweep,eval_headtohead,1000,1000,145,505,485,409,0.843298969072165,replay only; exact draw unverified (see NOTE_reconstruction)

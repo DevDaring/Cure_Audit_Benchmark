@@ -1,0 +1,68 @@
+{
+  "generated_utc": "2026-09-12T16:56:18Z",
+  "behavioral_archive": {
+    "file": "Code\\audit\\results\\behavioral_results.parquet",
+    "exists": true,
+    "n_rows": 81056,
+    "n_run_ids": 8,
+    "run_id_prefix_samples": [
+      "4d2bf45f",
+      "5a9dc0eb",
+      "6a9c1a98",
+      "7b91ec97",
+      "89cc3dfc",
+      "c49b3f0f",
+      "e51f69bf",
+      "f2882699"
+    ],
+    "rows_with_prefix_tacl-": 0,
+    "rows_with_prefix_e4-": 0
+  },
+  "git_history": {
+    "searched": true,
+    "n_paths_ever_committed": 7,
+    "paths_ever_committed": [
+      "Code/CURE/results/reanalysis/number_provenance.csv",
+      "Code/CURE/results/reanalysis/prognosis_heldout.csv",
+      "Code/CURE/results/reanalysis/prognosis_seed_level.csv",
+      "Code/CURE/results/reanalysis/provenance_audit.csv",
+      "Code/CURE/results/reanalysis/rank_curve.csv",
+      "Code/CURE/results/reanalysis/target_token_audit.csv",
+      "Code/CURE/results/reanalysis/target_token_per_seed.csv"
+    ],
+    "candidate_paths": [],
+    "candidate_exists_in_worktree": {}
+  },
+  "run_logs": {
+    "Code\\CURE\\logs\\extended_research.log": {
+      "bytes": 33007,
+      "lines_with_tacl": 0,
+      "lines_with_e4": 0,
+      "lines_with_parsed_answer": 0,
+      "has_per_item_output": false
+    },
+    "Code\\CURE\\logs\\run_cure.log": {
+      "bytes": 0,
+      "lines_with_tacl": 0,
+      "lines_with_e4": 0,
+      "lines_with_parsed_answer": 0,
+      "has_per_item_output": false
+    },
+    "Code\\CURE\\logs\\run_tacl_extra.log": {
+      "bytes": 0,
+      "lines_with_tacl": 0,
+      "lines_with_e4": 0,
+      "lines_with_parsed_answer": 0,
+      "has_per_item_output": false
+    },
+    "Code\\CURE\\results\\run_tacl_extra.log": {
+      "bytes": 25987,
+      "lines_with_tacl": 0,
+      "lines_with_e4": 0,
+      "lines_with_parsed_answer": 0,
+      "has_per_item_output": false
+    }
+  },
+  "n_candidate_files": 22,
+  "verdict": "NOT FOUND: no raw per-item generations under CURE run ids in the behavioural archive, any result/csv/jsonl file, the run logs, or any commit in git history. Paired behavioural intervals and per-condition failure counts for the shipped held-out table cannot be reconstructed; they REQUIRE a rerun that stores raw outputs (P1/P2 harness does so by design)."
+}

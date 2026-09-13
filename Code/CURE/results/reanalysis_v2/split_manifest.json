@@ -1,0 +1,50 @@
+{
+  "generated_utc": "2026-09-13T03:18:24Z",
+  "random_seed": 20260912,
+  "fractions": {
+    "fit": 0.5,
+    "dev": 0.2,
+    "test": 0.3
+  },
+  "unit": "seed_id (source item); all counterfactual pairs of a seed share its split",
+  "n_seeds_clean_pentad": 596,
+  "n_seeds_eligible": 596,
+  "exclusions": {
+    "fewer_than_2_mask_clean_pairs_on_some_model": 0
+  },
+  "split_sizes": {
+    "fit": 291,
+    "dev": 108,
+    "test": 197
+  },
+  "pairs_per_split_per_model": {
+    "llama-3.1-8b-instruct": {
+      "fit": 2334,
+      "dev": 848,
+      "test": 1601
+    },
+    "qwen2.5-7b-instruct": {
+      "fit": 2334,
+      "dev": 848,
+      "test": 1601
+    },
+    "gemma-2-2b-it": {
+      "fit": 2334,
+      "dev": 848,
+      "test": 1601
+    },
+    "phi-4-mini-instruct": {
+      "fit": 2334,
+      "dev": 848,
+      "test": 1601
+    }
+  },
+  "n_gold_unknown_fallback": 15,
+  "assertions": {
+    "fit_dev_disjoint": true,
+    "fit_test_disjoint": true,
+    "dev_test_disjoint": true,
+    "no_test_seed_pair_in_fit_any_model": true
+  },
+  "note": "The existing pool has already informed the project (Next_Plan.md P2): call the test split a new controlled held-out evaluation, not a historically untouched test. Cap dev/test evaluation by stratified sampling from these splits, never by file-order truncation."
+}

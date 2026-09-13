@@ -1,0 +1,4 @@
+fit,a,b,r2,absC_where_fitted_score_equals_tau,spearman_score_vs_absC,note
+score = a + b*linear(|C|),0.9771057894306195,-0.15825482088160178,0.8994400517012415,1.3440714680645036,-0.9999996224851667,
+score = a + b*log1p(|C|),1.0441496028024277,-0.4155383731089206,0.9375550786784891,0.9605441608941621,-0.9999996224851667,
+determinism check,,,,,0.9942348008385744,share of distinct |C| values (4 dp) mapping to exactly one score; 1.0 means the score is a deterministic function of |C| alone

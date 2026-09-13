@@ -201,14 +201,30 @@ def load_model(model_cfg: dict, force_reload: bool = False) -> tuple[Any, Any]:
         trust_remote_code=True,
     )
 
-    model = AutoModelForCausalLM.from_pretrained(
-        hf_id,
-        token=HUGGINGFACE_TOKEN,
-        torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
-        device_map={"": 0},
-        trust_remote_code=True,
-    )
+    # flash_attention_2 is preferred for speed, but transformers raises rather than
+    # degrading when the package is absent, which takes the whole run down. The TIST
+    # lease hit exactly that: the pinned torch did not install, the matching flash-attn
+    # wheel therefore did not install either, and all four models failed to load while
+    # the run still exited zero. Fall back to sdpa, which is numerically equivalent for
+    # the forward passes this codebase performs and merely slower.
+    def _load(attn_impl: str):
+        return AutoModelForCausalLM.from_pretrained(
+            hf_id,
+            token=HUGGINGFACE_TOKEN,
+            torch_dtype=torch.bfloat16,
+            attn_implementation=attn_impl,
+            device_map={"": 0},
+            trust_remote_code=True,
+        )
+
+    try:
+        model = _load("flash_attention_2")
+    except (ImportError, ValueError, RuntimeError) as exc:
+        logger.warning(
+            "flash_attention_2 unavailable for %s (%s); falling back to sdpa",
+            name, str(exc)[:160],
+        )
+        model = _load("sdpa")
     model.eval()
 
     _verify_flash_attention(model, name)

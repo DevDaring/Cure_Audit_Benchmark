@@ -1,0 +1,33 @@
+file,rows,key_set,family,key_columns,rows_would_drop,rows_would_keep
+cure_final_gemma-2-2b-it.parquet,10,shipped,,(family unmatched or column missing),0,10
+cure_final_gemma-2-2b-it.parquet,10,corrected,cure_final,method+model_name,0,10
+cure_final_llama-3.1-8b-instruct.parquet,10,shipped,,(family unmatched or column missing),0,10
+cure_final_llama-3.1-8b-instruct.parquet,10,corrected,cure_final,method+model_name,0,10
+cure_final_phi-4-mini-instruct.parquet,10,shipped,,(family unmatched or column missing),0,10
+cure_final_phi-4-mini-instruct.parquet,10,corrected,cure_final,method+model_name,0,10
+cure_final_qwen2.5-7b-instruct.parquet,10,shipped,,(family unmatched or column missing),0,10
+cure_final_qwen2.5-7b-instruct.parquet,10,corrected,cure_final,method+model_name,0,10
+cure_prognosis_gemma-2-2b-it.parquet,508,shipped,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_gemma-2-2b-it.parquet,508,corrected,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_llama-3.1-8b-instruct.parquet,508,shipped,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_llama-3.1-8b-instruct.parquet,508,corrected,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_phi-4-mini-instruct.parquet,508,shipped,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_phi-4-mini-instruct.parquet,508,corrected,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_qwen2.5-7b-instruct.parquet,508,shipped,cure_prognosis,model_name+seed_id,0,508
+cure_prognosis_qwen2.5-7b-instruct.parquet,508,corrected,cure_prognosis,model_name+seed_id,0,508
+cure_recovery_sweep_gemma-2-2b-it.parquet,4000,shipped,cure_recovery,model_name+seed_id+subvariant_A+subvariant_B+condition,3000,1000
+cure_recovery_sweep_gemma-2-2b-it.parquet,4000,corrected,cure_recovery_sweep,model_name+seed_id+subvariant_A+subvariant_B+condition+erase_rank,0,4000
+cure_recovery_sweep_llama-3.1-8b-instruct.parquet,4000,shipped,cure_recovery,model_name+seed_id+subvariant_A+subvariant_B+condition,3000,1000
+cure_recovery_sweep_llama-3.1-8b-instruct.parquet,4000,corrected,cure_recovery_sweep,model_name+seed_id+subvariant_A+subvariant_B+condition+erase_rank,0,4000
+cure_recovery_sweep_phi-4-mini-instruct.parquet,4000,shipped,cure_recovery,model_name+seed_id+subvariant_A+subvariant_B+condition,3000,1000
+cure_recovery_sweep_phi-4-mini-instruct.parquet,4000,corrected,cure_recovery_sweep,model_name+seed_id+subvariant_A+subvariant_B+condition+erase_rank,0,4000
+cure_recovery_sweep_qwen2.5-7b-instruct.parquet,4000,shipped,cure_recovery,model_name+seed_id+subvariant_A+subvariant_B+condition,3000,1000
+cure_recovery_sweep_qwen2.5-7b-instruct.parquet,4000,corrected,cure_recovery_sweep,model_name+seed_id+subvariant_A+subvariant_B+condition+erase_rank,0,4000
+tacl_extra_gemma-2-2b-it.parquet,4,shipped,,(family unmatched or column missing),0,4
+tacl_extra_gemma-2-2b-it.parquet,4,corrected,tacl_extra,method+model_name,0,4
+tacl_extra_llama-3.1-8b-instruct.parquet,4,shipped,,(family unmatched or column missing),0,4
+tacl_extra_llama-3.1-8b-instruct.parquet,4,corrected,tacl_extra,method+model_name,0,4
+tacl_extra_phi-4-mini-instruct.parquet,4,shipped,,(family unmatched or column missing),0,4
+tacl_extra_phi-4-mini-instruct.parquet,4,corrected,tacl_extra,method+model_name,0,4
+tacl_extra_qwen2.5-7b-instruct.parquet,4,shipped,,(family unmatched or column missing),0,4
+tacl_extra_qwen2.5-7b-instruct.parquet,4,corrected,tacl_extra,method+model_name,0,4

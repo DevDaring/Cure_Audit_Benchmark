@@ -1,0 +1,33 @@
+model_name,stage,n_pairs,n_seeds,n_touching_degenerate,share_degenerate,n_unmatched_in_mask,reconstruction_verified_against_saved_sweep,pentad_used_by_shipped_loader
+llama-3.1-8b-instruct,sweep_SAVED_ARTIFACT,1000,508.0,191.0,0.191,0,True,authoritative: joined from cure_recovery_sweep parquet
+llama-3.1-8b-instruct,NOTE_reconstruction,164,,,,1672,False,"n_pairs = replayed sweep keys that match the saved sweep; n_unmatched = symmetric difference. The saved sweep keys are all inside the replayed pool, so the pool is right and the DRAW differs: the run-time row order of cdva_results.parquet is not recoverable, hence the exact fitting set was never recorded (no manifest). The containment fit SUBSET-OF sweep holds by construction and on the replay (confirmed)."
+llama-3.1-8b-instruct,all,5960,596.0,1177.0,0.19748322147651007,0,False,"pentad_dataset.parquet (raw, no mask)"
+llama-3.1-8b-instruct,fit,600,390.0,125.0,0.20833333333333334,0,False,"pentad_dataset.parquet (raw, no mask)"
+llama-3.1-8b-instruct,sweep,1000,505.0,197.0,0.197,0,False,"pentad_dataset.parquet (raw, no mask)"
+llama-3.1-8b-instruct,eval_headtohead,1000,485.0,202.0,0.202,0,False,"pentad_dataset.parquet (raw, no mask)"
+llama-3.1-8b-instruct,all_with_clean_pentad,4783,596.0,0.0,0.0,0,False,pentad_dataset_clean.parquet (counterfactual)
+llama-3.1-8b-instruct,eligible_pool_clean_and_masked,4783,596.0,0.0,0.0,0,False,clean pentad + mask applied before any stage
+qwen2.5-7b-instruct,sweep_SAVED_ARTIFACT,1000,508.0,191.0,0.191,0,True,authoritative: joined from cure_recovery_sweep parquet
+qwen2.5-7b-instruct,NOTE_reconstruction,164,,,,1672,False,"n_pairs = replayed sweep keys that match the saved sweep; n_unmatched = symmetric difference. The saved sweep keys are all inside the replayed pool, so the pool is right and the DRAW differs: the run-time row order of cdva_results.parquet is not recoverable, hence the exact fitting set was never recorded (no manifest). The containment fit SUBSET-OF sweep holds by construction and on the replay (confirmed)."
+qwen2.5-7b-instruct,all,5960,596.0,1177.0,0.19748322147651007,0,False,"pentad_dataset.parquet (raw, no mask)"
+qwen2.5-7b-instruct,fit,600,390.0,125.0,0.20833333333333334,0,False,"pentad_dataset.parquet (raw, no mask)"
+qwen2.5-7b-instruct,sweep,1000,505.0,197.0,0.197,0,False,"pentad_dataset.parquet (raw, no mask)"
+qwen2.5-7b-instruct,eval_headtohead,1000,485.0,202.0,0.202,0,False,"pentad_dataset.parquet (raw, no mask)"
+qwen2.5-7b-instruct,all_with_clean_pentad,4783,596.0,0.0,0.0,0,False,pentad_dataset_clean.parquet (counterfactual)
+qwen2.5-7b-instruct,eligible_pool_clean_and_masked,4783,596.0,0.0,0.0,0,False,clean pentad + mask applied before any stage
+gemma-2-2b-it,sweep_SAVED_ARTIFACT,1000,508.0,191.0,0.191,0,True,authoritative: joined from cure_recovery_sweep parquet
+gemma-2-2b-it,NOTE_reconstruction,164,,,,1672,False,"n_pairs = replayed sweep keys that match the saved sweep; n_unmatched = symmetric difference. The saved sweep keys are all inside the replayed pool, so the pool is right and the DRAW differs: the run-time row order of cdva_results.parquet is not recoverable, hence the exact fitting set was never recorded (no manifest). The containment fit SUBSET-OF sweep holds by construction and on the replay (confirmed)."
+gemma-2-2b-it,all,5960,596.0,1177.0,0.19748322147651007,0,False,"pentad_dataset.parquet (raw, no mask)"
+gemma-2-2b-it,fit,600,390.0,125.0,0.20833333333333334,0,False,"pentad_dataset.parquet (raw, no mask)"
+gemma-2-2b-it,sweep,1000,505.0,197.0,0.197,0,False,"pentad_dataset.parquet (raw, no mask)"
+gemma-2-2b-it,eval_headtohead,1000,485.0,202.0,0.202,0,False,"pentad_dataset.parquet (raw, no mask)"
+gemma-2-2b-it,all_with_clean_pentad,4783,596.0,0.0,0.0,0,False,pentad_dataset_clean.parquet (counterfactual)
+gemma-2-2b-it,eligible_pool_clean_and_masked,4783,596.0,0.0,0.0,0,False,clean pentad + mask applied before any stage
+phi-4-mini-instruct,sweep_SAVED_ARTIFACT,1000,508.0,191.0,0.191,0,True,authoritative: joined from cure_recovery_sweep parquet
+phi-4-mini-instruct,NOTE_reconstruction,164,,,,1672,False,"n_pairs = replayed sweep keys that match the saved sweep; n_unmatched = symmetric difference. The saved sweep keys are all inside the replayed pool, so the pool is right and the DRAW differs: the run-time row order of cdva_results.parquet is not recoverable, hence the exact fitting set was never recorded (no manifest). The containment fit SUBSET-OF sweep holds by construction and on the replay (confirmed)."
+phi-4-mini-instruct,all,5960,596.0,1177.0,0.19748322147651007,0,False,"pentad_dataset.parquet (raw, no mask)"
+phi-4-mini-instruct,fit,600,390.0,125.0,0.20833333333333334,0,False,"pentad_dataset.parquet (raw, no mask)"
+phi-4-mini-instruct,sweep,1000,505.0,197.0,0.197,0,False,"pentad_dataset.parquet (raw, no mask)"
+phi-4-mini-instruct,eval_headtohead,1000,485.0,202.0,0.202,0,False,"pentad_dataset.parquet (raw, no mask)"
+phi-4-mini-instruct,all_with_clean_pentad,4783,596.0,0.0,0.0,0,False,pentad_dataset_clean.parquet (counterfactual)
+phi-4-mini-instruct,eligible_pool_clean_and_masked,4783,596.0,0.0,0.0,0,False,clean pentad + mask applied before any stage

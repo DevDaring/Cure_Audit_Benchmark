@@ -1,0 +1,22 @@
+# Extended Research Codes. torch is installed first by bootstrap_extended.sh from the cu124
+# index; everything here must not upgrade it (the bootstrap passes a constraint file).
+#
+# The new intervention (p1_intervention.py) uses plain Hugging Face forward hooks. It does
+# NOT need transformer_lens, nnsight or flash-attn; load_osm falls back to SDPA attention.
+transformers>=4.50.3,<6
+accelerate>=0.34.0
+safetensors>=0.4
+huggingface_hub>=0.23.2
+tokenizers>=0.20
+pandas>=2.2
+pyarrow>=15
+numpy>=1.26
+scipy>=1.11
+scikit-learn>=1.5
+datasets>=2.19          # P2 external utility: cais/mmlu subset, wikitext-2-raw-v1
+concept-erasure>=0.2.4  # P2 faithful LEACE (EleutherAI); pinned version recorded at runtime
+tabulate>=0.9           # pandas .to_markdown in reports
+sentencepiece
+protobuf
+tqdm
+python-dotenv>=1.0

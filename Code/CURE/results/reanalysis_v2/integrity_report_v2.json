@@ -1,0 +1,24 @@
+{
+  "ts": "2026-09-12T16:55:54Z",
+  "mutate": false,
+  "checked": [
+    "cure_final_gemma-2-2b-it.parquet",
+    "cure_final_llama-3.1-8b-instruct.parquet",
+    "cure_final_phi-4-mini-instruct.parquet",
+    "cure_final_qwen2.5-7b-instruct.parquet",
+    "cure_prognosis_gemma-2-2b-it.parquet",
+    "cure_prognosis_llama-3.1-8b-instruct.parquet",
+    "cure_prognosis_phi-4-mini-instruct.parquet",
+    "cure_prognosis_qwen2.5-7b-instruct.parquet",
+    "cure_recovery_sweep_gemma-2-2b-it.parquet",
+    "cure_recovery_sweep_llama-3.1-8b-instruct.parquet",
+    "cure_recovery_sweep_phi-4-mini-instruct.parquet",
+    "cure_recovery_sweep_qwen2.5-7b-instruct.parquet",
+    "tacl_extra_gemma-2-2b-it.parquet",
+    "tacl_extra_llama-3.1-8b-instruct.parquet",
+    "tacl_extra_phi-4-mini-instruct.parquet",
+    "tacl_extra_qwen2.5-7b-instruct.parquet"
+  ],
+  "deduped": {},
+  "corrupt": []
+}

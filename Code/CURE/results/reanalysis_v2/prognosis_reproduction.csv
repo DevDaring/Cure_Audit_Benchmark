@@ -1,0 +1,5 @@
+model_name,n_seeds,source,aggregation,auc_all_seeds_rank_ge8,n_initially_failing,auc_restricted_to_failing,n_sentinel,n_rank8_success,n_initially_passing_given_positive_rank,note
+llama-3.1-8b-instruct,508,cure_prognosis_llama-3.1-8b-instruct.parquet,first_pair (shipped),0.9291727140783745,105,0.7151851851851853,43,10,403,already-passing seeds carry a positive rank in the shipped file
+qwen2.5-7b-instruct,508,cure_prognosis_qwen2.5-7b-instruct.parquet,first_pair (shipped),0.8592575473763592,205,0.7722786789134258,81,20,303,already-passing seeds carry a positive rank in the shipped file
+gemma-2-2b-it,508,cure_prognosis_gemma-2-2b-it.parquet,first_pair (shipped),0.9296443899448191,89,0.6190476190476191,32,10,419,already-passing seeds carry a positive rank in the shipped file
+phi-4-mini-instruct,508,cure_prognosis_phi-4-mini-instruct.parquet,first_pair (shipped),0.8506276150627615,113,0.7060386473429952,16,14,395,already-passing seeds carry a positive rank in the shipped file
