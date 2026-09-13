@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:52:21Z",
+  "generated_utc": "2026-09-13T13:10:34Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,11 +42,11 @@
   ],
   "models": {
     "phi-4-mini-instruct": {
-      "sec_load": 10.65298843383789,
+      "sec_load": 10.11562967300415,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "microsoft/Phi-4-mini-instruct",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Phi3ForCausalLM",
       "dtype": "torch.bfloat16",
       "bases": {
@@ -269,10 +269,10 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 6050
+        "dev": 0
       },
-      "sec_model_total": 23299.118921279907
+      "sec_model_total": 14.15301251411438
     }
   },
-  "sec_wall_total": 23299.406432390213
+  "sec_wall_total": 14.421374797821045
 }
