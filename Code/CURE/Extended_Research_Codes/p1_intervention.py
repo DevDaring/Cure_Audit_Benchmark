@@ -277,9 +277,12 @@ def _to(model, enc):
 
 
 def forward_hidden(model, tok, text: str, edit: HookedEdit | None = None,
-                   positions: list[int] | None = None):
-    """Logits and per-layer post-block hidden states [T, d] for one text, optionally under an
-    edit at `positions`. Returns (logits[T,V] float32 cpu, {layer: hidden[T,d] float32 cpu})."""
+                   positions: list[int] | None = None, logits: str = "none"):
+    """Per-layer post-block hidden states [T, d] for one text, optionally under an edit at
+    `positions`. Returns (logits, {layer: hidden[T,d] float32 cpu}) where logits is the full
+    [T, V] float32 cpu tensor when logits="all" and None otherwise. Copying the full logits
+    (T x 256k for Gemma) to the CPU costs four times the forward pass itself, so it is done
+    only for identity_checks, which compares logits at every position."""
     import torch
     enc = _to(model, _encode(tok, text)[0])
     if edit is not None:
@@ -289,7 +292,8 @@ def forward_hidden(model, tok, text: str, edit: HookedEdit | None = None,
         out = model(**enc, output_hidden_states=True)
     # hidden_states[0] is the embedding output; hidden_states[l+1] is post-block l
     hs = {l: out.hidden_states[l + 1][0].float().cpu() for l in range(len(out.hidden_states) - 1)}
-    return out.logits[0].float().cpu(), hs
+    lg = out.logits[0].float().cpu() if logits == "all" else None
+    return lg, hs
 
 
 def commutator(model, tok, text_a: str, text_b: str, pos_a: list[int], pos_b: list[int],
@@ -455,12 +459,12 @@ def identity_checks(model, tok, texts: list[str], basis_by_layer: dict, span_pos
     zero_basis = {l: np.zeros((0, np.asarray(r).shape[1]), np.float32) for l, r in basis_by_layer.items()}
     dev_a0, dev_r0, dev_nonspan, dev_span = 0.0, 0.0, 0.0, 0.0
     for text, pos in zip(texts, span_positions):
-        lg0, hs0 = forward_hidden(model, tok, text, None, None)
+        lg0, hs0 = forward_hidden(model, tok, text, None, None, logits="all")
         e = HookedEdit(model, basis_by_layer, alpha=0.0, site="span")
-        lg1, _ = forward_hidden(model, tok, text, e, pos)
+        lg1, _ = forward_hidden(model, tok, text, e, pos, logits="all")
         dev_a0 = max(dev_a0, float((lg1 - lg0).abs().max()))
         e = HookedEdit(model, zero_basis, alpha=1.0, site="span")
-        lg2, _ = forward_hidden(model, tok, text, e, pos)
+        lg2, _ = forward_hidden(model, tok, text, e, pos, logits="all")
         dev_r0 = max(dev_r0, float((lg2 - lg0).abs().max()))
         e = HookedEdit(model, basis_by_layer, alpha=1.0, site="span")
         _, hs3 = forward_hidden(model, tok, text, e, pos)

@@ -114,8 +114,9 @@ def check_liveness(model: str, rec: dict, inst: dict) -> dict:
         note("WARN", model, "status says a stage is starting but no stage process is running")
     if int(kv.get("TRACEBACKS", "0") or 0) > 0:
         note("WARN", model, "Traceback in %s (retry loop may recover)" % Path(kv.get("LOG", "")).name)
-    if kv.get("LOG_AGE_S") and int(kv["LOG_AGE_S"]) > 2400 and not done:
-        note("WARN", model, "newest stage log silent for %d min" % (int(kv["LOG_AGE_S"]) // 60))
+    gpu_pct = int(re.match(r"\s*(\d+)", kv.get("GPU", "0") or "0").group(1)) if re.match(r"\s*(\d+)", kv.get("GPU", "0") or "0") else 0
+    if kv.get("LOG_AGE_S") and int(kv["LOG_AGE_S"]) > 2400 and not done and gpu_pct < 5:
+        note("WARN", model, "newest stage log silent for %d min and GPU idle" % (int(kv["LOG_AGE_S"]) // 60))
     if "FATAL" in kv.get("STATUS", "") or "gave up" in kv.get("STATUS", ""):
         note("ERROR", model, "VM status: " + kv["STATUS"][:160])
     return out

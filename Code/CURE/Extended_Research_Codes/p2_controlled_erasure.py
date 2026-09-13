@@ -376,9 +376,12 @@ def collect_fit_activations(model, tok, fmt: str, pairs: list[dict], c: pd.DataF
     items = LF.resolve_fit_items(tok, fmt, pairs, c, sysm)
     diffs: dict[int, list] = {}; acts: dict[int, list] = {}; labels = []
     hidden = []
-    for it in items:
+    t0 = time.time()
+    for k, it in enumerate(items):
         _, hs = I.forward_hidden(model, tok, it["text"], None, None)
         hidden.append({l: hs[l][it["pos"], :].numpy() for l in hs})
+        if (k + 1) % 200 == 0:
+            log.info("collect_fit_activations: %d/%d prompts, %.2f s/forward", k + 1, len(items), (time.time() - t0) / (k + 1))
         for l in hs:
             acts.setdefault(l, []).append(hidden[-1][l])
         labels += [it["label"]] * len(it["pos"])
