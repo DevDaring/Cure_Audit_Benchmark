@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T13:04:56Z",
+  "generated_utc": "2026-09-13T13:05:30Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "qwen2.5-7b-instruct": {
-      "sec_load": 9.87131142616272,
+      "sec_load": 9.822068691253662,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "Qwen/Qwen2.5-7B-Instruct",
@@ -275,10 +275,10 @@
       },
       "n_items_this_run": {
         "dev": 0,
-        "test": 100
+        "test": 0
       },
-      "sec_model_total": 28.113064765930176
+      "sec_model_total": 26.58278512954712
     }
   },
-  "sec_wall_total": 28.36982011795044
+  "sec_wall_total": 26.842477083206177
 }
