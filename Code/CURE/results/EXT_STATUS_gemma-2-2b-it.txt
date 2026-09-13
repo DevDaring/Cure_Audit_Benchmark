@@ -1,1 +1,1 @@
-[full] P2 dev starting @ Sun Sep 13 07:04:36 UTC 2026
+[full] P2-dev attempt 1 exited non-zero: -13 07:22:11,130 | INFO | cure.ext.p2.erasure | energy match gemma-2-2b-it neutral_contrast: target 0.01772, alpha 1.00 -> 0.006467 2026-09-13 07:22:11,131 | INFO | cure.ext | wrote Code/CURE/results/v2_gemma-2-2b-it/p2_matched_alphas.json  @ Sun Sep 13 07:57:02 UTC 2026
