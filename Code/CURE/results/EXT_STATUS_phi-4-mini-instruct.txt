@@ -1,1 +1,1 @@
-SMOKE PASSED; full run starting @ Sun Sep 13 04:35:37 UTC 2026
+[full] P1 pilot starting @ Sun Sep 13 04:35:39 UTC 2026
