@@ -1,1 +1,1 @@
-[smoke] P1 pilot starting @ Sun Sep 13 04:17:48 UTC 2026
+[smoke] P1 attempt 1 exited non-zero:                                                ^^^^^^^^^^^^^^^^^ AttributeError: 'list' object has no attribute 'keys' [exit 1 in 11s]  @ Sun Sep 13 04:18:01 UTC 2026
