@@ -80,7 +80,8 @@ if [ -n "${Github_Classic_Token:-}" ]; then
 fi
 
 # ---------------------------------------------------------------- git helpers (no .md ever)
-git_sync_push() {   # $1 = commit message; adds what is already staged
+LOCK=/tmp/ext_git.lock
+git_sync_push() {   # $1 = commit message; adds what is already staged; serialised by flock
   local n=0
   git -C "$REPO" commit -q -m "$1" >/dev/null 2>&1 || true
   while [ $n -lt 6 ]; do
@@ -90,16 +91,24 @@ git_sync_push() {   # $1 = commit message; adds what is already staged
   done
   echo "[ext] WARNING: push failed after retries: $1"; return 1
 }
-push_status() {
+# Both pushers run under one lock so the 20-minute checkpoint loop and a stage-end push
+# never interleave their git operations.
+_push_status_locked() {
   printf '%s @ %s\n' "$1" "$(date -u)" > "$REPO/$STATUS_REL"
   git -C "$REPO" add -f "$STATUS_REL" >/dev/null 2>&1
   git_sync_push "ext[$MODEL]: $1"
 }
-push_results() {
-  # every non-markdown file under this VM's own output directory
+_push_results_locked() {
+  # every non-markdown file under this VM's own output directory (incremental parquet rows
+  # included, so a stage interrupted by a credit stop keeps its finished items)
   find "$V2" -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git -C "$REPO" add -f >/dev/null 2>&1
   git -C "$REPO" add -f "$STATUS_REL" >/dev/null 2>&1
   git_sync_push "ext-results[$MODEL]: $1"
+}
+push_status()  { ( flock 9; _push_status_locked  "$1" ) 9>"$LOCK"; }
+push_results() { ( flock 9; _push_results_locked "$1" ) 9>"$LOCK"; }
+checkpoint_loop() {   # background: push whatever exists every 20 minutes
+  while true; do sleep 1200; push_results "checkpoint $(date -u +%H:%M)"; done
 }
 push_status "container started ($(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null | head -1))"
 
@@ -167,6 +176,8 @@ snapshot_download(hf, token=C.HUGGINGFACE_TOKEN)
 print("present")
 PY
 push_status "setup complete; GPU stages starting"
+checkpoint_loop &
+CKPT_PID=$!
 
 # ---------------------------------------------------------------- stage runner (retry x3, resume-aware)
 run_stage() {  # $1 label, $2 log name, rest = command
@@ -213,6 +224,7 @@ if [ "${EXT_SKIP_P3:-0}" != "1" ]; then
   done
 fi
 
+kill "$CKPT_PID" >/dev/null 2>&1 || true
 date -u > "$V2/DONE_${MODEL}.txt"
 push_results "ALL STAGES DONE"
 push_status "ALL COMPLETE for $MODEL"

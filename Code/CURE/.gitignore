@@ -9,3 +9,5 @@ results/quarantine/
 __pycache__/
 *.py[cod]
 .deploy_state.json
+.vast_ext_state.json
+.onstart_*.sh
