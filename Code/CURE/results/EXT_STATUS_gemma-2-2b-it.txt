@@ -1,1 +1,1 @@
-[full] P1 pilot starting @ Sun Sep 13 07:04:01 UTC 2026
+[full] P2 dev starting @ Sun Sep 13 07:04:36 UTC 2026
