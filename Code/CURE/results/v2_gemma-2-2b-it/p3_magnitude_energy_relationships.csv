@@ -1,0 +1,13 @@
+model_name,phase,scope,x,y,spearman,lo,hi,n,n_seeds
+gemma-2-2b-it,dev,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.12273352631809958,-0.23535478054141395,0.0018653048494136995,522,60
+gemma-2-2b-it,dev,all_edited_conditions,energy_total_A,acc_loss_A,-0.10956980007788107,-0.24721169255473074,0.02041307954923824,522,60
+gemma-2-2b-it,dev,all_edited_conditions,energy_total_A,absC_change,-0.045344982680866765,-0.13615128305489715,0.05245384083260797,540,60
+gemma-2-2b-it,dev,targeted_only,energy_total_A,p_gold_loss_A,-0.24870285187465532,-0.36974647807149513,-0.09831072809011918,290,60
+gemma-2-2b-it,dev,targeted_only,energy_total_A,acc_loss_A,-0.22797201993091715,-0.35662402285939293,-0.07936385893557447,290,60
+gemma-2-2b-it,dev,targeted_only,energy_total_A,absC_change,-0.11516733986848623,-0.2482501757132516,0.02554733160379834,300,60
+gemma-2-2b-it,dev,random_only,energy_total_A,p_gold_loss_A,-0.03230849222674875,-0.1882554680902195,0.1138924650331801,174,60
+gemma-2-2b-it,dev,random_only,energy_total_A,acc_loss_A,0.012866047879671346,-0.004996827094230992,0.03776194126894198,174,60
+gemma-2-2b-it,dev,random_only,energy_total_A,absC_change,-0.007654612194722463,-0.13454653166551586,0.11230182186053647,180,60
+gemma-2-2b-it,dev,neutral_only,energy_total_A,p_gold_loss_A,0.2212959687728107,-0.05828972603750288,0.4772913180734094,58,60
+gemma-2-2b-it,dev,neutral_only,energy_total_A,acc_loss_A,0.1473726318843677,-0.0238897229417734,0.3011716768844561,58,60
+gemma-2-2b-it,dev,neutral_only,energy_total_A,absC_change,0.018573875766371154,-0.2447396970761559,0.2804253957428135,60,60
