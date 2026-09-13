@@ -1,0 +1,5 @@
+model_name,phase,id,comparison,statistic,label,point,lo,hi,p_boot,n_seeds,p_holm,reject_0.05_holm
+gemma-2-2b-it,dev,C1,"cure vs unedited on D (paired absolute |C| change), demographic pairs",D,"exploratory (dev; same four comparisons, not confirmatory)",0.1342529296875,0.046125976562500004,0.2245863037109375,0.003,100,0.006,True
+gemma-2-2b-it,dev,C2,cure vs unedited on generation accuracy (attempted denominator),delta generation accuracy (attempted),"exploratory (dev; same four comparisons, not confirmatory)",0.115,0.045,0.18,0.0005,100,0.002,True
+gemma-2-2b-it,dev,C3,cure vs mean of three rank-matched random controls on D,D_cure - D_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.1301069132486979,0.04625851694742839,0.21833136749267573,0.003,100,0.006,True
+gemma-2-2b-it,dev,C4,cure vs mean of three rank-matched random controls on generation accuracy,acc_cure - acc_random_mean,"exploratory (dev; same four comparisons, not confirmatory)",0.105,0.043291666666666666,0.17,0.001,100,0.003,True
