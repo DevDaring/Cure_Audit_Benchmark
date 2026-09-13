@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:55:43Z",
+  "generated_utc": "2026-09-13T06:28:23Z",
   "fmt": "chat",
   "rank": 1,
   "conditions": [
@@ -17,10 +17,10 @@
   "models": {
     "gemma-2-2b-it": {
       "hf_id": "google/gemma-2-2b-it",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Gemma2ForCausalLM",
       "dtype": "torch.bfloat16",
-      "sec_load": 7.314452648162842,
+      "sec_load": 7.5050201416015625,
       "basis": {
         "n_fit_pairs_used": 200,
         "n_fit_pairs_skipped": 0,
@@ -28,7 +28,7 @@
         "estimator": "centred_svd",
         "rank": 1,
         "site": "span (all tokens)",
-        "sec_fit": 1275.7488799095154
+        "sec_fit": 66.81012988090515
       },
       "identity_checks": {
         "tol": 0.001,
@@ -45,8 +45,8 @@
         "dtype": "torch.bfloat16",
         "pass_all": true
       },
-      "n_items_this_run": 280,
-      "sec_model_total": 1763.7704617977142
+      "n_items_this_run": 0,
+      "sec_model_total": 76.44615936279297
     },
     "llama-3.1-8b-instruct": {
       "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
@@ -148,7 +148,7 @@
       "sec_model_total": 965.169011592865
     }
   },
-  "sec_wall_total": 1764.0931084156036,
+  "sec_wall_total": 76.84843373298645,
   "merged_from": [
     "gemma-2-2b-it",
     "llama-3.1-8b-instruct",
