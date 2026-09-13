@@ -709,7 +709,7 @@ def wikitext_tokens(tok, n_tokens: int) -> tuple[list[int], dict]:
     if key in _CAP_CACHE:
         return _CAP_CACHE[key]
     datasets = _datasets_or_none()
-    ds = datasets.load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
+    ds = datasets.load_dataset("Salesforce/wikitext", "wikitext-2-raw-v1", split="test")   # namespaced id (datasets>=4)
     pieces, doc_ids, count = [], [], 0
     for i, t in enumerate(ds["text"]):
         if not t.strip():
@@ -774,8 +774,12 @@ def _wiki_probe(model, tok, factory, n_tokens: int) -> dict:
             "dataset": json.dumps(rec), "prompt_format": "raw text, %d-token windows" % WINDOW}
 
 
+PROBES = ("mmlu_200", "wikitext2_20k")
+
+
 def capability_eval(model, tok, edit_factory, policy: str, n_mmlu: int = N_MMLU,
-                    n_wiki: int = N_WIKI_TOKENS, seed: int = K.RANDOM_SEED_V2) -> list[dict]:
+                    n_wiki: int = N_WIKI_TOKENS, seed: int = K.RANDOM_SEED_V2,
+                    probes: tuple = PROBES) -> list[dict]:
     """Two bounded probes under an explicit application policy. edit_factory must already
     build edits with site="all" when policy == "all"; with policy == "none" an edited
     condition is NOT evaluated (the prompts have no demographic span) and a status row says
@@ -790,10 +794,16 @@ def capability_eval(model, tok, edit_factory, policy: str, n_mmlu: int = N_MMLU,
                  "note": "no demographic span in external prompts; policy=none applies no edit and records nothing"}
                 for p in ("mmlu_200", "wikitext2_20k")]
     rows = []
-    t0 = time.time()
-    rows.append({**base, **_mmlu_probe(model, tok, edit_factory, n_mmlu, seed), "status": "ok", "sec": time.time() - t0})
-    t0 = time.time()
-    rows.append({**base, **_wiki_probe(model, tok, edit_factory, n_wiki), "status": "ok", "sec": time.time() - t0})
+    for probe, fn in (("mmlu_200", lambda: _mmlu_probe(model, tok, edit_factory, n_mmlu, seed)),
+                      ("wikitext2_20k", lambda: _wiki_probe(model, tok, edit_factory, n_wiki))):
+        if probe not in probes:
+            continue
+        t0 = time.time()
+        try:                                   # one probe failing must not discard the other
+            rows.append({**base, **fn(), "status": "ok", "sec": time.time() - t0})
+        except Exception as exc:
+            rows.append({**base, "probe": probe, "status": "error", "note": str(exc)[:300], "sec": time.time() - t0})
+            log.error("capability probe %s failed: %s", probe, str(exc)[:200])
     return rows
 
 
@@ -820,10 +830,13 @@ def done_keys(path: Path) -> set:
 
 
 def cap_done_keys(path: Path) -> set:
+    """Capability rows already produced, EXCLUDING error/unavailable rows so a rerun retries
+    them (e.g. after a dataset-id fix)."""
     if not path.exists():
         return set()
-    d = pd.read_parquet(path, columns=["model_name", "phase", "cond_id", "probe"])
-    return set(map(tuple, d.to_numpy().tolist()))
+    d = pd.read_parquet(path, columns=["model_name", "phase", "cond_id", "probe", "status"])
+    d = d[~d["status"].isin(["error", "unavailable"])]
+    return set(zip(d["model_name"], d["phase"], d["cond_id"], d["probe"]))
 
 
 def parse_args(argv=None):
@@ -1003,14 +1016,15 @@ def _run_capability(model, tok, args, mname, phase, conds, store, cap_path, cap_
     for cond in [x for x in conds if x.status == "ok"]:
         if budget.exceeded():
             log.warning("cap reached before capability %s %s", phase, cond.cond_id); break
-        if any((mname, phase, cond.cond_id, p) in cap_done for p in ("mmlu_200", "wikitext2_20k")):
+        todo = tuple(p for p in PROBES if (mname, phase, cond.cond_id, p) not in cap_done)
+        if not todo:
             continue
         factory = make_factory(model, store, cond, site="all") if args.capability_policy == "all" else make_factory(model, store, cond)
         try:
-            out = capability_eval(model, tok, factory, args.capability_policy, n_mmlu, n_wiki, args.seed)
+            out = capability_eval(model, tok, factory, args.capability_policy, n_mmlu, n_wiki, args.seed, probes=todo)
         except Exception as exc:
             out = [{"probe": p, "status": "error", "note": str(exc)[:300], "capability_policy": args.capability_policy}
-                   for p in ("mmlu_200", "wikitext2_20k")]
+                   for p in todo]
             log.error("capability failed %s %s: %s", mname, cond.cond_id, str(exc)[:200])
         for o in out:
             o.update({"model_name": mname, "phase": phase, "cond_id": cond.cond_id, "condition": cond.family,
@@ -1018,6 +1032,14 @@ def _run_capability(model, tok, args, mname, phase, conds, store, cap_path, cap_
                       "ts": K.utc_now()})
             cap_done.add((mname, phase, cond.cond_id, o["probe"]))
         rows += out
+    if rows and cap_path.exists():
+        # a retried probe replaces its earlier error/unavailable row
+        prev = pd.read_parquet(cap_path)
+        new_keys = {(r["model_name"], r["phase"], r["cond_id"], r["probe"]) for r in rows}
+        stale = prev.apply(lambda r: (r["model_name"], r["phase"], r["cond_id"], r["probe"]) in new_keys
+                           and r["status"] in ("error", "unavailable"), axis=1)
+        if stale.any():
+            prev[~stale].to_parquet(cap_path, index=False)
     P1.append_rows(cap_path, rows)
 
 
