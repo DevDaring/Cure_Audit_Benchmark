@@ -37,17 +37,26 @@ def check(name, cond, detail=""):
 
 def load_cached_tokenizer(repo_id: str):
     """Load a tokenizer from the local HF cache even when the snapshot holds tokenizer files
-    only (no config.json), which transformers>=5 otherwise refuses offline."""
+    only (no config.json), which transformers>=5 otherwise refuses offline. When it is not
+    cached at all (a fresh VM), download it if the network allows; the Qwen tokenizer is
+    public and small."""
+    import os
     from transformers import AutoTokenizer
     try:
         return AutoTokenizer.from_pretrained(repo_id, local_files_only=True)
     except Exception:
-        from huggingface_hub import scan_cache_dir
+        pass
+    from huggingface_hub import scan_cache_dir
+    try:
         for r in scan_cache_dir().repos:
             if r.repo_id == repo_id:
                 snap = sorted(r.revisions, key=lambda x: x.last_modified)[-1].snapshot_path
                 return AutoTokenizer.from_pretrained(str(snap), local_files_only=True)
-        raise
+    except Exception:
+        pass
+    if os.environ.get("HF_HUB_OFFLINE") == "1":
+        raise RuntimeError("tokenizer %s not cached and HF_HUB_OFFLINE=1" % repo_id)
+    return AutoTokenizer.from_pretrained(repo_id, token=os.environ.get("HUGGINGFACE_TOKEN") or None)
 
 
 def main():
