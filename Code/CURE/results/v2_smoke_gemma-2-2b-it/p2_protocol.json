@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T04:40:55Z",
+  "generated_utc": "2026-09-13T06:13:38Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,11 +42,11 @@
   ],
   "models": {
     "gemma-2-2b-it": {
-      "sec_load": 7.54365086555481,
+      "sec_load": 78.90054416656494,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "google/gemma-2-2b-it",
-      "attn_implementation": "sdpa",
+      "attn_implementation": "flash_attention_2",
       "model_class": "Gemma2ForCausalLM",
       "dtype": "torch.bfloat16",
       "bases": {
@@ -274,11 +274,11 @@
         ]
       },
       "n_items_this_run": {
-        "dev": 120,
+        "dev": 0,
         "test": 110
       },
-      "sec_model_total": 124.69252228736877
+      "sec_model_total": 101.40628385543823
     }
   },
-  "sec_wall_total": 125.03574585914612
+  "sec_wall_total": 104.2957751750946
 }
