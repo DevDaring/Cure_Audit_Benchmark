@@ -126,17 +126,26 @@ def onstart_script(model: str) -> str:
 def cmd_launch(args):
     st = load_state()
     pool = offers(limit=40)
+    if getattr(args, "offer", None):
+        got = [o for o in json.loads(vast("search", "offers", "id=%s" % args.offer)) if str(o.get("id")) == str(args.offer)]
+        if not got:
+            print("offer", args.offer, "not found or no longer rentable; falling back to the best fast-CPU offer")
+            fast = json.loads(vast("search", "offers", QUERY + " cpu_ghz>=3.3", "-o", "dph"))
+            got = [o for o in fast if any(g.lower() in str(o.get("gpu_name", "")).lower() for g in GPU_OK) and o.get("reliability2", 0) > 0.99][:3]
+        pool = got + pool
     if not pool:
         print("no offers match", QUERY); sys.exit(1)
     used = set()
     for model in args.models:
-        if model in st and st[model].get("instance_id"):
+        if model in st and st[model].get("instance_id") and not getattr(args, "replace", False):
             print(model, "already has instance", st[model]["instance_id"]); continue
         cand = [o for o in pool if o["id"] not in used and o.get("machine_id") not in
-                {st[m].get("machine_id") for m in st}]
+                {st[m].get("machine_id") for m in st if not m.endswith("__old")}]
         if not cand:
             print("ran out of distinct offers for", model); break
         o = cand[0]; used.add(o["id"])
+        if getattr(args, "replace", False) and model in st and st[model].get("instance_id"):
+            st[model + "__old"] = st[model]           # destroyed by `migrate` once the new VM has resumed
         script = HERE / f".onstart_{model}.sh"
         script.write_text(onstart_script(model), encoding="utf-8")
         env = ("-e EXT_MODEL=%s -e RANDOM_SEED=%s -e HUGGINGFACE_TOKEN=%s -e Github_Classic_Token=%s "
@@ -244,6 +253,41 @@ def cmd_restart(args):
             print("%-24s %s" % (model, ssh_run(int(iid), RESTART_CMD)))
 
 
+def cmd_migrate(args):
+    """Move one model to a new offer: checkpoint-push from the old VM, launch the replacement
+    (same env, resume-aware from the pushed rows and bases), wait until the new VM reports a
+    stage of the FULL sequence, then destroy the old one."""
+    import time as _t
+    st = load_state()
+    old = st.get(args.model, {})
+    if not old.get("instance_id"):
+        print("no instance for", args.model); sys.exit(1)
+    print("old", old["instance_id"], "final checkpoint push:", ssh_run(int(old["instance_id"]), (
+        "cd /workspace/Cure_Audit_Benchmark && ( flock 9; git checkout -q -- Code/CURE/results/reanalysis_v2 2>/dev/null; "
+        "find Code/CURE/results/v2_* -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git add -f >/dev/null 2>&1; "
+        "git add -u -- Code/CURE/results >/dev/null 2>&1; git commit -q -m 'ext[%s]: pre-migration checkpoint' >/dev/null 2>&1; "
+        "git pull --rebase -q origin main >/dev/null 2>&1 || git rebase --abort; git push -q origin main >/dev/null 2>&1 && echo PUSHED || echo PUSH_FAILED ) 9>/tmp/ext_git.lock") % args.model, timeout=300))
+    # stop the old stage so it cannot push anything after this point (it would race the new VM)
+    ssh_run(int(old["instance_id"]), "pkill -f '[r]un_all.py'; pkill -f '[p]1_pilot.py|[p]2_controlled_erasure.py|[p]3_explanation.py'; S=$(printf '%s%s' 'boot' 'strap_extended.sh'); pkill -f \"^bash .*${S}$\"; echo stopped", timeout=60)
+    args.models = [args.model]; args.replace = True
+    cmd_launch(args)
+    st = load_state()
+    new_id = st[args.model]["instance_id"]
+    print("waiting for the new VM to resume the FULL sequence ...")
+    stale = github_status(args.model)              # the old VM's last line; wait for a NEWER one
+    for _ in range(90):
+        _t.sleep(60)
+        status = github_status(args.model)
+        if status != stale and ("[full]" in status or "ALL COMPLETE" in status):
+            print("new VM", new_id, "status:", status[:100]); break
+        if status != stale and "FATAL" in status:
+            print("new VM reported:", status[:160]); break
+    code, body = api_destroy(int(old["instance_id"]))
+    print("old", old["instance_id"], "destroy ->", code)
+    if code == 200:
+        st.pop(args.model + "__old", None); save_state(st)
+
+
 def cmd_destroy(args):
     st = load_state()
     targets = [args.model] if args.model else list(st)
@@ -268,13 +312,19 @@ def main():
     l.add_argument("--extend-ranks", action="store_true", default=False,
                    help="also run ranks 2 and 4 in P2 (roughly triples the control conditions)")
     l.add_argument("--skip-p3", action="store_true", default=False)
+    l.add_argument("--offer", default=None, help="rent this exact offer id for the (single) model")
+    l.add_argument("--replace", action="store_true", help="keep the existing instance as <model>__old (see migrate)")
     l.add_argument("--cap-policy", default="all")
     g = sub.add_parser("logs"); g.add_argument("--model", required=True); g.add_argument("--tail", default="200")
     d = sub.add_parser("destroy"); d.add_argument("--model", default=None)
     rs = sub.add_parser("restart"); rs.add_argument("--model", default=None)
+    mg = sub.add_parser("migrate"); mg.add_argument("--model", required=True); mg.add_argument("--offer", required=True)
+    for a, d in (("--p1-hours", "6"), ("--p2-dev-hours", "24"), ("--p2-test-hours", "24"), ("--p3-hours", "10"), ("--cap-policy", "all")):
+        mg.add_argument(a, default=d)
+    mg.add_argument("--extend-ranks", action="store_true", default=True); mg.add_argument("--skip-p3", action="store_true", default=False)
     args = ap.parse_args()
     {"check": cmd_check, "offers": cmd_offers, "launch": cmd_launch, "status": cmd_status,
-     "logs": cmd_logs, "destroy": cmd_destroy, "restart": cmd_restart}[args.cmd](args)
+     "logs": cmd_logs, "destroy": cmd_destroy, "restart": cmd_restart, "migrate": cmd_migrate}[args.cmd](args)
 
 
 if __name__ == "__main__":
