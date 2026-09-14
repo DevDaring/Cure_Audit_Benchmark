@@ -245,7 +245,7 @@ def ssh_run(iid: int, cmd: str, timeout: int = 120) -> str:
         return "no ssh url"
     r = subprocess.run(["ssh", "-i", str(Path.home() / ".ssh" / "id_rsa"), "-o", "StrictHostKeyChecking=no",
                         "-o", "BatchMode=yes", "-o", "ConnectTimeout=25", "-p", m.group(2), f"root@{m.group(1)}", cmd],
-                       capture_output=True, text=True, timeout=timeout)
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
     lines = [l for l in scrub(r.stdout).strip().splitlines() if l and "vast.ai" not in l and "Have fun" not in l]
     return " | ".join(lines) if r.returncode == 0 else "ssh error: " + scrub(r.stderr)[-160:]
 
