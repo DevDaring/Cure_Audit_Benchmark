@@ -127,17 +127,23 @@ def protocol_hash(d: dict) -> str:
 # the frozen protocol record
 # ---------------------------------------------------------------------------
 
-def load_protocol() -> dict:
-    p = FINAL / "final_protocol.json"
-    return read_json(p, {})
+def protocol_path(model: str | None = None) -> Path:
+    """One protocol file per model on the VMs (two VMs must never commit the same file);
+    f4_analysis merges them into final_protocol.json on the author's machine."""
+    m = model or os.environ.get("NR_MODEL")
+    return FINAL / ("final_protocol_%s.json" % m if m else "final_protocol.json")
 
 
-def save_protocol(proto: dict) -> None:
+def load_protocol(model: str | None = None) -> dict:
+    return read_json(protocol_path(model), {})
+
+
+def save_protocol(proto: dict, model: str | None = None) -> None:
     proto = dict(proto)
     core = {k: v for k, v in proto.items() if not k.startswith("_") and k not in ("protocol_hash", "saved_utc")}
     proto["protocol_hash"] = protocol_hash(core)
     proto["saved_utc"] = utc_now()
-    write_json(proto, FINAL / "final_protocol.json")
+    write_json(proto, protocol_path(model))
 
 
 # ---------------------------------------------------------------------------

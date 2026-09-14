@@ -348,9 +348,7 @@ def stage_checks(model, tok, bases: Bases, man: pd.DataFrame, sp_all: dict) -> d
     res["pass_all_final"] = bool(res["pass_all"] and res["prefill_all_no_decode_edit"] and res["pass_same_input_patch_null"]
                                  and res["candidate_boundary"]["n_boundary_merges"] == 0)
     res["model"] = bases.model; res["utc"] = N.utc_now()
-    allp = N.read_json(OUT / "identity_checks.json", {})
-    allp[bases.model] = res
-    N.write_json(allp, OUT / "identity_checks.json")
+    N.write_json({bases.model: res}, OUT / ("identity_checks_%s.json" % bases.model))   # per model: two VMs never share a file
     log.info("identity checks %s: pass_all_final=%s", bases.model, res["pass_all_final"])
     return res
 
@@ -509,7 +507,7 @@ def stage_rows(model, tok, bases: Bases, man: pd.DataFrame, sp_all: dict, cal: d
                                 rows.append(eval_side(model, tok, bases, cal["alphas"], r, side, sp[side], cond, variant, generate=False))
         if rows:
             for x in rows:
-                x.setdefault("protocol_hash", N.load_protocol().get("protocol_hash", ""))
+                x.setdefault("protocol_hash", N.load_protocol(bases.model).get("protocol_hash", ""))
                 N.append_jsonl(OUT / ("raw_generations_%s.jsonl" % bases.model),
                                {k: x.get(k) for k in ("model_name", "seed_id", "side", "cond", "variant", "kind", "gen_raw", "status")})
             N.append_rows(path, rows); n_new += len(rows)
@@ -560,13 +558,13 @@ def main() -> None:
     cfg, model, tok = load_for_run(args.model)
     log.info("loaded %s: %s attn=%s dtype=%s", args.model, cfg.get("model_class"), cfg.get("attn_implementation"), cfg.get("dtype"))
     bases = Bases(args.model)
-    proto = N.load_protocol()
+    proto = N.load_protocol(args.model)
     proto.setdefault("models", {})[args.model] = {k: cfg.get(k) for k in ("hf_id", "model_class", "attn_implementation", "dtype", "transformers", "torch")}
     proto.setdefault("bases", {})[args.model] = bases.target_prov
     proto["random_basis_seed"] = N.RANDOM_SEED_FINAL; proto["conditions"] = N.CONDITIONS
     proto["max_new_tokens"] = N.MAX_NEW_TOKENS; proto["fmt"] = N.FMT; proto["match_tolerance"] = N.MATCH_TOL
     proto["dev_seed_source"] = "fresh BBQ construction, templates disjoint from the final set (deliberate departure from the plan's existing-dev-split wording)"
-    N.save_protocol(proto)
+    N.save_protocol(proto, args.model)
     sp_all = resolve_spans(args.model, tok, man)
     stages = [args.stage] if args.stage != "all" else ["checks", "calibrate", "timing", "final", "control", "baseline"]
     cal = N.read_json(OUT / ("calibration_%s.json" % args.model), {"alphas": {c: 1.0 for c in CALIBRATED}})
