@@ -270,14 +270,34 @@ def outcome_claims(conf: pd.DataFrame, pres: pd.DataFrame, sec: pd.DataFrame, ef
             "outcome_rule": "Section 10: two models must independently support a replication claim; one positive model supports a model-specific result"}
 
 
+def merge_protocols() -> dict:
+    """final_protocol_<model>.json (one per VM) -> final_protocol.json; identity_checks likewise."""
+    merged = {"models": {}, "bases": {}}
+    for m in N.FINAL_MODELS:
+        p = N.read_json(OUT / ("final_protocol_%s.json" % m), {})
+        for k, v in p.items():
+            if k in ("models", "bases"):
+                merged[k].update(v)
+            elif k not in ("protocol_hash", "saved_utc"):
+                merged[k] = v
+        ic = N.read_json(OUT / ("identity_checks_%s.json" % m), {})
+        if ic:
+            allc = N.read_json(OUT / "identity_checks.json", {}); allc.update(ic); N.write_json(allc, OUT / "identity_checks.json")
+    prev = N.read_json(OUT / "final_protocol.json", {})
+    prev.update(merged)
+    return prev
+
+
 def main() -> None:
-    proto = N.load_protocol()
+    proto = merge_protocols()
     proto.setdefault("acc_margin_pp", N.ACC_MARGIN_PP)
     proto.setdefault("acc_margin_justification", "two percentage points of attempted-denominator accuracy on a three-option task is below "
                      "the half-width of the paired intervals on 160 seeds and is the largest loss the authors would accept for a bias edit "
                      "whose purpose is to leave the answer unchanged; fixed before the final run")
     proto.setdefault("n_boot", N.N_BOOT_FINAL); proto.setdefault("cluster", "template family (seed-level reported alongside)")
-    N.save_protocol(proto)
+    core = {k: v for k, v in proto.items() if not k.startswith("_") and k not in ("protocol_hash", "saved_utc")}
+    proto["protocol_hash"] = N.protocol_hash(core); proto["saved_utc"] = N.utc_now()
+    N.write_json(proto, OUT / "final_protocol.json")
     d = load_rows()
     pt = pairwise_T(d)
     N.write_csv(pt, OUT / "pair_level.csv")
