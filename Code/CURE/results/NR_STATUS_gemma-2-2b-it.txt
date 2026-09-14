@@ -1,1 +1,1 @@
-container started (NVIDIA RTX A6000, 46068 MiB) @ Mon Sep 14 08:36:31 UTC 2026
+setup complete @ Mon Sep 14 08:36:48 UTC 2026
