@@ -1,1 +1,1 @@
-SMOKE gave up after 3 attempts @ Mon Sep 14 08:28:39 UTC 2026
+FATAL: SMOKE FAILED @ Mon Sep 14 08:28:41 UTC 2026
