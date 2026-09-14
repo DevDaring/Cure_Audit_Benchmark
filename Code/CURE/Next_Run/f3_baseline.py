@@ -115,7 +115,10 @@ def fit_and_validate(model: str, model_obj, tok, bases) -> None:
                 "class_counts_fit": {"man": int((z[tr] == 0).sum()), "woman": int((z[tr] == 1).sum())},
                 "n_fit_seeds": len(fit_seeds), "n_heldout_seeds": len(held_seeds)})
     layers = sorted(X)
-    erasers = LF.fit_leace_erasers({l: X[l][tr] for l in layers}, z[tr], device="cpu")
+    # fit on the model's device: the CPU LAPACK eigh failed on Llama's float32 covariance
+    # ("linalg.eigh: Argument 8 has illegal value"), the GPU path is what results/v2 used
+    dev = str(next(model_obj.parameters()).device)
+    erasers = LF.fit_leace_erasers({l: X[l][tr] for l in layers}, z[tr], device=dev)
     md = {}
     for l in layers:
         m = X[l][tr][z[tr] == 1].mean(0) - X[l][tr][z[tr] == 0].mean(0)
