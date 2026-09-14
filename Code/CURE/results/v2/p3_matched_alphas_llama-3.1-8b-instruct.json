@@ -1,0 +1,160 @@
+{
+  "target_energy": 0.007599449802881997,
+  "target_alpha": 1.0,
+  "controls": {
+    "random_1": {
+      "alpha": 1.0,
+      "energy": 0.0002471930349901793,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_2": {
+      "alpha": 1.0,
+      "energy": 0.0002366173466788774,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "random_3": {
+      "alpha": 1.0,
+      "energy": 0.00024741026473905435,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    },
+    "neutral": {
+      "alpha": 1.0,
+      "energy": 0.0017853808420665463,
+      "feasible": true,
+      "source": "p2_matched_alphas.json"
+    }
+  },
+  "target_at_control_energy": {
+    "random_1": {
+      "alpha": 0.13567421838494953,
+      "energy": 0.00035234702373841367,
+      "feasible": true,
+      "trace": [
+        [
+          0.13567421838494953,
+          0.00035234702373841367
+        ],
+        [
+          0.16474726518172442,
+          0.0004392767406337846
+        ],
+        [
+          0.19382031197849933,
+          0.0005339066455175226
+        ],
+        [
+          0.22289335877527422,
+          0.0006349180324555087
+        ],
+        [
+          0.25196640557204913,
+          0.000747389832898174
+        ]
+      ],
+      "target": 0.0002854833124720342,
+      "energy_at_alpha1": 0.007599449802881997,
+      "control_energy_at_alpha1": 0.0002854833124720342
+    },
+    "random_2": {
+      "alpha": 0.1272878068361861,
+      "energy": 0.00032784135385875235,
+      "feasible": true,
+      "trace": [
+        [
+          0.1272878068361861,
+          0.00032784135385875235
+        ],
+        [
+          0.15456376544394027,
+          0.00040857592861746114
+        ],
+        [
+          0.18183972405169443,
+          0.0004941514203558296
+        ],
+        [
+          0.20911568265944858,
+          0.0005856403639406623
+        ],
+        [
+          0.23639164126720277,
+          0.0006865302255059281
+        ]
+      ],
+      "target": 0.00025128101520356693,
+      "energy_at_alpha1": 0.007599449802881997,
+      "control_energy_at_alpha1": 0.00025128101520356693
+    },
+    "random_3": {
+      "alpha": 0.14073087096670778,
+      "energy": 0.0003671666432901767,
+      "feasible": true,
+      "trace": [
+        [
+          0.14073087096670778,
+          0.0003671666432901767
+        ],
+        [
+          0.17088748617385943,
+          0.0004583471022402563
+        ],
+        [
+          0.20104410138101111,
+          0.0005574964228435216
+        ],
+        [
+          0.23120071658816277,
+          0.0006660607900278662
+        ],
+        [
+          0.26135733179531445,
+          0.000786786348677994
+        ]
+      ],
+      "target": 0.00030716011505160237,
+      "energy_at_alpha1": 0.007599449802881997,
+      "control_energy_at_alpha1": 0.00030716011505160237
+    },
+    "neutral": {
+      "alpha": 0.34850778420728545,
+      "energy": 0.0012045017054089502,
+      "feasible": true,
+      "trace": [
+        [
+          0.28700641052364684,
+          0.0008973836891029624
+        ],
+        [
+          0.34850778420728545,
+          0.0012045017054089502
+        ],
+        [
+          0.41000915789092407,
+          0.00157249839054262
+        ],
+        [
+          0.47151053157456263,
+          0.001997204004342008
+        ],
+        [
+          0.5330119052582013,
+          0.0024903950326945227
+        ]
+      ],
+      "target": 0.0012775245803463562,
+      "energy_at_alpha1": 0.007599449802881997,
+      "control_energy_at_alpha1": 0.0012775245803463562
+    }
+  },
+  "matched_on": "dev items, prompt A, span positions, all edited layers",
+  "n_items": 60,
+  "control_sources": {
+    "random_1": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_llama-3.1-8b-instruct/p2_basis_llama-3.1-8b-instruct_chat_random_ortho_1.npz",
+    "random_2": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_llama-3.1-8b-instruct/p2_basis_llama-3.1-8b-instruct_chat_random_ortho_2.npz",
+    "random_3": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_llama-3.1-8b-instruct/p2_basis_llama-3.1-8b-instruct_chat_random_ortho_3.npz",
+    "neutral": "/workspace/Cure_Audit_Benchmark/Code/CURE/results/v2_llama-3.1-8b-instruct/p2_basis_llama-3.1-8b-instruct_chat_neutral_contrast.npz"
+  }
+}
