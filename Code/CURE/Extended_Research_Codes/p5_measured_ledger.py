@@ -50,12 +50,15 @@ def pilot_rows() -> list[dict]:
     per = {}
     for m in MODELS:
         dm = d[d.model_name == m]
+        # validity and accuracy from the stored readout columns (reparsed at merge and, for the
+        # unmapped residue, mapped by the judge), both sides of every pair -- the same quantity
+        # the P2 summary reports, so the pilot and the confirmatory numbers agree by construction
         rows = []
         for _, r in dm.iterrows():
-            pa, ga = idx[(r.seed_id, r.subvariant_A)]
-            ia, _ = P1.parse_answer(str(r.gen_raw_A), pa); gi = P1.gold_index(pa, ga)
-            rows.append({"condition": r.condition, "absC": r.absC, "valid": ia is not None,
-                         "acc": (ia == gi) if (ia is not None and gi is not None) else np.nan})
+            for side in ("A", "B"):
+                v = r.get("gen_valid_%s" % side); c = r.get("gen_correct_%s" % side)
+                rows.append({"condition": r.condition, "absC": r.absC, "valid": bool(v) if v is not None and v == v else False,
+                             "acc": (bool(c) if c is not None and c == c else np.nan)})
         t = pd.DataFrame(rows).groupby("condition").agg(absC=("absC", "mean"), acc=("acc", "mean"), valid=("valid", "mean"))
         per[m] = t
     ident = pd.read_parquet(V2 / "pilot_per_item.parquet")
@@ -73,8 +76,8 @@ def pilot_rows() -> list[dict]:
                 "metric_formula": "mean |C| and generation validity per condition, chat format, demographic pairs",
                 "eligible_n": "24 seeds x 4 models", "interval": txt,
                 "permitted_wording": "The matched-position edit reduces mean |C| on every model with no loss of output "
-                                     "validity. The legacy last-token edit raises |C| on Phi and Llama and collapses Phi's "
-                                     "output validity to a third: a large part of the original 'damage' is output invalidity "
+                                     "validity. The legacy last-token edit raises |C| on Phi and Llama and lowers Phi's "
+                                     "output validity from 0.96 to 0.56 and Gemma's from 0.92 to 0.77: a large part of the original 'damage' is output invalidity "
                                      "under a position-transferred edit, not accuracy loss.",
                 "note": "Identity pairs give |C| = 0 exactly under the sequential convention; the frozen (legacy "
                         "TransformerLens) source state gives up to %s on identity pairs, so it is not a null instrument."
