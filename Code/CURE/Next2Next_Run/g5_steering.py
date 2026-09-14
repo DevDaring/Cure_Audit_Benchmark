@@ -160,7 +160,11 @@ def debias_vector(model, tok, items: list[dict], max_items: int) -> tuple[dict, 
     """DV: mean span activation on unbiased-state prompts minus biased-state prompts."""
     sysm = P1.system_prompt()
     sums = {"unb": {}, "bias": {}}; cnt = {"unb": 0, "bias": 0}; n_used = 0
-    for it in items[:max_items]:
+    for it in items:
+        # the quota is max_items, but keep scanning until both states hold at least one prompt
+        # (a 12-prompt smoke can meet only biased answers on a model that rarely answers 'unknown')
+        if n_used >= max_items and min(cnt.values()) > 0:
+            break
         text = I.build_input(tok, it["prompt"], "chat", sysm)
         pos = I.resolve_span_positions(tok, text, it["swap"])
         if not pos:
