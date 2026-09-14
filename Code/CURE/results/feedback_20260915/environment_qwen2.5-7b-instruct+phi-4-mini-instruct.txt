@@ -1,0 +1,6 @@
+python 3.11.10 | torch 2.5.1+cu124 | cuda 12.4 | avail True | transformers 5.17.0
+device NVIDIA RTX A6000 | mem GB 50.9
+flash_attn 2.8.3
+concept_erasure ok
+sklearn 1.9.1
+scipy 1.17.1
