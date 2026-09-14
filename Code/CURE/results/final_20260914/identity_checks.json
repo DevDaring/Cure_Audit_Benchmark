@@ -1,0 +1,35 @@
+{
+  "gemma-2-2b-it": {
+    "tol": 0.001,
+    "max_abs_logit_dev_alpha0": 0.0,
+    "pass_alpha0": true,
+    "max_abs_logit_dev_rank0": 0.0,
+    "pass_rank0": true,
+    "max_abs_hidden_dev_nonspan_first_edited_layer": 0.0,
+    "pass_nonspan_untouched": true,
+    "max_abs_hidden_dev_span_first_edited_layer": 0.65625,
+    "span_actually_edited": true,
+    "decode_step_edits_under_span_policy": 0,
+    "pass_no_decode_edit_under_span": true,
+    "dtype": "torch.bfloat16",
+    "pass_all": true,
+    "prefill_all_no_decode_edit": true,
+    "prefill_all_touches_every_prefill_position": true,
+    "max_abs_dev_same_input_patch": 0.0,
+    "pass_same_input_patch_null": true,
+    "injection_vs_unpatched_max_abs_dev": 0.060886383056640625,
+    "max_abs_dev_batched_vs_single": 0.08652877807617188,
+    "tolerances": {
+      "logits_alpha0_rank0": 0.001,
+      "same_input_patch": 1e-06,
+      "note": "bf16 with flash attention. alpha-0, rank-0 and the same-input patch null are exact no-ops by construction and must be 0. injection_vs_unpatched and batched_vs_single compare different kernel paths and are recorded as the instrument's bf16 noise floor; the bridge uses the identity-patched reference so that noise cancels"
+    },
+    "candidate_boundary": {
+      "n_candidates": 3,
+      "n_boundary_merges": 0
+    },
+    "pass_all_final": true,
+    "model": "gemma-2-2b-it",
+    "utc": "2026-09-14T08:40:09Z"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "models": {
+    "gemma-2-2b-it": {
+      "hf_id": "google/gemma-2-2b-it",
+      "model_class": "Gemma2ForCausalLM",
+      "attn_implementation": "flash_attention_2",
+      "dtype": "torch.bfloat16",
+      "transformers": null,
+      "torch": null
+    }
+  },
+  "bases": {
+    "gemma-2-2b-it": {
+      "file": "Code/CURE/results/v2/p2_basis_gemma-2-2b-it_chat_cure_centred_svd.npz",
+      "sha256": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+      "rank_used": 1,
+      "max_rank_in_file": 4,
+      "fit_info": {
+        "n_fit_pairs_requested": 300,
+        "n_fit_pairs_used": 300,
+        "n_span_tokens": 330,
+        "site": "span (all tokens, truncated to shorter span)",
+        "sec_collect": 19.668144702911377,
+        "n_fit_pairs_neutral_type": 54,
+        "estimator": "centred_svd"
+      },
+      "fit_id": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+      "note": "contrast-derived projection: leading right singular vector of centred span-position activation differences over the fit pairs; 54 of the fit pairs are neutral-type substitutions"
+    }
+  },
+  "random_basis_seed": 20260914,
+  "conditions": [
+    "B",
+    "S1",
+    "SE",
+    "NE",
+    "RE",
+    "RNE",
+    "G1"
+  ],
+  "max_new_tokens": 48,
+  "fmt": "chat",
+  "match_tolerance": 0.05,
+  "dev_seed_source": "fresh BBQ construction, templates disjoint from the final set (deliberate departure from the plan's existing-dev-split wording)",
+  "protocol_hash": "d8504349f1687b67",
+  "saved_utc": "2026-09-14T08:40:02Z"
+}
