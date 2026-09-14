@@ -294,6 +294,18 @@
       "6": 0.0669221505522728,
       "13": 0.030519725754857063,
       "19": 0.06768965721130371
+    },
+    "eval_set": {
+      "n_seeds": 72,
+      "n_templates": 12,
+      "flipped_F_to_M": 36,
+      "n_candidates": 1867,
+      "n_templates_with_candidates": 12,
+      "excluded": {
+        "no_opposite_gender_descriptor_in_template": 8,
+        "duplicate_descriptor_triple_in_template": 481
+      },
+      "construction": "descriptor substitution (opposite-gender descriptor of the same template), as the pooled audit's subvariants"
     }
   },
   "part_b_done": {
