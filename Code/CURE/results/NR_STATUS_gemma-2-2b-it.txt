@@ -1,1 +1,1 @@
-setup complete @ Mon Sep 14 08:36:48 UTC 2026
+SMOKE starting @ Mon Sep 14 08:36:49 UTC 2026
