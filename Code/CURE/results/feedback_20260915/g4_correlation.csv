@@ -1,0 +1,3 @@
+model_name,n_seeds,pearson_dT_dCanswer,spearman_dT_dCanswer,share_seeds_both_fall,share_seeds_C_falls_T_rises
+gemma-2-2b-it,160,0.11140240194848469,0.11854857611625454,0.46875,0.2125
+llama-3.1-8b-instruct,160,0.02372010522040783,-0.059486698699167936,0.45625,0.2
