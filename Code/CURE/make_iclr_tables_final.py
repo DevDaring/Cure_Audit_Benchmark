@@ -83,7 +83,7 @@ for m in MODELS:
     rows.append("\\midrule")
 rows.pop()
 w("tab_final_confirm.tex", r"""\begin{table}[t]
-\caption{The four pre-declared tests on the fresh set, per model: template-cluster estimates with bootstrap intervals and Holm-adjusted $p$ over the family of eight; $^{\ast}$ rejects at 0.05.}
+\caption{Fresh replication: the pre-registered tests per model; $^{\ast}$ rejects after Holm correction.}
 \label{tab:final-confirm}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -110,7 +110,7 @@ for m in MODELS:
     rows.append("\\midrule")
 rows.pop()
 w("tab_final_levels.tex", r"""\begin{table}[t]
-\caption{Fresh set, every condition: answer-score sensitivity $T$ (lower is less sensitive), generation accuracy, output validity and the share of pairs with both sides correct; template-weighted means with template-cluster bootstrap intervals.}
+\caption{Fresh replication, every condition: $T$, generation accuracy, validity and both-correct share.}
 \label{tab:final-levels}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -133,7 +133,7 @@ for m in MODELS:
     d1, d2 = S(m, "control acc_S1 - acc_B"), S(m, "control acc_NE - acc_B")
     rows.append("%s & %d & %.3f & %.3f & %s & %.3f & %s \\\\" % (D[m], int(b.n_seeds), b.estimate, s1.estimate, cell(d1.estimate, d1.lo, d1.hi, "%+.3f"), ne.estimate, cell(d2.estimate, d2.lo, d2.hi, "%+.3f")))
 w("tab_control.tex", r"""\begin{table}[t]
-\caption{Relevant-information control: BBQ items whose correct answer names the swapped entity. Generation accuracy under no edit, the span erasure and the control-span edit, with paired template-cluster intervals for the changes.}
+\caption{Relevant-information control: accuracy when the swapped entity is the correct answer.}
 \label{tab:control}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -157,7 +157,7 @@ for m in MODELS:
     br = per[m][(per[m].kind == "bridge") & (per[m].status == "ok") & (per[m].cond == "B")]
     rows.append("%s & %.3f & %.3f & %s & %s & %.2f \\\\" % (D[m], b0.estimate, b1.estimate, cell(dd.estimate, dd.lo, dd.hi, "%+.3f"), cell(df.estimate, df.lo, df.hi, "%+.3f"), br.first_disambiguates.mean()))
 w("tab_bridge.tex", r"""\begin{table}[t]
-\caption{The patching instruments on the fresh set: mean answer-level patching effect $|C_{\mathrm{answer}}|$ under no edit and under the span erasure, its paired reduction, the paired reduction of the legacy first-token effect $|C_{\mathrm{first}}|$, and the share of seeds whose gold first token identifies a unique option.}
+\caption{Fresh replication: answer-level and first-token patching effects, no edit versus span erasure.}
 \label{tab:bridge}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -189,7 +189,7 @@ for m in MODELS:
     rows.append("\\midrule")
 rows.pop()
 w("tab_energy.tex", r"""\begin{table}[h]
-\caption{Strengths and achieved activation energies (summed squared displacement over layers and edited positions, relative to the unedited energy at both candidate spans on the development seeds): development value used for calibration and the test-set mean; mean number of edited positions per prompt.}
+\caption{Calibrated strengths and achieved activation energies per condition.}
 \label{tab:energy}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -216,7 +216,7 @@ for m in MODELS:
         D[m], bv["n_fit_rows"], bv["n_heldout_rows"], mid["probe_pre"], mid["probe_post_leace"], mid["max_abs_cov_post_leace"], int(tl.n_seeds),
         cell(tl.estimate, tl.lo, tl.hi, "%+.3f"), cell(tm.estimate, tm.lo, tm.hi, "%+.3f"), cell(al.estimate, al.lo, al.hi, "%+.3f")))
 w("tab_f3.tex", r"""\begin{table}[h]
-\caption{Coherent-label baselines (man/woman contrast, fit-split pairs): fit and held-out rows, held-out gender-probe accuracy before and after LEACE at the middle layer, residual feature-label covariance, and on the gender-eligible fresh seeds the change in $T$ under LEACE and under the mean difference and the accuracy change under LEACE.}
+\caption{Coherent-label LEACE and mean-difference baselines: probe checks and effects on gender seeds.}
 \label{tab:f3}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -242,7 +242,7 @@ for cat in cats:
         cells.append("%d & %s & %s" % (int(h1.n_seeds), cell(h1.estimate, h1.lo, h1.hi, "%+.3f"), cell(h4.estimate, h4.lo, h4.hi, "%+.3f")))
     rows.append("%s & %s \\\\" % (cat.replace("_", " "), " & ".join(cells)))
 w("tab_subgroups.tex", r"""\begin{table}[h]
-\caption{H1 (sensitivity reduction) and H4 (accuracy change) by BBQ category on the fresh set, both models; exploratory, template-cluster intervals.}
+\caption{Fresh replication: H1 and H4 by BBQ category (exploratory).}
 \label{tab:subgroups}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -267,7 +267,7 @@ for m in MODELS:
     h1 = conf.loc[(m, "H1")]
     rows.append("%s & %s & %s & %s & %s \\\\" % (D[m], cell(h1.estimate, h1.lo, h1.hi, "%+.3f"), cell(a.estimate, a.lo, a.hi, "%+.3f"), cell(b.estimate, b.lo, b.hi, "%+.3f"), cell(c.estimate, c.lo, c.hi, "%+.3f")))
 w("tab_diag.tex", r"""\begin{table}[h]
-\caption{Scoring-sensitivity checks: the H1 reduction in $T$ under the frozen scoring, and under a fixed option permutation and label-only candidates (32 pre-selected seeds) and under length-normalised scores (all seeds).}
+\caption{Scoring-sensitivity checks on the H1 reduction in $T$.}
 \label{tab:diag}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -293,7 +293,7 @@ for m in MODELS:
     rows.append("\\midrule")
 rows.pop()
 w("tab_deltas.tex", r"""\begin{table}[h]
-\caption{Fresh set, paired changes relative to no edit for every edited condition: answer sensitivity $T$, generation accuracy and the both-sides-correct share; template-weighted means with template-cluster bootstrap intervals.}
+\caption{Fresh replication: paired changes relative to no edit for every edited condition.}
 \label{tab:deltas}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -320,7 +320,7 @@ for m in ALL4:
     rows.append("%s & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f \\\\" % (D4[m], b.both_correct, s1.both_correct, b.flip_rate_both_valid, s1.flip_rate_both_valid,
                                                                                 b.conservative_failure_rate, s1.conservative_failure_rate, b.both_wrong_valid, s1.both_wrong_valid))
 w("tab_legacy.tex", r"""\begin{table}[h]
-\caption{Earlier pool, 160 test seeds per model, no edit versus span erasure: both sides correct, answer flips among pairs with both sides valid, conservative failure (either side invalid or the answers differ), and both sides valid but wrong.}
+\caption{Pooled audit: behavioural shares before and after the span erasure.}
 \label{tab:legacy}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}

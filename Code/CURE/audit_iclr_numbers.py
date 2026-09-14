@@ -36,7 +36,8 @@ def fail(msg):
 
 def table_rows(name: str) -> list[list[str]]:
     """Rows of a generated table as lists of cell strings (LaTeX stripped, intervals kept)."""
-    txt = (TAB / name).read_text(encoding="utf-8")
+    src = (V2 / name) if name == "tab_controls.tex" else (TAB / name)   # figure data lives next to the results
+    txt = src.read_text(encoding="utf-8")
     body = txt.split("\\midrule", 1)[1].split("\\bottomrule")[0]
     rows = []
     for line in body.splitlines():
