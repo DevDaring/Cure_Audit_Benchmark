@@ -1,1 +1,1 @@
-SMOKE PASSED for qwen2.5-7b-instruct @ Mon Sep 14 17:56:12 UTC 2026
+stage g3 qwen2.5-7b-instruct starting @ Mon Sep 14 17:56:14 UTC 2026
