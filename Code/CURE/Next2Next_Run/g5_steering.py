@@ -56,6 +56,22 @@ VECTORS = ("DV", "CV")
 SITES = {"span": "span", "last": "last_token", "all": "prefill_all"}
 
 
+STEER_IMPL = 2                  # 2: last_token edits the last prompt position in the scoring pass (see SteerEdit)
+
+
+def drop_stale_last_rows(path) -> None:
+    """Rows of the *_last conditions written before STEER_IMPL 2 edited the wrong position in
+    the scoring pass; remove them so the resume logic recomputes them."""
+    if not path.exists():
+        return
+    d = pd.read_parquet(path)
+    impl = d["steer_impl"] if "steer_impl" in d else pd.Series([0] * len(d), index=d.index)
+    stale = d.cond.str.endswith("_last") & (impl.fillna(0) < STEER_IMPL)
+    if stale.any():
+        d[~stale].to_parquet(path, index=False)
+        log.info("g5: dropped %d stale *_last rows (steer_impl < %d)", int(stale.sum()), STEER_IMPL)
+
+
 class SteerEdit(I.HookedEdit):
     """h' = h + alpha * v at the target positions (additive steering); logs the same energy
     bookkeeping as HookedEdit so energy_of() applies unchanged."""
@@ -65,6 +81,19 @@ class SteerEdit(I.HookedEdit):
         super().__init__(model, {l: np.asarray(v, np.float32)[None, :] for l, v in vec_by_layer.items()}, alpha=alpha, site=site)
         dev = next(model.parameters()).device; dt = next(model.parameters()).dtype
         self.V = {int(l): torch.as_tensor(np.asarray(v, np.float32), device=dev).to(dt) for l, v in vec_by_layer.items()}
+
+    def _positions_for(self, row: int, T: int, prefill: bool) -> list[int]:
+        # last_token: the last PROMPT position (the targets carry n_prefill - 1, pad-corrected), so
+        # that the teacher-forced option tokens of the scoring pass are read out under the edit;
+        # HookedEdit's own rule (T - 1 of the current sequence) would edit the last option token
+        # instead, after every position that determines the option likelihood. At decode steps
+        # (T == 1) every generated token is edited.
+        if self.site == "last_token":
+            if prefill and row < len(self._targets) and self._targets[row]:
+                off = self._pad[row] if row < len(self._pad) else 0
+                return [p + off for p in self._targets[row] if 0 <= p + off < T]
+            return [T - 1]
+        return super()._positions_for(row, T, prefill)
 
     def _make_hook(self, li: int):
         v = self.V[li]
@@ -254,6 +283,7 @@ def run(mname: str, smoke: bool) -> None:
     z = np.load(C.OUT / ("g5_vectors_%s.npz" % mname))
     vecs = {"DV": {int(k[3:]): z[k] for k in z.files if k.startswith("DV_")}, "CV": {int(k[3:]): z[k] for k in z.files if k.startswith("CV_")}}
     conds = [("%s_%s" % (v, s), v, s) for v in VECTORS for s in ("span", "last", "all")]
+    drop_stale_last_rows(path)
     done = C.done_keys(path, ROW_KEY)
     t0 = time.time(); n = 0
     for group in ("final", "control"):
@@ -289,7 +319,7 @@ def eval_steer(model, tok, mname: str, vec: dict, alpha: float, site: str, r, si
     text = sp["text"]; cands = S.candidates(options, "text"); first_ids = S.first_token_ids(tok, text, options)
     pos = list(range(sp["n_prefill"])) if site == "prefill_all" else (sp["demo"] if site == "span" else [sp["n_prefill"] - 1])
     row = {"model_name": mname, "seed_id": r.seed_id, "group": r.group, "side": side, "cond": cname, "variant": "std", "kind": "score",
-           "category": r.category, "template": r.template, "site": site, "alpha": alpha, "basis_id": cname.split("_")[0] + "_vector",
+           "category": r.category, "template": r.template, "site": site, "alpha": alpha, "basis_id": cname.split("_")[0] + "_vector", "steer_impl": STEER_IMPL,
            "rank": 1, "positions": json.dumps(pos), "n_edited_positions": len(pos), "gold_index": gold, "options": json.dumps(options), "status": "ok"}
     try:
         e = SteerEdit(model, vec, alpha, site)

@@ -54,8 +54,17 @@ def a1(tests: list, summary: list) -> None:
             continue
         d = pd.read_parquet(p); d = d[d.status == "ok"]
         w = {stat: d.pivot_table(index="seed_id", columns="cond_id", values=stat) for stat in ("C_raw", "C_logp", "C_margin")}
-        mism = d[(d.cond_id.isin(["unedited_r0_a0", "cure_centred_svd_r1_a1"]))].C_raw_matches_stored.mean()
-        summary.append({"study": "A1", "model_name": m, "condition": "-", "quantity": "share of rows whose C_raw equals the stored C (0.05)", "estimate": float(mism)})
+        # reproduction of the pooled audit's stored C on the same pairs: bf16 logits are quantised at
+        # 0.125-0.25 for logit magnitudes of 16-64, so a different GPU reproduces C only to that
+        # resolution (qwen: exact; gemma/phi: differences are multiples of 0.125). Report the
+        # correlation and the mean-level agreement, not an exact-match share.
+        b = d[d.cond_id.isin(["unedited_r0_a0", "cure_centred_svd_r1_a1"]) & np.isfinite(d.C_stored)]
+        if len(b) > 3:
+            summary.append({"study": "A1", "model_name": m, "condition": "-", "quantity": "reproduction: corr(C_raw, stored C)", "estimate": float(np.corrcoef(b.C_raw, b.C_stored)[0, 1])})
+            summary.append({"study": "A1", "model_name": m, "condition": "-", "quantity": "reproduction: median |C_raw - stored C|", "estimate": float((b.C_raw - b.C_stored).abs().median())})
+            for c in ("unedited_r0_a0", "cure_centred_svd_r1_a1"):
+                x = b[b.cond_id == c]
+                summary.append({"study": "A1", "model_name": m, "condition": c, "quantity": "reproduction: mean|C_raw| / mean|stored C|", "estimate": float(x.C_raw.abs().mean() / x.C_stored.abs().mean()) if x.C_stored.abs().mean() else float("nan")})
         rnd = [c for c in w["C_raw"].columns if c.startswith("random_ortho")]
         comps = [("S1_vs_B", "cure_centred_svd_r1_a1", "unedited_r0_a0"), ("S1_vs_random_mean", "cure_centred_svd_r1_a1", "RANDOM_MEAN")]
         for c in w["C_raw"].columns:
