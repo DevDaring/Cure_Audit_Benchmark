@@ -1,0 +1,302 @@
+{
+  "model": "gemma-2-2b-it",
+  "utc": "2026-09-14T17:59:50Z",
+  "concept_erasure_version": "0.2.4",
+  "part_a": {
+    "n_eligible_fit_pairs": 2334,
+    "collect_info": {
+      "n_fit_pairs_requested": 2334,
+      "n_fit_pairs_used": 2334,
+      "n_span_tokens": 2628,
+      "site": "span (all tokens, truncated to shorter span)"
+    },
+    "n_pairs_used": 2334,
+    "n_pairs_heldout": 466,
+    "sizes": {
+      "swap_small": 50,
+      "swap_300": 300,
+      "swap_max": 1868
+    },
+    "swap_small": {
+      "tag": "swap_small",
+      "n_rows_fit": 114,
+      "n_rows_heldout": 1052,
+      "d": 2304,
+      "class_counts_fit": {
+        "0": 57,
+        "1": 57
+      },
+      "per_layer": [
+        {
+          "layer": 6,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 100,
+          "probe_pre": 0.6749049429657795,
+          "probe_post": 0.5,
+          "max_abs_cov_post_fit": 1.6391277313232422e-06,
+          "abs_cos_to_contrast_basis": 0.2545295157431571
+        },
+        {
+          "layer": 13,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 100,
+          "probe_pre": 0.6397338403041825,
+          "probe_post": 0.5,
+          "max_abs_cov_post_fit": 7.09399842379386e-06,
+          "abs_cos_to_contrast_basis": 0.28382691895882306
+        },
+        {
+          "layer": 19,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 100,
+          "probe_pre": 0.688212927756654,
+          "probe_post": 0.5,
+          "max_abs_cov_post_fit": 1.1912563390899123e-05,
+          "abs_cos_to_contrast_basis": 0.3673578052294558
+        }
+      ],
+      "n_pairs": 50,
+      "shrinkage": true,
+      "sec_fit": 3.502208948135376,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "swap_300": {
+      "tag": "swap_300",
+      "n_rows_fit": 696,
+      "n_rows_heldout": 1052,
+      "d": 2304,
+      "class_counts_fit": {
+        "0": 348,
+        "1": 348
+      },
+      "per_layer": [
+        {
+          "layer": 6,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 545,
+          "probe_pre": 0.7091254752851711,
+          "probe_post": 0.49809885931558934,
+          "max_abs_cov_post_fit": 0.0017777928847005997,
+          "abs_cos_to_contrast_basis": 0.04736634622578408
+        },
+        {
+          "layer": 13,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 545,
+          "probe_pre": 0.7262357414448669,
+          "probe_post": 0.5313688212927756,
+          "max_abs_cov_post_fit": 0.002033366168710007,
+          "abs_cos_to_contrast_basis": 0.08036411215530842
+        },
+        {
+          "layer": 19,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 546,
+          "probe_pre": 0.717680608365019,
+          "probe_post": 0.5399239543726235,
+          "max_abs_cov_post_fit": 0.0015322809246764786,
+          "abs_cos_to_contrast_basis": 0.0653654277198815
+        }
+      ],
+      "n_pairs": 300,
+      "shrinkage": true,
+      "sec_fit": 4.596444368362427,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "swap_max": {
+      "tag": "swap_max",
+      "n_rows_fit": 4204,
+      "n_rows_heldout": 1052,
+      "d": 2304,
+      "class_counts_fit": {
+        "0": 2102,
+        "1": 2102
+      },
+      "per_layer": [
+        {
+          "layer": 6,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1505,
+          "probe_pre": 0.7062737642585551,
+          "probe_post": 0.4847908745247148,
+          "max_abs_cov_post_fit": 0.002632353647118461,
+          "abs_cos_to_contrast_basis": 0.12179850070470404
+        },
+        {
+          "layer": 13,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1518,
+          "probe_pre": 0.69106463878327,
+          "probe_post": 0.4914448669201521,
+          "max_abs_cov_post_fit": 0.0048252009812363205,
+          "abs_cos_to_contrast_basis": 0.23606723474033936
+        },
+        {
+          "layer": 19,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1518,
+          "probe_pre": 0.7024714828897338,
+          "probe_post": 0.4448669201520912,
+          "max_abs_cov_post_fit": 0.007351525426513518,
+          "abs_cos_to_contrast_basis": 0.08245411841129613
+        }
+      ],
+      "n_pairs": 1868,
+      "shrinkage": true,
+      "sec_fit": 19.772976875305176,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "swap_max_noshrink": {
+      "tag": "swap_max_noshrink",
+      "n_rows_fit": 4204,
+      "n_rows_heldout": 1052,
+      "d": 2304,
+      "class_counts_fit": {
+        "0": 2102,
+        "1": 2102
+      },
+      "per_layer": [
+        {
+          "layer": 6,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1505,
+          "probe_pre": 0.7062737642585551,
+          "probe_post": 0.4876425855513308,
+          "max_abs_cov_post_fit": 0.0029468006878864412,
+          "abs_cos_to_contrast_basis": 0.12179229090747694
+        },
+        {
+          "layer": 13,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1518,
+          "probe_pre": 0.69106463878327,
+          "probe_post": 0.4752851711026616,
+          "max_abs_cov_post_fit": 0.0051463289021538286,
+          "abs_cos_to_contrast_basis": 0.23606781363083554
+        },
+        {
+          "layer": 19,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1518,
+          "probe_pre": 0.7024714828897338,
+          "probe_post": 0.46577946768060835,
+          "max_abs_cov_post_fit": 0.007480766351284241,
+          "abs_cos_to_contrast_basis": 0.08245516890989944
+        }
+      ],
+      "n_pairs": 1868,
+      "shrinkage": false,
+      "sec_fit": 19.879233598709106,
+      "label": "0 = side A, 1 = side B of the swap"
+    }
+  },
+  "part_b": {
+    "pool": {
+      "n_items": 4502,
+      "n_templates": 25,
+      "pentad_bbq_seeds": 254,
+      "pentad_contexts_matched": 516,
+      "seeds_pool": 254,
+      "dev_seeds_pool": 16,
+      "touched_templates": 156
+    },
+    "n_fit_templates": 17,
+    "n_eval_templates": 8,
+    "n_fit_items": 3140,
+    "n_eval_items": 1362,
+    "collect": {
+      "n_prompts": 1500,
+      "n_rows": 7612
+    },
+    "gender_large": {
+      "tag": "gender_large",
+      "n_rows_fit": 5538,
+      "n_rows_heldout": 2074,
+      "d": 2304,
+      "class_counts_fit": {
+        "0": 2769,
+        "1": 2769
+      },
+      "per_layer": [
+        {
+          "layer": 6,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1583,
+          "probe_pre": 1.0,
+          "probe_post": 0.4927675988428158,
+          "max_abs_cov_post_fit": 0.00026309242523848774,
+          "abs_cos_to_contrast_basis": 0.0711015442685429
+        },
+        {
+          "layer": 13,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1693,
+          "probe_pre": 1.0,
+          "probe_post": 0.5366441658630665,
+          "max_abs_cov_post_fit": 0.001039162046774151,
+          "abs_cos_to_contrast_basis": 0.02061212019270777
+        },
+        {
+          "layer": 19,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1673,
+          "probe_pre": 1.0,
+          "probe_post": 0.49662487945998074,
+          "max_abs_cov_post_fit": 0.0014369202116500948,
+          "abs_cos_to_contrast_basis": 0.07623827866755131
+        }
+      ],
+      "sec_fit": 10.52655291557312,
+      "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+    },
+    "gender_small": {
+      "tag": "gender_small",
+      "n_rows_fit": 61,
+      "n_rows_heldout": 2074,
+      "d": 2304,
+      "class_counts_fit": {
+        "0": 33,
+        "1": 28
+      },
+      "per_layer": [
+        {
+          "layer": 6,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 59,
+          "probe_pre": 1.0,
+          "probe_post": 0.49951783992285437,
+          "max_abs_cov_post_fit": 7.176136528415965e-06,
+          "abs_cos_to_contrast_basis": 0.11145662712969945
+        },
+        {
+          "layer": 13,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 59,
+          "probe_pre": 1.0,
+          "probe_post": 0.49951783992285437,
+          "max_abs_cov_post_fit": 1.090997266892891e-05,
+          "abs_cos_to_contrast_basis": 0.11673429775484939
+        },
+        {
+          "layer": 19,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 59,
+          "probe_pre": 1.0,
+          "probe_post": 0.49951783992285437,
+          "max_abs_cov_post_fit": 1.4459148141565904e-05,
+          "abs_cos_to_contrast_basis": 0.14240572182756928
+        }
+      ],
+      "sec_fit": 3.4138436317443848,
+      "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+    },
+    "md_gender_abs_cos_to_contrast_basis": {
+      "6": 0.07109802961349487,
+      "13": 0.02057969942688942,
+      "19": 0.07624731957912445
+    },
+    "eval_set": {
+      "n_seeds": 0
+    }
+  }
+}
