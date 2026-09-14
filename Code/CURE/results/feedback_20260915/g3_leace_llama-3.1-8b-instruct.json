@@ -196,5 +196,220 @@
       "swap_max",
       "swap_max_noshrink"
     ]
+  },
+  "part_b": {
+    "pool": {
+      "n_items": 4502,
+      "n_templates": 25,
+      "pentad_bbq_seeds": 254,
+      "pentad_contexts_matched": 516,
+      "seeds_pool": 254,
+      "dev_seeds_pool": 16,
+      "touched_templates": 156
+    },
+    "n_fit_templates": 12,
+    "n_eval_templates": 13,
+    "n_fit_items": 2154,
+    "n_eval_items": 2348,
+    "collect": {
+      "n_prompts": 1500,
+      "n_rows": 7894
+    },
+    "gender_large": {
+      "tag": "gender_large",
+      "n_rows_fit": 5724,
+      "n_rows_heldout": 2170,
+      "d": 4096,
+      "class_counts_fit": {
+        "0": 2793,
+        "1": 2931
+      },
+      "per_layer": [
+        {
+          "layer": 8,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 2177,
+          "probe_pre": 1.0,
+          "probe_post": 0.5645161290322581,
+          "max_abs_cov_post_fit": 3.708775067612218e-05,
+          "abs_cos_to_contrast_basis": 0.043246057103823884
+        },
+        {
+          "layer": 16,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 2408,
+          "probe_pre": 1.0,
+          "probe_post": 0.4875576036866359,
+          "max_abs_cov_post_fit": 6.660846182143438e-05,
+          "abs_cos_to_contrast_basis": 0.029770314593783834
+        },
+        {
+          "layer": 24,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 2572,
+          "probe_pre": 1.0,
+          "probe_post": 0.447926267281106,
+          "max_abs_cov_post_fit": 7.270685863858758e-05,
+          "abs_cos_to_contrast_basis": 0.0037795744111693893
+        }
+      ],
+      "sec_fit": 35.52896809577942,
+      "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+    },
+    "gender_small": {
+      "tag": "gender_small",
+      "n_rows_fit": 61,
+      "n_rows_heldout": 2170,
+      "d": 4096,
+      "class_counts_fit": {
+        "0": 30,
+        "1": 31
+      },
+      "per_layer": [
+        {
+          "layer": 8,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 60,
+          "probe_pre": 0.9907834101382489,
+          "probe_post": 0.5170506912442396,
+          "max_abs_cov_post_fit": 7.047716631325576e-08,
+          "abs_cos_to_contrast_basis": 0.08145531672101128
+        },
+        {
+          "layer": 16,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 60,
+          "probe_pre": 0.9907834101382489,
+          "probe_post": 0.5170506912442396,
+          "max_abs_cov_post_fit": 8.100849490955787e-07,
+          "abs_cos_to_contrast_basis": 0.03441613898220018
+        },
+        {
+          "layer": 24,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 60,
+          "probe_pre": 0.9907834101382489,
+          "probe_post": 0.5170506912442396,
+          "max_abs_cov_post_fit": 1.2288392150771931e-06,
+          "abs_cos_to_contrast_basis": 0.028582270152793732
+        }
+      ],
+      "sec_fit": 19.230088233947754,
+      "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+    },
+    "md_gender_abs_cos_to_contrast_basis": {
+      "8": 0.04326090216636658,
+      "16": 0.029796432703733444,
+      "24": 0.00378708285279572
+    }
+  },
+  "part_b_done": {
+    "split": [
+      "26",
+      "29",
+      "30",
+      "38",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "46",
+      "50",
+      "7"
+    ],
+    "fits": {
+      "collect": {
+        "n_prompts": 1500,
+        "n_rows": 7894
+      },
+      "gender_large": {
+        "tag": "gender_large",
+        "n_rows_fit": 5724,
+        "n_rows_heldout": 2170,
+        "d": 4096,
+        "class_counts_fit": {
+          "0": 2793,
+          "1": 2931
+        },
+        "per_layer": [
+          {
+            "layer": 8,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 2177,
+            "probe_pre": 1.0,
+            "probe_post": 0.5645161290322581,
+            "max_abs_cov_post_fit": 3.708775067612218e-05,
+            "abs_cos_to_contrast_basis": 0.043246057103823884
+          },
+          {
+            "layer": 16,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 2408,
+            "probe_pre": 1.0,
+            "probe_post": 0.4875576036866359,
+            "max_abs_cov_post_fit": 6.660846182143438e-05,
+            "abs_cos_to_contrast_basis": 0.029770314593783834
+          },
+          {
+            "layer": 24,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 2572,
+            "probe_pre": 1.0,
+            "probe_post": 0.447926267281106,
+            "max_abs_cov_post_fit": 7.270685863858758e-05,
+            "abs_cos_to_contrast_basis": 0.0037795744111693893
+          }
+        ],
+        "sec_fit": 35.52896809577942,
+        "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+      },
+      "gender_small": {
+        "tag": "gender_small",
+        "n_rows_fit": 61,
+        "n_rows_heldout": 2170,
+        "d": 4096,
+        "class_counts_fit": {
+          "0": 30,
+          "1": 31
+        },
+        "per_layer": [
+          {
+            "layer": 8,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 60,
+            "probe_pre": 0.9907834101382489,
+            "probe_post": 0.5170506912442396,
+            "max_abs_cov_post_fit": 7.047716631325576e-08,
+            "abs_cos_to_contrast_basis": 0.08145531672101128
+          },
+          {
+            "layer": 16,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 60,
+            "probe_pre": 0.9907834101382489,
+            "probe_post": 0.5170506912442396,
+            "max_abs_cov_post_fit": 8.100849490955787e-07,
+            "abs_cos_to_contrast_basis": 0.03441613898220018
+          },
+          {
+            "layer": 24,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 60,
+            "probe_pre": 0.9907834101382489,
+            "probe_post": 0.5170506912442396,
+            "max_abs_cov_post_fit": 1.2288392150771931e-06,
+            "abs_cos_to_contrast_basis": 0.028582270152793732
+          }
+        ],
+        "sec_fit": 19.230088233947754,
+        "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+      },
+      "md_gender_abs_cos_to_contrast_basis": {
+        "8": 0.04326090216636658,
+        "16": 0.029796432703733444,
+        "24": 0.00378708285279572
+      }
+    }
   }
 }
