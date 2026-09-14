@@ -1,0 +1,22 @@
+{
+  "model": "llama-3.1-8b-instruct",
+  "sec_per_side_by_condition": {
+    "B": 2.576414187749227,
+    "S1": 2.526689608891805,
+    "SE": 2.547331929206848,
+    "NE": 2.563294212023417,
+    "RE": 2.568094531695048,
+    "RNE": 3.2478854258855185,
+    "G1": 4.034584919611613
+  },
+  "sec_bridge": 0.8690568208694458,
+  "sec_per_seed_all_conditions": 41.866703271865845,
+  "estimate_hours_tier160": 2.197282003385049,
+  "estimate_hours_tier100": 1.4995036155206185,
+  "model_hour_allowance": 12.0,
+  "tier_chosen": 160,
+  "gpu_rate_usd_per_hour": 0.481,
+  "estimated_cost_usd": 1.0568926436282087,
+  "decided_before_final_rows": true,
+  "utc": "2026-09-14T09:03:27Z"
+}
