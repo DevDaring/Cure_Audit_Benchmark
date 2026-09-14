@@ -1,1 +1,1 @@
-stage g3 llama-3.1-8b-instruct starting @ Mon Sep 14 22:27:08 UTC 2026
+stage g1 llama-3.1-8b-instruct starting @ Mon Sep 14 23:31:49 UTC 2026
