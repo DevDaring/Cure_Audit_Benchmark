@@ -100,6 +100,30 @@ def cmd_logs(args):
                      "for f in /workspace/Cure_Audit_Benchmark/Code/CURE/logs/nr_*.log; do echo == $f; tail -n 15 $f; done" % args.tail, timeout=180))
 
 
+RESTART = r'''
+S=$(printf '%s%s' 'boot' 'strap_final.sh')
+pkill -f "^bash .*${S}$" >/dev/null 2>&1; pkill -x sleep >/dev/null 2>&1
+pkill -f "[f]2_runner.py" >/dev/null 2>&1; sleep 3; pkill -9 -f "[f]2_runner.py" >/dev/null 2>&1; sleep 1
+while IFS= read -r -d '' kv; do case "$kv" in NR_*=*|HUGGINGFACE_TOKEN=*|Github_Classic_Token=*|RANDOM_SEED=*) export "$kv";; esac; done < /proc/1/environ
+cd /workspace/Cure_Audit_Benchmark && git add -u -- Code/CURE/results >/dev/null 2>&1; git commit -q -m "nr[$NR_MODEL]: local before pull" >/dev/null 2>&1
+git pull --no-rebase --no-edit -q origin main >/dev/null 2>&1 || git merge --abort >/dev/null 2>&1
+__CLEAN__
+export NR_SKIP_SMOKE=__SKIP__
+nohup bash "Code/CURE/Next_Run/${S}" > /workspace/nr_boot.log 2>&1 &
+sleep 5; echo "model=$NR_MODEL running=$(pgrep -fc "^bash .*${S}$") head=$(git log --oneline -1 | cut -c1-60)"
+'''
+
+
+def cmd_restart(args):
+    st = DV.load_state()
+    for m, rec in st.items():
+        if args.model and m != args.model:
+            continue
+        clean = ("rm -rf Code/CURE/results/final_smoke_%s" % m) if args.fresh_smoke else ""
+        cmd = RESTART.replace("__CLEAN__", clean).replace("__SKIP__", "0" if args.fresh_smoke else "1")
+        print("%-24s %s" % (m, DV.ssh_run(int(rec["instance_id"]), cmd, timeout=240).strip()[-300:]))
+
+
 def cmd_destroy(args):
     st = DV.load_state()
     for m in list(st):
@@ -119,8 +143,9 @@ def main():
     l.add_argument("--rate", default="auto"); l.add_argument("--tier", default=None)
     g = sub.add_parser("logs"); g.add_argument("--model", required=True); g.add_argument("--tail", default="200")
     d = sub.add_parser("destroy"); d.add_argument("--model", default=None)
+    rs = sub.add_parser("restart"); rs.add_argument("--model", default=None); rs.add_argument("--fresh-smoke", action="store_true", help="delete the smoke dir and rerun the smoke first")
     a = ap.parse_args()
-    {"check": DV.cmd_check, "status": cmd_status, "offers": DV.cmd_offers, "launch": cmd_launch, "logs": cmd_logs, "destroy": cmd_destroy}[a.cmd](a)
+    {"check": DV.cmd_check, "status": cmd_status, "offers": DV.cmd_offers, "launch": cmd_launch, "logs": cmd_logs, "destroy": cmd_destroy, "restart": cmd_restart}[a.cmd](a)
 
 
 if __name__ == "__main__":
