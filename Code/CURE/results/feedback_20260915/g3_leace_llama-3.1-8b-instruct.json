@@ -1,0 +1,200 @@
+{
+  "model": "llama-3.1-8b-instruct",
+  "utc": "2026-09-14T22:27:27Z",
+  "concept_erasure_version": "0.2.4",
+  "part_a": {
+    "n_eligible_fit_pairs": 2334,
+    "collect_info": {
+      "n_fit_pairs_requested": 2334,
+      "n_fit_pairs_used": 2334,
+      "n_span_tokens": 2579,
+      "site": "span (all tokens, truncated to shorter span)"
+    },
+    "n_pairs_used": 2334,
+    "n_pairs_heldout": 466,
+    "sizes": {
+      "swap_small": 50,
+      "swap_300": 300,
+      "swap_max": 1868
+    },
+    "swap_small": {
+      "tag": "swap_small",
+      "n_rows_fit": 114,
+      "n_rows_heldout": 1050,
+      "d": 4096,
+      "class_counts_fit": {
+        "0": 57,
+        "1": 57
+      },
+      "per_layer": [
+        {
+          "layer": 8,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 101,
+          "probe_pre": 0.659047619047619,
+          "probe_post": 0.5,
+          "max_abs_cov_post_fit": 7.306797462597228e-08,
+          "abs_cos_to_contrast_basis": 0.19870003290190508
+        },
+        {
+          "layer": 16,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 101,
+          "probe_pre": 0.6819047619047619,
+          "probe_post": 0.5,
+          "max_abs_cov_post_fit": 1.1666040671499151e-07,
+          "abs_cos_to_contrast_basis": 0.1650705046507722
+        },
+        {
+          "layer": 24,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 101,
+          "probe_pre": 0.679047619047619,
+          "probe_post": 0.5,
+          "max_abs_cov_post_fit": 1.8835590596784626e-07,
+          "abs_cos_to_contrast_basis": 0.12783380160047958
+        }
+      ],
+      "n_pairs": 50,
+      "shrinkage": true,
+      "sec_fit": 19.2473566532135,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "swap_300": {
+      "tag": "swap_300",
+      "n_rows_fit": 684,
+      "n_rows_heldout": 1050,
+      "d": 4096,
+      "class_counts_fit": {
+        "0": 342,
+        "1": 342
+      },
+      "per_layer": [
+        {
+          "layer": 8,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 539,
+          "probe_pre": 0.7066666666666667,
+          "probe_post": 0.4714285714285714,
+          "max_abs_cov_post_fit": 9.759037880695354e-05,
+          "abs_cos_to_contrast_basis": 0.01921769564610902
+        },
+        {
+          "layer": 16,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 539,
+          "probe_pre": 0.7266666666666667,
+          "probe_post": 0.5104761904761905,
+          "max_abs_cov_post_fit": 0.0001704143850426925,
+          "abs_cos_to_contrast_basis": 0.04170604705466084
+        },
+        {
+          "layer": 24,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 540,
+          "probe_pre": 0.7152380952380952,
+          "probe_post": 0.48,
+          "max_abs_cov_post_fit": 0.00026047486016711995,
+          "abs_cos_to_contrast_basis": 0.03226494624127438
+        }
+      ],
+      "n_pairs": 300,
+      "shrinkage": true,
+      "sec_fit": 22.256054639816284,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "swap_max": {
+      "tag": "swap_max",
+      "n_rows_fit": 4108,
+      "n_rows_heldout": 1050,
+      "d": 4096,
+      "class_counts_fit": {
+        "0": 2054,
+        "1": 2054
+      },
+      "per_layer": [
+        {
+          "layer": 8,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1451,
+          "probe_pre": 0.6866666666666666,
+          "probe_post": 0.5504761904761905,
+          "max_abs_cov_post_fit": 0.00020323186648507196,
+          "abs_cos_to_contrast_basis": 0.10628453883434127
+        },
+        {
+          "layer": 16,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1451,
+          "probe_pre": 0.7066666666666667,
+          "probe_post": 0.48857142857142855,
+          "max_abs_cov_post_fit": 0.0002697401211273738,
+          "abs_cos_to_contrast_basis": 0.08672230481614429
+        },
+        {
+          "layer": 24,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1457,
+          "probe_pre": 0.7,
+          "probe_post": 0.5142857142857142,
+          "max_abs_cov_post_fit": 0.0004546991272846703,
+          "abs_cos_to_contrast_basis": 0.020551622434567183
+        }
+      ],
+      "n_pairs": 1868,
+      "shrinkage": true,
+      "sec_fit": 64.26662278175354,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "swap_max_noshrink": {
+      "tag": "swap_max_noshrink",
+      "n_rows_fit": 4108,
+      "n_rows_heldout": 1050,
+      "d": 4096,
+      "class_counts_fit": {
+        "0": 2054,
+        "1": 2054
+      },
+      "per_layer": [
+        {
+          "layer": 8,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1451,
+          "probe_pre": 0.6866666666666666,
+          "probe_post": 0.5542857142857143,
+          "max_abs_cov_post_fit": 0.00020746351967854996,
+          "abs_cos_to_contrast_basis": 0.10628765014741527
+        },
+        {
+          "layer": 16,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1451,
+          "probe_pre": 0.7066666666666667,
+          "probe_post": 0.48857142857142855,
+          "max_abs_cov_post_fit": 0.0002819194140805053,
+          "abs_cos_to_contrast_basis": 0.08672627917506252
+        },
+        {
+          "layer": 24,
+          "leace_rank": 1,
+          "cov_effective_rank_fit": 1457,
+          "probe_pre": 0.7,
+          "probe_post": 0.49047619047619045,
+          "max_abs_cov_post_fit": 0.0005159954671469584,
+          "abs_cos_to_contrast_basis": 0.02055058627500761
+        }
+      ],
+      "n_pairs": 1868,
+      "shrinkage": false,
+      "sec_fit": 64.61844539642334,
+      "label": "0 = side A, 1 = side B of the swap"
+    },
+    "complete": true,
+    "tags": [
+      "swap_small",
+      "swap_300",
+      "swap_max",
+      "swap_max_noshrink"
+    ]
+  }
+}
