@@ -1,1 +1,1 @@
-setup complete @ Mon Sep 14 17:54:32 UTC 2026
+SMOKE qwen2.5-7b-instruct starting @ Mon Sep 14 17:54:36 UTC 2026
