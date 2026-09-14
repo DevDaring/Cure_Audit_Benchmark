@@ -37,8 +37,11 @@ g3_rows_<model>.parquet (resumable). Usage: python g3_leace_conditioned.py --mod
 from __future__ import annotations
 
 import argparse
+import collections
+import hashlib
 import json
 import random
+import re
 import time
 
 import numpy as np
@@ -163,7 +166,7 @@ def gender_pool() -> tuple[pd.DataFrame, dict]:
 def split_templates(df: pd.DataFrame) -> tuple[set, set]:
     ts = sorted(df.question_index.astype(str).unique())
     rng = random.Random(C.RANDOM_SEED); rng.shuffle(ts)
-    n_fit = int(round(2 * len(ts) / 3))
+    n_fit = len(ts) // 2                      # the fit pool is capped far below its size; more eval templates = more clusters
     return set(ts[:n_fit]), set(ts[n_fit:])
 
 
@@ -194,23 +197,83 @@ def collect_gender(model, tok, df: pd.DataFrame, max_items: int) -> tuple[dict, 
     return X, np.asarray(z), np.asarray(tpl), {"n_prompts": n_prompts, "n_rows": n_rows}
 
 
-def build_fm_eval_set(df_eval: pd.DataFrame, n_per_template: int, max_seeds: int) -> pd.DataFrame:
-    """F<->M invariance pairs (gold = unknown) from the eval templates with the final cycle's
-    pair rule; the swapped entity changes gender."""
-    cands, _ = D.build_candidates(df_eval, set(), set(), "invariance")
-    cands = [x for x in cands if x["group_A"] != x["group_B"] and {x["group_A"], x["group_B"]} == {"F", "M"}]
+def _sub_word(text: str, old: str, new: str) -> str:
+    def rep(m):
+        w = m.group(0)
+        return new[0].upper() + new[1:] if w[0].isupper() and not new[0].isupper() else new
+    return re.sub(r"(?<![A-Za-z0-9])" + re.escape(old) + r"(?![A-Za-z0-9])", rep, text, flags=re.I)
+
+
+def build_fm_eval_set(df_eval: pd.DataFrame, n_per_template: int, max_seeds: int) -> tuple[pd.DataFrame, dict]:
+    """F<->M swap pairs (gold = unknown) on the evaluation templates. Every BBQ Gender_identity
+    item pairs one female with one male entity, so no sibling item flips the gender of one
+    entity while keeping the other (the final cycle's pair rule yields M->M and F->F swaps only).
+    The variant is therefore built the way the pooled audit built its subvariants: the swapped
+    entity's descriptor is replaced, in the context and in its option, by an opposite-gender
+    descriptor drawn from the same template's own items (a name from the template's name list,
+    or the man/woman-type word); everything else is fixed, so the diff is one span."""
+    amb = df_eval[df_eval.context_condition == "ambig"]
+    names = {}
+    for r in amb.itertuples(index=False):
+        for _, d, g in D.entities(r)["ent"]:
+            names.setdefault((str(r.question_index), g), set()).add(d)
     rng = random.Random(C.RANDOM_SEED)
+    cands, excl, seen = [], collections.Counter(), set()
+    for r in amb.itertuples(index=False):
+        e = D.entities(r)
+        if len(e["ent"]) != 2 or e["unknown"] is None or int(r.label) != e["unknown"]:
+            excl["shape_or_gold_not_unknown"] += 1; continue
+        opts = [r.ans0, r.ans1, r.ans2]
+        if len({D.norm(o) for o in opts}) != 3:
+            excl["degenerate_options"] += 1; continue
+        for i1, d1, g1 in e["ent"]:
+            i2, d2, g2 = next(x for x in e["ent"] if x[0] != i1)
+            other = "F" if g1 == "M" else "M"
+            pool = sorted(x for x in names.get((str(r.question_index), other), set())
+                          if D.norm(x) not in (D.norm(d1), D.norm(d2)) and D.whole_word_count(r.context, x) == 0)
+            if not pool:
+                excl["no_opposite_gender_descriptor_in_template"] += 1; continue
+            if D.whole_word_count(r.context, d1) != 1 or D.whole_word_count(opts[i1], d1) < 1 or D.whole_word_count(r.context, d2) < 1:
+                excl["descriptor_not_exactly_once"] += 1; continue
+            d_new = pool[rng.randrange(len(pool))]
+            ctx_b = _sub_word(r.context, d1, d_new)
+            opts_b = list(opts); opts_b[i1] = _sub_word(opts[i1], d1, d_new)
+            ops = D.word_diff(r.context, ctx_b)
+            if len(ops) != 1 or ops[0][0] != "replace" or len({D.norm(o) for o in opts_b}) != 3:
+                excl["diff_not_single_replacement"] += 1; continue
+            key = (str(r.question_index), D.norm(d1), D.norm(d_new), D.norm(d2))
+            if key in seen:
+                excl["duplicate_descriptor_triple_in_template"] += 1; continue
+            seen.add(key)
+            sem = ["", "", ""]; sem[i1] = "ent1"; sem[e["unknown"]] = "unknown"; sem[i2] = "ent2"
+            sid = "fm_" + hashlib.sha1(("bbq|%s|%d|%s|%s" % (r.category, int(r.example_id), d1, d_new)).encode()).hexdigest()[:10]
+            cands.append({
+                "seed_id": sid, "kind": "fm_swap", "category": r.category, "question_index": str(r.question_index),
+                "question_polarity": r.question_polarity, "example_id_A": int(r.example_id), "example_id_B": -1,
+                "context_A": r.context, "context_B": ctx_b, "question": r.question,
+                "options_A": json.dumps(opts), "options_B": json.dumps(opts_b), "semantic_ids": json.dumps(sem),
+                "descriptor_A": d1, "descriptor_B": d_new, "group_A": g1, "group_B": other, "entity2_descriptor": d2,
+                "gold_A": opts[e["unknown"]], "gold_B": opts_b[e["unknown"]], "gold_index": int(e["unknown"]),
+                "prompt_A": D.prompt_text(r.context, r.question, opts), "prompt_B": D.prompt_text(ctx_b, r.question, opts_b),
+                "n_context_replacements": 1,
+                "stereotyped_groups": json.dumps(list(dict(r.additional_metadata).get("stereotyped_groups", []))) if r.additional_metadata is not None else "[]",
+                "template": "%s|%s" % (r.category, r.question_index), "group": "fm_eval", "in_tier_100": True, "in_diag_32": False,
+                "f3_eligible": True})
     by_t = {}
     for x in cands:
         by_t.setdefault(x["template"], []).append(x)
     out = []
     for t in sorted(by_t):
-        xs = by_t[t]; rng.shuffle(xs); out += xs[:n_per_template]
+        xs = by_t[t]; rng.shuffle(xs)
+        # alternate the flipped gender so both directions are present in every template
+        f_first = [x for x in xs if x["group_A"] == "F"]; m_first = [x for x in xs if x["group_A"] == "M"]
+        mix = [x for pair in zip(f_first, m_first) for x in pair] + f_first[len(m_first):] + m_first[len(f_first):]
+        out += mix[:n_per_template]
     rng.shuffle(out)
     out = out[:max_seeds]
-    for x in out:
-        x["group"] = "fm_eval"; x["in_tier_100"] = True; x["in_diag_32"] = False; x["f3_eligible"] = True
-    return pd.DataFrame(out)
+    info = {"n_candidates": len(cands), "n_templates_with_candidates": len(by_t), "excluded": dict(excl),
+            "construction": "descriptor substitution (opposite-gender descriptor of the same template), as the pooled audit's subvariants"}
+    return pd.DataFrame(out), info
 
 
 def spans_for(tok, man: pd.DataFrame) -> dict:
@@ -234,6 +297,23 @@ def part_b(mname: str, model, tok, rec: dict, smoke: bool) -> None:
     df_eval = df[df.question_index.astype(str).isin(eval_t)]
     rec["part_b"] = {"pool": notes, "n_fit_templates": len(fit_t), "n_eval_templates": len(eval_t),
                      "n_fit_items": int(len(df_fit)), "n_eval_items": int(len(df_eval))}
+    prev = rec.get("part_b_done") or {}
+    fits, md = {}, {}
+    if prev.get("fits") and prev.get("split") == sorted(fit_t) and all((C.OUT / ("g3_leace_%s_%s.npz" % (mname, t))).exists() for t in ("gender_large", "gender_small")) \
+            and (C.OUT / ("g3_md_%s_gender.npz" % mname)).exists():
+        for t in ("gender_large", "gender_small"):
+            fits[t] = LF.erasers_from_npz(np.load(C.OUT / ("g3_leace_%s_%s.npz" % (mname, t))))
+        zz = np.load(C.OUT / ("g3_md_%s_gender.npz" % mname)); md = {int(k[3:]): zz[k] for k in zz.files if k.startswith("md_")}
+        rec["part_b"].update(prev["fits"])
+        log.info("g3 B %s: fits reused from disk", mname)
+    else:
+        fits, md = _part_b_fits(mname, model, tok, rec, df_fit, smoke)
+        rec["part_b_done"] = {"split": sorted(fit_t), "fits": {k: rec["part_b"][k] for k in ("collect", "gender_large", "gender_small", "md_gender_abs_cos_to_contrast_basis")}}
+        C.write_json(rec, C.OUT / ("g3_leace_%s.json" % mname))
+    _part_b_eval(mname, model, tok, rec, df_eval, fits, md, smoke)
+
+
+def _part_b_fits(mname: str, model, tok, rec: dict, df_fit: pd.DataFrame, smoke: bool) -> tuple[dict, dict]:
     X, z, tpl, cinfo = collect_gender(model, tok, df_fit, max_items=(20 if smoke else 1500))
     rec["part_b"]["collect"] = cinfo
     layers = sorted(X); dev = str(next(model.parameters()).device)
@@ -262,13 +342,17 @@ def part_b(mname: str, model, tok, rec: dict, smoke: bool) -> None:
     np.savez(C.OUT / ("g3_md_%s_gender.npz" % mname), **{"md_%d" % l: md[l] for l in layers})
     rec["part_b"]["md_gender_abs_cos_to_contrast_basis"] = {str(l): float(abs(float(md[l][0] @ (target[l][0] / np.linalg.norm(target[l][0]))))) for l in probe_layers}
     del X
+    return fits, md
 
+
+def _part_b_eval(mname: str, model, tok, rec: dict, df_eval: pd.DataFrame, fits: dict, md: dict, smoke: bool) -> None:
     # ---- fresh F<->M evaluation set
-    ev = build_fm_eval_set(df_eval, n_per_template=(1 if smoke else 4), max_seeds=(2 if smoke else 80))
+    ev, ev_info = build_fm_eval_set(df_eval, n_per_template=(1 if smoke else 6), max_seeds=(2 if smoke else 72))
+    rec["part_b"]["eval_set"] = {"n_seeds": int(len(ev)), "n_templates": int(ev.template.nunique()) if len(ev) else 0,
+                                 "flipped_F_to_M": int((ev.group_A == "F").sum()) if len(ev) else 0, **ev_info}
     if ev.empty:
-        rec["part_b"]["eval_set"] = {"n_seeds": 0}; return
+        log.warning("g3 B %s: empty F<->M evaluation set (%s)", mname, ev_info); return
     ev.to_csv(C.OUT / ("g3_gender_manifest_%s.csv" % mname), index=False)
-    rec["part_b"]["eval_set"] = {"n_seeds": int(len(ev)), "n_templates": int(ev.template.nunique())}
     sp_all = spans_for(tok, ev)
     bases = F2.Bases(mname)
     f3_leace, f3_md = bases.leace, bases.md
@@ -314,8 +398,14 @@ def run(mname: str, smoke: bool, parts: str) -> None:
     rec = C.read_json(C.OUT / ("g3_leace_%s.json" % mname), {}) or {}
     rec.update({"model": mname, "utc": C.utc_now(), "concept_erasure_version": LF.leace_version()})
     if "a" in parts:
-        part_a(mname, model, tok, rec, smoke)
-        C.write_json(rec, C.OUT / ("g3_leace_%s.json" % mname))
+        have = [k for k, v in (rec.get("part_a") or {}).items() if isinstance(v, dict) and "per_layer" in v]
+        if {"swap_small", "swap_300", "swap_max", "swap_max_noshrink"} <= set(have) and all((C.OUT / ("g3_leace_%s_%s.npz" % (mname, t))).exists() for t in have):
+            log.info("g3 A %s: already complete, skipped", mname)
+        else:
+            part_a(mname, model, tok, rec, smoke)
+            rec["part_a"]["complete"] = True
+            rec["part_a"]["tags"] = [k for k, v in rec["part_a"].items() if isinstance(v, dict) and "per_layer" in v]
+            C.write_json(rec, C.OUT / ("g3_leace_%s.json" % mname))
     if "b" in parts and mname in C.FRESH_MODELS:
         part_b(mname, model, tok, rec, smoke)
         C.write_json(rec, C.OUT / ("g3_leace_%s.json" % mname))
