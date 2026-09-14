@@ -1,0 +1,7 @@
+model_name,condition,quantity,margin_pp,n_seeds,n_clusters,estimate,lo,hi,p_one_sided,degenerate,p_holm,non_inferior_holm_0.05
+gemma-2-2b-it,S1,acc_S1 - acc_B,2.0,160,80,-0.0625,-0.1,-0.028125,0.9926007399260074,False,1.0,False
+gemma-2-2b-it,SE,acc_SE - acc_B,2.0,160,80,-0.009375,-0.03125,0.0125,0.17168283171682833,False,0.7389261073892611,False
+gemma-2-2b-it,NE,acc_NE - acc_B,2.0,153,79,-0.00949367088607595,-0.022151898734177215,0.0,0.14778522147785222,False,0.7389261073892611,False
+llama-3.1-8b-instruct,S1,acc_S1 - acc_B,2.0,160,80,-0.040625,-0.071875,-0.0125,0.9261073892610739,False,1.0,False
+llama-3.1-8b-instruct,SE,acc_SE - acc_B,2.0,160,80,-0.01875,-0.0375,-0.003125,0.43695630436956306,False,1.0,False
+llama-3.1-8b-instruct,NE,acc_NE - acc_B,2.0,155,79,0.0031645569620253164,-0.00949367088607595,0.0189873417721519,9.999000099990002e-05,False,0.0005999400059994001,True

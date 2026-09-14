@@ -1,0 +1,350 @@
+{
+  "generated_utc": "2026-09-14T11:21:58Z",
+  "claims": [
+    {
+      "id": "H1_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "answer-score sensitivity T, B minus S1",
+      "population": "final BBQ set (160 seeds, 80 templates)",
+      "estimate": 0.02138409245612912,
+      "interval": [
+        -0.014485381917798969,
+        0.05660732988495216
+      ],
+      "p_holm": 0.7595240475952405,
+      "family": "confirmatory (8, Holm)",
+      "status": "limited",
+      "permitted_wording": "no confirmatory reduction in answer-score sensitivity on this model (+0.021 [-0.014, +0.057], Holm p 0.760)"
+    },
+    {
+      "id": "H2_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "position specificity (T_NE - T_SE)",
+      "population": "final BBQ set, paired location population",
+      "estimate": -0.010105695053313738,
+      "interval": [
+        -0.03297060915298242,
+        0.011393239521103061
+      ],
+      "p_holm": 0.7621237876212379,
+      "family": "confirmatory (8, Holm)",
+      "status": "limited",
+      "energy_matched_on_test": true,
+      "energy_test_spread": 0.06074010664630535,
+      "reason": "not significant after Holm",
+      "permitted_wording": "position specificity (T_NE - T_SE): not significant after Holm (-0.010 [-0.033, +0.011], Holm p 0.762); the calibrated cells removed 1.3e-03-1.4e-03 of the common denominator, and no energy-controlled causal claim is made"
+    },
+    {
+      "id": "H3_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "direction specificity (T_RE - T_SE)",
+      "population": "final BBQ set, paired location population",
+      "estimate": -0.00860574157397638,
+      "interval": [
+        -0.030278088008866246,
+        0.010293083952026891
+      ],
+      "p_holm": 0.7621237876212379,
+      "family": "confirmatory (8, Holm)",
+      "status": "limited",
+      "energy_matched_on_test": true,
+      "energy_test_spread": 0.06074010664630535,
+      "reason": "not significant after Holm",
+      "permitted_wording": "direction specificity (T_RE - T_SE): not significant after Holm (-0.009 [-0.030, +0.010], Holm p 0.762); the calibrated cells removed 1.3e-03-1.4e-03 of the common denominator, and no energy-controlled causal claim is made"
+    },
+    {
+      "id": "H4_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "generated-answer accuracy, S1 minus B",
+      "population": "final BBQ set",
+      "estimate": -0.0625,
+      "interval": [
+        -0.1,
+        -0.028125
+      ],
+      "p_holm": 0.012598740125987402,
+      "family": "confirmatory (8, Holm)",
+      "status": "unsupported",
+      "non_inferior_within_margin": false,
+      "permitted_wording": "generated-answer accuracy FALLS under the span edit (-0.062 [-0.100, -0.028], Holm p 0.013); the earlier pool's gain does not replicate on fresh items"
+    },
+    {
+      "id": "CTRL_S1_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "relevant-information control: accuracy change under the span edit",
+      "population": "control group (36 seeds)",
+      "estimate": -0.6375,
+      "interval": [
+        -0.825,
+        -0.425
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "relevant-information control: accuracy change under the span edit: -0.637 [-0.825, -0.425]"
+    },
+    {
+      "id": "CTRL_NE_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "relevant-information control: accuracy change under the calibrated location control",
+      "population": "control group (36 seeds)",
+      "estimate": 0.0125,
+      "interval": [
+        -0.0375,
+        0.075
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": false,
+      "permitted_wording": "relevant-information control: accuracy change under the calibrated location control: +0.013 [-0.037, +0.075]"
+    },
+    {
+      "id": "CANS_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "answer-level patching effect, B minus S1 (mean |C_answer|)",
+      "population": "final BBQ set",
+      "estimate": 0.8053576763834718,
+      "interval": [
+        0.4995143373125624,
+        1.1243974297031905
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "answer-level patching effect, B minus S1 (mean |C_answer|): +0.805 [+0.500, +1.124]"
+    },
+    {
+      "id": "BOTH_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "both-sides-correct share, S1 minus B",
+      "population": "final BBQ set",
+      "estimate": -0.075,
+      "interval": [
+        -0.13125,
+        -0.03125
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "both-sides-correct share, S1 minus B: -0.075 [-0.131, -0.031]"
+    },
+    {
+      "id": "G1ACC_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "every-position prefill edit on the same items: accuracy change",
+      "population": "final BBQ set",
+      "estimate": -0.390625,
+      "interval": [
+        -0.471875,
+        -0.3125
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "every-position prefill edit on the same items: accuracy change: -0.391 [-0.472, -0.312]"
+    },
+    {
+      "id": "G1T_gemma-2-2b-it",
+      "model": "gemma-2-2b-it",
+      "endpoint": "every-position prefill edit on the same items: T change",
+      "population": "final BBQ set",
+      "estimate": -0.027916174553867967,
+      "interval": [
+        -0.08298801389677693,
+        0.03217748060803489
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": false,
+      "permitted_wording": "every-position prefill edit on the same items: T change: -0.028 [-0.083, +0.032]"
+    },
+    {
+      "id": "H1_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "answer-score sensitivity T, B minus S1",
+      "population": "final BBQ set (160 seeds, 80 templates)",
+      "estimate": 0.05525791858114448,
+      "interval": [
+        0.024651469474056036,
+        0.08444946991123473
+      ],
+      "p_holm": 0.005599440055994401,
+      "family": "confirmatory (8, Holm)",
+      "status": "supported",
+      "permitted_wording": "the span edit lowers answer-score sensitivity on this model (+0.055 [+0.025, +0.084], Holm p 0.006)"
+    },
+    {
+      "id": "H2_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "position specificity (T_NE - T_SE)",
+      "population": "final BBQ set, paired location population",
+      "estimate": 0.03411989400517296,
+      "interval": [
+        0.014591923291400268,
+        0.05319101179936704
+      ],
+      "p_holm": 0.005599440055994401,
+      "family": "confirmatory (8, Holm)",
+      "status": "limited",
+      "energy_matched_on_test": false,
+      "energy_test_spread": 0.27334580538237246,
+      "reason": "rejects after Holm but the achieved test energies differ by more than 10% across the four calibrated cells",
+      "permitted_wording": "position specificity (T_NE - T_SE): rejects after Holm but the achieved test energies differ by more than 10% across the four calibrated cells (+0.034 [+0.015, +0.053], Holm p 0.006); the calibrated cells removed 1.4e-04-1.9e-04 of the common denominator, and no energy-controlled causal claim is made"
+    },
+    {
+      "id": "H3_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "direction specificity (T_RE - T_SE)",
+      "population": "final BBQ set, paired location population",
+      "estimate": 0.03071380618745318,
+      "interval": [
+        0.01150643826397621,
+        0.05009642271673014
+      ],
+      "p_holm": 0.015498450154984501,
+      "family": "confirmatory (8, Holm)",
+      "status": "limited",
+      "energy_matched_on_test": false,
+      "energy_test_spread": 0.27334580538237246,
+      "reason": "rejects after Holm but the achieved test energies differ by more than 10% across the four calibrated cells",
+      "permitted_wording": "direction specificity (T_RE - T_SE): rejects after Holm but the achieved test energies differ by more than 10% across the four calibrated cells (+0.031 [+0.012, +0.050], Holm p 0.015); the calibrated cells removed 1.4e-04-1.9e-04 of the common denominator, and no energy-controlled causal claim is made"
+    },
+    {
+      "id": "H4_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "generated-answer accuracy, S1 minus B",
+      "population": "final BBQ set",
+      "estimate": -0.040625,
+      "interval": [
+        -0.071875,
+        -0.0125
+      ],
+      "p_holm": 0.0683931606839316,
+      "family": "confirmatory (8, Holm)",
+      "status": "unsupported",
+      "non_inferior_within_margin": false,
+      "permitted_wording": "generated-answer accuracy is not preserved: point estimate -0.041 [-0.072, -0.013], Holm p 0.068, non-inferiority within 2 points not shown (one-sided Holm p 1.000)"
+    },
+    {
+      "id": "CTRL_S1_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "relevant-information control: accuracy change under the span edit",
+      "population": "control group (36 seeds)",
+      "estimate": -0.4375,
+      "interval": [
+        -0.65,
+        -0.2375
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "relevant-information control: accuracy change under the span edit: -0.438 [-0.650, -0.237]"
+    },
+    {
+      "id": "CTRL_NE_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "relevant-information control: accuracy change under the calibrated location control",
+      "population": "control group (36 seeds)",
+      "estimate": 0.0,
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": false,
+      "permitted_wording": "relevant-information control: accuracy change under the calibrated location control: +0.000 [+0.000, +0.000]"
+    },
+    {
+      "id": "CANS_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "answer-level patching effect, B minus S1 (mean |C_answer|)",
+      "population": "final BBQ set",
+      "estimate": 0.36717234361249546,
+      "interval": [
+        0.23823917931211716,
+        0.5026073006478293
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "answer-level patching effect, B minus S1 (mean |C_answer|): +0.367 [+0.238, +0.503]"
+    },
+    {
+      "id": "BOTH_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "both-sides-correct share, S1 minus B",
+      "population": "final BBQ set",
+      "estimate": -0.0375,
+      "interval": [
+        -0.075,
+        -0.00625
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "both-sides-correct share, S1 minus B: -0.037 [-0.075, -0.006]"
+    },
+    {
+      "id": "G1ACC_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "every-position prefill edit on the same items: accuracy change",
+      "population": "final BBQ set",
+      "estimate": -0.215625,
+      "interval": [
+        -0.28125,
+        -0.15
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": true,
+      "permitted_wording": "every-position prefill edit on the same items: accuracy change: -0.216 [-0.281, -0.150]"
+    },
+    {
+      "id": "G1T_llama-3.1-8b-instruct",
+      "model": "llama-3.1-8b-instruct",
+      "endpoint": "every-position prefill edit on the same items: T change",
+      "population": "final BBQ set",
+      "estimate": 0.008072261375195056,
+      "interval": [
+        -0.028335287770308873,
+        0.04562961953246325
+      ],
+      "family": "secondary (estimate and interval)",
+      "status": "measured",
+      "interval_excludes_zero": false,
+      "permitted_wording": "every-position prefill edit on the same items: T change: +0.008 [-0.028, +0.046]"
+    }
+  ],
+  "energy_flags": {
+    "gemma-2-2b-it": {
+      "dev_matching_status": "matched within tolerance",
+      "dev_feasible": true,
+      "test_cells": {
+        "S1": 0.027671536284236558,
+        "SE": 0.0013515858377026978,
+        "NE": 0.0013787913028862008,
+        "RE": 0.0013374064489435945,
+        "RNE": 0.001297322030996298,
+        "G1": 2.8830101678989655
+      },
+      "test_relative_spread": 0.06074010664630535,
+      "caution_flag_gt_10pct": false
+    },
+    "llama-3.1-8b-instruct": {
+      "dev_matching_status": "matched within tolerance",
+      "dev_feasible": true,
+      "test_cells": {
+        "S1": 0.00593875378361879,
+        "SE": 0.00016724557910189963,
+        "NE": 0.00018729791337767778,
+        "RE": 0.00016083193134507163,
+        "RNE": 0.00014235120931352984,
+        "G1": 0.2900663008570977
+      },
+      "test_relative_spread": 0.27334580538237246,
+      "caution_flag_gt_10pct": true
+    }
+  },
+  "outcome_rule": "Section 10: two models must independently support a replication claim; one positive model supports a model-specific result; a rejection in the opposite direction is a measured harm, never a preservation claim"
+}

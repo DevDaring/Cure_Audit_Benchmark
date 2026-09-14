@@ -7,6 +7,14 @@
       "dtype": "torch.bfloat16",
       "transformers": null,
       "torch": null
+    },
+    "llama-3.1-8b-instruct": {
+      "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
+      "model_class": "LlamaForCausalLM",
+      "attn_implementation": "flash_attention_2",
+      "dtype": "torch.bfloat16",
+      "transformers": null,
+      "torch": null
     }
   },
   "bases": {
@@ -26,6 +34,23 @@
       },
       "fit_id": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
       "note": "contrast-derived projection: leading right singular vector of centred span-position activation differences over the fit pairs; 54 of the fit pairs are neutral-type substitutions"
+    },
+    "llama-3.1-8b-instruct": {
+      "file": "Code/CURE/results/v2/p2_basis_llama-3.1-8b-instruct_chat_cure_centred_svd.npz",
+      "sha256": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+      "rank_used": 1,
+      "max_rank_in_file": 4,
+      "fit_info": {
+        "n_fit_pairs_requested": 300,
+        "n_fit_pairs_used": 300,
+        "n_span_tokens": 328,
+        "site": "span (all tokens, truncated to shorter span)",
+        "sec_collect": 154.04333329200745,
+        "n_fit_pairs_neutral_type": 54,
+        "estimator": "centred_svd"
+      },
+      "fit_id": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+      "note": "contrast-derived projection: leading right singular vector of centred span-position activation differences over the fit pairs; 54 of the fit pairs are neutral-type substitutions"
     }
   },
   "random_basis_seed": 20260914,
@@ -42,6 +67,10 @@
   "fmt": "chat",
   "match_tolerance": 0.05,
   "dev_seed_source": "fresh BBQ construction, templates disjoint from the final set (deliberate departure from the plan's existing-dev-split wording)",
-  "protocol_hash": "d8504349f1687b67",
-  "saved_utc": "2026-09-14T08:42:49Z"
+  "protocol_hash": "fabcf78ee38dcdf9",
+  "saved_utc": "2026-09-14T11:21:36Z",
+  "acc_margin_pp": 2.0,
+  "acc_margin_justification": "two percentage points of attempted-denominator accuracy on a three-option task is below the half-width of the paired intervals on 160 seeds and is the largest loss the authors would accept for a bias edit whose purpose is to leave the answer unchanged; fixed before the final run",
+  "n_boot": 10000,
+  "cluster": "template family (seed-level reported alongside)"
 }

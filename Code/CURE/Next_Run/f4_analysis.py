@@ -75,6 +75,7 @@ def pairwise_T(d: pd.DataFrame) -> pd.DataFrame:
                "score_acc": (float(a.score_correct) + float(b.score_correct)) / 2,
                "both_score_correct": float(bool(a.score_correct) and bool(b.score_correct)),
                "energy_num": (float(a.energy_num) + float(b.energy_num)) / 2, "n_edited": (int(a.n_edited_positions) + int(b.n_edited_positions)) / 2,
+               "alpha": float(a.alpha),
                "first_disambiguates": bool(a.first_disambiguates) and bool(b.first_disambiguates)}
         if var == "std" and "gen_valid" in g:
             rec.update({"gen_acc": (float(a.gen_correct) + float(b.gen_correct)) / 2,
@@ -94,7 +95,8 @@ def paired(pt: pd.DataFrame, m: str, c1: str, c2: str, col: str, group: str = "f
     common = a.index.intersection(b.index)
     if not len(common):
         return np.array([]), 0, 0
-    diff = pd.DataFrame({"d": a.loc[common, col].to_numpy(float) - b.loc[common, col].to_numpy(float), "cl": a.loc[common, cluster].to_numpy()})
+    cl = np.asarray(common) if cluster == "seed_id" else a.loc[common, cluster].to_numpy()
+    diff = pd.DataFrame({"d": a.loc[common, col].to_numpy(float) - b.loc[common, col].to_numpy(float), "cl": cl})
     return diff.groupby("cl")["d"].mean().to_numpy(), len(common), diff.cl.nunique()
 
 
@@ -229,45 +231,90 @@ def energy_flags(sec: pd.DataFrame) -> dict:
 
 
 def outcome_claims(conf: pd.DataFrame, pres: pd.DataFrame, sec: pd.DataFrame, eflags: dict, proto: dict) -> dict:
+    """Section 10 applied mechanically. A confirmatory test is 'supported' only when it rejects
+    after Holm IN THE HYPOTHESISED DIRECTION; a rejection in the opposite direction is
+    'unsupported' (a measured harm); H2/H3 additionally need the energy match to hold on the
+    test seeds (dev feasible and <=10% spread), otherwise 'limited'."""
     claims = []
     fam = conf[conf.cluster == "template"].set_index(["model_name", "id"])
+    S = sec.set_index(["model_name", "quantity"])
+
+    def sget(m, q):
+        return S.loc[(m, q)] if (m, q) in S.index else None
+
     for m in N.FINAL_MODELS:
         def row(hid):
             return fam.loc[(m, hid)] if (m, hid) in fam.index else None
         h1, h2, h3, h4 = (row(h) for h in ("H1", "H2", "H3", "H4"))
         pr = pres[(pres.model_name == m)].set_index("condition")
-        matched = eflags.get(m, {}).get("dev_feasible", False) and not eflags.get(m, {}).get("caution_flag_gt_10pct", True)
-        def status(r):
+        ef = eflags.get(m, {})
+        matched = bool(ef.get("dev_feasible", False)) and not bool(ef.get("caution_flag_gt_10pct", True))
+
+        def verdict(r):
             if r is None or not np.isfinite(r.p_holm):
-                return "not_measured"
-            return "supported" if (r["reject_holm_0.05"] and r.estimate > 0) else "limited"
-        claims.append({"id": "H1_%s" % m, "model": m, "endpoint": "answer-score sensitivity T, S1 vs B", "population": "final BBQ set",
+                return "not_measured", "not measured"
+            if r["reject_holm_0.05"] and r.estimate > 0:
+                return "supported", "rejects after Holm in the hypothesised direction"
+            if r["reject_holm_0.05"] and r.estimate < 0:
+                return "unsupported", "rejects after Holm in the OPPOSITE direction"
+            return "limited", "not significant after Holm"
+
+        def fmt(r):
+            return "%+.3f [%+.3f, %+.3f], Holm p %.3f" % (r.estimate, r.lo, r.hi, r.p_holm)
+
+        st, why = verdict(h1)
+        claims.append({"id": "H1_%s" % m, "model": m, "endpoint": "answer-score sensitivity T, B minus S1", "population": "final BBQ set (160 seeds, 80 templates)",
                        "estimate": None if h1 is None else float(h1.estimate), "interval": None if h1 is None else [float(h1.lo), float(h1.hi)],
-                       "p_holm": None if h1 is None else float(h1.p_holm), "family": "confirmatory (8, Holm)", "status": status(h1),
-                       "permitted_wording": "the span edit lowers answer-score sensitivity on this model" if status(h1) == "supported" else
-                       "no confirmatory reduction in answer-score sensitivity on this model (estimate and interval reported)"})
-        for hid, r, txt in (("H2", h2, "position specificity"), ("H3", h3, "direction specificity")):
-            st = status(r)
+                       "p_holm": None if h1 is None else float(h1.p_holm), "family": "confirmatory (8, Holm)", "status": st,
+                       "permitted_wording": ("the span edit lowers answer-score sensitivity on this model (%s)" % fmt(h1)) if st == "supported" else
+                       ("no confirmatory reduction in answer-score sensitivity on this model (%s)" % (fmt(h1) if h1 is not None else "not measured"))})
+        for hid, r, txt in (("H2", h2, "position specificity (T_NE - T_SE)"), ("H3", h3, "direction specificity (T_RE - T_SE)")):
+            st, why = verdict(r)
             if st == "supported" and not matched:
-                st = "limited"
+                st, why = "limited", "rejects after Holm but the achieved test energies differ by more than 10% across the four calibrated cells"
             claims.append({"id": "%s_%s" % (hid, m), "model": m, "endpoint": txt, "population": "final BBQ set, paired location population",
                            "estimate": None if r is None else float(r.estimate), "interval": None if r is None else [float(r.lo), float(r.hi)],
                            "p_holm": None if r is None else float(r.p_holm), "family": "confirmatory (8, Holm)", "status": st,
-                           "energy_matched": matched,
-                           "permitted_wording": ("%s supported at calibrated energy" % txt) if st == "supported" else
-                           ("%s: %s" % (txt, "unresolved (not significant after Holm)" if r is not None else "not measured")) +
-                           ("" if matched else "; energy matching not verified, so no energy-controlled claim")})
-        s4 = status(h4)
+                           "energy_matched_on_test": matched, "energy_test_spread": ef.get("test_relative_spread"), "reason": why,
+                           "permitted_wording": ("%s supported at calibrated energy (%s)" % (txt, fmt(r))) if st == "supported" else
+                           ("%s: %s (%s); the calibrated cells removed %.1e-%.1e of the common denominator, and no energy-controlled causal claim is made"
+                            % (txt, why, fmt(r) if r is not None else "not measured",
+                               min(v for k, v in ef.get("test_cells", {}).items() if k in ("SE", "NE", "RE", "RNE")) if ef.get("test_cells") else float("nan"),
+                               max(v for k, v in ef.get("test_cells", {}).items() if k in ("SE", "NE", "RE", "RNE")) if ef.get("test_cells") else float("nan")))})
+        st, why = verdict(h4)
         pres_ok = bool(pr.loc["S1", "non_inferior_holm_0.05"]) if "S1" in pr.index else False
-        claims.append({"id": "H4_%s" % m, "model": m, "endpoint": "generated-answer accuracy, S1 vs B", "population": "final BBQ set",
+        if st == "limited" and pres_ok:
+            wording = "accuracy preserved within the %.0f-point margin (S1 - B %s)" % (proto.get("acc_margin_pp", 2), fmt(h4))
+        elif st == "supported":
+            wording = "generated-answer accuracy rises (%s)" % fmt(h4)
+        elif st == "unsupported":
+            wording = "generated-answer accuracy FALLS under the span edit (%s); the earlier pool's gain does not replicate on fresh items" % fmt(h4)
+        else:
+            st = "unsupported" if (h4 is not None and h4.estimate < 0) else st
+            wording = "generated-answer accuracy is not preserved: point estimate %s, non-inferiority within %.0f points not shown (one-sided Holm p %.3f)" % (
+                fmt(h4) if h4 is not None else "n/a", proto.get("acc_margin_pp", 2), float(pr.loc["S1", "p_holm"]) if "S1" in pr.index else float("nan"))
+        claims.append({"id": "H4_%s" % m, "model": m, "endpoint": "generated-answer accuracy, S1 minus B", "population": "final BBQ set",
                        "estimate": None if h4 is None else float(h4.estimate), "interval": None if h4 is None else [float(h4.lo), float(h4.hi)],
-                       "p_holm": None if h4 is None else float(h4.p_holm), "family": "confirmatory (8, Holm)",
-                       "status": "supported" if s4 == "supported" else ("limited" if pres_ok else ("unsupported" if h4 is not None and h4.estimate < -proto.get("acc_margin_pp", 2) / 100 else "limited")),
-                       "non_inferior_within_margin": pres_ok,
-                       "permitted_wording": "generated-answer accuracy rises" if s4 == "supported" else
-                       ("accuracy preserved within the %.0f-point margin" % proto.get("acc_margin_pp", 2) if pres_ok else "accuracy change uncertain; no preservation claim")})
+                       "p_holm": None if h4 is None else float(h4.p_holm), "family": "confirmatory (8, Holm)", "status": st,
+                       "non_inferior_within_margin": pres_ok, "permitted_wording": wording})
+        # secondary claims that the paper must carry
+        for q, key, txt in (("control acc_S1 - acc_B", "CTRL_S1", "relevant-information control: accuracy change under the span edit"),
+                            ("control acc_NE - acc_B", "CTRL_NE", "relevant-information control: accuracy change under the calibrated location control"),
+                            ("|C_answer|_B - |C_answer|_S1", "CANS", "answer-level patching effect, B minus S1 (mean |C_answer|)"),
+                            ("bothcorrect_S1 - bothcorrect_B", "BOTH", "both-sides-correct share, S1 minus B"),
+                            ("acc_G1 - acc_B", "G1ACC", "every-position prefill edit on the same items: accuracy change"),
+                            ("T_G1 - T_B", "G1T", "every-position prefill edit on the same items: T change")):
+            r = sget(m, q)
+            if r is None:
+                continue
+            excl = np.isfinite(r.lo) and (r.lo > 0 or r.hi < 0)
+            claims.append({"id": "%s_%s" % (key, m), "model": m, "endpoint": txt, "population": "control group (36 seeds)" if key.startswith("CTRL") else "final BBQ set",
+                           "estimate": float(r.estimate), "interval": [float(r.lo), float(r.hi)], "family": "secondary (estimate and interval)",
+                           "status": "measured", "interval_excludes_zero": bool(excl),
+                           "permitted_wording": "%s: %+.3f [%+.3f, %+.3f]" % (txt, r.estimate, r.lo, r.hi)})
     return {"generated_utc": N.utc_now(), "claims": claims, "energy_flags": eflags,
-            "outcome_rule": "Section 10: two models must independently support a replication claim; one positive model supports a model-specific result"}
+            "outcome_rule": "Section 10: two models must independently support a replication claim; one positive model supports a model-specific result; "
+                            "a rejection in the opposite direction is a measured harm, never a preservation claim"}
 
 
 def merge_protocols() -> dict:
@@ -316,13 +363,32 @@ def main() -> None:
     lines = ["COMPLETION record (%s)" % N.utc_now(), "",
              "Rows: %d per-item rows; models: %s" % (len(d), ", ".join(sorted(d.model_name.unique()))), "",
              "Confirmatory family (template clusters, Holm over 8):"]
-    for r in fam.itertuples(index=False):
-        lines.append("  %-24s %s  est %+.4f [%+.4f, %+.4f]  p %.4f  p_holm %.4f  %s" % (r.model_name, r.id, r.estimate, r.lo, r.hi, r.p, r.p_holm, "REJECT" if r._asdict()["reject_holm_0.05"] else ""))
+    for _, r in fam.iterrows():
+        lines.append("  %-24s %s  est %+.4f [%+.4f, %+.4f]  p %.4f  p_holm %.4f  %s" % (r["model_name"], r["id"], r["estimate"], r["lo"], r["hi"], r["p"], r["p_holm"], "REJECT" if r["reject_holm_0.05"] else ""))
     lines += ["", "Preservation family (one-sided, margin %.0f pp, Holm over 6):" % proto["acc_margin_pp"]]
-    for r in pres.itertuples(index=False):
-        lines.append("  %-24s %-3s est %+.4f [%+.4f, %+.4f]  p %.4f  p_holm %.4f  %s" % (r.model_name, r.condition, r.estimate, r.lo, r.hi, r.p_one_sided, r.p_holm, "NON-INFERIOR" if r._asdict()["non_inferior_holm_0.05"] else ""))
-    lines += ["", "Energy: %s" % json.dumps(eflags, default=N.K._json_default)[:1500], "",
-              "Budget: see runtime_budget_<model>.json; claims: claims.json; secondary: secondary_results.csv"]
+    for _, r in pres.iterrows():
+        lines.append("  %-24s %-3s est %+.4f [%+.4f, %+.4f]  p %.4f  p_holm %.4f  %s" % (r["model_name"], r["condition"], r["estimate"], r["lo"], r["hi"], r["p_one_sided"], r["p_holm"], "NON-INFERIOR" if r["non_inferior_holm_0.05"] else ""))
+    lines += ["", "Energy: %s" % json.dumps(eflags, default=N.K._json_default)[:1500], ""]
+    # Section 10 outcome branch per model, applied mechanically from claims.json
+    cl = {c["id"]: c for c in claims["claims"]}
+    lines.append("Outcome branch (Section 10):")
+    for m in N.FINAL_MODELS:
+        h1, h4 = cl.get("H1_%s" % m, {}), cl.get("H4_%s" % m, {})
+        h2, h3 = cl.get("H2_%s" % m, {}), cl.get("H3_%s" % m, {})
+        ctrl = cl.get("CTRL_S1_%s" % m, {})
+        if h1.get("status") == "supported" and h4.get("status") == "unsupported":
+            br = "sensitivity improves but correctness declines beyond the justified margin -> a measured sensitivity-utility trade-off; no 'repair without cost'"
+        elif h1.get("status") == "supported" and h4.get("status") in ("supported", "limited"):
+            br = "operational benefit on sensitivity with accuracy preserved or improved"
+        elif h1.get("status") != "supported" and h4.get("status") == "unsupported":
+            br = "answer-level sensitivity does not improve and correctness declines -> the earlier gains have no replication support on fresh items; measurement/protocol result"
+        else:
+            br = "operational benefit not established on this model"
+        spec = "calibrated specificity " + ("supported" if h2.get("status") == "supported" and h3.get("status") == "supported" else
+                                           ("significant but energy caution (>10% test spread) -> limited" if h2.get("status") == "limited" and h2.get("reason", "").startswith("rejects") else "null or uncertain"))
+        lines.append("  %-24s %s; %s; relevant-information control accuracy change %+.3f" % (m, br, spec, ctrl.get("estimate", float("nan"))))
+    lines.append("  Replication across both models: NOT supported for the accuracy gain (falls on both); sensitivity reduction supported on Llama only (model-specific).")
+    lines += ["", "Budget: see runtime_budget_<model>.json; claims: claims.json; secondary: secondary_results.csv"]
     (OUT / "COMPLETION.txt").write_text("\n".join(lines), encoding="utf-8")
     print("\n".join(lines))
 

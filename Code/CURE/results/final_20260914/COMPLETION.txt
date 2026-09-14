@@ -1,0 +1,30 @@
+COMPLETION record (2026-09-14T11:21:58Z)
+
+Rows: 6144 per-item rows; models: gemma-2-2b-it, llama-3.1-8b-instruct
+
+Confirmatory family (template clusters, Holm over 8):
+  gemma-2-2b-it            H1  est +0.0214 [-0.0145, +0.0566]  p 0.2532  p_holm 0.7595  
+  gemma-2-2b-it            H2  est -0.0101 [-0.0330, +0.0114]  p 0.3811  p_holm 0.7621  
+  gemma-2-2b-it            H3  est -0.0086 [-0.0303, +0.0103]  p 0.4069  p_holm 0.7621  
+  gemma-2-2b-it            H4  est -0.0625 [-0.1000, -0.0281]  p 0.0021  p_holm 0.0126  REJECT
+  llama-3.1-8b-instruct    H1  est +0.0553 [+0.0247, +0.0844]  p 0.0007  p_holm 0.0056  REJECT
+  llama-3.1-8b-instruct    H2  est +0.0341 [+0.0146, +0.0532]  p 0.0008  p_holm 0.0056  REJECT
+  llama-3.1-8b-instruct    H3  est +0.0307 [+0.0115, +0.0501]  p 0.0031  p_holm 0.0155  REJECT
+  llama-3.1-8b-instruct    H4  est -0.0406 [-0.0719, -0.0125]  p 0.0171  p_holm 0.0684  
+
+Preservation family (one-sided, margin 2 pp, Holm over 6):
+  gemma-2-2b-it            S1  est -0.0625 [-0.1000, -0.0281]  p 0.9926  p_holm 1.0000  
+  gemma-2-2b-it            SE  est -0.0094 [-0.0312, +0.0125]  p 0.1717  p_holm 0.7389  
+  gemma-2-2b-it            NE  est -0.0095 [-0.0222, +0.0000]  p 0.1478  p_holm 0.7389  
+  llama-3.1-8b-instruct    S1  est -0.0406 [-0.0719, -0.0125]  p 0.9261  p_holm 1.0000  
+  llama-3.1-8b-instruct    SE  est -0.0187 [-0.0375, -0.0031]  p 0.4370  p_holm 1.0000  
+  llama-3.1-8b-instruct    NE  est +0.0032 [-0.0095, +0.0190]  p 0.0001  p_holm 0.0006  NON-INFERIOR
+
+Energy: {"gemma-2-2b-it": {"dev_matching_status": "matched within tolerance", "dev_feasible": true, "test_cells": {"S1": 0.027671536284236558, "SE": 0.0013515858377026978, "NE": 0.0013787913028862008, "RE": 0.0013374064489435945, "RNE": 0.001297322030996298, "G1": 2.8830101678989655}, "test_relative_spread": 0.06074010664630535, "caution_flag_gt_10pct": false}, "llama-3.1-8b-instruct": {"dev_matching_status": "matched within tolerance", "dev_feasible": true, "test_cells": {"S1": 0.00593875378361879, "SE": 0.00016724557910189963, "NE": 0.00018729791337767778, "RE": 0.00016083193134507163, "RNE": 0.00014235120931352984, "G1": 0.2900663008570977}, "test_relative_spread": 0.27334580538237246, "caution_flag_gt_10pct": true}}
+
+Outcome branch (Section 10):
+  gemma-2-2b-it            answer-level sensitivity does not improve and correctness declines -> the earlier gains have no replication support on fresh items; measurement/protocol result; calibrated specificity null or uncertain; relevant-information control accuracy change -0.637
+  llama-3.1-8b-instruct    sensitivity improves but correctness declines beyond the justified margin -> a measured sensitivity-utility trade-off; no 'repair without cost'; calibrated specificity significant but energy caution (>10% test spread) -> limited; relevant-information control accuracy change -0.438
+  Replication across both models: NOT supported for the accuracy gain (falls on both); sensitivity reduction supported on Llama only (model-specific).
+
+Budget: see runtime_budget_<model>.json; claims: claims.json; secondary: secondary_results.csv

@@ -1,0 +1,6 @@
+table,source
+confirmatory_tests.csv,per_item_<model>.parquet via pair_level.csv
+preservation_tests.csv,per_item_<model>.parquet via pair_level.csv
+secondary_results.csv,"per_item_<model>.parquet, calibration_<model>.json"
+legacy_behaviour.csv,results/v2/p2_per_item.parquet (F0)
+energy_audit.csv,results/v2/p3_magnitude_summary.csv (F0)
