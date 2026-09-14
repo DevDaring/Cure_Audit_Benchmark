@@ -1,0 +1,134 @@
+{
+  "n_fit_pairs_eligible": 2334,
+  "n_distinct_contrasts": 991,
+  "top_contrasts": [
+    {
+      "pair": [
+        "hindu",
+        "sikh"
+      ],
+      "n": 46
+    },
+    {
+      "pair": [
+        "man",
+        "woman"
+      ],
+      "n": 45
+    },
+    {
+      "pair": [
+        "black",
+        "white"
+      ],
+      "n": 44
+    },
+    {
+      "pair": [
+        "muslim",
+        "sikh"
+      ],
+      "n": 35
+    },
+    {
+      "pair": [
+        "hindu",
+        "muslim"
+      ],
+      "n": 34
+    },
+    {
+      "pair": [
+        "asian",
+        "black"
+      ],
+      "n": 32
+    },
+    {
+      "pair": [
+        "man",
+        "non-binary person"
+      ],
+      "n": 31
+    },
+    {
+      "pair": [
+        "non-binary person",
+        "woman"
+      ],
+      "n": 31
+    },
+    {
+      "pair": [
+        "asian",
+        "white"
+      ],
+      "n": 28
+    },
+    {
+      "pair": [
+        "wealthy",
+        "well-off"
+      ],
+      "n": 24
+    }
+  ],
+  "chosen_contrast": [
+    "man",
+    "woman"
+  ],
+  "n_chosen_pairs": 45,
+  "verdict": "swap side A/B is not a coherent demographic label across the fit set (991 distinct contrasts)",
+  "n_rows": 91,
+  "n_fit_rows": 61,
+  "n_heldout_rows": 30,
+  "class_counts_fit": {
+    "man": 30,
+    "woman": 31
+  },
+  "n_fit_seeds": 30,
+  "n_heldout_seeds": 15,
+  "hook_vs_published_max_abs_dev": 1.9073486328125e-06,
+  "per_layer_checks": [
+    {
+      "layer": 6,
+      "probe_pre": 1.0,
+      "probe_post_leace": 0.5,
+      "probe_post_leace_lo": 0.5,
+      "probe_post_leace_hi": 0.5,
+      "probe_post_mean_difference": 0.5,
+      "max_abs_cov_pre": 3.196402176834184,
+      "max_abs_cov_post_leace": 6.777571914229998e-05,
+      "leace_rank": 1
+    },
+    {
+      "layer": 13,
+      "probe_pre": 1.0,
+      "probe_post_leace": 0.5,
+      "probe_post_leace_lo": 0.5,
+      "probe_post_leace_hi": 0.5,
+      "probe_post_mean_difference": 0.5,
+      "max_abs_cov_pre": 4.5540177371674275,
+      "max_abs_cov_post_leace": 5.6852419124704104e-05,
+      "leace_rank": 1
+    },
+    {
+      "layer": 19,
+      "probe_pre": 1.0,
+      "probe_post_leace": 0.5,
+      "probe_post_leace_lo": 0.5,
+      "probe_post_leace_hi": 0.5,
+      "probe_post_mean_difference": 0.5,
+      "max_abs_cov_pre": 13.052136522440204,
+      "max_abs_cov_post_leace": 5.902580214069955e-05,
+      "leace_rank": 1
+    }
+  ],
+  "probe_layers": [
+    6,
+    13,
+    19
+  ],
+  "labels": "0 = man, 1 = woman (swap token of the fit-split variant)",
+  "utc": "2026-09-14T10:05:21Z"
+}
