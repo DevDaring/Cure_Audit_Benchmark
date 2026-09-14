@@ -1,1 +1,1 @@
-SMOKE llama-3.1-8b-instruct starting @ Mon Sep 14 21:31:43 UTC 2026
+SMOKE llama-3.1-8b-instruct attempt 1 failed: py", line 571, in run     raise CalledProcessError(retcode, process.args, subprocess.CalledProcessError: Command '['/opt/conda/bin/python3', 'g5_steering.py', '--model', 'llama-3.1-8b-instruct', '--smoke']' returned non-zero exit status 1.  @ Mon Sep 14 21:38:18 UTC 2026
