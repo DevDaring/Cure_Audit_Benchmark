@@ -1,0 +1,99 @@
+{
+  "model": "llama-3.1-8b-instruct",
+  "denominator": 185659.91497561336,
+  "denominator_rule": "mean over dev prompts of sum over layers and over the demographic span plus the matched span of ||h_unedited||^2",
+  "n_dev_prompts": 48,
+  "tolerance": 0.05,
+  "cells": {
+    "SE": {
+      "alpha": 0.10183201891808542,
+      "achieved": 5.2299807236146175e-05,
+      "rel_err": -0.0038567595882950303,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 0.19068679452277845,
+          "energy": 0.00010609407135273705,
+          "rel_err": 1.0207510813298697
+        },
+        {
+          "alpha": 0.09436431645865369,
+          "energy": 4.799823380617962e-05,
+          "rel_err": -0.08578790851295641
+        },
+        {
+          "alpha": 0.10183201891808542,
+          "energy": 5.2299807236146175e-05,
+          "rel_err": -0.0038567595882950303
+        }
+      ]
+    },
+    "NE": {
+      "alpha": 0.14029122398633198,
+      "achieved": 5.128515780621583e-05,
+      "rel_err": -0.023182570225588343,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 0.2011158046743954,
+          "energy": 8.787782287328457e-05,
+          "rel_err": 0.673790093375687
+        },
+        {
+          "alpha": 0.1201559296296148,
+          "energy": 4.079162506686133e-05,
+          "rel_err": -0.22305064352744247
+        },
+        {
+          "alpha": 0.14029122398633198,
+          "energy": 5.128515780621583e-05,
+          "rel_err": -0.023182570225588343
+        }
+      ]
+    },
+    "RE": {
+      "alpha": 1.0,
+      "achieved": 5.250229596953418e-05,
+      "rel_err": 0.0,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 1.0,
+          "energy": 5.250229596953418e-05,
+          "rel_err": 0.0
+        }
+      ]
+    },
+    "RNE": {
+      "alpha": 0.8672575288416947,
+      "achieved": 5.252384960506466e-05,
+      "rel_err": 0.0004105274851786589,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 0.8672575288416947,
+          "energy": 5.252384960506466e-05,
+          "rel_err": 0.0004105274851786589
+        }
+      ]
+    }
+  },
+  "utc": "2026-09-14T08:50:17Z",
+  "alpha_one_energy": {
+    "SE": 0.0014438998104788932,
+    "NE": 0.0012980334790604117,
+    "RE": 5.250229596953418e-05,
+    "RNE": 6.980429390714507e-05
+  },
+  "target_initial": 5.250229596953418e-05,
+  "target": 5.250229596953418e-05,
+  "target_reductions": 0,
+  "feasible": true,
+  "alphas": {
+    "SE": 0.10183201891808542,
+    "NE": 0.14029122398633198,
+    "RE": 1.0,
+    "RNE": 0.8672575288416947
+  },
+  "matching_status": "matched within tolerance"
+}
