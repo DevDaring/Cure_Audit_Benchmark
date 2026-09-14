@@ -1,0 +1,22 @@
+{
+  "model": "gemma-2-2b-it",
+  "sec_per_side_by_condition": {
+    "B": 2.0393428802490234,
+    "S1": 2.0152283112208047,
+    "SE": 2.006724198659261,
+    "NE": 2.002497434616089,
+    "RE": 2.0002102851867676,
+    "RNE": 2.002948602040609,
+    "G1": 2.02743931611379
+  },
+  "sec_bridge": 0.35229559739430744,
+  "sec_per_seed_all_conditions": 28.893373250961307,
+  "estimate_hours_tier160": 1.5503112329377071,
+  "estimate_hours_tier100": 1.068755012088352,
+  "model_hour_allowance": 12.0,
+  "tier_chosen": 160,
+  "gpu_rate_usd_per_hour": 0.403,
+  "estimated_cost_usd": 0.624775426873896,
+  "decided_before_final_rows": true,
+  "utc": "2026-09-14T08:42:37Z"
+}
