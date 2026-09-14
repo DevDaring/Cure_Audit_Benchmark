@@ -1,1 +1,1 @@
-SMOKE starting @ Mon Sep 14 08:28:26 UTC 2026
+SMOKE attempt 1 failed: se INTERNAL ASSERT FAILED at "../aten/src/ATen/native/BatchLinearAlgebra.cpp":1538, please report a bug to PyTorch. linalg.eigh: Argument 8 has illegal value. Most certainly there is a bug in the implementation calling the backend library.  @ Mon Sep 14 08:33:13 UTC 2026
