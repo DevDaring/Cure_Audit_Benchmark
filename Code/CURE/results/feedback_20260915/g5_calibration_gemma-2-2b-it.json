@@ -1,0 +1,67 @@
+{
+  "model": "gemma-2-2b-it",
+  "denominator": 12667151.855078125,
+  "target_span": 0.00038856788514713314,
+  "target_all": 0.962001838937847,
+  "target_all_rule": "mean dev energy of the span basis applied at every prefill position at alpha 1 (G1)",
+  "vectors": {
+    "DV": {
+      "n_prompts_used": 234,
+      "n_unbiased_state": 85,
+      "n_biased_state": 149,
+      "rule": "state = option-scoring argmax equals the unknown gold (unbiased) or not (biased); vector = mean(unbiased) - mean(biased) of span-position activations, unit norm per layer"
+    },
+    "CV": {
+      "file": "Code/CURE/results/v2/p2_basis_gemma-2-2b-it_chat_mean_difference.npz",
+      "sha256": "1a7301f2134eb60156e740b9348b11f82ae0c86ee3c856232168418f74d9e947",
+      "rule": "pooled-audit mean-difference direction (unit norm), sign fixed on the dev seeds",
+      "sign": 1.0,
+      "mean_margin_gain_at_alpha": 0.45117825210950696,
+      "alpha_used": 7.9143907155185875,
+      "n_dev": 45
+    }
+  },
+  "alphas": {
+    "DV": {
+      "span": {
+        "alpha": 7.914380488593478,
+        "energy_alpha1": 6.2034466671714706e-06,
+        "achieved": 0.00038842856678226843,
+        "rel_err": -0.00035854317917178544,
+        "within_tol": true
+      },
+      "all": {
+        "alpha": 45.27456591865674,
+        "energy_alpha1": 0.00046931810889904623,
+        "achieved": 0.9620563168521213,
+        "rel_err": 5.6629740265907495e-05,
+        "within_tol": true
+      },
+      "last": {
+        "alpha": 7.914380488593478,
+        "rule": "span alpha (one position)"
+      }
+    },
+    "CV": {
+      "span": {
+        "alpha": 7.9143907155185875,
+        "energy_alpha1": 6.203430635073544e-06,
+        "achieved": 0.0003884189644199216,
+        "rel_err": -0.00038325536644684584,
+        "within_tol": true
+      },
+      "all": {
+        "alpha": 45.274624703164996,
+        "energy_alpha1": 0.0004693168901759087,
+        "achieved": 0.9620115093197279,
+        "rel_err": 1.0052352801747323e-05,
+        "within_tol": true
+      },
+      "last": {
+        "alpha": 7.9143907155185875,
+        "rule": "span alpha (one position)"
+      }
+    }
+  },
+  "utc": "2026-09-14T18:27:08Z"
+}

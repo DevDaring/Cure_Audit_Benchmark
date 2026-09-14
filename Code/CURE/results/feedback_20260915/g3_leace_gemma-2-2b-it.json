@@ -1,6 +1,6 @@
 {
   "model": "gemma-2-2b-it",
-  "utc": "2026-09-14T17:59:50Z",
+  "utc": "2026-09-14T18:37:28Z",
   "concept_erasure_version": "0.2.4",
   "part_a": {
     "n_eligible_fit_pairs": 2334,
@@ -200,103 +200,209 @@
       "dev_seeds_pool": 16,
       "touched_templates": 156
     },
-    "n_fit_templates": 17,
-    "n_eval_templates": 8,
-    "n_fit_items": 3140,
-    "n_eval_items": 1362,
+    "n_fit_templates": 12,
+    "n_eval_templates": 13,
+    "n_fit_items": 2154,
+    "n_eval_items": 2348,
     "collect": {
       "n_prompts": 1500,
-      "n_rows": 7612
+      "n_rows": 7624
     },
     "gender_large": {
       "tag": "gender_large",
-      "n_rows_fit": 5538,
-      "n_rows_heldout": 2074,
+      "n_rows_fit": 5570,
+      "n_rows_heldout": 2054,
       "d": 2304,
       "class_counts_fit": {
-        "0": 2769,
-        "1": 2769
+        "0": 2785,
+        "1": 2785
       },
       "per_layer": [
         {
           "layer": 6,
           "leace_rank": 1,
-          "cov_effective_rank_fit": 1583,
+          "cov_effective_rank_fit": 1545,
           "probe_pre": 1.0,
-          "probe_post": 0.4927675988428158,
-          "max_abs_cov_post_fit": 0.00026309242523848774,
-          "abs_cos_to_contrast_basis": 0.0711015442685429
+          "probe_post": 0.48296007789678674,
+          "max_abs_cov_post_fit": 0.000263827825149043,
+          "abs_cos_to_contrast_basis": 0.06692388440919972
         },
         {
           "layer": 13,
           "leace_rank": 1,
-          "cov_effective_rank_fit": 1693,
+          "cov_effective_rank_fit": 1680,
           "probe_pre": 1.0,
-          "probe_post": 0.5366441658630665,
-          "max_abs_cov_post_fit": 0.001039162046774151,
-          "abs_cos_to_contrast_basis": 0.02061212019270777
+          "probe_post": 0.45034079844206426,
+          "max_abs_cov_post_fit": 0.001101667940937638,
+          "abs_cos_to_contrast_basis": 0.030548112621337387
         },
         {
           "layer": 19,
           "leace_rank": 1,
-          "cov_effective_rank_fit": 1673,
+          "cov_effective_rank_fit": 1672,
           "probe_pre": 1.0,
-          "probe_post": 0.49662487945998074,
-          "max_abs_cov_post_fit": 0.0014369202116500948,
-          "abs_cos_to_contrast_basis": 0.07623827866755131
+          "probe_post": 0.5511197663096398,
+          "max_abs_cov_post_fit": 0.0014147855649088614,
+          "abs_cos_to_contrast_basis": 0.06768411319481629
         }
       ],
-      "sec_fit": 10.52655291557312,
+      "sec_fit": 15.051407814025879,
       "label": "0 = male referent, 1 = female referent (descriptor tokens)"
     },
     "gender_small": {
       "tag": "gender_small",
       "n_rows_fit": 61,
-      "n_rows_heldout": 2074,
+      "n_rows_heldout": 2054,
       "d": 2304,
       "class_counts_fit": {
-        "0": 33,
-        "1": 28
+        "0": 26,
+        "1": 35
       },
       "per_layer": [
         {
           "layer": 6,
           "leace_rank": 1,
-          "cov_effective_rank_fit": 59,
+          "cov_effective_rank_fit": 60,
           "probe_pre": 1.0,
-          "probe_post": 0.49951783992285437,
-          "max_abs_cov_post_fit": 7.176136528415965e-06,
-          "abs_cos_to_contrast_basis": 0.11145662712969945
+          "probe_post": 0.49951314508276534,
+          "max_abs_cov_post_fit": 8.306846731416081e-06,
+          "abs_cos_to_contrast_basis": 0.0067992765168076175
         },
         {
           "layer": 13,
           "leace_rank": 1,
-          "cov_effective_rank_fit": 59,
-          "probe_pre": 1.0,
-          "probe_post": 0.49951783992285437,
-          "max_abs_cov_post_fit": 1.090997266892891e-05,
-          "abs_cos_to_contrast_basis": 0.11673429775484939
+          "cov_effective_rank_fit": 60,
+          "probe_pre": 0.9995131450827653,
+          "probe_post": 0.49951314508276534,
+          "max_abs_cov_post_fit": 5.25712646557674e-06,
+          "abs_cos_to_contrast_basis": 0.08804790417352545
         },
         {
           "layer": 19,
           "leace_rank": 1,
-          "cov_effective_rank_fit": 59,
-          "probe_pre": 1.0,
-          "probe_post": 0.49951783992285437,
-          "max_abs_cov_post_fit": 1.4459148141565904e-05,
-          "abs_cos_to_contrast_basis": 0.14240572182756928
+          "cov_effective_rank_fit": 60,
+          "probe_pre": 0.9961051606621227,
+          "probe_post": 0.49951314508276534,
+          "max_abs_cov_post_fit": 1.1229316446587835e-05,
+          "abs_cos_to_contrast_basis": 0.03429184830018408
         }
       ],
-      "sec_fit": 3.4138436317443848,
+      "sec_fit": 4.1713244915008545,
       "label": "0 = male referent, 1 = female referent (descriptor tokens)"
     },
     "md_gender_abs_cos_to_contrast_basis": {
-      "6": 0.07109802961349487,
-      "13": 0.02057969942688942,
-      "19": 0.07624731957912445
-    },
-    "eval_set": {
-      "n_seeds": 0
+      "6": 0.0669221505522728,
+      "13": 0.030519725754857063,
+      "19": 0.06768965721130371
+    }
+  },
+  "part_b_done": {
+    "split": [
+      "26",
+      "29",
+      "30",
+      "38",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "46",
+      "50",
+      "7"
+    ],
+    "fits": {
+      "collect": {
+        "n_prompts": 1500,
+        "n_rows": 7624
+      },
+      "gender_large": {
+        "tag": "gender_large",
+        "n_rows_fit": 5570,
+        "n_rows_heldout": 2054,
+        "d": 2304,
+        "class_counts_fit": {
+          "0": 2785,
+          "1": 2785
+        },
+        "per_layer": [
+          {
+            "layer": 6,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 1545,
+            "probe_pre": 1.0,
+            "probe_post": 0.48296007789678674,
+            "max_abs_cov_post_fit": 0.000263827825149043,
+            "abs_cos_to_contrast_basis": 0.06692388440919972
+          },
+          {
+            "layer": 13,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 1680,
+            "probe_pre": 1.0,
+            "probe_post": 0.45034079844206426,
+            "max_abs_cov_post_fit": 0.001101667940937638,
+            "abs_cos_to_contrast_basis": 0.030548112621337387
+          },
+          {
+            "layer": 19,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 1672,
+            "probe_pre": 1.0,
+            "probe_post": 0.5511197663096398,
+            "max_abs_cov_post_fit": 0.0014147855649088614,
+            "abs_cos_to_contrast_basis": 0.06768411319481629
+          }
+        ],
+        "sec_fit": 15.051407814025879,
+        "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+      },
+      "gender_small": {
+        "tag": "gender_small",
+        "n_rows_fit": 61,
+        "n_rows_heldout": 2054,
+        "d": 2304,
+        "class_counts_fit": {
+          "0": 26,
+          "1": 35
+        },
+        "per_layer": [
+          {
+            "layer": 6,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 60,
+            "probe_pre": 1.0,
+            "probe_post": 0.49951314508276534,
+            "max_abs_cov_post_fit": 8.306846731416081e-06,
+            "abs_cos_to_contrast_basis": 0.0067992765168076175
+          },
+          {
+            "layer": 13,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 60,
+            "probe_pre": 0.9995131450827653,
+            "probe_post": 0.49951314508276534,
+            "max_abs_cov_post_fit": 5.25712646557674e-06,
+            "abs_cos_to_contrast_basis": 0.08804790417352545
+          },
+          {
+            "layer": 19,
+            "leace_rank": 1,
+            "cov_effective_rank_fit": 60,
+            "probe_pre": 0.9961051606621227,
+            "probe_post": 0.49951314508276534,
+            "max_abs_cov_post_fit": 1.1229316446587835e-05,
+            "abs_cos_to_contrast_basis": 0.03429184830018408
+          }
+        ],
+        "sec_fit": 4.1713244915008545,
+        "label": "0 = male referent, 1 = female referent (descriptor tokens)"
+      },
+      "md_gender_abs_cos_to_contrast_basis": {
+        "6": 0.0669221505522728,
+        "13": 0.030519725754857063,
+        "19": 0.06768965721130371
+      }
     }
   }
 }
