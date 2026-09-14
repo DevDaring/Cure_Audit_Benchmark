@@ -1,1 +1,1 @@
-SMOKE llama-3.1-8b-instruct starting @ Mon Sep 14 22:22:48 UTC 2026
+SMOKE PASSED for llama-3.1-8b-instruct @ Mon Sep 14 22:27:05 UTC 2026
