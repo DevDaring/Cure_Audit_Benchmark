@@ -241,24 +241,28 @@ ACC_ROWS = (("span erasure, frozen bases", mg, "targeted"), ("energy-matched ran
             ("span erasure, sequential refit", dp, "full_sequential"), ("erasure, massive coordinates restored", ms, "restore_massive"),
             ("erasure, all coordinates restored", ms, "restore_all"))
 rows = []
-for head, key in (("change in $|C|$ relative to unedited", "absC_change_vs_unedited"), ("option-scoring accuracy loss relative to unedited", "acc_loss_vs_unedited")):
-    rows.append("\\multicolumn{5}{l}{\\emph{%s}} \\\\" % head)
-    for lab, df, c in ACC_ROWS:
+# the P3 files store an accuracy LOSS; the paper prints the CHANGE (positive = gain) so that the sign reads naturally
+for head, key, sign in (("$\\Delta|C|$", "absC_change_vs_unedited", 1.0), ("$\\Delta$ option acc.", "acc_loss_vs_unedited", -1.0)):
+    for i, (lab, df, c) in enumerate(ACC_ROWS):
         cells = []
         for m in MODELS:
             r = r3(df, m, c)
-            cells.append(cell_ci(r, key, "%+.3f") if r is not None else "--")
-        rows.append("\\quad %s & %s \\\\" % (lab, " & ".join(cells)))
+            if r is None:
+                cells.append("--"); continue
+            lo, hi = sorted([sign * r[key + "_lo"], sign * r[key + "_hi"]])
+            cells.append(cell(sign * r[key], lo, hi, "%+.3f"))
+        first = ("\\multirow{%d}{*}{%s}" % (len(ACC_ROWS), head)) if i == 0 else ""
+        rows.append("%s & %s & %s \\\\" % (first, lab, " & ".join(cells)))
     rows.append("\\midrule")
 rows.pop()
 w("tab_accounts.tex", r"""\begin{table}[t]
-\caption{Explanatory accounts on the 160 test seeds per model, with seed-cluster bootstrap intervals; a negative accuracy loss is a gain.}
+\caption{Explanatory accounts on the 160 test seeds per model: change in $|C|$ and in option-scoring accuracy relative to the unedited model (positive is a gain), seed-cluster intervals.}
 \label{tab:accounts}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{lcccc}
+\begin{tabular}{llcccc}
 \toprule
-Condition & """ + " & ".join(D[m] for m in MODELS) + r""" \\
+Readout & Condition & """ + " & ".join(D[m] for m in MODELS) + r""" \\
 \midrule
 """ + "\n".join(rows) + r"""
 \bottomrule
@@ -280,7 +284,7 @@ for m in MODELS:
         D[m], a2.n, a2.prevalence, cell(a2.auroc, a2.auroc_lo, a2.auroc_hi), cell(a3.auroc, a3.auroc_lo, a3.auroc_hi),
         cell(d42.delta, d42.delta_lo, d42.delta_hi, "%+.3f")))
 w("tab_forecast.tex", r"""\begin{table}[t]
-\caption{Forecasting new generation errors after the erasure: AUROC on the test seeds with seed-cluster bootstrap intervals.}
+\caption{Forecasting new generation errors after the erasure: AUROC on the test seeds with seed-cluster bootstrap intervals; the audit score is the unedited $|C|$ of the prompt.}
 \label{tab:forecast}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
@@ -303,8 +307,9 @@ for m in MODELS:
     pm = per[(per.model_name == m)]
     a = pm[pm.cond_id == ERASE].set_index("seed_id"); b = pm[pm.cond_id == "identity_alpha0_r1_a0"].set_index("seed_id")
     j = a.join(b[["gen_flip_AB"]], rsuffix="_pre", how="inner")
-    fa = pd.to_numeric(j["gen_flip_AB"], errors="coerce").fillna(1.0).to_numpy()   # attempted denominator: invalid counts as a flip
-    fb = pd.to_numeric(j["gen_flip_AB_pre"], errors="coerce").fillna(1.0).to_numpy()
+    # same convention as p2 summarise() flip_attempted: attempted denominator, an invalid side counts as no flip
+    fa = pd.to_numeric(j["gen_flip_AB"], errors="coerce").fillna(0.0).to_numpy()
+    fb = pd.to_numeric(j["gen_flip_AB_pre"], errors="coerce").fillna(0.0).to_numpy()
     dflip, lo, hi = cluster_boot(fa - fb, j.index.to_numpy())
     rows.append("%s & %.3f & %.3f & %.3f & %.3f & %.3f & %.3f & %s & %.3f & %.3f & %.2f \\\\" % (
         D[m], u.validity, k.validity, u.gen_acc_attempted, k.gen_acc_attempted, u.flip_attempted, k.flip_attempted,
@@ -402,7 +407,8 @@ proto = json.loads((V2 / "p2_protocol.json").read_text(encoding="utf-8"))
 k1 = {m: cond(m, ERASE) for m in MODELS}
 ratio = {m: probe(m, ERASE, "wikitext2_20k", "perplexity") / probe(m, "unedited_r0_a0", "wikitext2_20k", "perplexity") for m in MODELS}
 mmlu_drop = {m: probe(m, "unedited_r0_a0", "mmlu_200", "value") - probe(m, ERASE, "mmlu_200", "value") for m in MODELS}
-ratio_rand = {m: probe(m, "random_ortho_1_r1_a1", "wikitext2_20k", "perplexity") / probe(m, "unedited_r0_a0", "wikitext2_20k", "perplexity") for m in MODELS}
+ratio_rand = {(m, c): probe(m, c, "wikitext2_20k", "perplexity") / probe(m, "unedited_r0_a0", "wikitext2_20k", "perplexity")
+              for m in MODELS for c in ("random_ortho_1_r1_a1", "random_ortho_1_r4_a1")}   # both ranks shown in tab_global
 sides = pd.concat([per[per.cond_id.isin([ERASE, "identity_alpha0_r1_a0"])]["gen_parse_A"], per[per.cond_id.isin([ERASE, "identity_alpha0_r1_a0"])]["gen_parse_B"]])
 judge_share = float((sides == "judge").mean()); judge_none = float((sides == "judge_none").mean())
 pv = pil[(pil.pair_type == "demographic") & (pil.fmt == "chat")]
@@ -446,7 +452,7 @@ plt.rcParams.update({"font.size": 8.5, "axes.titlesize": 9, "axes.labelsize": 8.
                      "legend.fontsize": 7.5, "font.family": "DejaVu Sans", "savefig.dpi": 300, "savefig.bbox": "tight"})
 FIG.mkdir(parents=True, exist_ok=True)
 
-FC = [c for c in CONDS if c[0] not in ("random_ortho_1_r4_a1",)]
+FC = list(CONDS)      # every span condition, including the rank-4 random subspace
 fig, axes = plt.subplots(1, 4, figsize=(11, 2.9), sharey=True)
 labels = [l for _, l in FC]
 for ax, m in zip(axes, MODELS):
