@@ -1,0 +1,94 @@
+{
+  "model": "gemma-2-2b-it",
+  "denominator": 12667151.855078125,
+  "denominator_rule": "mean over dev prompts of sum over layers and over the demographic span plus the matched span of ||h_unedited||^2",
+  "n_dev_prompts": 45,
+  "tolerance": 0.05,
+  "cells": {
+    "SE": {
+      "alpha": 0.11171170931623985,
+      "achieved": 0.0003709767738614504,
+      "rel_err": -0.04527165511638143,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 0.2217532509501805,
+          "energy": 0.0007713264103970425,
+          "rel_err": 0.9850493051039871
+        },
+        {
+          "alpha": 0.11171170931623985,
+          "energy": 0.0003709767738614504,
+          "rel_err": -0.04527165511638143
+        }
+      ]
+    },
+    "NE": {
+      "alpha": 0.134336216900742,
+      "achieved": 0.00038050405711874017,
+      "rel_err": -0.02075268784845552,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 0.26322427988309677,
+          "energy": 0.0009305413946078555,
+          "rel_err": 1.3947974863015287
+        },
+        {
+          "alpha": 0.1099150476767931,
+          "energy": 0.0002858770192657073,
+          "rel_err": -0.2642803736663452
+        },
+        {
+          "alpha": 0.134336216900742,
+          "energy": 0.00038050405711874017,
+          "rel_err": -0.02075268784845552
+        }
+      ]
+    },
+    "RE": {
+      "alpha": 1.0,
+      "achieved": 0.00038856788514713314,
+      "rel_err": 0.0,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 1.0,
+          "energy": 0.00038856788514713314,
+          "rel_err": 0.0
+        }
+      ]
+    },
+    "RNE": {
+      "alpha": 0.9305990447595787,
+      "achieved": 0.0003884200120832296,
+      "rel_err": -0.0003805591495230043,
+      "within_tol": true,
+      "evaluations": [
+        {
+          "alpha": 0.9305990447595787,
+          "energy": 0.0003884200120832296,
+          "rel_err": -0.0003805591495230043
+        }
+      ]
+    }
+  },
+  "utc": "2026-09-14T08:40:24Z",
+  "alpha_one_energy": {
+    "SE": 0.007901816004518994,
+    "NE": 0.005608090470956561,
+    "RE": 0.00038856788514713314,
+    "RNE": 0.0004486851528545351
+  },
+  "target_initial": 0.00038856788514713314,
+  "target": 0.00038856788514713314,
+  "target_reductions": 0,
+  "feasible": true,
+  "alphas": {
+    "SE": 0.11171170931623985,
+    "NE": 0.134336216900742,
+    "RE": 1.0,
+    "RNE": 0.9305990447595787
+  },
+  "matching_status": "matched within tolerance"
+}
