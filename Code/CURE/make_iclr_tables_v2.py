@@ -11,7 +11,7 @@ Tables (Submission2/iclr2027/tables_v2/)
   tab_global.tex      MMLU and WikiText-2 under the every-position policy
   tab_protocol.tex    pilot: |C| and validity under the span edit and the last-token edit;
                       identity-pair |C| under the frozen source state
-  tab_accounts.tex    P3: energy-matched random, sequential refit, massive restoration
+  tab_accounts.tex    P3: random subspace at a development-fixed strength, sequential refit, massive restoration
   tab_forecast.tex    P4: AUROC of baseline, audit-only, and the increment
   tab_behaviour.tex   appendix: validity, generation accuracy, flip rate, option-scoring
                       accuracy, win rate W, per model, unedited vs erasure (test)
@@ -237,7 +237,7 @@ def r3(df, m, c):
     return r.iloc[0] if len(r) else None
 
 
-ACC_ROWS = (("span erasure, frozen bases", mg, "targeted"), ("energy-matched random subspace", mg, "random_1_matched"),
+ACC_ROWS = (("span erasure, frozen bases", mg, "targeted"), ("random subspace, development-fixed strength", mg, "random_1_matched"),
             ("span erasure, sequential refit", dp, "full_sequential"), ("erasure, massive coordinates restored", ms, "restore_massive"),
             ("erasure, all coordinates restored", ms, "restore_all"))
 rows = []
@@ -255,8 +255,12 @@ for head, key, sign in (("$\\Delta|C|$", "absC_change_vs_unedited", 1.0), ("$\\D
         rows.append("%s & %s & %s \\\\" % (first, lab, " & ".join(cells)))
     rows.append("\\midrule")
 rows.pop()
+# achieved energy of the random-subspace row on the test seeds, as a fraction of the erasure's (F0 energy audit)
+_ea = pd.read_csv(ROOT / "Code" / "CURE" / "results" / "final_20260914" / "energy_audit.csv")
+_ea = _ea[(_ea.phase == "test") & (_ea.condition == "random_1_matched")]
+_ea_lo, _ea_hi = 100 * _ea.ratio_to_targeted.min(), 100 * _ea.ratio_to_targeted.max()
 w("tab_accounts.tex", r"""\begin{table}[t]
-\caption{Explanatory accounts on the 160 test seeds per model: change in $|C|$ and in option-scoring accuracy relative to the unedited model (positive is a gain), seed-cluster intervals.}
+\caption{Earlier pool, 160 test seeds per model: change in $|C|$ and in option-scoring accuracy relative to the unedited model (positive is a gain) under the frozen erasure, a random subspace at the strength fixed on development seeds (which removed """ + ("%.1f to %.1f" % (_ea_lo, _ea_hi)) + r""" per cent of the erasure's activation energy on the test seeds), the blockwise sequential refit and the two restoration checks; seed-cluster intervals.}
 \label{tab:accounts}
 \centering\footnotesize
 \begin{adjustbox}{max width=\textwidth}
