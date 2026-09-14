@@ -11,3 +11,15 @@ llama-3.1-8b-instruct,dev,random_only,energy_total_A,absC_change,-0.020451779651
 llama-3.1-8b-instruct,dev,neutral_only,energy_total_A,p_gold_loss_A,0.0008920881018125096,-0.2481019538530987,0.24727034963498876,58,60
 llama-3.1-8b-instruct,dev,neutral_only,energy_total_A,acc_loss_A,0.135469890373986,0.003957818745670125,0.2772113433887483,58,60
 llama-3.1-8b-instruct,dev,neutral_only,energy_total_A,absC_change,-0.06727188046054798,-0.33399993395114447,0.198124425148769,60,60
+llama-3.1-8b-instruct,test,all_edited_conditions,energy_total_A,p_gold_loss_A,-0.1868105935644229,-0.2509326388636246,-0.12044869199717867,1413,160
+llama-3.1-8b-instruct,test,all_edited_conditions,energy_total_A,acc_loss_A,-0.15448947633154556,-0.20249830884258305,-0.109548249527355,1413,160
+llama-3.1-8b-instruct,test,all_edited_conditions,energy_total_A,absC_change,0.001962948324433582,-0.0546560270295476,0.05615237000928303,1440,160
+llama-3.1-8b-instruct,test,targeted_only,energy_total_A,p_gold_loss_A,-0.182214094782877,-0.2602182288146015,-0.10353583176768548,785,160
+llama-3.1-8b-instruct,test,targeted_only,energy_total_A,acc_loss_A,-0.18873999556477383,-0.2455138191433085,-0.13303757929082616,785,160
+llama-3.1-8b-instruct,test,targeted_only,energy_total_A,absC_change,0.0398872829249456,-0.03007179439759014,0.10339318459274104,800,160
+llama-3.1-8b-instruct,test,random_only,energy_total_A,p_gold_loss_A,0.01607947613346464,-0.06305053803447251,0.10442870158590509,471,160
+llama-3.1-8b-instruct,test,random_only,energy_total_A,acc_loss_A,-0.00021430532696830928,-0.054077505044533396,0.07544290564201496,471,160
+llama-3.1-8b-instruct,test,random_only,energy_total_A,absC_change,-0.003538183974606076,-0.08587597211344732,0.0788142783609761,480,160
+llama-3.1-8b-instruct,test,neutral_only,energy_total_A,p_gold_loss_A,-0.14299458333921142,-0.2996559666551675,0.017894008144553136,157,160
+llama-3.1-8b-instruct,test,neutral_only,energy_total_A,acc_loss_A,0.009270826711025231,-0.1129353983904984,0.14463642482370548,157,160
+llama-3.1-8b-instruct,test,neutral_only,energy_total_A,absC_change,-0.0548321822590825,-0.22707923085838605,0.10100151625807469,160,160
