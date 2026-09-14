@@ -75,11 +75,19 @@ def vast(*args, raw=True, check=True) -> str:
 
 
 def load_state() -> dict:
-    return json.loads(STATE.read_text()) if STATE.exists() else {}
+    """Live instances only; keys starting with '_' (e.g. '_done' notes) are kept in the file
+    by save_state but never iterated as instances."""
+    if not STATE.exists():
+        return {}
+    st = json.loads(STATE.read_text())
+    return {k: v for k, v in st.items() if not k.startswith("_")}
 
 
 def save_state(st: dict) -> None:
-    STATE.write_text(json.dumps(st, indent=2))
+    keep = {}
+    if STATE.exists():
+        keep = {k: v for k, v in json.loads(STATE.read_text()).items() if k.startswith("_")}
+    STATE.write_text(json.dumps({**st, **keep}, indent=2))
 
 
 # ---------------------------------------------------------------- commands

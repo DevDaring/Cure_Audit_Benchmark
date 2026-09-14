@@ -1,0 +1,89 @@
+model_name,target,kind,n_population_dev,n_population_test,caveat,phase,predictor,versus,stat,delta,delta_lo,delta_hi,excludes_zero,n
+llama-3.1-8b-instruct,new_error,binary,143,264,,dev_cv,4_baseline_plus_audit,2_baseline,auroc,-0.02898550724637683,-0.13488594977956678,0.03743202591692696,False,143
+llama-3.1-8b-instruct,new_error,binary,143,264,,dev_cv,3_audit_only,2_baseline,auroc,0.06449275362318835,-0.36908249158249157,0.4625141953277086,False,143
+llama-3.1-8b-instruct,new_error,binary,143,264,,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,-0.09347826086956518,-0.5369919672703688,0.38929143437010927,False,143
+llama-3.1-8b-instruct,new_error,binary,143,264,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,-0.03768115942028988,-0.1639913010836924,0.04197695035460983,False,143
+llama-3.1-8b-instruct,new_error,binary,143,264,,test,4_baseline_plus_audit,2_baseline,auroc,0.0014372978799855884,-0.06059913688795674,0.05577184739250658,False,264
+llama-3.1-8b-instruct,new_error,binary,143,264,,test,3_audit_only,2_baseline,auroc,-0.1478620194035214,-0.3445953121912666,0.05476281728907769,False,264
+llama-3.1-8b-instruct,new_error,binary,143,264,,test,4_baseline_plus_audit,3_audit_only,auroc,0.14929931728350698,-0.07401573762023078,0.3698905829388284,False,264
+llama-3.1-8b-instruct,new_error,binary,143,264,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.015450952209845492,-0.05481612685560053,0.08455620378879214,False,264
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,dev_cv,4_baseline_plus_audit,2_baseline,spearman,-0.002354160376665748,-0.012458585259225309,0.006937498834201881,False,245
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,dev_cv,3_audit_only,2_baseline,spearman,-0.34700505586375985,-0.5077940555291699,-0.17363172173178917,False,245
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,dev_cv,4_baseline_plus_audit,3_audit_only,spearman,0.3446508954870941,0.17119173160580253,0.505369356930169,True,245
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,-0.0018360002937600761,-0.006537585456900164,0.0018479348186778103,False,245
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,test,4_baseline_plus_audit,2_baseline,spearman,-0.002343786459620689,-0.0068259551560336295,0.00173268066586745,False,411
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,test,3_audit_only,2_baseline,spearman,-0.3988669065513584,-0.5216030549681114,-0.27959163228203976,False,411
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,test,4_baseline_plus_audit,3_audit_only,spearman,0.39652312009173774,0.2789004936889612,0.5177343910643565,True,411
+llama-3.1-8b-instruct,prob_loss,continuous,245,411,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,-0.0001792408966538872,-0.0018566887200818047,0.0016190002502326736,False,411
+qwen2.5-7b-instruct,new_error,binary,151,276,,dev_cv,4_baseline_plus_audit,2_baseline,auroc,-0.009389671361502372,-0.04140070921985815,0.012837162837162831,False,151
+qwen2.5-7b-instruct,new_error,binary,151,276,,dev_cv,3_audit_only,2_baseline,auroc,-0.07550860719874808,-0.3602801184322923,0.1908609271523177,False,151
+qwen2.5-7b-instruct,new_error,binary,151,276,,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,0.06611893583724571,-0.1949903277690836,0.35151515151515134,False,151
+qwen2.5-7b-instruct,new_error,binary,151,276,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,-0.005477308294209671,-0.036285539856968405,0.015873015873015928,False,151
+qwen2.5-7b-instruct,new_error,binary,151,276,,test,4_baseline_plus_audit,2_baseline,auroc,0.001908396946564861,-0.010345466155811004,0.01147100574232745,False,276
+qwen2.5-7b-instruct,new_error,binary,151,276,,test,3_audit_only,2_baseline,auroc,-0.1108233369683751,-0.2800105013026583,0.06392467833962191,False,276
+qwen2.5-7b-instruct,new_error,binary,151,276,,test,4_baseline_plus_audit,3_audit_only,auroc,0.11273173391493996,-0.06914251422475103,0.2896555417357655,False,276
+qwen2.5-7b-instruct,new_error,binary,151,276,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,-0.00027262813522355156,-0.004010580887703172,0.003663340336134439,False,276
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,dev_cv,4_baseline_plus_audit,2_baseline,spearman,0.01517785914455784,-0.04459836938977687,0.08973672156592644,False,248
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,dev_cv,3_audit_only,2_baseline,spearman,-0.05827848752691673,-0.26974246983192957,0.14716321924964823,False,248
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,dev_cv,4_baseline_plus_audit,3_audit_only,spearman,0.07345634667147458,-0.09606369135178716,0.2533383448556544,False,248
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,0.006526825599380684,-0.045434899640288955,0.07007813436449237,False,248
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,test,4_baseline_plus_audit,2_baseline,spearman,-0.011404362169571691,-0.0465939587544277,0.0236375124919703,False,416
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,test,3_audit_only,2_baseline,spearman,-0.11682329834141067,-0.2741942765265328,0.03593591782251767,False,416
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,test,4_baseline_plus_audit,3_audit_only,spearman,0.10541893617183898,-0.03189513862116067,0.23943104117395567,False,416
+qwen2.5-7b-instruct,prob_loss,continuous,248,416,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,-0.007839076936335024,-0.041805573049704295,0.02548338129596349,False,416
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4_baseline_plus_audit,2_baseline,auroc,0.00877192982456143,-0.17223684210526316,0.1478026437847866,False,56
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,3_audit_only,2_baseline,auroc,0.22660818713450293,-0.12419217687074827,0.541100209314495,False,56
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,-0.2178362573099415,-0.44621009942438516,0.0013151041666666912,False,56
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.011695906432748537,-0.14036458333333332,0.13022569444444446,False,56
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4_baseline_plus_audit,2_baseline,auroc,0.12610294117647058,0.05118652376360784,0.20834334935897433,True,108
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,3_audit_only,2_baseline,auroc,0.13970588235294124,-0.05876914087685364,0.32158152734778117,False,108
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4_baseline_plus_audit,3_audit_only,auroc,-0.013602941176470651,-0.15523595328282822,0.13423765904234644,False,108
+qwen2.5-7b-instruct,audit_cross,binary,56,108,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.08455882352941169,0.0361915535444947,0.14637387030614285,True,108
+gemma-2-2b-it,new_error,binary,120,221,,dev_cv,4_baseline_plus_audit,2_baseline,auroc,-0.030909090909090886,-0.08018370668940392,0.001590354090354095,False,120
+gemma-2-2b-it,new_error,binary,120,221,,dev_cv,3_audit_only,2_baseline,auroc,0.24681818181818183,0.0473544685990338,0.43303931451612904,True,120
+gemma-2-2b-it,new_error,binary,120,221,,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,-0.2777272727272727,-0.47234980164944146,-0.08145149134629026,False,120
+gemma-2-2b-it,new_error,binary,120,221,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,-0.026363636363636367,-0.057884308895972195,0.0,False,120
+gemma-2-2b-it,new_error,binary,120,221,,test,4_baseline_plus_audit,2_baseline,auroc,0.001941747572815622,0.0,0.0056868076644195605,False,221
+gemma-2-2b-it,new_error,binary,120,221,,test,3_audit_only,2_baseline,auroc,-0.025404530744336573,-0.24934967376373626,0.19116201776139666,False,221
+gemma-2-2b-it,new_error,binary,120,221,,test,4_baseline_plus_audit,3_audit_only,auroc,0.027346278317152195,-0.18777318741268925,0.25178291451890006,False,221
+gemma-2-2b-it,new_error,binary,120,221,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.0009708737864076999,0.0,0.0033304736142700667,False,221
+gemma-2-2b-it,prob_loss,continuous,249,406,,dev_cv,4_baseline_plus_audit,2_baseline,spearman,0.05101401127633931,0.010098307180932783,0.09804699544042601,True,249
+gemma-2-2b-it,prob_loss,continuous,249,406,,dev_cv,3_audit_only,2_baseline,spearman,-0.2526537323124244,-0.43676499501385235,-0.06700738324701541,False,249
+gemma-2-2b-it,prob_loss,continuous,249,406,,dev_cv,4_baseline_plus_audit,3_audit_only,spearman,0.3036677435887637,0.12909145831695604,0.478640905914206,True,249
+gemma-2-2b-it,prob_loss,continuous,249,406,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,0.03913137937481037,-0.000248657313699185,0.08553080537911457,False,249
+gemma-2-2b-it,prob_loss,continuous,249,406,,test,4_baseline_plus_audit,2_baseline,spearman,0.01212594866519312,-0.026026838382766287,0.050183262571454994,False,406
+gemma-2-2b-it,prob_loss,continuous,249,406,,test,3_audit_only,2_baseline,spearman,-0.26712376449569464,-0.4202840003080639,-0.10999752169640646,False,406
+gemma-2-2b-it,prob_loss,continuous,249,406,,test,4_baseline_plus_audit,3_audit_only,spearman,0.27924971316088776,0.13766081169383915,0.4212095131298177,True,406
+gemma-2-2b-it,prob_loss,continuous,249,406,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,0.008248155455086448,-0.030972041816112655,0.04963508412362599,False,406
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4_baseline_plus_audit,2_baseline,auroc,0.14322916666666663,0.04944534632034626,0.2604166666666667,True,68
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,3_audit_only,2_baseline,auroc,0.29079861111111105,0.040485420376724715,0.5173071086019547,True,68
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,-0.14756944444444442,-0.33397879464285707,0.04212719298245604,False,68
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.13107638888888884,0.0338411458333333,0.240509250157282,True,68
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4_baseline_plus_audit,2_baseline,auroc,0.10139860139860135,0.008716153127917804,0.20413243338291695,True,122
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,3_audit_only,2_baseline,auroc,0.05171911421911424,-0.14302325581395348,0.2529064265906371,False,122
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4_baseline_plus_audit,3_audit_only,auroc,0.049679487179487114,-0.07560547444191874,0.1745230170287378,False,122
+gemma-2-2b-it,audit_cross,binary,68,122,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.08041958041958042,-0.0029393848182547606,0.1726557308970097,False,122
+phi-4-mini-instruct,new_error,binary,171,276,,dev_cv,4_baseline_plus_audit,2_baseline,auroc,-0.00887096774193552,-0.024282227857742793,0.0029397510458116683,False,171
+phi-4-mini-instruct,new_error,binary,171,276,,dev_cv,3_audit_only,2_baseline,auroc,-0.267741935483871,-0.4734251277932345,-0.05386137870718467,False,171
+phi-4-mini-instruct,new_error,binary,171,276,,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,0.25887096774193546,0.04091636898575732,0.4685401417042041,True,171
+phi-4-mini-instruct,new_error,binary,171,276,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,-0.0040322580645161255,-0.01863403489338126,0.008756807708420666,False,171
+phi-4-mini-instruct,new_error,binary,171,276,,test,4_baseline_plus_audit,2_baseline,auroc,-0.009022556390977376,-0.024420426065162933,0.0011261684616948179,False,276
+phi-4-mini-instruct,new_error,binary,171,276,,test,3_audit_only,2_baseline,auroc,-0.13402255639097738,-0.36198185692148754,0.17205135058702398,False,276
+phi-4-mini-instruct,new_error,binary,171,276,,test,4_baseline_plus_audit,3_audit_only,auroc,0.125,-0.1930290818250378,0.35864393794707966,False,276
+phi-4-mini-instruct,new_error,binary,171,276,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,-0.0071428571428571175,-0.025670315982693034,0.004807981927710826,False,276
+phi-4-mini-instruct,prob_loss,continuous,247,408,,dev_cv,4_baseline_plus_audit,2_baseline,spearman,-0.002647027906873045,-0.010042747614723225,0.003801580736711076,False,247
+phi-4-mini-instruct,prob_loss,continuous,247,408,,dev_cv,3_audit_only,2_baseline,spearman,-0.45726576859947426,-0.6498482747934271,-0.25453604758159204,False,247
+phi-4-mini-instruct,prob_loss,continuous,247,408,,dev_cv,4_baseline_plus_audit,3_audit_only,spearman,0.4546187406926012,0.2523916472324843,0.6462098948154794,True,247
+phi-4-mini-instruct,prob_loss,continuous,247,408,,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,-0.003184556137059369,-0.012154296450825228,0.004171542620627047,False,247
+phi-4-mini-instruct,prob_loss,continuous,247,408,,test,4_baseline_plus_audit,2_baseline,spearman,0.002549762869049399,-0.0017829956311941897,0.007636871108805426,False,408
+phi-4-mini-instruct,prob_loss,continuous,247,408,,test,3_audit_only,2_baseline,spearman,-0.42221139470760827,-0.5651869013516971,-0.27236633232745483,False,408
+phi-4-mini-instruct,prob_loss,continuous,247,408,,test,4_baseline_plus_audit,3_audit_only,spearman,0.42476115757665767,0.27365586358838756,0.5691571655543006,True,408
+phi-4-mini-instruct,prob_loss,continuous,247,408,,test,4b_baseline_audit_energy,2b_baseline_plus_energy,spearman,0.0009185931090144317,-0.0031332438102108008,0.005532116600318736,False,408
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4_baseline_plus_audit,2_baseline,auroc,0.21839080459770116,-0.08409269957983191,0.6103553921568629,False,38
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,3_audit_only,2_baseline,auroc,0.5268199233716475,0.16629901960784318,0.7980967509193315,True,38
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4_baseline_plus_audit,3_audit_only,auroc,-0.3084291187739464,-0.5370717592592592,-0.062175712578938364,False,38
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,dev_cv,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.16091954022988508,-0.14658975659229206,0.5294558823529412,False,38
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4_baseline_plus_audit,2_baseline,auroc,0.13809523809523816,-0.14260360962566843,0.4500403225806449,False,51
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,3_audit_only,2_baseline,auroc,0.10158730158730156,-0.1738012868624324,0.3994449715370018,False,51
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4_baseline_plus_audit,3_audit_only,auroc,0.0365079365079366,-0.06482654889912962,0.17683531746031697,False,51
+phi-4-mini-instruct,audit_cross,binary,38,51,predictor 3 is the score whose TAU crossing defines the target; partly mechanical,test,4b_baseline_audit_energy,2b_baseline_plus_energy,auroc,0.10476190476190483,-0.14856430240761975,0.38330697870546065,False,51
