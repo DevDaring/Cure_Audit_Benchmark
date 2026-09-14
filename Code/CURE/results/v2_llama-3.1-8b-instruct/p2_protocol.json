@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-13T13:08:49Z",
+  "generated_utc": "2026-09-13T13:50:44Z",
   "fmt": "chat",
   "site": "span",
   "source_state": "sequential",
@@ -42,7 +42,7 @@
   ],
   "models": {
     "llama-3.1-8b-instruct": {
-      "sec_load": 11.466157913208008,
+      "sec_load": 11.518450736999512,
       "torch": "2.5.1+cu124",
       "transformers": "5.17.0",
       "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
@@ -266,13 +266,39 @@
           "neutral_contrast_r1_a1",
           "neutral_contrast_r2_a1",
           "neutral_contrast_r4_a1"
+        ],
+        "test": [
+          "unedited_r0_a0",
+          "identity_alpha0_r1_a0",
+          "cure_centred_svd_r1_a1",
+          "cure_centred_svd_r2_a1",
+          "cure_centred_svd_r4_a1",
+          "uncentred_svd_r1_a1",
+          "uncentred_svd_r2_a1",
+          "uncentred_svd_r4_a1",
+          "mean_difference_r1_a1",
+          "leace_faithful_r1_a1",
+          "leace_sequential_r1_a1",
+          "random_ortho_1_r1_a1",
+          "random_ortho_1_r2_a1",
+          "random_ortho_1_r4_a1",
+          "random_ortho_2_r1_a1",
+          "random_ortho_2_r2_a1",
+          "random_ortho_2_r4_a1",
+          "random_ortho_3_r1_a1",
+          "random_ortho_3_r2_a1",
+          "random_ortho_3_r4_a1",
+          "neutral_contrast_r1_a1",
+          "neutral_contrast_r2_a1",
+          "neutral_contrast_r4_a1"
         ]
       },
       "n_items_this_run": {
-        "dev": 340
+        "dev": 340,
+        "test": 8970
       },
-      "sec_model_total": 2504.2943036556244
+      "sec_model_total": 37272.62915182114
     }
   },
-  "sec_wall_total": 2504.5897340774536
+  "sec_wall_total": 37272.880917072296
 }
