@@ -1,1 +1,1 @@
-SMOKE attempt 3 failed:     for key in npz.files:                ^^^^^^^^^ AttributeError: 'dict' object has no attribute 'files'  @ Mon Sep 14 08:28:38 UTC 2026
+SMOKE gave up after 3 attempts @ Mon Sep 14 08:28:39 UTC 2026
