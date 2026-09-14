@@ -1,0 +1,715 @@
+{
+  "generated_utc": "2026-09-14T07:57:03Z",
+  "files": [
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_confirmatory.csv",
+      "sha256": "e06537720cabe67f9f3e4b60e4e3182625cea26539531fae073826e77eafb1d7",
+      "bytes": 7178
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_dev_seeds.csv",
+      "sha256": "1401a7a68e96726527da5d26d91ce89dcf88ff4844f6bb76045815c5a016f862",
+      "bytes": 6827
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_summary.csv",
+      "sha256": "64dfeab1a7525ebd5d58e84c5588497f77f638c3cfabc892cbb50a66586356a0",
+      "bytes": 1059359
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_test_seeds.csv",
+      "sha256": "e383f94d46f5a6bbf471ae1472ff9a7b079f768089851d163ed3b88e7099c69f",
+      "bytes": 11061
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_depth_summary.csv",
+      "sha256": "5ce649a3dd227d5d80dc4f92b4c072be570fd28a2bcdd0a1a93ed3b3b1381876",
+      "bytes": 22723
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_magnitude_energy_relationships.csv",
+      "sha256": "391181d453620bea3e14775ee74f20b33efc029e1bab0b4cfc46325938a4eec2",
+      "bytes": 13157
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_magnitude_summary.csv",
+      "sha256": "bfefbbdb555e5a15afdb017b7f36be1ed6920d3fb0044520584c31d93973582e",
+      "bytes": 39492
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_basis_mass_gemma-2-2b-it.csv",
+      "sha256": "fb501f7ad7d63e5ff117c3bcafd402d280cefc1718cf857774f03071a7843aae",
+      "bytes": 1005
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_basis_mass_llama-3.1-8b-instruct.csv",
+      "sha256": "ea4c631673ebd2d713c0cd3a8afa884818f42dcf4d3d8c125e3b0ed1a3d1c4cf",
+      "bytes": 1254
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_basis_mass_phi-4-mini-instruct.csv",
+      "sha256": "81c086ed12f6fad327f1727dfc725921c35ba0249f8e99f7bc795c1e738cbd10",
+      "bytes": 1242
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_basis_mass_qwen2.5-7b-instruct.csv",
+      "sha256": "21885d0a3427be96303277f444a5c0ded5daa011f2668493095db0a034c19728",
+      "bytes": 1089
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_coords_gemma-2-2b-it.csv",
+      "sha256": "fc6c520c88c791f1bc4c86653144e7b5bf8f486cfc0ae7ddd76df803e0fba216",
+      "bytes": 15153
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_coords_llama-3.1-8b-instruct.csv",
+      "sha256": "4a19b19465aca9657cfe2a95348bdb4eb1af0056d224b08866ed5f486aa01945",
+      "bytes": 18760
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_coords_phi-4-mini-instruct.csv",
+      "sha256": "4dd8558e9e5093747648ea2016ec6c5721944eef648452925a2f1cb4075dee1d",
+      "bytes": 18609
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_coords_qwen2.5-7b-instruct.csv",
+      "sha256": "b3497bdb3d47faf385aaa25c88f1e717a2762e5718dc3ff822602135ec2f0bfb",
+      "bytes": 16382
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_summary.csv",
+      "sha256": "350e5f9aee5e8774f88f92f635b1a547ccf34f4d046a1ad1b4fe8683f43ebbd1",
+      "bytes": 42018
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p4_coverage_curve.csv",
+      "sha256": "28c4de6b9b29b9e63d681907be88c93a7bd68fe7b95a410ddca2ee68a8408182",
+      "bytes": 113061
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p4_forecast_metrics.csv",
+      "sha256": "2b16b80a6d9b792f47d7d6a9966d67c801f0d495c3b0c8262b4c4d00a29cfbcb",
+      "bytes": 50198
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p4_incremental_tests.csv",
+      "sha256": "18ed1ffabc3569359cfba54fa3b455b2b646dabdc01b08a1e88e4fdea779c899",
+      "bytes": 16713
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_seeds.csv",
+      "sha256": "0c26bc5fadd47c56c8d7b8fec1252fb17cee947e9952ccde97b798bca6f3b72e",
+      "bytes": 10031
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_capability.parquet",
+      "sha256": "181dba3f5af2a1ad931b45d681c9b1d751221f7182c98795b29640a293055daf",
+      "bytes": 1066325
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_per_item.parquet",
+      "sha256": "8437816fad1c1d20304b1fa3d8052db8348df14801a41cfc852f55acb6ef8d58",
+      "bytes": 66850352
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_depth_per_item.parquet",
+      "sha256": "b5a90aa802dbe4f64dad1e14d4460ca980842c53dcfbbb3f6e839aa585049712",
+      "bytes": 4161562
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_magnitude_per_item.parquet",
+      "sha256": "cdfebcafb99a011127c6056117481fff9ef5d21c342bc439d60ced7ba29fd3db",
+      "bytes": 1476760
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_massive_per_item.parquet",
+      "sha256": "215f82e2f8bff722bf9d0dba77815e11612238cecca16af3a52d326d6330e59f",
+      "bytes": 1926174
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_per_item.parquet",
+      "sha256": "6d393def53a5ecf5f48ca445773739f4617b026ef0783d718d29cf0c24a65cde",
+      "bytes": 192118
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\merge_manifest.json",
+      "sha256": "c173352b617c15acdaea4703e35690757d532b33243f2ce748e6927c91af9f77",
+      "bytes": 8383
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_manifest_gemma-2-2b-it_chat.json",
+      "sha256": "fbb43ec1627d2ecedc0d437c4465f178e35cc606d003de97674a4bc65f113411",
+      "bytes": 5736
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_manifest_llama-3.1-8b-instruct_chat.json",
+      "sha256": "ab67ada7b0b1dd5a0c780eac6dbef136c80e0fbf9f7fcebc763f563e4891ff81",
+      "bytes": 6032
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_manifest_phi-4-mini-instruct_chat.json",
+      "sha256": "e46afd489726d817f99be46fdae189a38cc629fd4dc94d63fc4b017f64f30497",
+      "bytes": 6008
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_manifest_qwen2.5-7b-instruct_chat.json",
+      "sha256": "052ffba22d6feb0e994001c98cee9ef232f1802f2dc947a2708efea6ccc7a05e",
+      "bytes": 5864
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_matched_alphas.json",
+      "sha256": "4566940de3029a2b6c82ce43195cef5785af7667704f149b927104e0d9c3322e",
+      "bytes": 38540
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_protocol.json",
+      "sha256": "916d5238ce44af211c999ae24269f50226fdf4240e356cd7af9cc58c6d282982",
+      "bytes": 38972
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_gemma-2-2b-it_sequential_b4_r1.json",
+      "sha256": "08664917525c1412d57cf3ac843c79d556e25756d529e14641ebe486d41e49ee",
+      "bytes": 222
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_llama-3.1-8b-instruct_sequential_b4_r1.json",
+      "sha256": "b1ad7437c9fa294e2f3396959c64a996ed5668f0ed66ab83ce09ffa87b1d18da",
+      "bytes": 222
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_phi-4-mini-instruct_sequential_b4_r1.json",
+      "sha256": "b1ad7437c9fa294e2f3396959c64a996ed5668f0ed66ab83ce09ffa87b1d18da",
+      "bytes": 222
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_qwen2.5-7b-instruct_sequential_b4_r1.json",
+      "sha256": "08664917525c1412d57cf3ac843c79d556e25756d529e14641ebe486d41e49ee",
+      "bytes": 222
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_matched_alphas_gemma-2-2b-it.json",
+      "sha256": "cfbe1d4d3af574ccd004ac780d7d1a6043455e5eb3970eb90ce316f7992a0461",
+      "bytes": 4356
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_matched_alphas_llama-3.1-8b-instruct.json",
+      "sha256": "25c85b272a51438dd0cd7b96a7890cc560bc1fdf0d91ea68be0fb9ecef5f0502",
+      "bytes": 4440
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_matched_alphas_phi-4-mini-instruct.json",
+      "sha256": "a9bba7fe3d4489931fbcdf6e3a45a60d6d67acbde84eb0ade978b07e6da9dbce",
+      "bytes": 4416
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_matched_alphas_qwen2.5-7b-instruct.json",
+      "sha256": "b76882dcff746ca473e02ed427b28d7adc235f6a4612b4ee5e62895d801088f5",
+      "bytes": 4398
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_protocol.json",
+      "sha256": "f5cc44a7f363452db53f9aa8f957a800e71bd999e0c3f1ed004eccda546cb74e",
+      "bytes": 7277
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_cure_centred_svd.npz",
+      "sha256": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+      "bytes": 896452
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_leace_faithful.npz",
+      "sha256": "e1b5c7a9b3e8d243f73b70359cf65327d3f170f0c3ebac93e45affb29eb93b83",
+      "bytes": 683476
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_leace_sequential.npz",
+      "sha256": "842609ebc91948342a89fd4f0fa675a033ff75f24aa29503dd4c52ed85b9b34b",
+      "bytes": 683052
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_mean_difference.npz",
+      "sha256": "1a7301f2134eb60156e740b9348b11f82ae0c86ee3c856232168418f74d9e947",
+      "bytes": 227836
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_neutral_contrast.npz",
+      "sha256": "a40db94a70fa55cedd414e582409d2b0b75ad2babb820bd343c01646c75bfc68",
+      "bytes": 896116
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_random_ortho_1.npz",
+      "sha256": "5d5810834ea2ea8d382ec5748eaf6b76f610c504956d30271098252b7ba91d54",
+      "bytes": 895404
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_random_ortho_2.npz",
+      "sha256": "86eeef89bc4ba3350bede00ebe6dd3659bf86a4ff9915822345e5b680f99ccf0",
+      "bytes": 895222
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_random_ortho_3.npz",
+      "sha256": "fe8f85999301f99ed4fe3467ab251adde9b9c74ef238bf92fb4fc79bedf2c1d8",
+      "bytes": 895224
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_gemma-2-2b-it_chat_uncentred_svd.npz",
+      "sha256": "0e899ba1a1b7e1178ad56eea9ea99a081ed710e2ae95cd55b56bf670ba3c9a0f",
+      "bytes": 896432
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_cure_centred_svd.npz",
+      "sha256": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+      "bytes": 1952024
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_leace_faithful.npz",
+      "sha256": "8268d856a9cf3f874260d72510cffadb8b617497d6059063220184279bc67e56",
+      "bytes": 1466809
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_leace_sequential.npz",
+      "sha256": "c0f8270b2a1f979729c198e1da6da7fb68815372e82477598d8221216c753af0",
+      "bytes": 1465848
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_mean_difference.npz",
+      "sha256": "7ff4c485aa546340ad912952475d0436620732264f2b4d384872920fbf72bf71",
+      "bytes": 492141
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_neutral_contrast.npz",
+      "sha256": "2664bc376a817e0b2794d64d71dec2ce3cf2707520a58642229acda6364b4d8a",
+      "bytes": 1952060
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_random_ortho_1.npz",
+      "sha256": "4d2797700009cd46194a66e5c2cc585535053f109aabd6d2efce1bd66bbe3b74",
+      "bytes": 1948195
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_random_ortho_2.npz",
+      "sha256": "94c7220f0c13a245cdbd6488890a0b83a228b88d135a5b84a2692e3248fdbb50",
+      "bytes": 1948297
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_random_ortho_3.npz",
+      "sha256": "dc8220d7b2a0afdf3a5b5ff94ac0917f1b5c4f4078d06f7111d8377be5fef475",
+      "bytes": 1948319
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_llama-3.1-8b-instruct_chat_uncentred_svd.npz",
+      "sha256": "4b48919c5bfdca85ec214826c1fa306fb321977bc05a0a14b0d972a9dc2c270a",
+      "bytes": 1951859
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_cure_centred_svd.npz",
+      "sha256": "653a1757b2e3dad1b7823a2fd29f20a28207e679871c79c9e792269915abdf79",
+      "bytes": 1464952
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_leace_faithful.npz",
+      "sha256": "230ffff611495be2692443d7cca7afc776ade1de2bcae81dc48c363a2f158a70",
+      "bytes": 1114360
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_leace_sequential.npz",
+      "sha256": "390c91600a70a563e13d58d289ae7a91a3e286da6a0d2dd2938ac6c3a3083d0a",
+      "bytes": 1113896
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_mean_difference.npz",
+      "sha256": "35307335dc0695a10ea7b0215e36f57cd6355b627fef55bc2f52d29efc865aee",
+      "bytes": 370733
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_neutral_contrast.npz",
+      "sha256": "465ce2f9a44c902216aa1e804ee32b24989a5f73caad1e29e9a87e5847d03033",
+      "bytes": 1464697
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_random_ortho_1.npz",
+      "sha256": "021c3c47fdf214874479c42bbb94c5e947c2f7e48c72de5b77e059472adcdf09",
+      "bytes": 1464005
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_random_ortho_2.npz",
+      "sha256": "cec1d0dd9da8a41af05e54181f544039feac9022a3ddce8f3bdb56acd098c097",
+      "bytes": 1464110
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_random_ortho_3.npz",
+      "sha256": "38532e20a80e5cce18ed5bd86934db0d5e31033157f43c1d67e4de3dc5932ac5",
+      "bytes": 1464161
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_phi-4-mini-instruct_chat_uncentred_svd.npz",
+      "sha256": "571babb7a3148de9c94378bc636db2505207c541c96f77030416015349dc698b",
+      "bytes": 1464974
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_cure_centred_svd.npz",
+      "sha256": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+      "bytes": 1501110
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_leace_faithful.npz",
+      "sha256": "9ba037d7b8ab0895a74be6773fbf94102c7a31c09741a0b38add0c649a7f70f2",
+      "bytes": 1125733
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_leace_sequential.npz",
+      "sha256": "3af4cd027b8bdc80937e752e1c9f8dbd5097c830f63724e61b7c44cbf7e40f88",
+      "bytes": 1124071
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_mean_difference.npz",
+      "sha256": "0842cf1344c3f3d4b3bdc72a032607fffcede8e8794392e6b05028c1f4586670",
+      "bytes": 378654
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_neutral_contrast.npz",
+      "sha256": "9e348b2178e2c7488fe77fa06918ce89df4ba200c5a3711e30fe126e5a57dfa1",
+      "bytes": 1500663
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_random_ortho_1.npz",
+      "sha256": "ef63c0f93c9cb7c1354f4b5dbc8ca7983ebd628def760c38a6edaeba3bdf46fe",
+      "bytes": 1493712
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_random_ortho_2.npz",
+      "sha256": "257af5bac5677075316b7b3f11e224b146327ba4599944efd1cbe981e46d0c02",
+      "bytes": 1493407
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_random_ortho_3.npz",
+      "sha256": "d58d25fbfb8105580101262656a7b3814c4d28b976ba5bcb5aa53fc931614fc6",
+      "bytes": 1493604
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p2_basis_qwen2.5-7b-instruct_chat_uncentred_svd.npz",
+      "sha256": "f164d9fb2152ef7445478e3c0fe71ac0e8bc3ebfb031d73f3a438aca51ae8a6c",
+      "bytes": 1500951
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_gemma-2-2b-it_sequential_b4_r1.npz",
+      "sha256": "4d85e2f097de3663b381a7afefa63c4bd8b4592b5fbdbd3e77b02ba96fc73940",
+      "bytes": 227332
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_llama-3.1-8b-instruct_sequential_b4_r1.npz",
+      "sha256": "e5ef958dcb2a162d048e745b728f51e33fd3cfcf0c24cad0e0f8cac356054e46",
+      "bytes": 492302
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_phi-4-mini-instruct_sequential_b4_r1.npz",
+      "sha256": "276f2b1e774003e8eec5413766ce5a6dc49b3c4c424e4cada422a50b945911d5",
+      "bytes": 370942
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\p3_basis_qwen2.5-7b-instruct_sequential_b4_r1.npz",
+      "sha256": "e982e3737f5006c9684f9b402e22ab464dab38168bd15f78f497c5e436fc0c9e",
+      "bytes": 378871
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_basis_gemma-2-2b-it_chat_r1.npz",
+      "sha256": "f47de9e489d4f845cd91bf9b9552396d38a8b81692a0dde406d5fbf4b5073fe3",
+      "bytes": 227927
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_basis_llama-3.1-8b-instruct_chat_r1.npz",
+      "sha256": "4e499f6cdaa8909dda63971a590afdbc41921e872d68335a940fc8e63a6ea659",
+      "bytes": 492618
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_basis_phi-4-mini-instruct_chat_r1.npz",
+      "sha256": "c7ee0473fe308efbf9e18fc3a3235ebb72a708e919eeb560da018a09b931e721",
+      "bytes": 371009
+    },
+    {
+      "path": "Code\\CURE\\results\\v2\\pilot_basis_qwen2.5-7b-instruct_chat_r1.npz",
+      "sha256": "3bde70c93414c315a73a07704294d5d967320242edea75fb11058785dbb8327c",
+      "bytes": 379259
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\data_integrity.csv",
+      "sha256": "bbddca31c878f68b19e9c8894f67849cc065b87513d37533030bc6042c088455",
+      "bytes": 5191
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\dedup_dry_run.csv",
+      "sha256": "683352cf772fec46c7b231cc7b7cac33af3252e1a7bf5c3bc6d7cc36ea96ff40",
+      "bytes": 3438
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\evidence_ledger.csv",
+      "sha256": "22ba769441251607fa3129c552cda5639cc27b8f3dfdb47dcb9d46b58d07d6d2",
+      "bytes": 12465
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\evidence_ledger_measured.csv",
+      "sha256": "4bed003d32ec33757e74502eac7e47748802e78e7a493ae1a57dfaa8bcbd08f4",
+      "bytes": 14592
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\input_checksums.csv",
+      "sha256": "6b37291bc091f0e7584bf5f3a23a2f7fea77f557383963f9bf11d55cdf35b2e2",
+      "bytes": 4776
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\metric_audit.csv",
+      "sha256": "9712e6dfdb945e9547339be9f1ee7476b6f9410dbad650e47d8f5abd7e268428",
+      "bytes": 19990
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\metric_audit_headtohead.csv",
+      "sha256": "5be34dbe32cdfefe5981fac0a3c1c01996f810ea1e4563fdf0cafdc31a1ba3a0",
+      "bytes": 7002
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\metric_audit_heldout.csv",
+      "sha256": "57b49bda8a39158adfbf4084edf2b939d548949c9ca2d26db2387dfe8964cfce",
+      "bytes": 3074
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\prognosis_rebuilt.csv",
+      "sha256": "00331a0a6b3d45bbf9de4e473dddd57adc420a198b91a1ac9d80b76fd67916af",
+      "bytes": 11778
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\prognosis_rebuilt_heldout.csv",
+      "sha256": "85f0526d2635b3f4e688a6b449d6918e2a92ad95c9d7c58674e084376a15a448",
+      "bytes": 9489
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\prognosis_rebuilt_seed_level.csv",
+      "sha256": "39e46a0f6fd3dda8664c34e21f90c69d41ad0633c7c40897bf1687209bfe42e2",
+      "bytes": 344557
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\prognosis_reproduction.csv",
+      "sha256": "69c3acb1ab24f16f87274c83e4ea40418762146bb0e886fc9b33e5105282ab31",
+      "bytes": 991
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\raw_archive_candidates.csv",
+      "sha256": "a8832e2b0d5b627b1fa422f602bb11184888b78c00e790373a42d3a21a4268d7",
+      "bytes": 3323
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\split_manifest.csv",
+      "sha256": "cad6c692951755a94f36259db9d4200323c905061507405a01fdc2c2e2205fd1",
+      "bytes": 33035
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\split_manifest_summary.csv",
+      "sha256": "4af963b35d95b97db0f8174bf1211b04cc15e68f036e2bbdfb085bea70518b2d",
+      "bytes": 1806
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\stage_overlap.csv",
+      "sha256": "6324b93d6f34d299636ffb72fd88db6fd38b0b9d9e575ec5179c1f3eaf062eb3",
+      "bytes": 1818
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\tau_audit.csv",
+      "sha256": "f51abe1dc1b146cfc0f3bcd46c9eb257dadacc41629399366e20fac5808a7b33",
+      "bytes": 761
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\tau_relation.csv",
+      "sha256": "560d6bf1f33bf220585a2405b3d9a2c2eedd9f095dddfaa8e3741f5634434f73",
+      "bytes": 494
+    },
+    {
+      "path": "Code\\CURE\\results\\reanalysis_v2\\tau_sensitivity.csv",
+      "sha256": "a18852b3b75c1e4be77d653060c41d7096bc7daf87aeea58f0e05e407f66c5b7",
+      "bytes": 1653
+    },
+    {
+      "path": "Submission2\\iclr2027\\iclr2027_CURE_Audit_Benchmark.tex",
+      "sha256": "0c27405b9bcc79e9cd20e783803f276a7536c47ccce2a35d0bbeb1af4e4851e1",
+      "bytes": 44710
+    },
+    {
+      "path": "Submission2\\iclr2027\\iclr2027_CURE_Audit_Benchmark.pdf",
+      "sha256": "5f79fcccf621749dad52d7d78cf6a609542b7e272a053d4e550002819e993ef4",
+      "bytes": 344197
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\check_vms.py",
+      "sha256": "2ae357d9c312c3b378fac39576380436e0804cc623213bc6a1fbd7f5846d5274",
+      "bytes": 23093
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\common.py",
+      "sha256": "d891f444687527dddfbae8c55952445c0b466f1670f5f13164b6060c88f1b9d7",
+      "bytes": 13438
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\deploy_vast.py",
+      "sha256": "dfe51db93a1c3b70fcb093dd52d0cd7c595a89614fe0b6aafc9eb889e4ab6755",
+      "bytes": 17921
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\judge_unmapped.py",
+      "sha256": "f2f0edd8a7bada3db90bcc318c5075b610479aae4d64b6d6365cdd5240dc3ed0",
+      "bytes": 7834
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\merge_v2.py",
+      "sha256": "0cf4f0f7669513e47b12e541a905fad19428dfa6b2ecfee46f1beb19ff4a2d8f",
+      "bytes": 8588
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_claims_ledger.py",
+      "sha256": "f375c79a42a0d15cdcdee6eb444d167010a6da55261b2b8790a18d1c6fa1bded",
+      "bytes": 24220
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_data_integrity.py",
+      "sha256": "e3dc85b31fb8cdb05d43c22bcba19af7d3dfed487e137776e25e2cee48dac0a1",
+      "bytes": 11550
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_metric_audit.py",
+      "sha256": "41e299601c37520d83b658ababd7c74fb37297aaf246bd48367ed703166c2962",
+      "bytes": 10510
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_prognosis_rebuild.py",
+      "sha256": "6b7f10c136c8e7c747f22574797c5224bdb2fe18268788b1035d0bc24275af54",
+      "bytes": 12659
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_raw_archive_search.py",
+      "sha256": "e032346e9152e362ce3a875d1f47a6437666b6b2397f19800a04919518e87899",
+      "bytes": 7478
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_snapshot_integrity.py",
+      "sha256": "b24f181492170efbdb12c12f79e294ce9cfbf22f07fcb017fa8b8a594b0ea659",
+      "bytes": 7433
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_split_manifest.py",
+      "sha256": "ec6b3916de1dc3d654534bb255e86b66774061a94287adb849e18094bfed80b8",
+      "bytes": 7318
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p0_tau_audit.py",
+      "sha256": "16b67d02981e5727707865e3aee3d1083a5e006a7d8135d788b6ca6bfae6b0eb",
+      "bytes": 7226
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p1_intervention.py",
+      "sha256": "1a791c1abc7f9eae050346fdddea3b2e568d68fbaed9621066b148d066883def",
+      "bytes": 27172
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p1_pilot.py",
+      "sha256": "160ed8c1de2e2ba2363bdcd093ab638a4727fa58c898a257b1123261a0285715",
+      "bytes": 30478
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p2_controlled_erasure.py",
+      "sha256": "3eef5b8d5c68464769a97a37763822572f7a9813675c4e59d33931b95f9f9e81",
+      "bytes": 81005
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p2_leace_faithful.py",
+      "sha256": "4be8fee8db9f67e1b5d43c17e2ec40f29dbc2e8e55a5d42e0bff4a476131209a",
+      "bytes": 17734
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p3_explanation.py",
+      "sha256": "412cb20570993f9f4890e822d1e16edafeac1f1854a071a0693cb4202ac89f5e",
+      "bytes": 89266
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p4_risk_forecast.py",
+      "sha256": "f9df8c39dec1489f36f7972631504c3e137a01e5ba688cdbc94a0d93f2052a3d",
+      "bytes": 51337
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\p5_measured_ledger.py",
+      "sha256": "649827e6c98c912e290f27ed0f6a419ce5e2df3825c08623a5a582e3e1672453",
+      "bytes": 26102
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\reparse_generations.py",
+      "sha256": "86bac5f301e3511f8f24ff2c055a65c913fb18a75b06d846d5769e6f473cb0cf",
+      "bytes": 4111
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\run_all.py",
+      "sha256": "11c00a905d63c14687901ea6731f8f127b4f869167ec70809944a3dbf481e118",
+      "bytes": 6105
+    },
+    {
+      "path": "Code\\CURE\\Extended_Research_Codes\\test_p1_cpu.py",
+      "sha256": "858152f07900ef208a0fa5487ddf42b7458b5b0f75fe825584b7873ed8b019c7",
+      "bytes": 10046
+    },
+    {
+      "path": "Code\\CURE\\Next_Run\\f0_provenance.py",
+      "sha256": "9c88979618a4cc5f28468293e0df3d55e00c957c5b7d053001ec4f2f14a2ff8f",
+      "bytes": 21118
+    },
+    {
+      "path": "Code\\CURE\\Next_Run\\f1_data.py",
+      "sha256": "08440d3e1d4f0e4f767b465357aed30cbf3e54942753d112c0c2483749d888f1",
+      "bytes": 20386
+    },
+    {
+      "path": "Code\\CURE\\Next_Run\\f1_scoring.py",
+      "sha256": "e9cae9f01c08dec9f9e9bf54367bab65749fa288255f48f97d6388ab0940a0b3",
+      "bytes": 13311
+    },
+    {
+      "path": "Code\\CURE\\Next_Run\\f2_runner.py",
+      "sha256": "21f26a38cb94c1fb66dbd266cab766cd304ad0bdc558b170dce336c63d48da8e",
+      "bytes": 33704
+    },
+    {
+      "path": "Code\\CURE\\Next_Run\\f3_baseline.py",
+      "sha256": "4fb789f7b44a9b94d80255bf9c943a2218ce89b42249af01e853853d323889d8",
+      "bytes": 9590
+    },
+    {
+      "path": "Code\\CURE\\Next_Run\\nr_common.py",
+      "sha256": "dce3e3e6cdef3752447b2392a5f51c7123d47210f49d85d10360c05c0ec00b2a",
+      "bytes": 11059
+    },
+    {
+      "path": "Code\\CURE\\make_iclr_tables_v2.py",
+      "sha256": "c7366dd534dca9e0a914521d18b9aa5100c2842ac9614c4d29300c0a58c4329c",
+      "bytes": 27283
+    }
+  ],
+  "p2_per_item": {
+    "rows": 60080,
+    "ok_rows": 60080,
+    "duplicate_keys": 0,
+    "key": [
+      "model_name",
+      "phase",
+      "cond_id",
+      "seed_id",
+      "pair_type",
+      "subvariant_A",
+      "subvariant_B"
+    ],
+    "rows_by_model_phase": {
+      "gemma-2-2b-it|dev": 6050,
+      "gemma-2-2b-it|test": 8970,
+      "llama-3.1-8b-instruct|dev": 6050,
+      "llama-3.1-8b-instruct|test": 8970,
+      "phi-4-mini-instruct|dev": 6050,
+      "phi-4-mini-instruct|test": 8970,
+      "qwen2.5-7b-instruct|dev": 6050,
+      "qwen2.5-7b-instruct|test": 8970
+    },
+    "key_note": "the key lacks a tokenizer/prompt version and a metric version; final rows carry protocol_hash"
+  }
+}

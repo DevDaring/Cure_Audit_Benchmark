@@ -1,0 +1,241 @@
+{
+  "generated_utc": "2026-09-14T07:57:09Z",
+  "claims": [
+    {
+      "id": "L1_llama-3.1-8b-instruct",
+      "endpoint": "paired reduction D in the first-gold-token patching effect, rank-1 span erasure",
+      "model": "llama-3.1-8b-instruct",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.0444350242614746,
+      "interval": [
+        0.0185254502296447,
+        0.0719029712677001
+      ],
+      "p_holm": 0.004,
+      "status": "supported",
+      "permitted_wording": "reduces the legacy first-token patching statistic (Holm-corrected within model)",
+      "validity_caveat": "the first gold token identifies a unique option on a minority of seeds; answer-level measures are added in F2"
+    },
+    {
+      "id": "L2_llama-3.1-8b-instruct",
+      "endpoint": "generation accuracy change (attempted denominator), S1 - B",
+      "model": "llama-3.1-8b-instruct",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.025,
+      "interval": [
+        -0.003125,
+        0.053125
+      ],
+      "p_holm": 0.086,
+      "status": "limited",
+      "permitted_wording": "interval includes zero; no preservation claim without the prespecified non-inferiority test"
+    },
+    {
+      "id": "L1_qwen2.5-7b-instruct",
+      "endpoint": "paired reduction D in the first-gold-token patching effect, rank-1 span erasure",
+      "model": "qwen2.5-7b-instruct",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.0758014678955078,
+      "interval": [
+        0.0044759082794189,
+        0.1456663608551024
+      ],
+      "p_holm": 0.14,
+      "status": "limited",
+      "permitted_wording": "point estimate positive; not significant after Holm correction",
+      "validity_caveat": "the first gold token identifies a unique option on a minority of seeds; answer-level measures are added in F2"
+    },
+    {
+      "id": "L2_qwen2.5-7b-instruct",
+      "endpoint": "generation accuracy change (attempted denominator), S1 - B",
+      "model": "qwen2.5-7b-instruct",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.021875,
+      "interval": [
+        -0.0125,
+        0.05625
+      ],
+      "p_holm": 0.376,
+      "status": "limited",
+      "permitted_wording": "interval includes zero; no preservation claim without the prespecified non-inferiority test"
+    },
+    {
+      "id": "L1_gemma-2-2b-it",
+      "endpoint": "paired reduction D in the first-gold-token patching effect, rank-1 span erasure",
+      "model": "gemma-2-2b-it",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.114178466796875,
+      "interval": [
+        0.0436518859863281,
+        0.186120376586914
+      ],
+      "p_holm": 0.004,
+      "status": "supported",
+      "permitted_wording": "reduces the legacy first-token patching statistic (Holm-corrected within model)",
+      "validity_caveat": "the first gold token identifies a unique option on a minority of seeds; answer-level measures are added in F2"
+    },
+    {
+      "id": "L2_gemma-2-2b-it",
+      "endpoint": "generation accuracy change (attempted denominator), S1 - B",
+      "model": "gemma-2-2b-it",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.071875,
+      "interval": [
+        0.028125,
+        0.11875
+      ],
+      "p_holm": 0.002,
+      "status": "supported",
+      "permitted_wording": "generation accuracy rises (Holm-corrected)"
+    },
+    {
+      "id": "L1_phi-4-mini-instruct",
+      "endpoint": "paired reduction D in the first-gold-token patching effect, rank-1 span erasure",
+      "model": "phi-4-mini-instruct",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.112890625,
+      "interval": [
+        0.059365234375,
+        0.1632910156249999
+      ],
+      "p_holm": 0.002,
+      "status": "supported",
+      "permitted_wording": "reduces the legacy first-token patching statistic (Holm-corrected within model)",
+      "validity_caveat": "the first gold token identifies a unique option on a minority of seeds; answer-level measures are added in F2"
+    },
+    {
+      "id": "L2_phi-4-mini-instruct",
+      "endpoint": "generation accuracy change (attempted denominator), S1 - B",
+      "model": "phi-4-mini-instruct",
+      "population": "160 test seeds of the existing pool",
+      "estimate": 0.0375,
+      "interval": [
+        -7.812499999999557e-05,
+        0.078125
+      ],
+      "p_holm": 0.144,
+      "status": "limited",
+      "permitted_wording": "interval includes zero; no preservation claim without the prespecified non-inferiority test"
+    },
+    {
+      "id": "E1_gemma-2-2b-it",
+      "endpoint": "energy-matched random control",
+      "model": "gemma-2-2b-it",
+      "status": "unsupported",
+      "achieved_ratio": 0.035518342607940144,
+      "permitted_wording": "rank-matched random control at 3.6% of the targeted edit's activation energy; perturbation magnitude has NOT been ruled out"
+    },
+    {
+      "id": "E1_llama-3.1-8b-instruct",
+      "endpoint": "energy-matched random control",
+      "model": "llama-3.1-8b-instruct",
+      "status": "unsupported",
+      "achieved_ratio": 0.02914111162801216,
+      "permitted_wording": "rank-matched random control at 2.9% of the targeted edit's activation energy; perturbation magnitude has NOT been ruled out"
+    },
+    {
+      "id": "E1_phi-4-mini-instruct",
+      "endpoint": "energy-matched random control",
+      "model": "phi-4-mini-instruct",
+      "status": "unsupported",
+      "achieved_ratio": 0.016111749339197422,
+      "permitted_wording": "rank-matched random control at 1.6% of the targeted edit's activation energy; perturbation magnitude has NOT been ruled out"
+    },
+    {
+      "id": "E1_qwen2.5-7b-instruct",
+      "endpoint": "energy-matched random control",
+      "model": "qwen2.5-7b-instruct",
+      "status": "unsupported",
+      "achieved_ratio": 0.021425287250321483,
+      "permitted_wording": "rank-matched random control at 2.1% of the targeted edit's activation energy; perturbation magnitude has NOT been ruled out"
+    },
+    {
+      "id": "M1",
+      "endpoint": "massive-activation restoration",
+      "status": "limited",
+      "permitted_wording": "restoring massive coordinates leaves the span effect unchanged; says nothing about the global damage"
+    },
+    {
+      "id": "F1",
+      "endpoint": "risk forecast",
+      "status": "unsupported",
+      "permitted_wording": "secondary negative result; the audit score adds no held-out AUROC over the baseline"
+    },
+    {
+      "id": "S1",
+      "endpoint": "sequential fitting explanation",
+      "status": "limited",
+      "permitted_wording": "blockwise refit (blocks of four layers, 120 pairs) behaved like the frozen 300-pair fit; not a controlled comparison"
+    },
+    {
+      "id": "B1",
+      "endpoint": "LEACE baseline",
+      "status": "limited",
+      "permitted_wording": "LEACE fitted on swap-side labels (not a coherent demographic concept) left the patching statistic unchanged; coherent-label baseline is F3"
+    },
+    {
+      "id": "D1",
+      "endpoint": "direction selection",
+      "status": "corrected",
+      "permitted_wording": "contrast-derived projection evaluated with patching; not 'identified by activation patching'"
+    }
+  ],
+  "fit_audit": {
+    "llama-3.1-8b-instruct": {
+      "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+      "n_fit_pairs_used": 300,
+      "n_fit_pairs_neutral_type": 54,
+      "fit_mixes_neutral_substitutions": true,
+      "n_span_tokens": 328,
+      "fit_id": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+      "p3_sequential_fit": {
+        "n_fit_pairs_used": 120,
+        "block": 4,
+        "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+      },
+      "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+    },
+    "qwen2.5-7b-instruct": {
+      "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+      "n_fit_pairs_used": 300,
+      "n_fit_pairs_neutral_type": 54,
+      "fit_mixes_neutral_substitutions": true,
+      "n_span_tokens": 328,
+      "fit_id": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+      "p3_sequential_fit": {
+        "n_fit_pairs_used": 120,
+        "block": 4,
+        "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+      },
+      "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+    },
+    "gemma-2-2b-it": {
+      "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+      "n_fit_pairs_used": 300,
+      "n_fit_pairs_neutral_type": 54,
+      "fit_mixes_neutral_substitutions": true,
+      "n_span_tokens": 330,
+      "fit_id": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+      "p3_sequential_fit": {
+        "n_fit_pairs_used": 120,
+        "block": 4,
+        "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+      },
+      "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+    },
+    "phi-4-mini-instruct": {
+      "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+      "n_fit_pairs_used": 300,
+      "n_fit_pairs_neutral_type": 54,
+      "fit_mixes_neutral_substitutions": true,
+      "n_span_tokens": 327,
+      "fit_id": "653a1757b2e3dad1b7823a2fd29f20a28207e679871c79c9e792269915abdf79",
+      "p3_sequential_fit": {
+        "n_fit_pairs_used": 120,
+        "block": 4,
+        "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+      },
+      "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+    }
+  }
+}

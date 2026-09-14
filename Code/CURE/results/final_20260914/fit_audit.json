@@ -1,0 +1,58 @@
+{
+  "llama-3.1-8b-instruct": {
+    "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+    "n_fit_pairs_used": 300,
+    "n_fit_pairs_neutral_type": 54,
+    "fit_mixes_neutral_substitutions": true,
+    "n_span_tokens": 328,
+    "fit_id": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+    "p3_sequential_fit": {
+      "n_fit_pairs_used": 120,
+      "block": 4,
+      "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+    },
+    "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+  },
+  "qwen2.5-7b-instruct": {
+    "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+    "n_fit_pairs_used": 300,
+    "n_fit_pairs_neutral_type": 54,
+    "fit_mixes_neutral_substitutions": true,
+    "n_span_tokens": 328,
+    "fit_id": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+    "p3_sequential_fit": {
+      "n_fit_pairs_used": 120,
+      "block": 4,
+      "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+    },
+    "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+  },
+  "gemma-2-2b-it": {
+    "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+    "n_fit_pairs_used": 300,
+    "n_fit_pairs_neutral_type": 54,
+    "fit_mixes_neutral_substitutions": true,
+    "n_span_tokens": 330,
+    "fit_id": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+    "p3_sequential_fit": {
+      "n_fit_pairs_used": 120,
+      "block": 4,
+      "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+    },
+    "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+  },
+  "phi-4-mini-instruct": {
+    "estimator": "contrast-derived projection: leading right singular vectors of centred span-position activation differences (not a direction selected by its effect on the output)",
+    "n_fit_pairs_used": 300,
+    "n_fit_pairs_neutral_type": 54,
+    "fit_mixes_neutral_substitutions": true,
+    "n_span_tokens": 327,
+    "fit_id": "653a1757b2e3dad1b7823a2fd29f20a28207e679871c79c9e792269915abdf79",
+    "p3_sequential_fit": {
+      "n_fit_pairs_used": 120,
+      "block": 4,
+      "note": "blockwise refit on 120 pairs; not a controlled layer-by-layer comparison against the 300-pair frozen fit"
+    },
+    "leace_v2_labels": "0 = side A, 1 = side B of the swap"
+  }
+}

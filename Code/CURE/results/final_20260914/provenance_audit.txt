@@ -1,0 +1,30 @@
+F0 provenance audit  (2026-09-14T07:57:09Z)
+
+1. Evidence frozen: 137 files hashed in evidence_manifest.json; p2_per_item ok rows 60080, duplicate keys 0.
+
+2. Fit provenance: the rank-one basis is a centred-SVD contrast-derived projection; the 300 fit pairs include neutral-type substitutions on every model (Llama-3.1-8B 54, Qwen2.5-7B 54, Gemma-2-2B 54, Phi-4-mini 54); the P3 'sequential' fit used blocks of four layers on 120 pairs.
+
+3. Energy: the P3 rows called matched achieved these fractions of the targeted edit's energy on the test seeds:
+   Gemma-2-2B random_1_matched: 3.6% (saved feasible=True, recomputed feasible at 5%=False)
+   Gemma-2-2B random_2_matched: 3.7% (saved feasible=True, recomputed feasible at 5%=False)
+   Gemma-2-2B random_3_matched: 2.3% (saved feasible=True, recomputed feasible at 5%=False)
+   Gemma-2-2B neutral_matched: 63.1% (saved feasible=True, recomputed feasible at 5%=False)
+   Llama-3.1-8B random_1_matched: 2.9% (saved feasible=True, recomputed feasible at 5%=False)
+   Llama-3.1-8B random_2_matched: 2.8% (saved feasible=True, recomputed feasible at 5%=False)
+   Llama-3.1-8B random_3_matched: 3.4% (saved feasible=True, recomputed feasible at 5%=False)
+   Llama-3.1-8B neutral_matched: 16.1% (saved feasible=True, recomputed feasible at 5%=False)
+   Phi-4-mini random_1_matched: 1.6% (saved feasible=True, recomputed feasible at 5%=False)
+   Phi-4-mini random_2_matched: 0.7% (saved feasible=True, recomputed feasible at 5%=False)
+   Phi-4-mini random_3_matched: 0.7% (saved feasible=True, recomputed feasible at 5%=False)
+   Phi-4-mini neutral_matched: 10.2% (saved feasible=True, recomputed feasible at 5%=False)
+   Qwen2.5-7B random_1_matched: 2.1% (saved feasible=True, recomputed feasible at 5%=False)
+   Qwen2.5-7B random_2_matched: 1.0% (saved feasible=True, recomputed feasible at 5%=False)
+   Qwen2.5-7B random_3_matched: 0.8% (saved feasible=True, recomputed feasible at 5%=False)
+   Qwen2.5-7B neutral_matched: 31.6% (saved feasible=True, recomputed feasible at 5%=False)
+   -> relabelled as rank-matched controls with achieved energy; the perturbation-size exclusion is withdrawn.
+
+4. Legacy behaviour (legacy_behaviour.csv): accuracy, validity, valid-pair flips, conservative failure, both-correct and both-wrong shares, by benchmark, parser-only next to parser-plus-judge; paired S1-B accuracy tests in legacy_behaviour_paired.csv.
+
+5. Capability: MMLU question-level intervals in capability_uncertainty.csv; WikiText-2 has aggregate perplexity only.
+
+6. Permissible claims with statuses: claims_f0.json (the contract generator reads it).

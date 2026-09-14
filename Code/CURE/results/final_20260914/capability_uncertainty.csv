@@ -1,0 +1,185 @@
+model_name,probe,cond_id,n_questions,accuracy,lo,hi,paired_diff_vs_unedited,diff_lo,diff_hi,perplexity,note
+llama-3.1-8b-instruct,mmlu_200,unedited_r0_a0,200,0.715,0.65,0.775,0.0,0.0,0.0,,
+llama-3.1-8b-instruct,mmlu_200,identity_alpha0_r1_a0,200,0.715,0.655,0.775,0.0,0.0,0.0,,
+llama-3.1-8b-instruct,mmlu_200,cure_centred_svd_r1_a1,200,0.685,0.62,0.745,-0.03,-0.085,0.02,,
+llama-3.1-8b-instruct,mmlu_200,cure_centred_svd_r2_a1,200,0.675,0.61,0.74,-0.04,-0.09,0.01,,
+llama-3.1-8b-instruct,mmlu_200,cure_centred_svd_r4_a1,200,0.645,0.58,0.71,-0.07,-0.135,-0.005,,
+llama-3.1-8b-instruct,mmlu_200,uncentred_svd_r1_a1,200,0.675,0.61,0.74,-0.04,-0.09,0.01,,
+llama-3.1-8b-instruct,mmlu_200,uncentred_svd_r2_a1,200,0.675,0.6098750000000001,0.74,-0.04,-0.095,0.01,,
+llama-3.1-8b-instruct,mmlu_200,uncentred_svd_r4_a1,200,0.64,0.575,0.705,-0.075,-0.14,-0.01,,
+llama-3.1-8b-instruct,mmlu_200,mean_difference_r1_a1,200,0.685,0.6198750000000001,0.745,-0.03,-0.065,0.0,,
+llama-3.1-8b-instruct,mmlu_200,leace_faithful_r1_a1,200,0.685,0.62,0.75,-0.03,-0.08,0.02,,
+llama-3.1-8b-instruct,mmlu_200,leace_sequential_r1_a1,200,0.705,0.64,0.77,-0.01,-0.04,0.02,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_1_r1_a1,200,0.71,0.645,0.77,-0.005,-0.03,0.02,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_1_r2_a1,200,0.7,0.635,0.76,-0.015,-0.055,0.02,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_1_r4_a1,200,0.705,0.64,0.77,-0.01,-0.05,0.025,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_2_r1_a1,200,0.685,0.62,0.75,-0.03,-0.06,0.0,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_2_r2_a1,200,0.705,0.64,0.77,-0.01,-0.04,0.02,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_2_r4_a1,200,0.71,0.645,0.77,-0.005,-0.045,0.03,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_3_r1_a1,200,0.705,0.64,0.765,-0.01,-0.035,0.015,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_3_r2_a1,200,0.705,0.64,0.77,-0.01,-0.03,0.01,,
+llama-3.1-8b-instruct,mmlu_200,random_ortho_3_r4_a1,200,0.695,0.63,0.76,-0.02,-0.055,0.01,,
+llama-3.1-8b-instruct,mmlu_200,neutral_contrast_r1_a1,200,0.69,0.625,0.755,-0.025,-0.060124999999999956,0.01,,
+llama-3.1-8b-instruct,mmlu_200,neutral_contrast_r2_a1,200,0.675,0.61,0.74,-0.04,-0.09,0.01,,
+llama-3.1-8b-instruct,mmlu_200,neutral_contrast_r4_a1,200,0.64,0.57,0.705,-0.075,-0.14,-0.014875000000001819,,
+llama-3.1-8b-instruct,wikitext2_20k,unedited_r0_a0,19980,,,,,,,7.7289393730540485,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,identity_alpha0_r1_a0,19980,,,,,,,7.7289393730540485,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,cure_centred_svd_r1_a1,19980,,,,,,,9.553389445990652,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,cure_centred_svd_r2_a1,19980,,,,,,,10.173907277432836,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,cure_centred_svd_r4_a1,19980,,,,,,,14.497425708795749,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,uncentred_svd_r1_a1,19980,,,,,,,9.563756897506542,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,uncentred_svd_r2_a1,19980,,,,,,,10.204635899826297,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,uncentred_svd_r4_a1,19980,,,,,,,14.410506039191787,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,mean_difference_r1_a1,19980,,,,,,,7.887773368100528,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,leace_faithful_r1_a1,19980,,,,,,,8.78373275123661,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,leace_sequential_r1_a1,19980,,,,,,,8.228623841243538,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_1_r1_a1,19980,,,,,,,7.888021942945538,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_1_r2_a1,19980,,,,,,,8.041270078309537,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_1_r4_a1,19980,,,,,,,8.238654849328112,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_2_r1_a1,19980,,,,,,,7.925411695575945,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_2_r2_a1,19980,,,,,,,8.167387823013586,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_2_r4_a1,19980,,,,,,,8.437039250549521,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_3_r1_a1,19980,,,,,,,7.859743689476623,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_3_r2_a1,19980,,,,,,,7.956458928400664,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,random_ortho_3_r4_a1,19980,,,,,,,8.077951706928125,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,neutral_contrast_r1_a1,19980,,,,,,,7.8987665265010225,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,neutral_contrast_r2_a1,19980,,,,,,,8.418057367109885,"aggregate only; per-window losses were not saved, so no sampling interval"
+llama-3.1-8b-instruct,wikitext2_20k,neutral_contrast_r4_a1,19980,,,,,,,13.78201874018549,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,mmlu_200,unedited_r0_a0,200,0.77,0.715,0.825,0.0,0.0,0.0,,
+qwen2.5-7b-instruct,mmlu_200,identity_alpha0_r1_a0,200,0.77,0.714875,0.83,0.0,0.0,0.0,,
+qwen2.5-7b-instruct,mmlu_200,cure_centred_svd_r1_a1,200,0.685,0.62,0.745,-0.085,-0.14,-0.03,,
+qwen2.5-7b-instruct,mmlu_200,cure_centred_svd_r2_a1,200,0.67,0.605,0.735,-0.1,-0.165,-0.04,,
+qwen2.5-7b-instruct,mmlu_200,cure_centred_svd_r4_a1,200,0.605,0.535,0.67,-0.165,-0.235,-0.095,,
+qwen2.5-7b-instruct,mmlu_200,uncentred_svd_r1_a1,200,0.685,0.62,0.75,-0.085,-0.14,-0.03,,
+qwen2.5-7b-instruct,mmlu_200,uncentred_svd_r2_a1,200,0.665,0.6,0.73,-0.105,-0.165,-0.05,,
+qwen2.5-7b-instruct,mmlu_200,uncentred_svd_r4_a1,200,0.605,0.54,0.675,-0.165,-0.235,-0.095,,
+qwen2.5-7b-instruct,mmlu_200,mean_difference_r1_a1,200,0.765,0.705,0.82,-0.005,-0.04,0.025,,
+qwen2.5-7b-instruct,mmlu_200,leace_faithful_r1_a1,200,0.77,0.71,0.825,0.0,-0.035,0.04,,
+qwen2.5-7b-instruct,mmlu_200,leace_sequential_r1_a1,200,0.76,0.7,0.815,-0.01,-0.04,0.02,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_1_r1_a1,200,0.76,0.7,0.815,-0.01,-0.04,0.015,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_1_r2_a1,200,0.76,0.7,0.815,-0.01,-0.04,0.02,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_1_r4_a1,200,0.76,0.7,0.815,-0.01,-0.045,0.025,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_2_r1_a1,200,0.775,0.715,0.83,0.005,-0.015,0.025,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_2_r2_a1,200,0.775,0.715,0.83,0.005,-0.02,0.03,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_2_r4_a1,200,0.775,0.715,0.83,0.005,-0.025,0.035,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_3_r1_a1,200,0.76,0.7,0.82,-0.01,-0.035,0.015,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_3_r2_a1,200,0.775,0.715,0.83,0.005,-0.01,0.025,,
+qwen2.5-7b-instruct,mmlu_200,random_ortho_3_r4_a1,200,0.77,0.715,0.825,0.0,-0.035,0.035,,
+qwen2.5-7b-instruct,mmlu_200,neutral_contrast_r1_a1,200,0.755,0.695,0.815,-0.015,-0.05,0.02,,
+qwen2.5-7b-instruct,mmlu_200,neutral_contrast_r2_a1,200,0.665,0.6,0.73,-0.105,-0.165,-0.045,,
+qwen2.5-7b-instruct,mmlu_200,neutral_contrast_r4_a1,200,0.29,0.23,0.355,-0.48,-0.565,-0.39,,
+qwen2.5-7b-instruct,wikitext2_20k,unedited_r0_a0,19980,,,,,,,7.211320348864096,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,identity_alpha0_r1_a0,19980,,,,,,,7.211320348864096,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,cure_centred_svd_r1_a1,19980,,,,,,,18.506786184951455,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,cure_centred_svd_r2_a1,19980,,,,,,,22.103057673338547,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,cure_centred_svd_r4_a1,19980,,,,,,,37.27266134210946,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,uncentred_svd_r1_a1,19980,,,,,,,18.60782596680489,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,uncentred_svd_r2_a1,19980,,,,,,,22.134484276218174,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,uncentred_svd_r4_a1,19980,,,,,,,38.799150022240816,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,mean_difference_r1_a1,19980,,,,,,,8.484364341741218,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,leace_faithful_r1_a1,19980,,,,,,,7.902798201793864,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,leace_sequential_r1_a1,19980,,,,,,,7.779542154928449,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_1_r1_a1,19980,,,,,,,7.284255009085824,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_1_r2_a1,19980,,,,,,,7.295960250912074,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_1_r4_a1,19980,,,,,,,7.351385489908923,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_2_r1_a1,19980,,,,,,,7.3516194966695085,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_2_r2_a1,19980,,,,,,,7.439400093981294,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_2_r4_a1,19980,,,,,,,7.6891779562146185,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_3_r1_a1,19980,,,,,,,7.284346821557403,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_3_r2_a1,19980,,,,,,,7.337426084218495,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,random_ortho_3_r4_a1,19980,,,,,,,7.465090109924695,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,neutral_contrast_r1_a1,19980,,,,,,,8.19167836007337,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,neutral_contrast_r2_a1,19980,,,,,,,11.955649635911282,"aggregate only; per-window losses were not saved, so no sampling interval"
+qwen2.5-7b-instruct,wikitext2_20k,neutral_contrast_r4_a1,19980,,,,,,,39.14335573669931,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,mmlu_200,unedited_r0_a0,200,0.55,0.48,0.62,0.0,0.0,0.0,,
+gemma-2-2b-it,mmlu_200,identity_alpha0_r1_a0,200,0.55,0.48,0.62,0.0,0.0,0.0,,
+gemma-2-2b-it,mmlu_200,cure_centred_svd_r1_a1,200,0.295,0.235,0.36,-0.255,-0.345,-0.17,,
+gemma-2-2b-it,mmlu_200,cure_centred_svd_r2_a1,200,0.27,0.21,0.335,-0.28,-0.37,-0.185,,
+gemma-2-2b-it,mmlu_200,cure_centred_svd_r4_a1,200,0.22,0.165,0.28,-0.33,-0.41,-0.245,,
+gemma-2-2b-it,mmlu_200,uncentred_svd_r1_a1,200,0.3,0.24,0.365,-0.25,-0.33,-0.165,,
+gemma-2-2b-it,mmlu_200,uncentred_svd_r2_a1,200,0.28,0.22,0.34,-0.27,-0.36,-0.18,,
+gemma-2-2b-it,mmlu_200,uncentred_svd_r4_a1,200,0.235,0.18,0.3,-0.315,-0.405,-0.22,,
+gemma-2-2b-it,mmlu_200,mean_difference_r1_a1,200,0.545,0.475,0.615,-0.005,-0.055,0.04,,
+gemma-2-2b-it,mmlu_200,leace_faithful_r1_a1,200,0.545,0.475,0.615,-0.005,-0.05,0.035,,
+gemma-2-2b-it,mmlu_200,leace_sequential_r1_a1,200,0.54,0.47,0.61,-0.01,-0.055,0.035,,
+gemma-2-2b-it,mmlu_200,random_ortho_1_r1_a1,200,0.555,0.485,0.625,0.005,-0.025,0.035,,
+gemma-2-2b-it,mmlu_200,random_ortho_1_r2_a1,200,0.565,0.5,0.635,0.015,-0.015,0.045,,
+gemma-2-2b-it,mmlu_200,random_ortho_1_r4_a1,200,0.535,0.465,0.605,-0.015,-0.06,0.025124999999998184,,
+gemma-2-2b-it,mmlu_200,random_ortho_2_r1_a1,200,0.55,0.48,0.615,0.0,-0.025,0.025,,
+gemma-2-2b-it,mmlu_200,random_ortho_2_r2_a1,200,0.545,0.475,0.615,-0.005,-0.045,0.035,,
+gemma-2-2b-it,mmlu_200,random_ortho_2_r4_a1,200,0.54,0.47,0.61,-0.01,-0.05,0.03,,
+gemma-2-2b-it,mmlu_200,random_ortho_3_r1_a1,200,0.545,0.475,0.615,-0.005,-0.03,0.02,,
+gemma-2-2b-it,mmlu_200,random_ortho_3_r2_a1,200,0.545,0.48,0.615,-0.005,-0.03,0.02,,
+gemma-2-2b-it,mmlu_200,random_ortho_3_r4_a1,200,0.535,0.47,0.605,-0.015,-0.05,0.02,,
+gemma-2-2b-it,mmlu_200,neutral_contrast_r1_a1,200,0.525,0.46,0.595,-0.025,-0.07,0.02,,
+gemma-2-2b-it,mmlu_200,neutral_contrast_r2_a1,200,0.445,0.375,0.515,-0.105,-0.185,-0.025,,
+gemma-2-2b-it,mmlu_200,neutral_contrast_r4_a1,200,0.26,0.2,0.325,-0.29,-0.385,-0.195,,
+gemma-2-2b-it,wikitext2_20k,unedited_r0_a0,19980,,,,,,,17.568949000122313,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,identity_alpha0_r1_a0,19980,,,,,,,17.568949000122313,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,cure_centred_svd_r1_a1,19980,,,,,,,98.91178414530879,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,cure_centred_svd_r2_a1,19980,,,,,,,822.2498439391585,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,cure_centred_svd_r4_a1,19980,,,,,,,1670.6491619022734,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,uncentred_svd_r1_a1,19980,,,,,,,102.19180965041977,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,uncentred_svd_r2_a1,19980,,,,,,,848.5993702865112,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,uncentred_svd_r4_a1,19980,,,,,,,1639.489516153154,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,mean_difference_r1_a1,19980,,,,,,,20.031289489345326,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,leace_faithful_r1_a1,19980,,,,,,,18.734118617292104,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,leace_sequential_r1_a1,19980,,,,,,,18.183923049094137,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_1_r1_a1,19980,,,,,,,17.838261242250777,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_1_r2_a1,19980,,,,,,,18.13471381075692,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_1_r4_a1,19980,,,,,,,18.606551467252697,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_2_r1_a1,19980,,,,,,,17.81627365709693,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_2_r2_a1,19980,,,,,,,18.50721992474419,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_2_r4_a1,19980,,,,,,,19.016029043104183,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_3_r1_a1,19980,,,,,,,17.565534534261314,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_3_r2_a1,19980,,,,,,,17.669087663977642,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,random_ortho_3_r4_a1,19980,,,,,,,18.013337843072385,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,neutral_contrast_r1_a1,19980,,,,,,,23.33508939099104,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,neutral_contrast_r2_a1,19980,,,,,,,60.10701217203378,"aggregate only; per-window losses were not saved, so no sampling interval"
+gemma-2-2b-it,wikitext2_20k,neutral_contrast_r4_a1,19980,,,,,,,302.3373073963647,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,mmlu_200,unedited_r0_a0,200,0.72,0.66,0.78,0.0,0.0,0.0,,
+phi-4-mini-instruct,mmlu_200,identity_alpha0_r1_a0,200,0.72,0.655,0.78,0.0,0.0,0.0,,
+phi-4-mini-instruct,mmlu_200,cure_centred_svd_r1_a1,200,0.23,0.17,0.29,-0.49,-0.575,-0.405,,
+phi-4-mini-instruct,mmlu_200,cure_centred_svd_r2_a1,200,0.21,0.155,0.265,-0.51,-0.59,-0.425,,
+phi-4-mini-instruct,mmlu_200,cure_centred_svd_r4_a1,200,0.22,0.165,0.28,-0.5,-0.585,-0.415,,
+phi-4-mini-instruct,mmlu_200,uncentred_svd_r1_a1,200,0.215,0.16,0.275,-0.505,-0.5901249999999999,-0.415,,
+phi-4-mini-instruct,mmlu_200,uncentred_svd_r2_a1,200,0.21,0.155,0.27,-0.51,-0.595,-0.42,,
+phi-4-mini-instruct,mmlu_200,uncentred_svd_r4_a1,200,0.205,0.15,0.26,-0.515,-0.5951249999999999,-0.43,,
+phi-4-mini-instruct,mmlu_200,mean_difference_r1_a1,200,0.605,0.54,0.675,-0.115,-0.18,-0.05,,
+phi-4-mini-instruct,mmlu_200,leace_faithful_r1_a1,200,0.61,0.54,0.68,-0.11,-0.17,-0.05,,
+phi-4-mini-instruct,mmlu_200,leace_sequential_r1_a1,200,0.65,0.585,0.715,-0.07,-0.115,-0.025,,
+phi-4-mini-instruct,mmlu_200,random_ortho_1_r1_a1,200,0.73,0.665,0.79,0.01,-0.03,0.05,,
+phi-4-mini-instruct,mmlu_200,random_ortho_1_r2_a1,200,0.715,0.65,0.775,-0.005,-0.045,0.035,,
+phi-4-mini-instruct,mmlu_200,random_ortho_1_r4_a1,200,0.71,0.645,0.77,-0.01,-0.045,0.025,,
+phi-4-mini-instruct,mmlu_200,random_ortho_2_r1_a1,200,0.695,0.63,0.755,-0.025,-0.06,0.01,,
+phi-4-mini-instruct,mmlu_200,random_ortho_2_r2_a1,200,0.69,0.625,0.755,-0.03,-0.07,0.005124999999998181,,
+phi-4-mini-instruct,mmlu_200,random_ortho_2_r4_a1,200,0.67,0.605,0.735,-0.05,-0.09,-0.01,,
+phi-4-mini-instruct,mmlu_200,random_ortho_3_r1_a1,200,0.735,0.67,0.795,0.015,-0.01,0.04,,
+phi-4-mini-instruct,mmlu_200,random_ortho_3_r2_a1,200,0.7,0.635,0.76,-0.02,-0.055,0.015,,
+phi-4-mini-instruct,mmlu_200,random_ortho_3_r4_a1,200,0.69,0.625,0.755,-0.03,-0.075,0.01,,
+phi-4-mini-instruct,mmlu_200,neutral_contrast_r1_a1,200,0.67,0.605,0.735,-0.05,-0.1,-0.005,,
+phi-4-mini-instruct,mmlu_200,neutral_contrast_r2_a1,200,0.425,0.355,0.495,-0.295,-0.375,-0.21,,
+phi-4-mini-instruct,mmlu_200,neutral_contrast_r4_a1,200,0.25,0.19,0.31,-0.47,-0.545,-0.395,,
+phi-4-mini-instruct,wikitext2_20k,unedited_r0_a0,19980,,,,,,,10.0843105486014,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,identity_alpha0_r1_a0,19980,,,,,,,10.0843105486014,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,cure_centred_svd_r1_a1,19980,,,,,,,4279.9586919412695,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,cure_centred_svd_r2_a1,19980,,,,,,,4423.288838124757,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,cure_centred_svd_r4_a1,19980,,,,,,,188115.87202185713,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,uncentred_svd_r1_a1,19980,,,,,,,5281.419434320591,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,uncentred_svd_r2_a1,19980,,,,,,,6218.359220344057,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,uncentred_svd_r4_a1,19980,,,,,,,276182.67249273736,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,mean_difference_r1_a1,19980,,,,,,,14.31332018416442,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,leace_faithful_r1_a1,19980,,,,,,,14.437140235321504,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,leace_sequential_r1_a1,19980,,,,,,,13.755582333899554,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_1_r1_a1,19980,,,,,,,10.995483124472257,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_1_r2_a1,19980,,,,,,,11.43300943654229,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_1_r4_a1,19980,,,,,,,12.026538252425844,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_2_r1_a1,19980,,,,,,,11.230992277669435,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_2_r2_a1,19980,,,,,,,11.930654466799412,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_2_r4_a1,19980,,,,,,,12.864837185355174,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_3_r1_a1,19980,,,,,,,10.935968292214561,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_3_r2_a1,19980,,,,,,,11.05428252721393,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,random_ortho_3_r4_a1,19980,,,,,,,11.915828595699672,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,neutral_contrast_r1_a1,19980,,,,,,,16.103594187469042,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,neutral_contrast_r2_a1,19980,,,,,,,284.82320467880567,"aggregate only; per-window losses were not saved, so no sampling interval"
+phi-4-mini-instruct,wikitext2_20k,neutral_contrast_r4_a1,19980,,,,,,,7061.660022261512,"aggregate only; per-window losses were not saved, so no sampling interval"

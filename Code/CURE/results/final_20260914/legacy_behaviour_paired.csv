@@ -1,0 +1,9 @@
+model_name,readout_policy,quantity,n_seeds,estimate,lo,hi,p_two_sided
+llama-3.1-8b-instruct,parser_plus_judge,accuracy_S1_minus_B,160,0.025,-0.003125,0.053125,0.08609139086091391
+llama-3.1-8b-instruct,parser_only,accuracy_S1_minus_B,160,0.034375,0.0125,0.059375,0.0091990800919908
+qwen2.5-7b-instruct,parser_plus_judge,accuracy_S1_minus_B,160,0.021875,-0.0125,0.05625,0.2084791520847915
+qwen2.5-7b-instruct,parser_only,accuracy_S1_minus_B,160,0.0125,-0.01875,0.04375,0.45265473452654736
+gemma-2-2b-it,parser_plus_judge,accuracy_S1_minus_B,160,0.071875,0.03125,0.11875,0.0033996600339966003
+gemma-2-2b-it,parser_only,accuracy_S1_minus_B,160,0.065625,0.025,0.109375,0.0051994800519948
+phi-4-mini-instruct,parser_plus_judge,accuracy_S1_minus_B,160,0.0375,-0.003125,0.078125,0.0704929507049295
+phi-4-mini-instruct,parser_only,accuracy_S1_minus_B,160,0.040625,0.003125,0.08125,0.04889511048895111
