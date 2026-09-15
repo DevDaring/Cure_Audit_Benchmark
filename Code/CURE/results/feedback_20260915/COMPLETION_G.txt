@@ -1,4 +1,4 @@
-COMPLETION record (feedback cycle) 2026-09-15T02:36:47Z
+COMPLETION record (feedback cycle) 2026-09-15T02:39:03Z
 tests: 222 rows; summary: 386 rows; leace fits: 60 rows
 
 A1           llama-3.1-8b-instruct    S1_vs_B                                                    C_raw     est +0.0444 [+0.0180, +0.0736] p 0.0052  p_holm 0.0104
