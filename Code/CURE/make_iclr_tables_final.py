@@ -408,7 +408,7 @@ plt.rcParams.update({"font.size": 8.5, "axes.titlesize": 9, "axes.labelsize": 8.
 FIG.mkdir(parents=True, exist_ok=True)
 order = ["B", "S1", "SE", "NE", "RE", "RNE", "G1"]
 short = {"B": "no edit", "S1": "span, $\\alpha$=1", "SE": "span, cal.", "NE": "control span, cal.", "RE": "random, span", "RNE": "random, control span", "G1": "every position"}
-fig, axes = plt.subplots(2, 2, figsize=(7.2, 3.5))
+fig, axes = plt.subplots(2, 2, figsize=(7.2, 2.9))
 for j, m in enumerate(MODELS):
     for i, (q, lab) in enumerate((("T", "answer sensitivity $T$"), ("acc", "generation accuracy"))):
         ax = axes[i, j]
