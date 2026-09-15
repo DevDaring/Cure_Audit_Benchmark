@@ -1,0 +1,225 @@
+COMPLETION record (feedback cycle) 2026-09-15T02:36:47Z
+tests: 222 rows; summary: 386 rows; leace fits: 60 rows
+
+A1           llama-3.1-8b-instruct    S1_vs_B                                                    C_raw     est +0.0444 [+0.0180, +0.0736] p 0.0052  p_holm 0.0104
+A1           llama-3.1-8b-instruct    S1_vs_B                                                    C_logp    est +0.0976 [+0.0550, +0.1432] p 0.0005  p_holm 0.0015
+A1           llama-3.1-8b-instruct    S1_vs_B                                                    C_margin  est -0.0005 [-0.0278, +0.0259] p 0.9665  p_holm 0.9665
+A1           llama-3.1-8b-instruct    S1_vs_random_mean                                          C_raw     est +0.0388 [+0.0147, +0.0652] p 0.0064  p_holm 0.0128
+A1           llama-3.1-8b-instruct    S1_vs_random_mean                                          C_logp    est +0.0949 [+0.0541, +0.1384] p 0.0002  p_holm 0.0006
+A1           llama-3.1-8b-instruct    S1_vs_random_mean                                          C_margin  est -0.0020 [-0.0268, +0.0211] p 0.8725  p_holm 0.8725
+A1           llama-3.1-8b-instruct    leace_faithful_vs_B                                        C_raw     est +0.0112 [-0.0030, +0.0254] p 0.1220  p_holm 0.3660
+A1           llama-3.1-8b-instruct    leace_faithful_vs_B                                        C_logp    est +0.0113 [-0.0140, +0.0359] p 0.3714  p_holm 0.6513
+A1           llama-3.1-8b-instruct    leace_faithful_vs_B                                        C_margin  est +0.0117 [-0.0113, +0.0343] p 0.3257  p_holm 0.6513
+A1           llama-3.1-8b-instruct    leace_gender_large_vs_B                                    C_raw     est +0.0073 [-0.0062, +0.0208] p 0.2914  p_holm 0.3632
+A1           llama-3.1-8b-instruct    leace_gender_large_vs_B                                    C_logp    est +0.0150 [-0.0068, +0.0364] p 0.1816  p_holm 0.3632
+A1           llama-3.1-8b-instruct    leace_gender_large_vs_B                                    C_margin  est +0.0197 [-0.0019, +0.0427] p 0.0901  p_holm 0.2703
+A1           llama-3.1-8b-instruct    leace_gender_small_vs_B                                    C_raw     est +0.0056 [-0.0075, +0.0194] p 0.4111  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_gender_small_vs_B                                    C_logp    est +0.0066 [-0.0159, +0.0286] p 0.5557  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_gender_small_vs_B                                    C_margin  est +0.0041 [-0.0183, +0.0278] p 0.7356  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_mw_f3_vs_B                                           C_raw     est +0.0058 [-0.0077, +0.0194] p 0.3944  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_mw_f3_vs_B                                           C_logp    est +0.0024 [-0.0222, +0.0271] p 0.8469  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_mw_f3_vs_B                                           C_margin  est +0.0065 [-0.0159, +0.0301] p 0.5897  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_sequential_vs_B                                      C_raw     est +0.0090 [-0.0066, +0.0272] p 0.3225  p_holm 0.9674
+A1           llama-3.1-8b-instruct    leace_sequential_vs_B                                      C_logp    est +0.0068 [-0.0191, +0.0342] p 0.6236  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_sequential_vs_B                                      C_margin  est +0.0069 [-0.0149, +0.0290] p 0.5358  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_300_vs_B                                        C_raw     est -0.0016 [-0.0136, +0.0102] p 0.8006  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_300_vs_B                                        C_logp    est -0.0056 [-0.0276, +0.0161] p 0.6150  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_300_vs_B                                        C_margin  est -0.0040 [-0.0258, +0.0183] p 0.7196  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_max_noshrink_vs_B                               C_raw     est +0.0060 [-0.0073, +0.0195] p 0.3790  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_max_noshrink_vs_B                               C_logp    est +0.0012 [-0.0209, +0.0233] p 0.9118  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_max_noshrink_vs_B                               C_margin  est -0.0058 [-0.0310, +0.0192] p 0.6591  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_max_vs_B                                        C_raw     est +0.0024 [-0.0117, +0.0163] p 0.7256  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_max_vs_B                                        C_logp    est -0.0010 [-0.0230, +0.0211] p 0.9313  p_holm 1.0000
+A1           llama-3.1-8b-instruct    leace_swap_max_vs_B                                        C_margin  est -0.0140 [-0.0356, +0.0078] p 0.2072  p_holm 0.6215
+A1           llama-3.1-8b-instruct    leace_swap_small_vs_B                                      C_raw     est +0.0097 [-0.0057, +0.0267] p 0.2486  p_holm 0.4972
+A1           llama-3.1-8b-instruct    leace_swap_small_vs_B                                      C_logp    est +0.0196 [-0.0044, +0.0441] p 0.1189  p_holm 0.3567
+A1           llama-3.1-8b-instruct    leace_swap_small_vs_B                                      C_margin  est +0.0019 [-0.0179, +0.0223] p 0.8567  p_holm 0.8567
+A1           qwen2.5-7b-instruct      S1_vs_B                                                    C_raw     est +0.0758 [+0.0040, +0.1454] p 0.0355  p_holm 0.0816
+A1           qwen2.5-7b-instruct      S1_vs_B                                                    C_logp    est +0.1393 [+0.0167, +0.2605] p 0.0272  p_holm 0.0816
+A1           qwen2.5-7b-instruct      S1_vs_B                                                    C_margin  est +0.1626 [+0.0455, +0.2908] p 0.0298  p_holm 0.0816
+A1           qwen2.5-7b-instruct      S1_vs_random_mean                                          C_raw     est +0.0645 [-0.0074, +0.1365] p 0.0826  p_holm 0.0826
+A1           qwen2.5-7b-instruct      S1_vs_random_mean                                          C_logp    est +0.1709 [+0.0477, +0.2950] p 0.0077  p_holm 0.0231
+A1           qwen2.5-7b-instruct      S1_vs_random_mean                                          C_margin  est +0.1480 [+0.0305, +0.2763] p 0.0365  p_holm 0.0730
+A1           qwen2.5-7b-instruct      leace_faithful_vs_B                                        C_raw     est -0.0044 [-0.0296, +0.0205] p 0.7319  p_holm 1.0000
+A1           qwen2.5-7b-instruct      leace_faithful_vs_B                                        C_logp    est -0.0500 [-0.0990, -0.0021] p 0.0467  p_holm 0.1401
+A1           qwen2.5-7b-instruct      leace_faithful_vs_B                                        C_margin  est -0.0109 [-0.0530, +0.0326] p 0.6302  p_holm 1.0000
+A1           qwen2.5-7b-instruct      leace_sequential_vs_B                                      C_raw     est +0.0233 [-0.0047, +0.0505] p 0.0968  p_holm 0.2904
+A1           qwen2.5-7b-instruct      leace_sequential_vs_B                                      C_logp    est -0.0186 [-0.0713, +0.0309] p 0.4674  p_holm 0.9347
+A1           qwen2.5-7b-instruct      leace_sequential_vs_B                                      C_margin  est +0.0087 [-0.0395, +0.0556] p 0.7289  p_holm 0.9347
+A1           qwen2.5-7b-instruct      leace_swap_300_vs_B                                        C_raw     est +0.0149 [-0.0112, +0.0414] p 0.2640  p_holm 0.7919
+A1           qwen2.5-7b-instruct      leace_swap_300_vs_B                                        C_logp    est +0.0022 [-0.0483, +0.0521] p 0.9317  p_holm 1.0000
+A1           qwen2.5-7b-instruct      leace_swap_300_vs_B                                        C_margin  est +0.0052 [-0.0314, +0.0428] p 0.7833  p_holm 1.0000
+A1           qwen2.5-7b-instruct      leace_swap_max_noshrink_vs_B                               C_raw     est +0.0093 [-0.0129, +0.0319] p 0.4207  p_holm 0.6619
+A1           qwen2.5-7b-instruct      leace_swap_max_noshrink_vs_B                               C_logp    est -0.0222 [-0.0672, +0.0221] p 0.3310  p_holm 0.6619
+A1           qwen2.5-7b-instruct      leace_swap_max_noshrink_vs_B                               C_margin  est -0.0280 [-0.0674, +0.0096] p 0.1656  p_holm 0.4968
+A1           qwen2.5-7b-instruct      leace_swap_max_vs_B                                        C_raw     est +0.0132 [-0.0146, +0.0417] p 0.3621  p_holm 0.5096
+A1           qwen2.5-7b-instruct      leace_swap_max_vs_B                                        C_logp    est -0.0298 [-0.0784, +0.0175] p 0.2261  p_holm 0.5096
+A1           qwen2.5-7b-instruct      leace_swap_max_vs_B                                        C_margin  est -0.0292 [-0.0690, +0.0124] p 0.1699  p_holm 0.5096
+A1           qwen2.5-7b-instruct      leace_swap_small_vs_B                                      C_raw     est +0.0150 [-0.0106, +0.0406] p 0.2671  p_holm 0.8012
+A1           qwen2.5-7b-instruct      leace_swap_small_vs_B                                      C_logp    est -0.0121 [-0.0616, +0.0375] p 0.6363  p_holm 1.0000
+A1           qwen2.5-7b-instruct      leace_swap_small_vs_B                                      C_margin  est -0.0066 [-0.0503, +0.0402] p 0.7702  p_holm 1.0000
+A1           gemma-2-2b-it            S1_vs_B                                                    C_raw     est +0.1258 [+0.0495, +0.2053] p 0.0021  p_holm 0.0042
+A1           gemma-2-2b-it            S1_vs_B                                                    C_logp    est +0.1526 [+0.0690, +0.2401] p 0.0005  p_holm 0.0015
+A1           gemma-2-2b-it            S1_vs_B                                                    C_margin  est +0.2589 [+0.1217, +0.4180] p 0.0125  p_holm 0.0125
+A1           gemma-2-2b-it            S1_vs_random_mean                                          C_raw     est +0.1179 [+0.0440, +0.1960] p 0.0033  p_holm 0.0066
+A1           gemma-2-2b-it            S1_vs_random_mean                                          C_logp    est +0.1469 [+0.0643, +0.2332] p 0.0006  p_holm 0.0018
+A1           gemma-2-2b-it            S1_vs_random_mean                                          C_margin  est +0.2541 [+0.1150, +0.4129] p 0.0130  p_holm 0.0130
+A1           gemma-2-2b-it            leace_faithful_vs_B                                        C_raw     est -0.0021 [-0.0334, +0.0289] p 0.8982  p_holm 1.0000
+A1           gemma-2-2b-it            leace_faithful_vs_B                                        C_logp    est -0.0025 [-0.0369, +0.0320] p 0.8814  p_holm 1.0000
+A1           gemma-2-2b-it            leace_faithful_vs_B                                        C_margin  est +0.0221 [-0.0117, +0.0561] p 0.2082  p_holm 0.6245
+A1           gemma-2-2b-it            leace_gender_large_vs_B                                    C_raw     est -0.0176 [-0.0547, +0.0187] p 0.3585  p_holm 1.0000
+A1           gemma-2-2b-it            leace_gender_large_vs_B                                    C_logp    est -0.0158 [-0.0585, +0.0248] p 0.4730  p_holm 1.0000
+A1           gemma-2-2b-it            leace_gender_large_vs_B                                    C_margin  est +0.0191 [-0.0268, +0.0725] p 0.4684  p_holm 1.0000
+A1           gemma-2-2b-it            leace_gender_small_vs_B                                    C_raw     est +0.0062 [-0.0268, +0.0383] p 0.7123  p_holm 1.0000
+A1           gemma-2-2b-it            leace_gender_small_vs_B                                    C_logp    est -0.0014 [-0.0387, +0.0351] p 0.9401  p_holm 1.0000
+A1           gemma-2-2b-it            leace_gender_small_vs_B                                    C_margin  est +0.0284 [-0.0096, +0.0720] p 0.1914  p_holm 0.5741
+A1           gemma-2-2b-it            leace_mw_f3_vs_B                                           C_raw     est +0.0605 [+0.0172, +0.1065] p 0.0103  p_holm 0.0309
+A1           gemma-2-2b-it            leace_mw_f3_vs_B                                           C_logp    est +0.0526 [+0.0077, +0.1001] p 0.0283  p_holm 0.0566
+A1           gemma-2-2b-it            leace_mw_f3_vs_B                                           C_margin  est -0.0018 [-0.0488, +0.0450] p 0.9386  p_holm 0.9386
+A1           gemma-2-2b-it            leace_sequential_vs_B                                      C_raw     est +0.0169 [-0.0173, +0.0498] p 0.3290  p_holm 0.9869
+A1           gemma-2-2b-it            leace_sequential_vs_B                                      C_logp    est +0.0176 [-0.0204, +0.0555] p 0.3655  p_holm 0.9869
+A1           gemma-2-2b-it            leace_sequential_vs_B                                      C_margin  est +0.0179 [-0.0243, +0.0589] p 0.4086  p_holm 0.9869
+A1           gemma-2-2b-it            leace_swap_300_vs_B                                        C_raw     est +0.0210 [-0.0067, +0.0493] p 0.1442  p_holm 0.4326
+A1           gemma-2-2b-it            leace_swap_300_vs_B                                        C_logp    est +0.0057 [-0.0239, +0.0371] p 0.7092  p_holm 0.7485
+A1           gemma-2-2b-it            leace_swap_300_vs_B                                        C_margin  est +0.0138 [-0.0161, +0.0441] p 0.3743  p_holm 0.7485
+A1           gemma-2-2b-it            leace_swap_max_noshrink_vs_B                               C_raw     est -0.0099 [-0.0444, +0.0239] p 0.5725  p_holm 1.0000
+A1           gemma-2-2b-it            leace_swap_max_noshrink_vs_B                               C_logp    est -0.0150 [-0.0538, +0.0222] p 0.4405  p_holm 1.0000
+A1           gemma-2-2b-it            leace_swap_max_noshrink_vs_B                               C_margin  est +0.0092 [-0.0228, +0.0411] p 0.5831  p_holm 1.0000
+A1           gemma-2-2b-it            leace_swap_max_vs_B                                        C_raw     est -0.0006 [-0.0330, +0.0307] p 0.9702  p_holm 1.0000
+A1           gemma-2-2b-it            leace_swap_max_vs_B                                        C_logp    est -0.0043 [-0.0406, +0.0318] p 0.8262  p_holm 1.0000
+A1           gemma-2-2b-it            leace_swap_max_vs_B                                        C_margin  est +0.0223 [-0.0046, +0.0486] p 0.1024  p_holm 0.3072
+A1           gemma-2-2b-it            leace_swap_small_vs_B                                      C_raw     est +0.0289 [+0.0020, +0.0558] p 0.0374  p_holm 0.0748
+A1           gemma-2-2b-it            leace_swap_small_vs_B                                      C_logp    est +0.0236 [-0.0048, +0.0523] p 0.1067  p_holm 0.1067
+A1           gemma-2-2b-it            leace_swap_small_vs_B                                      C_margin  est +0.0407 [+0.0105, +0.0705] p 0.0117  p_holm 0.0351
+A1           phi-4-mini-instruct      S1_vs_B                                                    C_raw     est +0.1367 [+0.0863, +0.1875] p 0.0001  p_holm 0.0003
+A1           phi-4-mini-instruct      S1_vs_B                                                    C_logp    est +0.2748 [+0.1954, +0.3568] p 0.0001  p_holm 0.0003
+A1           phi-4-mini-instruct      S1_vs_B                                                    C_margin  est +0.2136 [+0.1036, +0.3280] p 0.0004  p_holm 0.0004
+A1           phi-4-mini-instruct      S1_vs_random_mean                                          C_raw     est +0.1362 [+0.0884, +0.1846] p 0.0001  p_holm 0.0003
+A1           phi-4-mini-instruct      S1_vs_random_mean                                          C_logp    est +0.2772 [+0.1994, +0.3561] p 0.0001  p_holm 0.0003
+A1           phi-4-mini-instruct      S1_vs_random_mean                                          C_margin  est +0.2282 [+0.1209, +0.3427] p 0.0004  p_holm 0.0004
+A1           phi-4-mini-instruct      leace_faithful_vs_B                                        C_raw     est +0.0070 [-0.0219, +0.0367] p 0.6352  p_holm 1.0000
+A1           phi-4-mini-instruct      leace_faithful_vs_B                                        C_logp    est -0.0018 [-0.0402, +0.0370] p 0.9260  p_holm 1.0000
+A1           phi-4-mini-instruct      leace_faithful_vs_B                                        C_margin  est -0.0045 [-0.0458, +0.0352] p 0.8381  p_holm 1.0000
+A1           phi-4-mini-instruct      leace_sequential_vs_B                                      C_raw     est +0.0027 [-0.0309, +0.0359] p 0.8738  p_holm 0.9191
+A1           phi-4-mini-instruct      leace_sequential_vs_B                                      C_logp    est +0.0198 [-0.0207, +0.0596] p 0.3360  p_holm 0.9191
+A1           phi-4-mini-instruct      leace_sequential_vs_B                                      C_margin  est -0.0210 [-0.0614, +0.0184] p 0.3064  p_holm 0.9191
+A1           phi-4-mini-instruct      leace_swap_300_vs_B                                        C_raw     est +0.0141 [-0.0164, +0.0445] p 0.3669  p_holm 1.0000
+A1           phi-4-mini-instruct      leace_swap_300_vs_B                                        C_logp    est +0.0073 [-0.0307, +0.0464] p 0.7136  p_holm 1.0000
+A1           phi-4-mini-instruct      leace_swap_300_vs_B                                        C_margin  est +0.0136 [-0.0267, +0.0527] p 0.5113  p_holm 1.0000
+A1           phi-4-mini-instruct      leace_swap_max_noshrink_vs_B                               C_raw     est +0.0355 [+0.0047, +0.0656] p 0.0207  p_holm 0.0621
+A1           phi-4-mini-instruct      leace_swap_max_noshrink_vs_B                               C_logp    est +0.0149 [-0.0248, +0.0533] p 0.4592  p_holm 0.4592
+A1           phi-4-mini-instruct      leace_swap_max_noshrink_vs_B                               C_margin  est -0.0290 [-0.0641, +0.0052] p 0.1077  p_holm 0.2154
+A1           phi-4-mini-instruct      leace_swap_max_vs_B                                        C_raw     est +0.0125 [-0.0203, +0.0457] p 0.4624  p_holm 0.6231
+A1           phi-4-mini-instruct      leace_swap_max_vs_B                                        C_logp    est +0.0200 [-0.0186, +0.0588] p 0.3116  p_holm 0.6231
+A1           phi-4-mini-instruct      leace_swap_max_vs_B                                        C_margin  est -0.0323 [-0.0703, +0.0054] p 0.1001  p_holm 0.3003
+A1           phi-4-mini-instruct      leace_swap_small_vs_B                                      C_raw     est +0.0211 [-0.0098, +0.0523] p 0.1961  p_holm 0.3922
+A1           phi-4-mini-instruct      leace_swap_small_vs_B                                      C_logp    est +0.0339 [-0.0083, +0.0773] p 0.1243  p_holm 0.3729
+A1           phi-4-mini-instruct      leace_swap_small_vs_B                                      C_margin  est -0.0242 [-0.0627, +0.0124] p 0.2168  p_holm 0.3922
+A2           gemma-2-2b-it            |C_answer|_B - |C_answer|_S1 (unequal-length pairs)        last-pad  est +1.1358 [+0.5552, +1.7783] p 0.0033
+A2           gemma-2-2b-it            |C_answer|_B - |C_answer|_S1 (unequal-length pairs)        mean-pad  est +1.0957 [+0.5746, +1.6520] p 0.0009
+A2           gemma-2-2b-it            |C_answer|_B - |C_answer|_S1 (unequal-length pairs)        truncate  est +0.2623 [-0.2159, +0.7354] p 0.2934
+A2           llama-3.1-8b-instruct    |C_answer|_B - |C_answer|_S1 (unequal-length pairs)        last-pad  est +0.5021 [+0.1761, +0.8769] p 0.0211
+A2           llama-3.1-8b-instruct    |C_answer|_B - |C_answer|_S1 (unequal-length pairs)        mean-pad  est +0.3983 [+0.1259, +0.7277] p 0.0412
+A2           llama-3.1-8b-instruct    |C_answer|_B - |C_answer|_S1 (unequal-length pairs)        truncate  est +0.1818 [-0.0327, +0.4324] p 0.1591
+A3_fm_eval   llama-3.1-8b-instruct    T: B - LC_f3                                               T         est +0.0056 [-0.0134, +0.0242] p 0.5790
+A3_fm_eval   llama-3.1-8b-instruct    acc: B - LC_f3                                             acc       est -0.0069 [-0.0208, +0.0000] p 0.0728
+A3_fm_eval   llama-3.1-8b-instruct    T: B - LC_gender_large                                     T         est +0.0403 [+0.0100, +0.0724] p 0.0392
+A3_fm_eval   llama-3.1-8b-instruct    acc: B - LC_gender_large                                   acc       est -0.0139 [-0.0347, +0.0000] p 0.0333
+A3_fm_eval   llama-3.1-8b-instruct    T: B - LC_gender_small                                     T         est +0.0334 [+0.0033, +0.0652] p 0.0705
+A3_fm_eval   llama-3.1-8b-instruct    acc: B - LC_gender_small                                   acc       est -0.0069 [-0.0208, +0.0000] p 0.0728
+A3_fm_eval   llama-3.1-8b-instruct    T: B - MC                                                  T         est +0.0757 [+0.0504, +0.1012] p 0.0010
+A3_fm_eval   llama-3.1-8b-instruct    acc: B - MC                                                acc       est -0.0069 [-0.0208, +0.0000] p 0.0728
+A3_fm_eval   llama-3.1-8b-instruct    T: B - MC_gender                                           T         est +0.0669 [+0.0362, +0.0985] p 0.0038
+A3_fm_eval   llama-3.1-8b-instruct    acc: B - MC_gender                                         acc       est -0.0069 [-0.0208, +0.0000] p 0.0728
+A3_fm_eval   llama-3.1-8b-instruct    T: B - S1                                                  T         est +0.1018 [+0.0711, +0.1341] p 0.0006
+A3_fm_eval   llama-3.1-8b-instruct    acc: B - S1                                                acc       est -0.0069 [-0.0208, +0.0000] p 0.0728
+A3_fm_eval   llama-3.1-8b-instruct    |C_answer|: B - LC_f3                                      C_answer  est +0.0546 [-0.1189, +0.1950] p 0.5699
+A3_fm_eval   llama-3.1-8b-instruct    |C_answer|: B - LC_gender_large                            C_answer  est +0.3454 [+0.2468, +0.4509] p 0.0002
+A3_fm_eval   llama-3.1-8b-instruct    |C_answer|: B - S1                                         C_answer  est +0.5404 [+0.2964, +0.7820] p 0.0024
+A3_fm_eval   gemma-2-2b-it            T: B - LC_f3                                               T         est +0.0208 [-0.0008, +0.0421] p 0.0951
+A3_fm_eval   gemma-2-2b-it            acc: B - LC_f3                                             acc       est -0.0208 [-0.0417, +0.0000] p 0.1337
+A3_fm_eval   gemma-2-2b-it            T: B - LC_gender_large                                     T         est +0.0917 [+0.0269, +0.1730] p 0.1105
+A3_fm_eval   gemma-2-2b-it            acc: B - LC_gender_large                                   acc       est -0.0347 [-0.0833, +0.0000] p 0.1980
+A3_fm_eval   gemma-2-2b-it            T: B - LC_gender_small                                     T         est +0.0800 [+0.0381, +0.1250] p 0.0026
+A3_fm_eval   gemma-2-2b-it            acc: B - LC_gender_small                                   acc       est -0.0347 [-0.0833, +0.0000] p 0.1980
+A3_fm_eval   gemma-2-2b-it            T: B - MC                                                  T         est +0.1687 [+0.1000, +0.2487] p 0.0072
+A3_fm_eval   gemma-2-2b-it            acc: B - MC                                                acc       est -0.0694 [-0.1389, -0.0139] p 0.0939
+A3_fm_eval   gemma-2-2b-it            T: B - MC_gender                                           T         est +0.0808 [+0.0202, +0.1590] p 0.1279
+A3_fm_eval   gemma-2-2b-it            acc: B - MC_gender                                         acc       est -0.0208 [-0.0486, +0.0000] p 0.1673
+A3_fm_eval   gemma-2-2b-it            T: B - S1                                                  T         est +0.1499 [+0.0781, +0.2323] p 0.0091
+A3_fm_eval   gemma-2-2b-it            acc: B - S1                                                acc       est -0.0417 [-0.1111, +0.0208] p 0.2782
+A3_fm_eval   gemma-2-2b-it            |C_answer|: B - LC_f3                                      C_answer  est +0.0691 [+0.0147, +0.1234] p 0.0383
+A3_fm_eval   gemma-2-2b-it            |C_answer|: B - LC_gender_large                            C_answer  est +0.4416 [+0.2852, +0.6006] p 0.0009
+A3_fm_eval   gemma-2-2b-it            |C_answer|: B - S1                                         C_answer  est +0.9297 [+0.6374, +1.2142] p 0.0009
+B_final      gemma-2-2b-it            T: B - CV_all                                              T         est -0.0054 [-0.0529, +0.0409] p 0.8208
+B_final      gemma-2-2b-it            acc: B - CV_all                                            acc       est +0.1313 [+0.0312, +0.2344] p 0.0143
+B_final      gemma-2-2b-it            both: B - CV_all                                           both      est +0.0938 [-0.0063, +0.2000] p 0.0802
+B_final      gemma-2-2b-it            T: B - CV_last                                             T         est +0.0036 [-0.0018, +0.0091] p 0.1968
+B_final      gemma-2-2b-it            acc: B - CV_last                                           acc       est +0.1031 [+0.0563, +0.1500] p 0.0004
+B_final      gemma-2-2b-it            both: B - CV_last                                          both      est +0.1062 [+0.0563, +0.1562] p 0.0006
+B_final      gemma-2-2b-it            T: B - CV_span                                             T         est +0.0459 [+0.0204, +0.0720] p 0.0007
+B_final      gemma-2-2b-it            acc: B - CV_span                                           acc       est -0.0094 [-0.0312, +0.0094] p 0.3713
+B_final      gemma-2-2b-it            both: B - CV_span                                          both      est -0.0125 [-0.0312, +0.0000] p 0.0152
+B_final      gemma-2-2b-it            T: B - DV_all                                              T         est -0.1122 [-0.1762, -0.0506] p 0.0016
+B_final      gemma-2-2b-it            acc: B - DV_all                                            acc       est +0.4188 [+0.3406, +0.5000] p 0.0001
+B_final      gemma-2-2b-it            both: B - DV_all                                           both      est +0.3812 [+0.3063, +0.4625] p 0.0001
+B_final      gemma-2-2b-it            T: B - DV_last                                             T         est +0.0068 [+0.0022, +0.0118] p 0.0087
+B_final      gemma-2-2b-it            acc: B - DV_last                                           acc       est -0.2375 [-0.3031, -0.1750] p 0.0001
+B_final      gemma-2-2b-it            both: B - DV_last                                          both      est -0.2375 [-0.3063, -0.1688] p 0.0001
+B_final      gemma-2-2b-it            T: B - DV_span                                             T         est +0.0009 [-0.0257, +0.0276] p 0.9505
+B_final      gemma-2-2b-it            acc: B - DV_span                                           acc       est -0.0187 [-0.0437, +0.0031] p 0.1440
+B_final      gemma-2-2b-it            both: B - DV_span                                          both      est -0.0187 [-0.0500, +0.0063] p 0.1896
+B_final      gemma-2-2b-it            T: B - S1                                                  T         est +0.0214 [-0.0148, +0.0573] p 0.2480
+B_final      gemma-2-2b-it            acc: B - S1                                                acc       est +0.0625 [+0.0281, +0.1000] p 0.0024
+B_final      gemma-2-2b-it            both: B - S1                                               both      est +0.0750 [+0.0312, +0.1250] p 0.0143
+B_final      gemma-2-2b-it            T: B - SE                                                  T         est -0.0080 [-0.0299, +0.0119] p 0.4668
+B_final      gemma-2-2b-it            acc: B - SE                                                acc       est +0.0094 [-0.0125, +0.0312] p 0.4102
+B_final      gemma-2-2b-it            both: B - SE                                               both      est +0.0000 [-0.0250, +0.0250] p 1.0000
+B_control    gemma-2-2b-it            T: B - CV_span                                             T         est -0.0375 [-0.1458, +0.0694] p 0.5280
+B_control    gemma-2-2b-it            acc: B - CV_span                                           acc       est +0.4375 [+0.2750, +0.6125] p 0.0006
+B_control    gemma-2-2b-it            both: B - CV_span                                          both      est +0.4500 [+0.2500, +0.6500] p 0.0007
+B_control    gemma-2-2b-it            T: B - DV_span                                             T         est -0.0077 [-0.0752, +0.0657] p 0.8455
+B_control    gemma-2-2b-it            acc: B - DV_span                                           acc       est +0.2500 [+0.1500, +0.3500] p 0.0012
+B_control    gemma-2-2b-it            both: B - DV_span                                          both      est +0.2500 [+0.1250, +0.3750] p 0.0047
+B_control    gemma-2-2b-it            T: B - S1                                                  T         est +0.0391 [-0.0850, +0.1421] p 0.5572
+B_control    gemma-2-2b-it            acc: B - S1                                                acc       est +0.6375 [+0.4250, +0.8250] p 0.0048
+B_control    gemma-2-2b-it            both: B - S1                                               both      est +0.5750 [+0.3500, +0.8000] p 0.0048
+B_final      gemma-2-2b-it            |C_answer|: B - CV_span                                    C_answer  est +0.8159 [+0.5271, +1.1164] p 0.0001
+B_final      gemma-2-2b-it            |C_answer|: B - DV_span                                    C_answer  est +0.5209 [+0.2702, +0.7781] p 0.0010
+B_final      gemma-2-2b-it            |C_answer|: B - S1                                         C_answer  est +0.8054 [+0.4986, +1.1170] p 0.0001
+B_final      llama-3.1-8b-instruct    T: B - CV_all                                              T         est -0.0517 [-0.1090, +0.0040] p 0.0787
+B_final      llama-3.1-8b-instruct    acc: B - CV_all                                            acc       est +0.6844 [+0.6094, +0.7562] p 0.0001
+B_final      llama-3.1-8b-instruct    both: B - CV_all                                           both      est +0.6500 [+0.5687, +0.7250] p 0.0001
+B_final      llama-3.1-8b-instruct    T: B - CV_last                                             T         est -0.0005 [-0.0048, +0.0037] p 0.8099
+B_final      llama-3.1-8b-instruct    acc: B - CV_last                                           acc       est -0.2094 [-0.2875, -0.1313] p 0.0001
+B_final      llama-3.1-8b-instruct    both: B - CV_last                                          both      est -0.2062 [-0.2938, -0.1250] p 0.0002
+B_final      llama-3.1-8b-instruct    T: B - CV_span                                             T         est +0.0741 [+0.0457, +0.1022] p 0.0001
+B_final      llama-3.1-8b-instruct    acc: B - CV_span                                           acc       est -0.0375 [-0.0688, -0.0125] p 0.0467
+B_final      llama-3.1-8b-instruct    both: B - CV_span                                          both      est -0.0500 [-0.0875, -0.0187] p 0.0505
+B_final      llama-3.1-8b-instruct    T: B - DV_all                                              T         est -0.0810 [-0.1369, -0.0266] p 0.0060
+B_final      llama-3.1-8b-instruct    acc: B - DV_all                                            acc       est +0.6844 [+0.6094, +0.7562] p 0.0001
+B_final      llama-3.1-8b-instruct    both: B - DV_all                                           both      est +0.6500 [+0.5687, +0.7250] p 0.0001
+B_final      llama-3.1-8b-instruct    T: B - DV_last                                             T         est +0.0020 [-0.0029, +0.0069] p 0.4248
+B_final      llama-3.1-8b-instruct    acc: B - DV_last                                           acc       est +0.1625 [+0.1000, +0.2250] p 0.0001
+B_final      llama-3.1-8b-instruct    both: B - DV_last                                          both      est +0.1625 [+0.0938, +0.2313] p 0.0001
+B_final      llama-3.1-8b-instruct    T: B - DV_span                                             T         est +0.0593 [+0.0312, +0.0871] p 0.0001
+B_final      llama-3.1-8b-instruct    acc: B - DV_span                                           acc       est -0.0156 [-0.0437, +0.0125] p 0.3008
+B_final      llama-3.1-8b-instruct    both: B - DV_span                                          both      est -0.0187 [-0.0500, +0.0125] p 0.2744
+B_final      llama-3.1-8b-instruct    T: B - S1                                                  T         est +0.0553 [+0.0246, +0.0846] p 0.0008
+B_final      llama-3.1-8b-instruct    acc: B - S1                                                acc       est +0.0406 [+0.0125, +0.0719] p 0.0152
+B_final      llama-3.1-8b-instruct    both: B - S1                                               both      est +0.0375 [+0.0063, +0.0750] p 0.0398
+B_final      llama-3.1-8b-instruct    T: B - SE                                                  T         est +0.0312 [+0.0115, +0.0504] p 0.0029
+B_final      llama-3.1-8b-instruct    acc: B - SE                                                acc       est +0.0187 [+0.0031, +0.0375] p 0.0417
+B_final      llama-3.1-8b-instruct    both: B - SE                                               both      est +0.0187 [-0.0063, +0.0500] p 0.1808
+B_control    llama-3.1-8b-instruct    T: B - CV_span                                             T         est -0.2442 [-0.3908, -0.1097] p 0.0164
+B_control    llama-3.1-8b-instruct    acc: B - CV_span                                           acc       est +0.6750 [+0.5375, +0.8000] p 0.0001
+B_control    llama-3.1-8b-instruct    both: B - CV_span                                          both      est +0.8000 [+0.6500, +0.9500] p 0.0001
+B_control    llama-3.1-8b-instruct    T: B - DV_span                                             T         est -0.1037 [-0.2041, -0.0175] p 0.0786
+B_control    llama-3.1-8b-instruct    acc: B - DV_span                                           acc       est +0.4250 [+0.2625, +0.6125] p 0.0043
+B_control    llama-3.1-8b-instruct    both: B - DV_span                                          both      est +0.5250 [+0.3250, +0.7250] p 0.0009
+B_control    llama-3.1-8b-instruct    T: B - S1                                                  T         est -0.1152 [-0.2008, -0.0348] p 0.0385
+B_control    llama-3.1-8b-instruct    acc: B - S1                                                acc       est +0.4375 [+0.2375, +0.6625] p 0.0099
+B_control    llama-3.1-8b-instruct    both: B - S1                                               both      est +0.5000 [+0.2500, +0.7500] p 0.0110
+B_final      llama-3.1-8b-instruct    |C_answer|: B - CV_span                                    C_answer  est +0.4340 [+0.2740, +0.5973] p 0.0001
+B_final      llama-3.1-8b-instruct    |C_answer|: B - DV_span                                    C_answer  est +0.3852 [+0.2342, +0.5373] p 0.0001
+B_final      llama-3.1-8b-instruct    |C_answer|: B - S1                                         C_answer  est +0.3672 [+0.2340, +0.4991] p 0.0001
