@@ -1,0 +1,67 @@
+{
+  "model": "llama-3.1-8b-instruct",
+  "denominator": 185659.91497561336,
+  "target_span": 5.250229596953418e-05,
+  "target_all": 0.09711112519238539,
+  "target_all_rule": "mean dev energy of the span basis applied at every prefill position at alpha 1 (G1)",
+  "vectors": {
+    "DV": {
+      "n_prompts_used": 234,
+      "n_unbiased_state": 105,
+      "n_biased_state": 129,
+      "rule": "state = option-scoring argmax equals the unknown gold (unbiased) or not (biased); vector = mean(unbiased) - mean(biased) of span-position activations, unit norm per layer"
+    },
+    "CV": {
+      "file": "Code/CURE/results/v2/p2_basis_llama-3.1-8b-instruct_chat_mean_difference.npz",
+      "sha256": "7ff4c485aa546340ad912952475d0436620732264f2b4d384872920fbf72bf71",
+      "rule": "pooled-audit mean-difference direction (unit norm), sign fixed on the dev seeds",
+      "sign": 1.0,
+      "mean_margin_gain_at_alpha": 0.629928097234662,
+      "alpha_used": 0.32317026641064783,
+      "n_dev": 48
+    }
+  },
+  "alphas": {
+    "DV": {
+      "span": {
+        "alpha": 0.3231739538008152,
+        "energy_alpha1": 0.0005026961889634197,
+        "achieved": 5.250808235070796e-05,
+        "rel_err": 0.00011021196438982979,
+        "within_tol": true
+      },
+      "all": {
+        "alpha": 1.500132488895376,
+        "energy_alpha1": 0.04315287671289143,
+        "achieved": 0.09727071867331541,
+        "rel_err": 0.0016434108925609638,
+        "within_tol": true
+      },
+      "last": {
+        "alpha": 0.3231739538008152,
+        "rule": "span alpha (one position)"
+      }
+    },
+    "CV": {
+      "span": {
+        "alpha": 0.32317026641064783,
+        "energy_alpha1": 0.0005027076606101155,
+        "achieved": 5.250011772515874e-05,
+        "rel_err": -4.148855464729733e-05,
+        "within_tol": true
+      },
+      "all": {
+        "alpha": 1.5001153745743,
+        "energy_alpha1": 0.04315386135235686,
+        "achieved": 0.09727225832573444,
+        "rel_err": 0.0016592654346227525,
+        "within_tol": true
+      },
+      "last": {
+        "alpha": 0.32317026641064783,
+        "rule": "span alpha (one position)"
+      }
+    }
+  },
+  "utc": "2026-09-14T23:53:21Z"
+}
