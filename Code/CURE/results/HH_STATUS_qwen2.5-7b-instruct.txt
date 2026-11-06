@@ -1,1 +1,1 @@
-stage h3 qwen2.5-7b-instruct starting @ Fri Nov  6 21:25:43 UTC 2026
+stage h1b qwen2.5-7b-instruct starting @ Fri Nov  6 21:40:07 UTC 2026
