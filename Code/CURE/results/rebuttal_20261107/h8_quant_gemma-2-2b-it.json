@@ -1,0 +1,201 @@
+{
+  "model": "gemma-2-2b-it",
+  "dtype_loaded": "torch.bfloat16",
+  "cells": {
+    "CV_all@1": {
+      "median_alpha": 3.8439268715441117,
+      "n": 4,
+      "nominal_energy": 84008.72193486436,
+      "applied_energy": 85130.32481641037,
+      "along_energy": 83886.4924208434,
+      "applied_over_nominal": 1.0133509828070553,
+      "along_over_nominal": 0.9985138328489085
+    },
+    "CV_last@1": {
+      "median_alpha": 56.82138428000308,
+      "n": 4,
+      "nominal_energy": 84009.15633238529,
+      "applied_energy": 84037.8767009163,
+      "along_energy": 84001.60658711544,
+      "applied_over_nominal": 1.0008012702778593,
+      "along_over_nominal": 1.000367535988234
+    },
+    "CV_span@0.1": {
+      "median_alpha": 9.801404240511873,
+      "n": 4,
+      "nominal_energy": 8399.923469629786,
+      "applied_energy": 8422.00356217276,
+      "along_energy": 8396.596542885154,
+      "applied_over_nominal": 1.002202090383885,
+      "along_over_nominal": 0.9990959539326847
+    },
+    "CV_span@0.3": {
+      "median_alpha": 16.97653013008761,
+      "n": 4,
+      "nominal_energy": 25162.98882306832,
+      "applied_energy": 25174.674500048055,
+      "along_energy": 25141.324488505263,
+      "applied_over_nominal": 1.000877941546812,
+      "along_over_nominal": 0.9994236495477238
+    },
+    "CV_span@1": {
+      "median_alpha": 30.994761668050316,
+      "n": 4,
+      "nominal_energy": 84016.93453985095,
+      "applied_energy": 84101.69343262445,
+      "along_energy": 84046.41136742491,
+      "applied_over_nominal": 1.0011442823407566,
+      "along_over_nominal": 1.0005007187771202
+    },
+    "P_all@0.1": {
+      "median_alpha": 0.008528811132658439,
+      "n": 4,
+      "nominal_energy": 8468.379103143476,
+      "applied_energy": 9565.025444910681,
+      "along_energy": 8035.159682104724,
+      "applied_over_nominal": 1.1263135578354244,
+      "along_over_nominal": 0.9487969351163099
+    },
+    "P_all@1": {
+      "median_alpha": 0.03005686395467878,
+      "n": 4,
+      "nominal_energy": 87902.60837527299,
+      "applied_energy": 90954.12062018971,
+      "along_energy": 88949.16967144514,
+      "applied_over_nominal": 1.0294246880425608,
+      "along_over_nominal": 1.0076327835395458
+    },
+    "P_all@10": {
+      "median_alpha": 0.14184372772706802,
+      "n": 4,
+      "nominal_energy": 906982.3746998864,
+      "applied_energy": 908403.3844965501,
+      "along_energy": 906115.8072459102,
+      "applied_over_nominal": 1.0009391209855807,
+      "along_over_nominal": 0.998531076218843
+    },
+    "P_all@a1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 11501990.555506906,
+      "applied_energy": 11499080.545064984,
+      "along_energy": 11503504.167584436,
+      "applied_over_nominal": 0.9998048297533275,
+      "along_over_nominal": 1.0001889089324667
+    },
+    "P_last@0.1": {
+      "median_alpha": 0.48801158200887873,
+      "n": 4,
+      "nominal_energy": 8486.668077529863,
+      "applied_energy": 8494.234453969035,
+      "along_energy": 8491.811760766075,
+      "applied_over_nominal": 0.9996099424078946,
+      "along_over_nominal": 0.9993481648646078
+    },
+    "P_last@1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 34617.91074229876,
+      "applied_energy": 34655.16182289198,
+      "along_energy": 34666.189366830775,
+      "applied_over_nominal": 1.0006080239284358,
+      "along_over_nominal": 1.0009270786977398
+    },
+    "P_ne@0.1": {
+      "median_alpha": 0.16700511432308113,
+      "n": 4,
+      "nominal_energy": 8541.846182079127,
+      "applied_energy": 8570.550045061631,
+      "along_energy": 8552.355710266382,
+      "applied_over_nominal": 1.006842514042728,
+      "along_over_nominal": 1.0038554966680322
+    },
+    "P_ne@1": {
+      "median_alpha": 0.7730502783708955,
+      "n": 4,
+      "nominal_energy": 85251.4814229604,
+      "applied_energy": 85218.47375878147,
+      "along_energy": 85232.98131365582,
+      "applied_over_nominal": 0.9996667056980512,
+      "along_over_nominal": 0.9998362809863912
+    },
+    "P_ne@a1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 125969.57346199421,
+      "applied_energy": 125977.524424572,
+      "along_energy": 126009.40026949337,
+      "applied_over_nominal": 1.0005330577747,
+      "along_over_nominal": 1.0007976219115848
+    },
+    "P_span@0.03": {
+      "median_alpha": 0.054433440548506296,
+      "n": 4,
+      "nominal_energy": 2759.572614008095,
+      "applied_energy": 2782.7468118603906,
+      "along_energy": 2766.8510420099146,
+      "applied_over_nominal": 1.014404161184291,
+      "along_over_nominal": 1.0066369951424838
+    },
+    "P_span@0.1": {
+      "median_alpha": 0.15006849163797348,
+      "n": 4,
+      "nominal_energy": 9215.739509577392,
+      "applied_energy": 9200.65506212346,
+      "along_energy": 9187.360378019283,
+      "applied_over_nominal": 0.9984276363084625,
+      "along_over_nominal": 0.9970228027147094
+    },
+    "P_span@0.3": {
+      "median_alpha": 0.47303286244247345,
+      "n": 4,
+      "nominal_energy": 25964.024453905477,
+      "applied_energy": 25996.916399017093,
+      "along_energy": 25991.507667300357,
+      "applied_over_nominal": 0.9995585109711064,
+      "along_over_nominal": 0.999436423071935
+    },
+    "P_span@1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 84374.29242867735,
+      "applied_energy": 84396.515675222,
+      "along_energy": 84424.95062389749,
+      "applied_over_nominal": 1.0001348088196187,
+      "along_over_nominal": 1.0004190987443289
+    },
+    "R_all@0.1": {
+      "median_alpha": 0.11140271606186777,
+      "n": 4,
+      "nominal_energy": 8303.046509698186,
+      "applied_energy": 8504.520818709185,
+      "along_energy": 8042.045682229777,
+      "applied_over_nominal": 1.0242841660105113,
+      "along_over_nominal": 0.9684996194709906
+    },
+    "R_all@1": {
+      "median_alpha": 0.35228632028452556,
+      "n": 4,
+      "nominal_energy": 83514.55796319267,
+      "applied_energy": 83942.25742602038,
+      "along_energy": 83073.65832597871,
+      "applied_over_nominal": 1.0051305681695397,
+      "along_over_nominal": 0.9947124764185029
+    },
+    "Rk_span@1": {
+      "median_alpha": 0.5401866396784956,
+      "n": 4,
+      "nominal_energy": 85668.9116619817,
+      "applied_energy": 85655.77610242661,
+      "along_energy": 85631.23500371986,
+      "applied_over_nominal": 0.9994114049767461,
+      "along_over_nominal": 0.9990999909289703
+    }
+  },
+  "note": "ratios of applied to nominal energy; along = squared component of the applied displacement along the edit direction, over nominal",
+  "sec_bf16": {
+    "score_pair": 0.27212047576904297,
+    "generate_48": 2.2219340801239014
+  },
+  "float32_error": "FlashAttention only support fp16 and bf16 data type"
+}

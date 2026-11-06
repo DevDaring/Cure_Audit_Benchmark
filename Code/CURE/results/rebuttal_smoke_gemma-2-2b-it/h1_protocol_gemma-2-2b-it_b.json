@@ -1,0 +1,120 @@
+{
+  "model": "gemma-2-2b-it",
+  "cells": {
+    "P_span": [
+      "proj",
+      "span",
+      [
+        1.0,
+        0.3,
+        0.1,
+        0.03
+      ]
+    ],
+    "P_ne": [
+      "proj",
+      "ne",
+      [
+        1.0,
+        0.1,
+        "a1"
+      ]
+    ],
+    "P_last": [
+      "proj",
+      "last",
+      [
+        1.0,
+        0.1
+      ]
+    ],
+    "P_all": [
+      "proj",
+      "all",
+      [
+        10.0,
+        1.0,
+        0.1,
+        "a1"
+      ]
+    ],
+    "R_all": [
+      "proj",
+      "all",
+      [
+        1.0,
+        0.1
+      ]
+    ],
+    "Rk_span": [
+      "proj",
+      "span",
+      [
+        1.0
+      ]
+    ],
+    "CV_span": [
+      "steer",
+      "span",
+      [
+        1.0,
+        0.3,
+        0.1
+      ]
+    ],
+    "CV_last": [
+      "steer",
+      "last",
+      [
+        1.0
+      ]
+    ],
+    "CV_all": [
+      "steer",
+      "all",
+      [
+        1.0
+      ]
+    ]
+  },
+  "pass_levels": {
+    "a": [
+      10.0,
+      1.0,
+      0.1,
+      "a1"
+    ],
+    "b": [
+      0.3,
+      0.03
+    ]
+  },
+  "no_generation_levels": [
+    0.03
+  ],
+  "match_tol": 0.05,
+  "basis": {
+    "file": "Code/CURE/results/v2/p2_basis_gemma-2-2b-it_chat_cure_centred_svd.npz",
+    "sha256": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+    "rank_used": 1,
+    "max_rank_in_file": 4,
+    "fit_info": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 330,
+      "site": "span (all tokens, truncated to shorter span)",
+      "sec_collect": 19.668144702911377,
+      "n_fit_pairs_neutral_type": 54,
+      "estimator": "centred_svd"
+    },
+    "fit_id": "48de8830827a1a93e733d7721a38efbb74d587cc0e5540dda0aa432bfbd92e2a",
+    "note": "contrast-derived projection: leading right singular vector of centred span-position activation differences over the fit pairs; 54 of the fit pairs are neutral-type substitutions"
+  },
+  "model_cfg": {
+    "hf_id": "google/gemma-2-2b-it",
+    "model_class": "Gemma2ForCausalLM",
+    "attn_implementation": "flash_attention_2",
+    "dtype": "torch.bfloat16"
+  },
+  "utc": "2026-11-06T16:45:23Z"
+}
