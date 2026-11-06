@@ -1,1 +1,1 @@
-container started (NVIDIA GeForce RTX 3090 Ti, 24564 MiB) @ Fri Nov  6 16:33:42 UTC 2026
+SMOKE gemma-2-2b-it starting @ Fri Nov  6 16:34:24 UTC 2026
