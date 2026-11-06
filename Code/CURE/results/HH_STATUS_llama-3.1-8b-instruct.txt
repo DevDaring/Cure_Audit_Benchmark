@@ -1,1 +1,1 @@
-container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov  6 16:04:34 UTC 2026
+SMOKE llama-3.1-8b-instruct starting @ Fri Nov  6 16:10:21 UTC 2026
