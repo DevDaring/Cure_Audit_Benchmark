@@ -1,1 +1,1 @@
-container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov  6 16:06:55 UTC 2026
+SMOKE qwen2.5-7b-instruct starting @ Fri Nov  6 16:09:55 UTC 2026
