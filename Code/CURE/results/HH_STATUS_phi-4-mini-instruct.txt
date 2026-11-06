@@ -1,1 +1,1 @@
-SMOKE phi-4-mini-instruct starting @ Fri Nov  6 16:34:14 UTC 2026
+stage h1a phi-4-mini-instruct starting @ Fri Nov  6 16:41:46 UTC 2026
