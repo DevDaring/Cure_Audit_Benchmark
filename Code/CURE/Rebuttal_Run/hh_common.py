@@ -330,7 +330,7 @@ def measure_energy(model, tok, text: str, factory, positions: list[int]) -> floa
 
 
 def calibrate_alpha(model, tok, text: str, positions: list[int], make_edit_at, target: float,
-                    e1: float | None = None, max_iter: int = 4, tol: float = MATCH_TOL, capped: bool = True) -> dict:
+                    e1: float | None = None, max_iter: int = 6, tol: float = MATCH_TOL, capped: bool = True) -> dict:
     """alpha such that the edit's energy on THIS prompt equals `target`. Energy is quadratic in
     alpha for an additive vector and nearly so for a projection through depth, so a square-root
     update converges in one to three evaluations. capped = True for a projection, which cannot
@@ -348,7 +348,11 @@ def calibrate_alpha(model, tok, text: str, positions: list[int], make_edit_at, t
         feasible = abs(e1 - target) / target <= tol
         return {"alpha": 1.0, "achieved": e1, "target": target, "e1": e1, "rel_err": (e1 - target) / target, "feasible": feasible,
                 "n_eval": len(evals), "evaluations": evals, "reason": "" if feasible else "alpha capped at 1"}
-    a = float(np.sqrt(target / e1)); best = None
+    # secant in log-log: energy follows alpha^p with p between about 1 and 2 through depth, so the
+    # slope is re-estimated from the last two evaluations instead of being assumed quadratic
+    lim = 1.0 if capped else float("inf")
+    a = float(min(lim, np.sqrt(target / e1))); best = None
+    la_prev, le_prev = 0.0, float(np.log(e1))       # the alpha = 1 evaluation
     for _ in range(max_iter):
         en = measure_energy(model, tok, text, make_edit_at(a), positions)
         evals.append({"alpha": a, "energy": en})
@@ -356,11 +360,13 @@ def calibrate_alpha(model, tok, text: str, positions: list[int], make_edit_at, t
             best = (a, en)
         if abs(en - target) / target <= tol:
             break
-        lim = 1.0 if capped else float("inf")
         if en <= 0:
-            a = min(lim, a * 2.0)
-        else:
-            a = float(min(lim, a * np.sqrt(target / en)))
+            a = min(lim, a * 2.0); continue
+        la, le = float(np.log(a)), float(np.log(en))
+        slope = (le - le_prev) / (la - la_prev) if abs(la - la_prev) > 1e-9 else 2.0
+        slope = float(np.clip(slope, 0.5, 3.0))
+        la_prev, le_prev = la, le
+        a = float(min(lim, np.exp(la + (np.log(target) - le) / slope)))
     a, en = best
     return {"alpha": a, "achieved": en, "target": target, "e1": e1, "rel_err": (en - target) / target,
             "feasible": abs(en - target) / target <= tol, "n_eval": len(evals), "evaluations": evals, "reason": ""}
@@ -402,6 +408,9 @@ def eval_cell(model, tok, mname: str, r, side: str, sp_side: dict, factory, posi
             # energy_per_pass is one prompt's energy, the quantity calibrate_alpha matches
             row.update({"energy_num": en["num"], "energy_per_pass": en["num"] / max(1, len(cands)), "energy_den_edited": en["den_edited"],
                         "energy_by_layer": json.dumps(en["by_layer"]), "n_decode_edits_score": en["n_decode_edits"]})
+            if hasattr(e, "applied_summary"):                # what survived the write-back into bfloat16
+                ap = e.applied_summary()
+                row.update({"applied_over_nominal": ap["applied_over_nominal"], "along_over_nominal": ap["along_over_nominal"]})
         else:
             row.update({"energy_num": 0.0, "energy_per_pass": 0.0, "energy_den_edited": float("nan"), "energy_by_layer": "{}", "n_decode_edits_score": 0})
         if generate:
