@@ -99,12 +99,23 @@ def check_model(model: str, d: pd.DataFrame, brief: bool) -> list[str]:
         old = pd.read_parquet(H.FINAL / ("per_item_%s.parquet" % model))
         old = old[(old.kind == "bridge") & (old.status == "ok")]
         for new, o in SEPT_COND.items():
-            j = br[br.cond == new].set_index("seed_id")[["C_answer"]].join(old[old.cond == o].set_index("seed_id")[["C_answer"]], how="inner", lsuffix="_new", rsuffix="_sep")
-            if len(j) >= 5:
-                r = float(np.corrcoef(j.C_answer_new, j.C_answer_sep)[0, 1])
-                print("  reproduction C_answer %s: n=%d mean|C| %.3f vs %.3f, corr %.4f" % (new, len(j), j.C_answer_new.abs().mean(), j.C_answer_sep.abs().mean(), r))
-                if r < 0.90:
-                    fails.append("C_answer %s does not reproduce (corr %.3f)" % (new, r))
+            j = br[br.cond == new].set_index("seed_id")[["C_answer", "span_len_a", "span_len_b"]].join(old[old.cond == o].set_index("seed_id")[["C_answer"]], how="inner", lsuffix="_new", rsuffix="_sep")
+            same = j.span_len_a == j.span_len_b
+            # h9_bridge_check: September's own code reproduces its stored values exactly. This cycle's bridge
+            # orders the hooks differently (about one logit quantum per pair) and edits the whole term, where
+            # September edited the span truncated to the shorter length. Equal-length pairs have no such
+            # difference, so they carry the check; unequal-length pairs are reported, and the paper states
+            # C_answer under both rules.
+            for lab, x, floor in (("equal", j[same], 0.90 if new == "P_span@1" else 0.95), ("unequal", j[~same], None)):
+                if len(x) >= 5:
+                    r = float(np.corrcoef(x.C_answer_new, x.C_answer_sep)[0, 1])
+                    print("  reproduction C_answer %s %s pairs: n=%d mean|C| %.3f vs %.3f, corr %.4f" % (new, lab, len(x), x.C_answer_new.abs().mean(), x.C_answer_sep.abs().mean(), r))
+                    if new == "B" and r < 0.95:
+                        fails.append("unedited C_answer does not reproduce on %s pairs (corr %.3f)" % (lab, r))
+                    if floor and r < floor:
+                        fails.append("C_answer %s does not reproduce on equal-length pairs (corr %.3f, floor %.2f)" % (new, r, floor))
+                    if floor and x.C_answer_sep.abs().mean() and abs(x.C_answer_new.abs().mean() / x.C_answer_sep.abs().mean() - 1) > 0.15:
+                        fails.append("mean |C_answer| %s on equal-length pairs differs by more than 15 per cent from September" % new)
     # ---- early reading (labelled partial; never used for a decision about the design)
     if not brief and len(final):
         g = final.groupby("cond").agg(pairs=("T", "size"), T=("T", "mean"), T_mean=("T_mean", "mean"), acc=("acc", "mean"), valid=("validity", "mean"), feasible=("feasible", "mean"))
