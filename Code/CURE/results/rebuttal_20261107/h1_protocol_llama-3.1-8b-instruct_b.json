@@ -1,0 +1,120 @@
+{
+  "model": "llama-3.1-8b-instruct",
+  "cells": {
+    "P_span": [
+      "proj",
+      "span",
+      [
+        1.0,
+        0.3,
+        0.1,
+        0.03
+      ]
+    ],
+    "P_ne": [
+      "proj",
+      "ne",
+      [
+        1.0,
+        0.1,
+        "a1"
+      ]
+    ],
+    "P_last": [
+      "proj",
+      "last",
+      [
+        1.0,
+        0.1
+      ]
+    ],
+    "P_all": [
+      "proj",
+      "all",
+      [
+        10.0,
+        1.0,
+        0.1,
+        "a1"
+      ]
+    ],
+    "R_all": [
+      "proj",
+      "all",
+      [
+        1.0,
+        0.1
+      ]
+    ],
+    "Rk_span": [
+      "proj",
+      "span",
+      [
+        1.0
+      ]
+    ],
+    "CV_span": [
+      "steer",
+      "span",
+      [
+        1.0,
+        0.3,
+        0.1
+      ]
+    ],
+    "CV_last": [
+      "steer",
+      "last",
+      [
+        1.0
+      ]
+    ],
+    "CV_all": [
+      "steer",
+      "all",
+      [
+        1.0
+      ]
+    ]
+  },
+  "pass_levels": {
+    "a": [
+      10.0,
+      1.0,
+      0.1,
+      "a1"
+    ],
+    "b": [
+      0.3,
+      0.03
+    ]
+  },
+  "no_generation_levels": [
+    0.03
+  ],
+  "match_tol": 0.05,
+  "basis": {
+    "file": "Code/CURE/results/v2/p2_basis_llama-3.1-8b-instruct_chat_cure_centred_svd.npz",
+    "sha256": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+    "rank_used": 1,
+    "max_rank_in_file": 4,
+    "fit_info": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 328,
+      "site": "span (all tokens, truncated to shorter span)",
+      "sec_collect": 154.04333329200745,
+      "n_fit_pairs_neutral_type": 54,
+      "estimator": "centred_svd"
+    },
+    "fit_id": "4249aadd2d329d12b0fbe34aa559709e7979544a5c0e0de723480df8ebce718e",
+    "note": "contrast-derived projection: leading right singular vector of centred span-position activation differences over the fit pairs; 54 of the fit pairs are neutral-type substitutions"
+  },
+  "model_cfg": {
+    "hf_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "model_class": "LlamaForCausalLM",
+    "attn_implementation": "flash_attention_2",
+    "dtype": "torch.bfloat16"
+  },
+  "utc": "2026-11-06T22:54:00Z"
+}
