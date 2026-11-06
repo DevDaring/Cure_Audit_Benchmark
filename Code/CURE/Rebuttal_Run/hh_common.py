@@ -256,9 +256,11 @@ class DoseEdit(_hooked_edit_class()):
         return [p + off for p in self._targets[row] if 0 <= p + off < T]
 
     def _make_hook(self, li: int):
-        if self.mode == "proj":
-            return super()._make_hook(li)
-        v = self.V[li]
+        """One hook for both operators. Records the nominal displacement (delta_norm, the final
+        cycle's bookkeeping) and the displacement that survives the write-back into the model's
+        dtype (applied), with its component along the edit direction."""
+        U = self.U[li]
+        v_st = self.V[li] if self.mode == "steer" else None
 
         def hook(module, inputs, output):
             import torch
@@ -274,16 +276,29 @@ class DoseEdit(_hooked_edit_class()):
                 if not prefill:
                     self.n_decode_edits += 1
                 cur = hs[b, pos, :]
-                delta = (-self.alpha) * v.unsqueeze(0).expand(len(pos), -1)      # h' = h - delta = h + alpha v
+                if self.mode == "steer":
+                    delta = (-self.alpha) * v_st.unsqueeze(0).expand(len(pos), -1)
+                else:
+                    delta = self.alpha * (cur @ U.transpose(0, 1)) @ U
+                new = (cur - delta).to(hs.dtype)
                 if self.record:
                     with torch.no_grad():
-                        dn = delta.float().norm(dim=-1); hn = cur.float().norm(dim=-1)
-                        for p, d_, h_ in zip(pos, dn.tolist(), hn.tolist()):
-                            self.changed_log.append({"layer": li, "row": b, "position": int(p), "prefill": prefill,
-                                                     "delta_norm": d_, "h_norm": h_})
-                hs[b, pos, :] = cur - delta
+                        applied = (cur.float() - new.float())
+                        dn = delta.float().norm(dim=-1); hn = cur.float().norm(dim=-1); an = applied.norm(dim=-1)
+                        al = (applied @ U.float().transpose(0, 1)).norm(dim=-1)
+                        for p, d_, h_, a_, l_ in zip(pos, dn.tolist(), hn.tolist(), an.tolist(), al.tolist()):
+                            self.changed_log.append({"layer": li, "row": b, "position": int(p), "prefill": prefill, "delta_norm": d_, "h_norm": h_,
+                                                     "applied_norm": a_, "along_norm": l_})
+                hs[b, pos, :] = new
             return output
         return hook
+
+    def applied_summary(self) -> dict:
+        nom = sum(r["delta_norm"] ** 2 for r in self.changed_log)
+        app = sum(r["applied_norm"] ** 2 for r in self.changed_log)
+        alo = sum(r["along_norm"] ** 2 for r in self.changed_log)
+        return {"nominal_energy": nom, "applied_energy": app, "along_energy": alo, "applied_over_nominal": app / nom if nom else float("nan"),
+                "along_over_nominal": alo / nom if nom else float("nan")}
 
 
 def make_factory(model, op: str, rows: dict, alpha: float, site: str):
