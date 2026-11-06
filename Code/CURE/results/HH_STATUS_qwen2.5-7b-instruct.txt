@@ -1,1 +1,1 @@
-SMOKE PASSED for qwen2.5-7b-instruct @ Fri Nov  6 16:17:24 UTC 2026
+SMOKE ONLY DONE for qwen2.5-7b-instruct; holding for review @ Fri Nov  6 16:17:30 UTC 2026
