@@ -7,6 +7,8 @@ reproduction diagnostic). GPU. Computes C_answer under the span erasure on the s
   order      this cycle's order (edit first, injection wins), edit on the truncated span
   this       this cycle's bridge (edit first, injection wins), edit on the whole term in both runs
 
+Run with --n 160 on every model at the end of the cycle: the paper reports C_answer under both span rules.
+
 'sept' must equal the stored September value if the instrument is unchanged. 'order' against 'sept'
 isolates the hook order; 'this' against 'order' isolates the whole-term edit on unequal-length pairs.
 
@@ -32,8 +34,11 @@ def main() -> None:
     a = ap.parse_args()
     m = a.model
     man = H.fresh_manifest(); man = man[man.group == "final"]
-    old = pd.read_parquet(H.FINAL / ("per_item_%s.parquet" % m))
-    old = old[(old.kind == "bridge") & (old.status == "ok") & (old.cond == "S1")].set_index("seed_id").C_answer
+    p_old = H.FINAL / ("per_item_%s.parquet" % m)       # absent for the two replication models
+    old = pd.Series(dtype=float)
+    if p_old.exists():
+        old = pd.read_parquet(p_old)
+        old = old[(old.kind == "bridge") & (old.status == "ok") & (old.cond == "S1")].set_index("seed_id").C_answer
     sp_all = H.load_spans(m)
     cfg, model, tok = H.load_model(m)
     target, _ = H.target_basis(m)
@@ -58,7 +63,9 @@ def main() -> None:
     d.to_csv(H.K.RESULTS / "rebuttal_20261107" / ("h9_bridge_%s.csv" % m), index=False)
     corr = lambda x, y: float(np.corrcoef(x, y)[0, 1]) if len(x) > 2 else float("nan")
     print("pairs", len(d), "equal", int(d.equal.sum()))
-    print("sept vs stored: corr %.5f, max |diff| %.4f" % (corr(d.sept, d.stored), (d.sept - d.stored).abs().max()))
+    if d.stored.notna().sum() > 2:
+        k = d[d.stored.notna()]
+        print("sept vs stored: corr %.5f, max |diff| %.4f" % (corr(k.sept, k.stored), (k.sept - k.stored).abs().max()))
     for lab, x in (("equal", d[d.equal]), ("unequal", d[~d.equal])):
         print("%-8s order vs sept: corr %.4f median|diff| %.4f | this vs order: corr %.4f median|diff| %.4f | this vs sept: corr %.4f | mean|C| sept %.3f order %.3f this %.3f" % (
             lab, corr(x.order, x.sept), (x.order - x.sept).abs().median(), corr(x.this, x.order), (x.this - x.order).abs().median(), corr(x.this, x.sept), x.sept.abs().mean(), x.order.abs().mean(), x["this"].abs().mean()))
