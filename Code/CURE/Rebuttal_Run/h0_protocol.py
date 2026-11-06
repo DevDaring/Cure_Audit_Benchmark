@@ -1,0 +1,96 @@
+"""
+h0_protocol.py -- the declared protocol of the rebuttal cycle, written and committed to the public
+results repository BEFORE any GPU run, so the commit's timestamp is the external record of what was
+declared. CPU, author's machine.
+
+These are follow-up tests. On Gemma-2-2B and Llama-3.1-8B the fresh items were already inspected in
+September, so their results are declared follow-ups, not a new confirmatory replication. On
+Qwen2.5-7B and Phi-4-mini the fresh items have never been scored, so those results are out-of-sample.
+
+Writes results/rebuttal_20261107/h_protocol.json with the design, the hypotheses, the tests, the
+outcome rules and a hash of all of it.
+"""
+
+from __future__ import annotations
+
+import hh_common as H
+
+PROTOCOL = {
+    "cycle": "rebuttal_20261107",
+    "venue": "ICLR 2027 author-reviewer discussion (5-18 November 2026), submission 18658",
+    "status_of_the_items": {
+        "gemma-2-2b-it, llama-3.1-8b-instruct": "fresh items inspected in September 2026: declared follow-up, not confirmatory replication",
+        "qwen2.5-7b-instruct, phi-4-mini-instruct": "fresh items never scored on these models: out-of-sample",
+    },
+    "design": {
+        "h1": {"population": "fresh replication: 160 final seeds (80 BBQ templates) and 36 relevant-information control seeds; both sides of every seed; all four models",
+               "reference": "E_S1(side) = energy of the rank-one span erasure at alpha 1 on that side (sum over layers and span positions of ||h - h'||^2, one pass)",
+               "matching": "per side, |achieved / target - 1| <= 0.05; a projection capped at alpha 1 is flagged infeasible with its achieved fraction, and the span erasure is scaled down per side to that energy",
+               "cells": {"P_span": "f 1, 0.3, 0.1, 0.03", "P_ne": "f 1, 0.1; alpha 1", "P_last": "f 1, 0.1", "P_all": "f 10, 1, 0.1; alpha 1", "R_all": "f 1, 0.1",
+                         "Rk_span": "f 1 (rank 64, exploratory: confounds direction with rank)", "CV_span": "f 1, 0.3, 0.1", "CV_last": "f 1", "CV_all": "f 1",
+                         "P_span@E(P_last), P_span@E(P_ne)": "span erasure at the energy the site achieved"},
+               "sites": "every site is prefill-only; no cell edits generated tokens",
+               "strength_freeze": "each side's alpha is solved once on the unpatched prompt, then frozen across candidates, generation and every patching pass",
+               "readouts": ["T (primary)", "T_mean (length-normalised scores)", "option accuracy", "generation accuracy and validity (deterministic parser; not at f 0.03)",
+                            "C_answer at f 1, 0.1 and alpha 1", "energy, alpha, feasibility"]},
+        "h2": {"population": "gender-flip set of the feedback cycle (72 seeds per model, built by descriptor substitution); gemma-2-2b-it, llama-3.1-8b-instruct",
+               "cells": ["B", "P_span@{1,0.3,0.1,0.03}", "LEACE_gl@native + P_span@E(LEACE_gl)", "LEACE_f3@native + P_span@E(LEACE_f3)", "MDg_span@native + P_span@E(MDg)",
+                         "MDf3_span@native + P_span@E(MDf3)", "CV_span@1"],
+               "note": "the erasure is scaled down per side to the baseline's own energy; the rows of a pair share site and energy but differ in operator AND in fit data and label"},
+        "h3": {"population": "every eligible mask-clean demographic pair of the 160 pooled test seeds (about 6.5 per seed), four models",
+               "cells": ["unedited", "rank-one span erasure at alpha 1", "first rank-matched random subspace at alpha 1"], "statistics": ["C_raw", "C_logp", "C_margin"]},
+        "h4": {"population": "fresh final and control sets, four models", "cells": ["B", "RW (descriptor neutralised in the text; rule per item: name / head / attribute / modifier)"],
+               "audit": "rewritten prompts were read by a person before the run; every control pair stays answerable from the context; 157 of 160 final pairs and 36 of 36 control pairs become identical"},
+        "h7": {"population": "fresh final set, four models", "cells": ["B", "P_span@1", "P_ne@1", "CV_span@1"], "readout": "token-level option log-probabilities"},
+    },
+    "margins": {"T": 0.02, "accuracy": 0.02, "abs_C_answer": 0.1,
+                "justification": "0.02 in accuracy is the September cycle's non-inferiority margin; 0.02 in T is about one seventh of the unedited T; 0.1 in |C_answer| is about one tenth of its unedited mean; each is smaller than the effects the manuscript reports"},
+    "hypotheses": {
+        "K1_site_at_equal_energy": {
+            "statement": "At equal total energy on every prompt, T under the span projection is lower than under the control-span, last-token and every-position projections.",
+            "tests": "per model, T(other) - T(span) on the final seeds, one-sided (greater), Holm over the three within model. Each comparison uses the span erasure matched to the other cell's achieved energy on each side: "
+                     "P_span@E(P_ne) vs P_ne@1, P_span@E(P_last) vs P_last@1, P_span@1 vs P_all@1. Pairs with both rows present; coverage is reported.",
+            "secondary": "the same family on C_answer and at f 0.1"},
+        "K2_damage_tracks_amount": {
+            "statement": "Every-position projection at the span erasure's total energy leaves generation accuracy within the margin of the UNEDITED model, while the same projection at alpha 1 does not.",
+            "tests": "per model, one-sided non-inferiority acc(P_all@1) >= acc(B) - 0.02; acc(B) - acc(P_all@a1) one-sided (greater); the dose curve f 0.1, 1, 10, alpha 1 is reported in full",
+            "reading": "this separates total energy from energy per token: a pass says the damage needs far more total removal than the span edit uses, not that position is irrelevant"},
+        "K3_operator": {
+            "statement": "At the span and equal energy, the contrast vector is non-inferior to the projection on T.",
+            "tests": "per model, one-sided non-inferiority T(CV_span@1) <= T(P_span@1) + 0.02; control-set accuracy of both reported"},
+        "K4_leace_equal_energy": {
+            "statement": "At the coherent gender LEACE's own energy, the erasure removes no more dependence than LEACE does.",
+            "tests": "per model on the gender-flip set, co-primary on T and on |C_answer| (the manuscript's comparison used C_answer): non-superiority of the erasure: P_span@E(b) - b + margin > 0, one-sided (greater), for b in LEACE_gl, MDg, MDf3 and LEACE_f3; "
+                     "Holm over the four within model and readout. A rejection says the erasure does not beat the baseline by more than the margin at equal energy."},
+        "K5_selection": {
+            "statement": "The reduction D = mean(|C_pre| - |C_post|) under the span erasure is positive over every eligible demographic pair, not only the selected largest-|C| pair.",
+            "tests": "per model, one-sided (greater) seed-cluster test of D, for C_raw and C_logp; D(all) / D(selected), the share of pairs with lower |C|, and the quartiles are reported"},
+        "K6_rewrite": {
+            "statement": "Descriptive, no directional test: how close the edit comes to hiding the term, and what each costs.",
+            "reports": "control-set accuracy of RW, P_span@1 and B; TV(q(P_span@1, a), q(RW, a)) against TV(q(B, a), q(RW, a)); T(RW) on the three pairs whose rewrites differ. T = 0 on identical rewrites is true by construction and is not evidence."},
+        "K7_out_of_sample": {
+            "statement": "On Qwen2.5-7B and Phi-4-mini, on items never scored on them, the span erasure lowers T and lowers C_answer.",
+            "tests": "per model, T(B) - T(P_span@1) and |C_answer|(B) - |C_answer|(P_span@1), one-sided (greater), Holm over the two within model"},
+        "K8_scoring": {
+            "statement": "Every T result above is reported on T and on T_mean. A claim is called robust to scoring only if both agree in sign with the T_mean interval excluding zero; otherwise it is stated as specific to the raw-sum readout.",
+            "explanation": "h7 attributes the change in option scores to the descriptor's tokens, the shared JSON tokens and the other option tokens, per model"},
+    },
+    "outcome_rules": "A hypothesis is supported when its test rejects in the stated direction after Holm within its family; a rejection in the opposite direction is a measured harm and is reported as such; anything else is limited. "
+                     "Every number is reported whichever way it falls. No cell is added, dropped or re-specified after the full runs start without being labelled exploratory.",
+    "statistics": {"bootstrap": "studentised, 10,000 resamples, clusters = BBQ template (fresh and gender sets) or seed (pooled pairs)", "seed": H.RANDOM_SEED, "correction": "Holm within each named family and model",
+                   "paired_baseline": "all paired tests use this cycle's B rows; drift of B against the September rows is reported"},
+    "not_in_scope": "No weight-space edit, no new model family: the guidance limits a revision to validating existing results.",
+}
+
+
+def main() -> None:
+    H.ensure_out()
+    p = dict(PROTOCOL)
+    p["protocol_hash"] = H.N.protocol_hash(PROTOCOL)
+    p["written_utc"] = H.utc_now()
+    H.write_json(p, H.OUT / "h_protocol.json")
+    print("protocol written:", H.K.rel(H.OUT / "h_protocol.json"), "hash", p["protocol_hash"])
+
+
+if __name__ == "__main__":
+    main()
