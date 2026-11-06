@@ -1,1 +1,1 @@
-stage h1a phi-4-mini-instruct starting @ Fri Nov  6 16:41:46 UTC 2026
+stage h7 phi-4-mini-instruct starting @ Fri Nov  6 20:47:34 UTC 2026
