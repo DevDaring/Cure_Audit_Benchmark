@@ -1,1 +1,1 @@
-SMOKE PASSED for gemma-2-2b-it @ Fri Nov  6 16:20:48 UTC 2026
+SMOKE ONLY DONE for gemma-2-2b-it; holding for review @ Fri Nov  6 16:20:55 UTC 2026
