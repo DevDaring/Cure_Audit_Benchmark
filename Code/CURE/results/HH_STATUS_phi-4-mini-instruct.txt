@@ -1,1 +1,1 @@
-container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov  6 16:06:34 UTC 2026
+SMOKE phi-4-mini-instruct starting @ Fri Nov  6 16:08:39 UTC 2026
