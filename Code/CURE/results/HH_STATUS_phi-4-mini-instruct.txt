@@ -1,1 +1,1 @@
-stage h3 phi-4-mini-instruct starting @ Fri Nov  6 21:10:28 UTC 2026
+stage h1b phi-4-mini-instruct starting @ Fri Nov  6 21:21:08 UTC 2026
