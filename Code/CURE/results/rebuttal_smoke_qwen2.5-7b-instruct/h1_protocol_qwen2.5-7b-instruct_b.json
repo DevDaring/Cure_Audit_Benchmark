@@ -1,0 +1,120 @@
+{
+  "model": "qwen2.5-7b-instruct",
+  "cells": {
+    "P_span": [
+      "proj",
+      "span",
+      [
+        1.0,
+        0.3,
+        0.1,
+        0.03
+      ]
+    ],
+    "P_ne": [
+      "proj",
+      "ne",
+      [
+        1.0,
+        0.1,
+        "a1"
+      ]
+    ],
+    "P_last": [
+      "proj",
+      "last",
+      [
+        1.0,
+        0.1
+      ]
+    ],
+    "P_all": [
+      "proj",
+      "all",
+      [
+        10.0,
+        1.0,
+        0.1,
+        "a1"
+      ]
+    ],
+    "R_all": [
+      "proj",
+      "all",
+      [
+        1.0,
+        0.1
+      ]
+    ],
+    "Rk_span": [
+      "proj",
+      "span",
+      [
+        1.0
+      ]
+    ],
+    "CV_span": [
+      "steer",
+      "span",
+      [
+        1.0,
+        0.3,
+        0.1
+      ]
+    ],
+    "CV_last": [
+      "steer",
+      "last",
+      [
+        1.0
+      ]
+    ],
+    "CV_all": [
+      "steer",
+      "all",
+      [
+        1.0
+      ]
+    ]
+  },
+  "pass_levels": {
+    "a": [
+      10.0,
+      1.0,
+      0.1,
+      "a1"
+    ],
+    "b": [
+      0.3,
+      0.03
+    ]
+  },
+  "no_generation_levels": [
+    0.03
+  ],
+  "match_tol": 0.05,
+  "basis": {
+    "file": "Code/CURE/results/v2/p2_basis_qwen2.5-7b-instruct_chat_cure_centred_svd.npz",
+    "sha256": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+    "rank_used": 1,
+    "max_rank_in_file": 4,
+    "fit_info": {
+      "n_fit_pairs_requested": 300,
+      "n_fit_pairs_used": 300,
+      "n_span_tokens": 328,
+      "site": "span (all tokens, truncated to shorter span)",
+      "sec_collect": 88.91084599494934,
+      "n_fit_pairs_neutral_type": 54,
+      "estimator": "centred_svd"
+    },
+    "fit_id": "b57a6c3a859ec1aebf3de41ce4ae7838084f729e807dae1cef58e532bff8d384",
+    "note": "contrast-derived projection: leading right singular vector of centred span-position activation differences over the fit pairs; 54 of the fit pairs are neutral-type substitutions"
+  },
+  "model_cfg": {
+    "hf_id": "Qwen/Qwen2.5-7B-Instruct",
+    "model_class": "Qwen2ForCausalLM",
+    "attn_implementation": "flash_attention_2",
+    "dtype": "torch.bfloat16"
+  },
+  "utc": "2026-11-06T16:16:52Z"
+}
