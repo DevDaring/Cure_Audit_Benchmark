@@ -1,0 +1,12 @@
+{
+  "model": "qwen2.5-7b-instruct",
+  "conditions": [
+    "unedited_r0_a0",
+    "cure_centred_svd_r1_a1",
+    "random_ortho_1_r1_a1"
+  ],
+  "n_test_seeds": 2,
+  "selection_rule_of_the_audit": "largest unedited |C| among mask-clean demographic pairs",
+  "this_stage": "every eligible mask-clean demographic pair of every test seed",
+  "utc": "2026-11-06T16:41:01Z"
+}

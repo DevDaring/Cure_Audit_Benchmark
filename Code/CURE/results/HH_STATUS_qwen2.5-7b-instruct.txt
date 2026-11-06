@@ -1,1 +1,1 @@
-SMOKE qwen2.5-7b-instruct starting @ Fri Nov  6 16:34:29 UTC 2026
+stage h1a qwen2.5-7b-instruct starting @ Fri Nov  6 16:42:44 UTC 2026
