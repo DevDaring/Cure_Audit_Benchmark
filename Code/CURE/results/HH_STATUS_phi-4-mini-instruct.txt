@@ -1,1 +1,1 @@
-SMOKE ONLY DONE for phi-4-mini-instruct; holding for review @ Fri Nov  6 16:15:32 UTC 2026
+stage h1a phi-4-mini-instruct starting @ Fri Nov  6 16:41:46 UTC 2026

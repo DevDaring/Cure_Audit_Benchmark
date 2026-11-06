@@ -1,0 +1,12 @@
+{
+  "model": "phi-4-mini-instruct",
+  "file": "Code/CURE/results/v2/p2_basis_phi-4-mini-instruct_chat_mean_difference.npz",
+  "sha256": "35307335dc0695a10ea7b0215e36f57cd6355b627fef55bc2f52d29efc865aee",
+  "rule": "pooled-audit mean-difference direction (unit norm), sign fixed on the dev seeds",
+  "sign": 1.0,
+  "mean_margin_gain_at_alpha": 0.8449099715431633,
+  "alpha_used": 4.5101297294305,
+  "n_dev": 6,
+  "rule_energy": "alpha at 5 per cent of the span erasure's energy on the dev seeds",
+  "utc": "2026-11-06T16:34:32Z"
+}

@@ -1,1 +1,1 @@
-SMOKE ONLY DONE for qwen2.5-7b-instruct; holding for review @ Fri Nov  6 16:17:30 UTC 2026
+stage h1a qwen2.5-7b-instruct starting @ Fri Nov  6 16:42:44 UTC 2026

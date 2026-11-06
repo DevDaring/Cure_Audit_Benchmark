@@ -1,0 +1,201 @@
+{
+  "model": "qwen2.5-7b-instruct",
+  "dtype_loaded": "torch.bfloat16",
+  "cells": {
+    "CV_all@1": {
+      "median_alpha": 2.349778116245223,
+      "n": 4,
+      "nominal_energy": 34711.147372455336,
+      "applied_energy": 34939.406158607984,
+      "along_energy": 34623.6020930979,
+      "applied_over_nominal": 1.0074804623066231,
+      "along_over_nominal": 0.9972242120302913
+    },
+    "CV_last@1": {
+      "median_alpha": 34.69405774791865,
+      "n": 4,
+      "nominal_energy": 34706.182995543306,
+      "applied_energy": 34736.84056961216,
+      "along_energy": 34720.33815717825,
+      "applied_over_nominal": 1.0008456202715525,
+      "along_over_nominal": 1.000361099320922
+    },
+    "CV_span@0.1": {
+      "median_alpha": 6.425592274486938,
+      "n": 4,
+      "nominal_energy": 3470.483008079277,
+      "applied_energy": 3473.072555575338,
+      "along_energy": 3466.4586006193213,
+      "applied_over_nominal": 1.0009960060501073,
+      "along_over_nominal": 0.9990016190496238
+    },
+    "CV_span@0.3": {
+      "median_alpha": 11.12945228813344,
+      "n": 4,
+      "nominal_energy": 10413.58222572843,
+      "applied_energy": 10423.666411088177,
+      "along_energy": 10416.021306304494,
+      "applied_over_nominal": 1.0008742385498348,
+      "along_over_nominal": 1.0000945406852004
+    },
+    "CV_span@1": {
+      "median_alpha": 20.31950690296057,
+      "n": 4,
+      "nominal_energy": 34706.37141189009,
+      "applied_energy": 34738.721513730205,
+      "along_energy": 34721.262739092665,
+      "applied_over_nominal": 1.0009173336771107,
+      "along_over_nominal": 1.0004207448855538
+    },
+    "P_all@0.1": {
+      "median_alpha": 0.004077527720927893,
+      "n": 4,
+      "nominal_energy": 3572.881945026141,
+      "applied_energy": 3146.425317311693,
+      "along_energy": 2546.725172346719,
+      "applied_over_nominal": 0.8786767479681059,
+      "along_over_nominal": 0.7079319931102048
+    },
+    "P_all@1": {
+      "median_alpha": 0.013276121613531398,
+      "n": 4,
+      "nominal_energy": 34897.052426714225,
+      "applied_energy": 35174.223369073676,
+      "along_energy": 32776.291519808154,
+      "applied_over_nominal": 0.9995127983127898,
+      "along_over_nominal": 0.9306076850117109
+    },
+    "P_all@10": {
+      "median_alpha": 0.04859368164133636,
+      "n": 4,
+      "nominal_energy": 354465.7044475922,
+      "applied_energy": 349291.20018093975,
+      "along_energy": 341924.3893128349,
+      "applied_over_nominal": 0.9847221979036969,
+      "along_over_nominal": 0.9638318242222415
+    },
+    "P_all@a1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 64682135.55348267,
+      "applied_energy": 64766988.49357408,
+      "along_energy": 64747656.19411895,
+      "applied_over_nominal": 1.0013128650026997,
+      "along_over_nominal": 1.001014039134248
+    },
+    "P_last@0.1": {
+      "median_alpha": 0.7774842230397957,
+      "n": 4,
+      "nominal_energy": 3519.9720684347885,
+      "applied_energy": 3518.7887951973307,
+      "along_energy": 3516.3857006308435,
+      "applied_over_nominal": 0.996873327502685,
+      "along_over_nominal": 0.9961290459519141
+    },
+    "P_last@1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 5217.084698033381,
+      "applied_energy": 5215.807694125587,
+      "along_energy": 5212.801881930647,
+      "applied_over_nominal": 1.0010164640245778,
+      "along_over_nominal": 1.0004836929548901
+    },
+    "P_ne@0.1": {
+      "median_alpha": 0.17934290495303779,
+      "n": 4,
+      "nominal_energy": 3636.463341670573,
+      "applied_energy": 3643.848079494643,
+      "along_energy": 3638.417262742905,
+      "applied_over_nominal": 1.0020844334392467,
+      "along_over_nominal": 1.00045540962242
+    },
+    "P_ne@1": {
+      "median_alpha": 0.934448655496416,
+      "n": 4,
+      "nominal_energy": 31875.751227093213,
+      "applied_energy": 31893.39718440312,
+      "along_energy": 31878.69401665804,
+      "applied_over_nominal": 1.0001662666795441,
+      "along_over_nominal": 0.9997457216026735
+    },
+    "P_ne@a1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 36012.55713931498,
+      "applied_energy": 36031.382318372445,
+      "along_energy": 36016.70978431965,
+      "applied_over_nominal": 0.9989901680003146,
+      "along_over_nominal": 0.9987115052032698
+    },
+    "P_span@0.03": {
+      "median_alpha": 0.09480633215675395,
+      "n": 4,
+      "nominal_energy": 1121.8721197203154,
+      "applied_energy": 1130.0111921172452,
+      "along_energy": 1124.98777772364,
+      "applied_over_nominal": 1.0053581809398575,
+      "along_over_nominal": 1.000863075789885
+    },
+    "P_span@0.1": {
+      "median_alpha": 0.2843078694338105,
+      "n": 4,
+      "nominal_energy": 3546.7766198508325,
+      "applied_energy": 3547.160497981328,
+      "along_energy": 3542.1430112978605,
+      "applied_over_nominal": 0.999900420998438,
+      "along_over_nominal": 0.9985126109762841
+    },
+    "P_span@0.3": {
+      "median_alpha": 0.5711063152096645,
+      "n": 4,
+      "nominal_energy": 10436.026363969424,
+      "applied_energy": 10430.782750537777,
+      "along_energy": 10424.679754656741,
+      "applied_over_nominal": 1.000248067713279,
+      "along_over_nominal": 0.9996406722282641
+    },
+    "P_span@1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 34550.35180491873,
+      "applied_energy": 34580.24827172261,
+      "along_energy": 34574.35073878967,
+      "applied_over_nominal": 1.0008891269937914,
+      "along_over_nominal": 1.0007025687794608
+    },
+    "R_all@0.1": {
+      "median_alpha": 0.053608938947718315,
+      "n": 4,
+      "nominal_energy": 3421.014708978607,
+      "applied_energy": 3414.6240729792517,
+      "along_energy": 3320.454131020132,
+      "applied_over_nominal": 0.997239795692382,
+      "along_over_nominal": 0.9682672431150041
+    },
+    "R_all@1": {
+      "median_alpha": 0.16952635001970018,
+      "n": 4,
+      "nominal_energy": 34333.166479214044,
+      "applied_energy": 34361.35906813458,
+      "along_energy": 34051.987736985415,
+      "applied_over_nominal": 1.0008680069566154,
+      "along_over_nominal": 0.9911861661711988
+    },
+    "Rk_span@1": {
+      "median_alpha": 1.0,
+      "n": 4,
+      "nominal_energy": 26025.365606710693,
+      "applied_energy": 26039.801565551403,
+      "along_energy": 26035.41148155502,
+      "applied_over_nominal": 1.0005550863544177,
+      "along_over_nominal": 1.000389036704435
+    }
+  },
+  "note": "ratios of applied to nominal energy; along = squared component of the applied displacement along the edit direction, over nominal",
+  "sec_bf16": {
+    "score_pair": 0.48744702339172363,
+    "generate_48": 1.2646756172180176
+  },
+  "float32_error": "CUDA out of memory. Tried to allocate 260.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 151.06 MiB is free. Including non-PyTorch memory, this process has 23.40 GiB memory in use. Of the allocated memory 22.36 GiB is allocated by PyTorch, and 747.87 MiB is reserved by PyTorch but unalloca"
+}
