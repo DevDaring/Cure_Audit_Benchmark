@@ -1,1 +1,1 @@
-SMOKE ONLY DONE for qwen2.5-7b-instruct; holding for review @ Fri Nov  6 16:17:30 UTC 2026
+container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov  6 16:34:08 UTC 2026
