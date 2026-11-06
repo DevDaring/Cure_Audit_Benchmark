@@ -1,1 +1,1 @@
-setup complete @ Fri Nov  6 16:08:37 UTC 2026
+SMOKE phi-4-mini-instruct starting @ Fri Nov  6 16:08:39 UTC 2026
