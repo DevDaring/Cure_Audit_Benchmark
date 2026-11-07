@@ -5,7 +5,7 @@ Research VMs, run from the author's machine. It does not trust the VMs' own stat
   liveness   (Vast API + SSH)  instance running; bootstrap process alive; a stage process
              running or a DONE marker present; GPU busy; free disk; no Traceback in the
              newest stage log; the last status line and its age
-  results    (git pull of DevDaring/Cure_Audit_Benchmark into the scratch clone) for every
+  results    (git pull of REPO_OWNER/Cure_Audit_Benchmark into the scratch clone) for every
              results/v2_<model> and v2_smoke_<model> directory:
                pilot_per_item.parquet   conditions present, rows per condition, error rate,
                                         identity checks passed (pilot_protocol.json), seeds
@@ -51,7 +51,7 @@ import pandas as pd
 import common as K
 import deploy_vast as D
 
-CLONE = Path(r"C:\Users\Debz\AppData\Local\Temp\claude\d--PhD-Audit-Benchmark\66e31894-16d3-477d-8371-6bd5e18be9e5\scratchpad\cure_repo")
+CLONE = Path(r"C:\path\to\scratchpad\cure_repo")
 SSH_KEY = Path.home() / ".ssh" / "id_rsa"
 P1_CONDS = ["unedited", "identity_alpha0", "span_seq_r1", "span_frozen_r1", "last_token_r1"]
 P2_FAMILIES = ["unedited", "identity_alpha0", "cure_centred_svd", "uncentred_svd", "mean_difference",
@@ -334,7 +334,7 @@ def push_merged(models: list[str]) -> str:
     man = M.merge(M.per_model_dirs())
     tok = D.E.get("Github_Classic_Token", "")
     g = lambda *a: subprocess.run(["git", "-C", str(CLONE)] + list(a), capture_output=True, text=True)
-    g("remote", "set-url", "origin", f"https://{tok}@github.com/DevDaring/Cure_Audit_Benchmark.git")
+    g("remote", "set-url", "origin", f"https://{tok}@github.com/REPO_OWNER/Cure_Audit_Benchmark.git")
     g("fetch", "-q", "origin", "main"); g("reset", "-q", "--hard", "origin/main")     # start from the remote tip
     dst = src / "v2"
     dst.mkdir(parents=True, exist_ok=True)
@@ -346,7 +346,7 @@ def push_merged(models: list[str]) -> str:
         g("add", "-f", *files)
     staged = g("diff", "--cached", "--name-only").stdout.splitlines()
     if any(x.endswith(".md") or ".env" in x for x in staged):
-        g("reset", "-q"); g("remote", "set-url", "origin", D.CLEAN_URL if hasattr(D, "CLEAN_URL") else "https://github.com/DevDaring/Cure_Audit_Benchmark.git")
+        g("reset", "-q"); g("remote", "set-url", "origin", D.CLEAN_URL if hasattr(D, "CLEAN_URL") else "https://github.com/REPO_OWNER/Cure_Audit_Benchmark.git")
         return "REFUSED: markdown or env staged"
     msg = "merged results/v2 (hourly check): %d files from %d VMs" % (len(files), n)
     g("commit", "-q", "-m", msg)
@@ -357,7 +357,7 @@ def push_merged(models: list[str]) -> str:
         if r.returncode == 0:
             break
         _t.sleep(5 + 5 * attempt)
-    g("remote", "set-url", "origin", "https://github.com/DevDaring/Cure_Audit_Benchmark.git")
+    g("remote", "set-url", "origin", "https://github.com/REPO_OWNER/Cure_Audit_Benchmark.git")
     return ("pushed %d files (%d merged, %d warnings)" % (len(files), len(man["files"]), len(man["warnings"]))) if r.returncode == 0 else "push failed: " + D.scrub(r.stderr)[-200:]
 
 

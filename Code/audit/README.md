@@ -1018,7 +1018,7 @@ Together, `leaderboard.parquet` (which FM dominates per benchmark) and `validity
 ```bibtex
 @article{mirage2026,
   title   = {{MIRAGE}: Mechanism-Indexed Reliability Audit for Group-bias Evaluation},
-  author  = {Debnath, Koushik and Mukherjee, Imon and Sanyal, Debarshi Kumar},
+  author  = {Anonymous},
   journal = {IEEE Transactions on Computational Social Systems},
   year    = {2026},
   note    = {Under preparation.}

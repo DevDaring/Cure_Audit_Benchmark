@@ -14,7 +14,7 @@ services:
         apt-get update -y &&
         apt-get install -y --no-install-recommends git ca-certificates &&
         rm -rf /workspace/Audit_Benchmark &&
-        git clone https://github.com/DevDaring/Cure_Audit_Benchmark /workspace/Audit_Benchmark &&
+        git clone https://github.com/REPO_OWNER/Cure_Audit_Benchmark /workspace/Audit_Benchmark &&
         cd /workspace/Audit_Benchmark/Code/audit/GPU_Remaining &&
         bash bootstrap.sh 2>&1 | tee /workspace/boot.log
     env:

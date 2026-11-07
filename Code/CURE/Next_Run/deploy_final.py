@@ -35,7 +35,7 @@ def onstart(model: str) -> str:
         "mkdir -p /workspace && cd /workspace",
         "apt-get update -y >/dev/null 2>&1; apt-get install -y --no-install-recommends git >/dev/null 2>&1",
         "if [ ! -d /workspace/Cure_Audit_Benchmark ]; then",
-        "  git clone -q https://${Github_Classic_Token}@github.com/DevDaring/Cure_Audit_Benchmark.git /workspace/Cure_Audit_Benchmark",
+        "  git clone -q https://${Github_Classic_Token}@github.com/REPO_OWNER/Cure_Audit_Benchmark.git /workspace/Cure_Audit_Benchmark",
         "fi",
         "cd /workspace/Cure_Audit_Benchmark && git pull -q --no-rebase origin main || true",
         "nohup bash /workspace/Cure_Audit_Benchmark/Code/CURE/Next_Run/bootstrap_final.sh > /workspace/nr_boot.log 2>&1 &",
@@ -77,7 +77,7 @@ def cmd_launch(args):
 
 def github_status(model: str) -> str:
     import urllib.request
-    url = "https://raw.githubusercontent.com/DevDaring/Cure_Audit_Benchmark/main/Code/CURE/results/NR_STATUS_%s.txt" % model
+    url = "https://raw.githubusercontent.com/REPO_OWNER/Cure_Audit_Benchmark/main/Code/CURE/results/NR_STATUS_%s.txt" % model
     try:
         with urllib.request.urlopen(url, timeout=20) as r:
             return r.read().decode().strip()

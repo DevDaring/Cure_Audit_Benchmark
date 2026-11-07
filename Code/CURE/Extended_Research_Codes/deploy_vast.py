@@ -122,7 +122,7 @@ def onstart_script(model: str) -> str:
         "mkdir -p /workspace && cd /workspace",
         "apt-get update -y >/dev/null 2>&1; apt-get install -y --no-install-recommends git >/dev/null 2>&1",
         "if [ ! -d /workspace/Cure_Audit_Benchmark ]; then",
-        "  git clone -q https://${Github_Classic_Token}@github.com/DevDaring/Cure_Audit_Benchmark.git /workspace/Cure_Audit_Benchmark",
+        "  git clone -q https://${Github_Classic_Token}@github.com/REPO_OWNER/Cure_Audit_Benchmark.git /workspace/Cure_Audit_Benchmark",
         "fi",
         "cd /workspace/Cure_Audit_Benchmark && git pull -q --rebase origin main || true",
         "nohup bash /workspace/Cure_Audit_Benchmark/Code/CURE/Extended_Research_Codes/bootstrap_extended.sh "
@@ -177,7 +177,7 @@ def cmd_launch(args):
 
 
 def github_status(model: str) -> str:
-    r = subprocess.run(["gh", "api", f"repos/DevDaring/Cure_Audit_Benchmark/contents/Code/CURE/results/EXT_STATUS_{model}.txt",
+    r = subprocess.run(["gh", "api", f"repos/REPO_OWNER/Cure_Audit_Benchmark/contents/Code/CURE/results/EXT_STATUS_{model}.txt",
                         "-q", ".content"], capture_output=True, text=True)
     if r.returncode != 0:
         return "(no status file yet)"

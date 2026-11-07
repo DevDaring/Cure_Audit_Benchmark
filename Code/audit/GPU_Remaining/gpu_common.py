@@ -81,12 +81,12 @@ def _run(cmd: list[str], cwd: Path = REPO, check: bool = False) -> subprocess.Co
 
 
 def git_configure(token: str, user_name: str = "MIRAGE GPU Runner",
-                  user_email: str = "koushikdeb2009@gmail.com") -> None:
+                  user_email: str = "runner@localhost") -> None:
     """Point the origin remote at a token URL on the current (main) branch."""
     _run(["git", "config", "user.name", user_name])
     _run(["git", "config", "user.email", user_email])
     _run(["git", "config", "pull.rebase", "true"])
-    remote = f"https://{token}@github.com/DevDaring/Cure_Audit_Benchmark.git"
+    remote = f"https://{token}@github.com/REPO_OWNER/Cure_Audit_Benchmark.git"
     _run(["git", "remote", "set-url", "origin", remote])
 
 

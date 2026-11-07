@@ -38,9 +38,9 @@ with open("../.env", "w") as f:
         if not os.environ.get(k): f.write(f"{k}=unused\n")
 PY
 git config --global --add safe.directory "$REPO"
-git -C "$REPO" config user.name "CURE Runner"; git -C "$REPO" config user.email "koushikdeb2009@gmail.com"
+git -C "$REPO" config user.name "CURE Runner"; git -C "$REPO" config user.email "runner@localhost"
 git -C "$REPO" config pull.rebase false
-[ -n "${Github_Classic_Token:-}" ] && git -C "$REPO" remote set-url origin "https://${Github_Classic_Token}@github.com/DevDaring/Cure_Audit_Benchmark.git"
+[ -n "${Github_Classic_Token:-}" ] && git -C "$REPO" remote set-url origin "https://${Github_Classic_Token}@github.com/REPO_OWNER/Cure_Audit_Benchmark.git"
 
 LOCK=/tmp/nr_git.lock
 git_sync_push() {

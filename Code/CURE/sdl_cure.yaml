@@ -17,7 +17,7 @@ services:
         apt-get update -y &&
         apt-get install -y --no-install-recommends git ca-certificates &&
         rm -rf /workspace/Cure_Audit_Benchmark &&
-        git clone https://__GH_TOKEN__@github.com/DevDaring/Cure_Audit_Benchmark /workspace/Cure_Audit_Benchmark &&
+        git clone https://__GH_TOKEN__@github.com/REPO_OWNER/Cure_Audit_Benchmark /workspace/Cure_Audit_Benchmark &&
         cd /workspace/Cure_Audit_Benchmark/Code/CURE &&
         bash bootstrap.sh 2>&1 | tee /workspace/boot.log
     env:

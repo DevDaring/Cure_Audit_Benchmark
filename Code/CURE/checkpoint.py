@@ -31,7 +31,7 @@ def _run(cmd: list[str]) -> subprocess.CompletedProcess:
 def git_configure(token: str, remote_url: str) -> None:
     """Point origin at a token URL. The token is only used here, never written out."""
     _run(["git", "config", "user.name", "CURE Runner"])
-    _run(["git", "config", "user.email", "koushikdeb2009@gmail.com"])
+    _run(["git", "config", "user.email", "runner@localhost"])
     _run(["git", "config", "pull.rebase", "true"])
     if token and remote_url:
         auth = remote_url.replace("https://", f"https://{token}@")
