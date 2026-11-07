@@ -1,0 +1,162 @@
+macro,value,source
+llamaLastEnergyPct,2,h_levels: P_last@1 energy_fraction_median
+llamaAllEnergy,57,h_levels: P_all@a1 energy_fraction_median
+llamaOutPct,0.6,h1 rows: scored energy outside 5% of target
+gemmaLastEnergyPct,44,h_levels: P_last@1 energy_fraction_median
+gemmaAllEnergy,159,h_levels: P_all@a1 energy_fraction_median
+gemmaOutPct,1.0,h1 rows: scored energy outside 5% of target
+qwenLastEnergyPct,17,h_levels: P_last@1 energy_fraction_median
+qwenAllEnergy,2527,h_levels: P_all@a1 energy_fraction_median
+qwenOutPct,1.8,h1 rows: scored energy outside 5% of target
+phiLastEnergyPct,26,h_levels: P_last@1 energy_fraction_median
+phiAllEnergy,136,h_levels: P_all@a1 energy_fraction_median
+phiOutPct,1.6,h1 rows: scored energy outside 5% of target
+RWholeMin,33,h9
+RWholeMax,49,h9
+RTruncMin,30,h9
+RTruncMax,44,h9
+REqualMin,51,h9
+REqualMax,60,h9
+RUnequalMin,-10,h9
+RUnequalMax,32,h9
+RAllMin,17,h_k5 C_raw R_all_pct
+RAllMax,27,h_k5 C_raw R_all_pct
+nAllPairs,"1{,}045",h_k5 n_pairs
+shareLowerMin,50,h_k5
+shareLowerMax,59,h_k5
+topTenMin,74,h_k5
+topTenMax,100,h_k5
+ratioMin,0.70,h_k5
+ratioMax,1.37,h_k5
+llamaMarginR,9,h_k5 C_margin
+llamaGlT,0.129,h_levels h2
+llamaGlTe,0.116,h_levels h2
+llamaGlEnergyPct,0.9,h_levels h2
+gemmaGlT,0.115,h_levels h2
+gemmaGlTe,0.174,h_levels h2
+gemmaGlEnergyPct,2.3,h_levels h2
+llamaRwCtrl,0.88,"h4 RW control, template-weighted"
+llamaBCtrl,0.84,h_levels control B
+llamaSCtrl,0.40,h_levels control P_span@1
+llamaRwFinal,0.63,h4 RW final
+gemmaRwCtrl,0.82,"h4 RW control, template-weighted"
+gemmaBCtrl,0.80,h_levels control B
+gemmaSCtrl,0.16,h_levels control P_span@1
+gemmaRwFinal,0.42,h4 RW final
+qwenRwCtrl,0.78,"h4 RW control, template-weighted"
+qwenBCtrl,0.71,h_levels control B
+qwenSCtrl,0.51,h_levels control P_span@1
+qwenRwFinal,0.96,h4 RW final
+phiRwCtrl,1.00,"h4 RW control, template-weighted"
+phiBCtrl,0.95,h_levels control B
+phiSCtrl,0.26,h_levels control P_span@1
+phiRwFinal,0.66,h4 RW final
+rwIdentical,98,h4 identical_after_rewrite
+llamaTDesc,0.111,h_k8_tokens T_desc
+llamaTmDesc,0.054,h_k8_tokens Tm_desc
+gemmaTDesc,0.120,h_k8_tokens T_desc
+gemmaTmDesc,0.068,h_k8_tokens Tm_desc
+qwenTDesc,0.027,h_k8_tokens T_desc
+qwenTmDesc,0.089,h_k8_tokens Tm_desc
+phiTDesc,0.070,h_k8_tokens T_desc
+phiTmDesc,0.062,h_k8_tokens Tm_desc
+llamaCB,0.99,h_levels
+llamaCS,0.57,h_levels
+llamaTB,0.140,h_levels
+llamaTS,0.086,h_levels
+llamaTmB,0.041,h_levels
+llamaTmS,0.054,h_levels
+llamaAccB,0.68,h_levels
+llamaAccS,0.64,h_levels
+llamaCtrlPten,0.64,h_levels
+llamaCtrlCten,0.09,h_levels
+llamaCtrlCone,0.00,h_levels
+llamaTPten,0.104,h_levels
+llamaTCten,0.063,h_levels
+llamaTCone,0.036,h_levels
+llamaFreshCone,0.67,h_levels
+llamaDoseAllTen,0.6,h_tests K2_dose
+llamaDoseAllOne,5.3,h_tests K2_dose
+llamaDoseAllTenx,10.3,h_tests K2_dose
+llamaDoseAllFull,21.6,h_tests K2_dose
+llamaDirAcc,4.7,exploratory: R_all@1 - P_all@1 accuracy
+llamaCtrlDiffTen,+0.55,"exploratory: P_span@0.1 - CV_span@0.1, term-answer accuracy"
+llamaCtrlLossTen,20,h_tests control_accuracy
+gemmaCB,1.84,h_levels
+gemmaCS,0.94,h_levels
+gemmaTB,0.128,h_levels
+gemmaTS,0.107,h_levels
+gemmaTmB,0.054,h_levels
+gemmaTmS,0.061,h_levels
+gemmaAccB,0.42,h_levels
+gemmaAccS,0.36,h_levels
+gemmaCtrlPten,0.59,h_levels
+gemmaCtrlCten,0.26,h_levels
+gemmaCtrlCone,0.16,h_levels
+gemmaTPten,0.110,h_levels
+gemmaTCten,0.071,h_levels
+gemmaTCone,0.051,h_levels
+gemmaFreshCone,0.46,h_levels
+gemmaDoseAllTen,0.6,h_tests K2_dose
+gemmaDoseAllOne,5.3,h_tests K2_dose
+gemmaDoseAllTenx,20.9,h_tests K2_dose
+gemmaDoseAllFull,39.1,h_tests K2_dose
+gemmaDirAcc,4.1,exploratory: R_all@1 - P_all@1 accuracy
+gemmaCtrlDiffTen,+0.33,"exploratory: P_span@0.1 - CV_span@0.1, term-answer accuracy"
+gemmaCtrlLossTen,21,h_tests control_accuracy
+qwenCB,2.98,h_levels
+qwenCS,1.98,h_levels
+qwenTB,0.031,h_levels
+qwenTS,0.027,h_levels
+qwenTmB,0.086,h_levels
+qwenTmS,0.080,h_levels
+qwenAccB,0.94,h_levels
+qwenAccS,0.95,h_levels
+qwenCtrlPten,0.68,h_levels
+qwenCtrlCten,0.28,h_levels
+qwenCtrlCone,0.30,h_levels
+qwenTPten,0.028,h_levels
+qwenTCten,0.034,h_levels
+qwenTCone,0.013,h_levels
+qwenFreshCone,0.97,h_levels
+qwenDoseAllTen,0.3,h_tests K2_dose
+qwenDoseAllOne,0.0,h_tests K2_dose
+qwenDoseAllTenx,-1.2,h_tests K2_dose
+qwenDoseAllFull,3.8,h_tests K2_dose
+qwenDirAcc,-0.3,exploratory: R_all@1 - P_all@1 accuracy
+qwenCtrlDiffTen,+0.40,"exploratory: P_span@0.1 - CV_span@0.1, term-answer accuracy"
+qwenCtrlLossTen,4,h_tests control_accuracy
+phiCB,1.64,h_levels
+phiCS,0.99,h_levels
+phiTB,0.112,h_levels
+phiTS,0.070,h_levels
+phiTmB,0.056,h_levels
+phiTmS,0.057,h_levels
+phiAccB,0.77,h_levels
+phiAccS,0.76,h_levels
+phiCtrlPten,0.45,h_levels
+phiCtrlCten,0.25,h_levels
+phiCtrlCone,0.09,h_levels
+phiTPten,0.088,h_levels
+phiTCten,0.061,h_levels
+phiTCone,0.093,h_levels
+phiFreshCone,0.46,h_levels
+phiDoseAllTen,2.2,h_tests K2_dose
+phiDoseAllOne,11.2,h_tests K2_dose
+phiDoseAllTenx,36.9,h_tests K2_dose
+phiDoseAllFull,77.2,h_tests K2_dose
+phiDirAcc,12.2,exploratory: R_all@1 - P_all@1 accuracy
+phiCtrlDiffTen,+0.20,"exploratory: P_span@0.1 - CV_span@0.1, term-answer accuracy"
+phiCtrlLossTen,50,h_tests control_accuracy
+corrRawMin,0.02,h_exploratory
+corrRawMax,0.17,h_exploratory
+corrFixMin,0.02,h_exploratory
+corrFixMax,0.17,h_exploratory
+relMin,0.96,"h_exploratory, rounded down"
+flipMin,5,h1 rows
+flipMax,11,h1 rows
+llamaFlipCv,0.075,exploratory
+llamaFlipCvP,0.009,exploratory
+tolSame,24,exploratory: K1 after dropping out-of-tolerance pairs
+tolTotal,24,exploratory
+phiValidCtrl,0.76,h_levels control validity

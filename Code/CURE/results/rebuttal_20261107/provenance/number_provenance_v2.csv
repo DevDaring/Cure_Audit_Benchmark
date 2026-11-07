@@ -1,0 +1,12 @@
+float,quantity,source_file
+tab:confirm,"|C| before, D, R, accuracy change, random comparisons, Holm decisions",results/v2/p2_confirmatory.csv; p2_summary.csv
+tab:controls,D per condition per model,results/v2/p2_summary.csv
+tab:global,MMLU accuracy and WikiText-2 perplexity under the every-position policy,results/v2/p2_capability.parquet
+tab:protocol,"pilot |C|, validity, identity-pair |C| under frozen source",results/v2/pilot_per_item.parquet
+tab:accounts,P3 magnitude / depth / massive rows,results/v2/p3_magnitude_summary.csv; p3_depth_summary.csv; p3_massive_summary.csv
+tab:forecast,"AUROC, increments",results/v2/p4_forecast_metrics.csv; p4_incremental_tests.csv
+tab:behaviour,"validity, gen accuracy, flip rate (+ cluster bootstrap of change), option accuracy, W",results/v2/p2_summary.csv; p2_per_item.parquet
+tab:strength,dev alpha screen D and accuracy change,results/v2/p2_summary.csv
+tab:split,seeds per split,reanalysis_v2/split_manifest_summary.csv
+tab:token,target-token uniqueness,reanalysis/target_token_audit.csv
+numbers_v2.tex,"nSeedsTotal=596; nFitSplit=291; nDevSplit=108; nTestSplit=197; nDevSeeds=100; nTestSeeds=160; nFitPairs=300; nMaxNewTokens=48; nBoot=2{,}000; RminPct=11; RmaxPct=28; RfourMinPct=22; RfourMaxPct=29; pplRatioMin=1.2; pplRatioMax=424; pplRatioRandMax=1.19; mmluDropMax=0.49; mmluDropMin=0.03; judgeSharePct=2.4; judgeNoneSharePct=2.6; phiLastTokenValidity=0.56; phiUneditedValidity=0.96; gemmaLastTokenValidity=0.77; gemmaUneditedValidity=0.92; frozenIdentityMax=1.81; pilotSpanValidityMaxDrop=0.07; gemmaAccGain=0.072; validityMin=0.95; nSpanTokensMin=327; nSpanTokensMax=330; mmluRandMaxAbs=0.015; auditOnlyMax=0.62; incrMaxAbs=0.009; nIncrIncludeZero=4; restoreAllMaxAbs=0.016; matchedRandMaxAbsC=0.012; matchedRandMaxAbsAcc=0.009",results/v2 (see script)

@@ -1,0 +1,100 @@
+float,quantity,source_file
+18.1240,A1 gemma-2-2b-it S1_vs_B C_raw R_pct,g_tests.csv
+20.3285,A1 gemma-2-2b-it S1_vs_B C_logp R_pct,g_tests.csv
+38.1766,A1 gemma-2-2b-it S1_vs_B C_margin R_pct,g_tests.csv
+17.1872,A1 gemma-2-2b-it S1_vs_random_mean C_raw R_pct,g_tests.csv
+19.7176,A1 gemma-2-2b-it S1_vs_random_mean C_logp R_pct,g_tests.csv
+37.7374,A1 gemma-2-2b-it S1_vs_random_mean C_margin R_pct,g_tests.csv
+28.0810,A1 llama-3.1-8b-instruct S1_vs_B C_raw R_pct,g_tests.csv
+32.8628,A1 llama-3.1-8b-instruct S1_vs_B C_logp R_pct,g_tests.csv
+-0.3345,A1 llama-3.1-8b-instruct S1_vs_B C_margin R_pct,g_tests.csv
+25.4219,A1 llama-3.1-8b-instruct S1_vs_random_mean C_raw R_pct,g_tests.csv
+32.2448,A1 llama-3.1-8b-instruct S1_vs_random_mean C_logp R_pct,g_tests.csv
+-1.2292,A1 llama-3.1-8b-instruct S1_vs_random_mean C_margin R_pct,g_tests.csv
+11.4319,A1 qwen2.5-7b-instruct S1_vs_B C_raw R_pct,g_tests.csv
+11.0052,A1 qwen2.5-7b-instruct S1_vs_B C_logp R_pct,g_tests.csv
+19.4700,A1 qwen2.5-7b-instruct S1_vs_B C_margin R_pct,g_tests.csv
+9.8906,A1 qwen2.5-7b-instruct S1_vs_random_mean C_raw R_pct,g_tests.csv
+13.1694,A1 qwen2.5-7b-instruct S1_vs_random_mean C_logp R_pct,g_tests.csv
+18.0372,A1 qwen2.5-7b-instruct S1_vs_random_mean C_margin R_pct,g_tests.csv
+32.4675,A1 phi-4-mini-instruct S1_vs_B C_raw R_pct,g_tests.csv
+41.1002,A1 phi-4-mini-instruct S1_vs_B C_logp R_pct,g_tests.csv
+34.3144,A1 phi-4-mini-instruct S1_vs_B C_margin R_pct,g_tests.csv
+32.3839,A1 phi-4-mini-instruct S1_vs_random_mean C_raw R_pct,g_tests.csv
+41.3164,A1 phi-4-mini-instruct S1_vs_random_mean C_logp R_pct,g_tests.csv
+35.8216,A1 phi-4-mini-instruct S1_vs_random_mean C_margin R_pct,g_tests.csv
+0.9755,A1 reproduction corr gemma-2-2b-it,g_summary.csv
+1.0000,A1 reproduction corr llama-3.1-8b-instruct,g_summary.csv
+1.0000,A1 reproduction corr qwen2.5-7b-instruct,g_summary.csv
+0.9157,A1 reproduction corr phi-4-mini-instruct,g_summary.csv
+11/41,A1 C_logp R range,g_tests.csv
+7.000,A1 max LEACE R on C_logp,g_tests.csv
+13.1987,A2 gemma-2-2b-it truncate R_pct,g_tests.csv
+40.2553,A2 gemma-2-2b-it mean-pad R_pct,g_tests.csv
+45.1962,A2 gemma-2-2b-it last-pad R_pct,g_tests.csv
+16.9134,A2 llama-3.1-8b-instruct truncate R_pct,g_tests.csv
+32.9688,A2 llama-3.1-8b-instruct mean-pad R_pct,g_tests.csv
+40.9046,A2 llama-3.1-8b-instruct last-pad R_pct,g_tests.csv
+100,A3 cov rank gemma-2-2b-it swap_small,g_leace_fits.csv
+545,A3 cov rank gemma-2-2b-it swap_300,g_leace_fits.csv
+1518,A3 cov rank gemma-2-2b-it swap_max,g_leace_fits.csv
+1518,A3 cov rank gemma-2-2b-it swap_max_noshrink,g_leace_fits.csv
+60,A3 cov rank gemma-2-2b-it gender_small,g_leace_fits.csv
+1680,A3 cov rank gemma-2-2b-it gender_large,g_leace_fits.csv
+101,A3 cov rank llama-3.1-8b-instruct swap_small,g_leace_fits.csv
+539,A3 cov rank llama-3.1-8b-instruct swap_300,g_leace_fits.csv
+1451,A3 cov rank llama-3.1-8b-instruct swap_max,g_leace_fits.csv
+1451,A3 cov rank llama-3.1-8b-instruct swap_max_noshrink,g_leace_fits.csv
+60,A3 cov rank llama-3.1-8b-instruct gender_small,g_leace_fits.csv
+2408,A3 cov rank llama-3.1-8b-instruct gender_large,g_leace_fits.csv
+100,A3 cov rank qwen2.5-7b-instruct swap_small,g_leace_fits.csv
+531,A3 cov rank qwen2.5-7b-instruct swap_300,g_leace_fits.csv
+1461,A3 cov rank qwen2.5-7b-instruct swap_max,g_leace_fits.csv
+1461,A3 cov rank qwen2.5-7b-instruct swap_max_noshrink,g_leace_fits.csv
+96,A3 cov rank phi-4-mini-instruct swap_small,g_leace_fits.csv
+536,A3 cov rank phi-4-mini-instruct swap_300,g_leace_fits.csv
+1449,A3 cov rank phi-4-mini-instruct swap_max,g_leace_fits.csv
+1449,A3 cov rank phi-4-mini-instruct swap_max_noshrink,g_leace_fits.csv
+0.2068,A3 fm_eval T gemma-2-2b-it B,g_summary.csv
+0.0568,A3 fm_eval T gemma-2-2b-it S1,g_summary.csv
+0.0381,A3 fm_eval T gemma-2-2b-it MC,g_summary.csv
+0.1260,A3 fm_eval T gemma-2-2b-it MC_gender,g_summary.csv
+0.1859,A3 fm_eval T gemma-2-2b-it LC_f3,g_summary.csv
+0.1268,A3 fm_eval T gemma-2-2b-it LC_gender_small,g_summary.csv
+0.1151,A3 fm_eval T gemma-2-2b-it LC_gender_large,g_summary.csv
+0.1697,A3 fm_eval T llama-3.1-8b-instruct B,g_summary.csv
+0.0679,A3 fm_eval T llama-3.1-8b-instruct S1,g_summary.csv
+0.0940,A3 fm_eval T llama-3.1-8b-instruct MC,g_summary.csv
+0.1028,A3 fm_eval T llama-3.1-8b-instruct MC_gender,g_summary.csv
+0.1641,A3 fm_eval T llama-3.1-8b-instruct LC_f3,g_summary.csv
+0.1362,A3 fm_eval T llama-3.1-8b-instruct LC_gender_small,g_summary.csv
+0.1294,A3 fm_eval T llama-3.1-8b-instruct LC_gender_large,g_summary.csv
+72,A3 fm eval seeds,g3_leace_gemma-2-2b-it.json
+0.1065,B gemma-2-2b-it S1 T,g_summary.csv
+0.1270,B gemma-2-2b-it DV_span T,g_summary.csv
+0.0820,B gemma-2-2b-it CV_span T,g_summary.csv
+0.1211,B gemma-2-2b-it DV_last T,g_summary.csv
+0.1242,B gemma-2-2b-it CV_last T,g_summary.csv
+0.2401,B gemma-2-2b-it DV_all T,g_summary.csv
+0.1333,B gemma-2-2b-it CV_all T,g_summary.csv
+0.0860,B llama-3.1-8b-instruct S1 T,g_summary.csv
+0.0819,B llama-3.1-8b-instruct DV_span T,g_summary.csv
+0.0672,B llama-3.1-8b-instruct CV_span T,g_summary.csv
+0.1392,B llama-3.1-8b-instruct DV_last T,g_summary.csv
+0.1418,B llama-3.1-8b-instruct CV_last T,g_summary.csv
+0.2223,B llama-3.1-8b-instruct DV_all T,g_summary.csv
+0.1930,B llama-3.1-8b-instruct CV_all T,g_summary.csv
+8.5746,A4 pooled D R_pct gemma-2-2b-it equal,g4_strata.csv
+25.0313,A4 pooled D R_pct gemma-2-2b-it unequal,g4_strata.csv
+20.4328,A4 pooled D R_pct llama-3.1-8b-instruct equal,g4_strata.csv
+34.2291,A4 pooled D R_pct llama-3.1-8b-instruct unequal,g4_strata.csv
+15.7707,A4 pooled D R_pct qwen2.5-7b-instruct equal,g4_strata.csv
+7.3517,A4 pooled D R_pct qwen2.5-7b-instruct unequal,g4_strata.csv
+11.0360,A4 pooled D R_pct phi-4-mini-instruct equal,g4_strata.csv
+39.9334,A4 pooled D R_pct phi-4-mini-instruct unequal,g4_strata.csv
+0.1114,A4 corr dT dC gemma-2-2b-it,g4_correlation.csv
+3.643,A4 energy test/dev gemma-2-2b-it,g4_energy_drift.csv
+0.0237,A4 corr dT dC llama-3.1-8b-instruct,g4_correlation.csv
+3.198,A4 energy test/dev llama-3.1-8b-instruct,g4_energy_drift.csv
+293122,C attrition total,exclusions.csv
+numbers_feedback.tex,"gemmaReproCorr=0.975; gemmaRraw=18; gemmaRrawP=0.004; gemmaRlogp=20; gemmaRlogpP=0.001; gemmaRmargin=38; gemmaRmarginP=0.012; llamaReproCorr=1.000; llamaRraw=28; llamaRrawP=0.010; llamaRlogp=33; llamaRlogpP=0.001; llamaRmargin=0; llamaRmarginP=0.967; qwenReproCorr=1.000; qwenRraw=11; qwenRrawP=0.082; qwenRlogp=11; qwenRlogpP=0.082; qwenRmargin=19; qwenRmarginP=0.082; phiReproCorr=0.916; phiRraw=32; phiRrawP=$<$0.001; phiRlogp=41; phiRlogpP=$<$0.001; phiRmargin=34; phiRmarginP=$<$0.001; RlogpMin=11; RlogpMax=41; nLogpSig=3; leaceMaxRlogp=7; leaceMinRlogp=-4; gemmaAlignTrunc=13; gemmaAlignMean=40; gemmaAlignLast=45; llamaAlignTrunc=17; llamaAlignMean=33; llamaAlignLast=41; gemmaSwapMaxRows=4,204; gemmaSwapMaxRank=1,518; gemmaSwapMaxProbe=0.49; gemmaGenderRows=5,570; gemmaGenderRank=1,680; gemmaGenderProbe=0.45; llamaSwapMaxRows=4,108; llamaSwapMaxRank=1,451; llamaSwapMaxProbe=0.49; llamaGenderRows=5,724; llamaGenderRank=2,408; llamaGenderProbe=0.49; qwenSwapMaxRows=4,118; qwenSwapMaxRank=1,461; qwenSwapMaxProbe=0.52; phiSwapMaxRows=4,102; phiSwapMaxRank=1,449; phiSwapMaxProbe=0.50; gemmaFmSoneRT=73; gemmaFmSoneRC=53; gemmaFmSoneRCP=$<$0.001; gemmaFmMCpaperRT=82; gemmaFmMCgenderRT=39; gemmaFmLCpaperRT=10; gemmaFmLCpaperRC=4; gemmaFmLCpaperRCP=0.038; gemmaFmLCsmallRT=39; gemmaFmLCgenderRT=44; gemmaFmLCgenderRC=25; gemmaFmLCgenderRCP=$<$0.001; llamaFmSoneRT=60; llamaFmSoneRC=46; llamaFmSoneRCP=0.002; llamaFmMCpaperRT=45; llamaFmMCgenderRT=39; llamaFmLCpaperRT=3; llamaFmLCpaperRC=5; llamaFmLCpaperRCP=0.570; llamaFmLCsmallRT=20; llamaFmLCgenderRT=24; llamaFmLCgenderRC=29; llamaFmLCgenderRCP=$<$0.001; nFmSeeds=72; nFmTemplates=12; gemmaSteerSoneRT=17; gemmaSteerSoneRC=44; gemmaSteerSoneAcc=0.36; gemmaSteerSoneValid=0.95; gemmaSteerSoneCtrl=0.16; gemmaSteerDVspanRT=1; gemmaSteerDVspanRC=28; gemmaSteerDVspanAcc=0.44; gemmaSteerDVspanValid=0.99; gemmaSteerDVspanCtrl=0.55; gemmaSteerCVspanRT=36; gemmaSteerCVspanRC=44; gemmaSteerCVspanAcc=0.43; gemmaSteerCVspanValid=1.00; gemmaSteerCVspanCtrl=0.36; gemmaSteerDVlastRT=5; gemmaSteerDVlastAcc=0.66; gemmaSteerDVlastValid=0.92; gemmaSteerCVlastRT=3; gemmaSteerCVlastAcc=0.32; gemmaSteerCVlastValid=0.69; gemmaSteerDVallRT=-88; gemmaSteerDVallAcc=0.00; gemmaSteerDVallValid=0.00; gemmaSteerCVallRT=-4; gemmaSteerCVallAcc=0.29; gemmaSteerCVallValid=1.00; llamaSteerSoneRT=39; llamaSteerSoneRC=37; llamaSteerSoneAcc=0.64; llamaSteerSoneValid=1.00; llamaSteerSoneCtrl=0.40; llamaSteerDVspanRT=42; llamaSteerDVspanRC=39; llamaSteerDVspanAcc=0.70; llamaSteerDVspanValid=0.99; llamaSteerDVspanCtrl=0.41; llamaSteerCVspanRT=52; llamaSteerCVspanRC=44; llamaSteerCVspanAcc=0.72; llamaSteerCVspanValid=0.98; llamaSteerCVspanCtrl=0.16; llamaSteerDVlastRT=1; llamaSteerDVlastAcc=0.52; llamaSteerDVlastValid=0.89; llamaSteerCVlastRT=0; llamaSteerCVlastAcc=0.89; llamaSteerCVlastValid=0.91; llamaSteerDVallRT=-57; llamaSteerDVallAcc=0.00; llamaSteerDVallValid=0.00; llamaSteerCVallRT=-37; llamaSteerCVallAcc=0.00; llamaSteerCVallValid=0.00; gemmaStrataEqualFresh=58; gemmaStrataEqualPooled=9; gemmaStrataUnequalFresh=13; gemmaStrataUnequalPooled=25; llamaStrataEqualFresh=50; llamaStrataEqualPooled=20; llamaStrataUnequalFresh=17; llamaStrataUnequalPooled=34; qwenStrataEqualPooled=16; qwenStrataUnequalPooled=7; phiStrataEqualPooled=11; phiStrataUnequalPooled=40; gemmaCorrTC=0.11; gemmaEnergyDrift=3.6; gemmaEnergySpanCorr=0.89; gemmaTrawB=0.128; gemmaTmeanB=0.054; gemmaTrawSone=0.107; gemmaTmeanSone=0.061; llamaCorrTC=0.02; llamaEnergyDrift=3.2; llamaEnergySpanCorr=0.68; llamaTrawB=0.141; llamaTmeanB=0.042; llamaTrawSone=0.086; llamaTmeanSone=0.054; nExcluded=293,122; nExclOverlap=225,880",feedback_20260915 (see script)

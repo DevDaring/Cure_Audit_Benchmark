@@ -1,0 +1,148 @@
+
+===== llama-3.1-8b-instruct
+  group        cond  flip  n_valid_pairs  gen_unknown  score_unknown  score_acc  gen_acc
+  final           B 0.094            160        0.684          0.312      0.312    0.684
+  final    P_span@1 0.094            159        0.646          0.300      0.300    0.644
+  final  P_span@0.3 0.094            160        0.644          0.300      0.300    0.644
+  final  P_span@0.1 0.125            160        0.666          0.306      0.306    0.666
+  final P_span@0.03   NaN              0          NaN          0.322      0.322      NaN
+  final   CV_span@1 0.013            156        0.684          0.272      0.272    0.669
+  final CV_span@0.3 0.006            158        0.725          0.334      0.334    0.716
+  final CV_span@0.1 0.032            157        0.738          0.344      0.344    0.731
+  final      P_ne@1 0.097            155        0.662          0.312      0.312    0.662
+  final     P_all@1 0.094            159        0.633          0.303      0.303    0.631
+  final     R_all@1 0.100            160        0.678          0.300      0.300    0.678
+  final   Rk_span@1 0.112            160        0.688          0.328      0.328    0.688
+control           B 0.083             36        0.097          0.042      0.875    0.875
+control    P_span@1 0.111             27        0.206          0.111      0.236    0.403
+control  P_span@0.3 0.241             29        0.185          0.097      0.319    0.528
+control  P_span@0.1 0.156             32        0.147          0.083      0.403    0.653
+control P_span@0.03   NaN              0          NaN          0.056      0.722      NaN
+control   CV_span@1 0.000             24        0.255          0.194      0.000    0.000
+control CV_span@0.3 0.000             26        0.246          0.181      0.000    0.000
+control CV_span@0.1 0.160             25        0.281          0.167      0.083    0.083
+control      P_ne@1 0.083             36        0.097          0.028      0.903    0.875
+control     P_all@1 0.056             36        0.111          0.056      0.778    0.861
+control     R_all@1 0.056             36        0.111          0.042      0.875    0.861
+control   Rk_span@1 0.083             36        0.125          0.056      0.833    0.847
+  flip B - P_span@1   +0.0000 [-0.0563, +0.0563] p 1.0000 n=159
+  flip B - CV_span@1  +0.0750 [+0.0312, +0.1187] p 0.0090 n=156
+  flip B - P_ne@1     -0.0127 [-0.0506, +0.0190] p 0.4913 n=155
+  flip B - P_all@1    -0.0063 [-0.0500, +0.0437] p 0.8077 n=159
+  flip B - R_all@1    -0.0063 [-0.0252, +0.0125] p 0.5660 n=160
+  direction everywhere, acc R_all@1 - P_all@1: +0.0469 [+0.0187, +0.0781] p 0.0129
+  direction everywhere, T   R_all@1 - P_all@1: +0.0009 [-0.0206, +0.0208] p 0.9346
+  corr(dC, dT) raw 0.019; noise var in C 0.017, var(dC) 0.765, reliability 0.977, corrected 0.020
+  R_C: September's rule 36.9%, whole-term 42.1% (equal pairs 50.7 / 52.8, unequal 14.4 / 24.8)
+  scored rows outside 5%: 42 of 6698; along/nominal P_all@1 0.993, P_all@0.1 0.922
+
+===== gemma-2-2b-it
+  group        cond  flip  n_valid_pairs  gen_unknown  score_unknown  score_acc  gen_acc
+  final           B 0.119            160        0.419          0.484      0.484    0.419
+  final    P_span@1 0.136            147        0.374          0.425      0.425    0.356
+  final  P_span@0.3 0.131            153        0.399          0.419      0.419    0.388
+  final  P_span@0.1 0.114            158        0.409          0.453      0.453    0.406
+  final P_span@0.03   NaN              0          NaN          0.466      0.466      NaN
+  final   CV_span@1 0.082            159        0.462          0.512      0.512    0.459
+  final CV_span@0.3 0.045            157        0.462          0.503      0.503    0.456
+  final CV_span@0.1 0.070            158        0.437          0.475      0.475    0.434
+  final      P_ne@1 0.111            153        0.402          0.447      0.447    0.402
+  final     P_all@1 0.170            159        0.367          0.416      0.416    0.366
+  final     R_all@1 0.106            160        0.406          0.475      0.475    0.406
+  final   Rk_span@1 0.138            159        0.423          0.472      0.472    0.422
+control           B 0.167             36        0.069          0.111      0.833    0.847
+control    P_span@1 0.032             31        0.123          0.278      0.056    0.181
+control  P_span@0.3 0.069             29        0.131          0.278      0.069    0.194
+control  P_span@0.1 0.257             35        0.113          0.194      0.417    0.611
+control P_span@0.03   NaN              0          NaN          0.181      0.736      NaN
+control   CV_span@1 0.032             31        0.167          0.306      0.000    0.167
+control CV_span@0.3 0.032             31        0.185          0.319      0.014    0.167
+control CV_span@0.1 0.265             34        0.174          0.319      0.153    0.278
+control      P_ne@1 0.111             36        0.056          0.111      0.847    0.861
+control     P_all@1 0.028             36        0.028          0.111      0.833    0.903
+control     R_all@1 0.194             36        0.083          0.111      0.833    0.833
+control   Rk_span@1 0.167             36        0.167          0.194      0.722    0.736
+  flip B - P_span@1   -0.0187 [-0.0938, +0.0563] p 0.6297 n=147
+  flip B - CV_span@1  +0.0312 [-0.0250, +0.0875] p 0.2821 n=159
+  flip B - P_ne@1     +0.0000 [-0.0443, +0.0443] p 1.0000 n=153
+  flip B - P_all@1    -0.0500 [-0.1062, +0.0125] p 0.1077 n=159
+  flip B - R_all@1    +0.0125 [-0.0125, +0.0375] p 0.3586 n=160
+  direction everywhere, acc R_all@1 - P_all@1: +0.0406 [+0.0156, +0.0688] p 0.0094
+  direction everywhere, T   R_all@1 - P_all@1: -0.0315 [-0.0491, -0.0146] p 0.0005
+  corr(dC, dT) raw 0.128; noise var in C 0.041, var(dC) 3.676, reliability 0.989, corrected 0.129
+  R_C: September's rule 43.7%, whole-term 49.1% (equal pairs 58.3 / 57.4, unequal 13.2 / 31.9)
+  scored rows outside 5%: 71 of 7232; along/nominal P_all@1 0.994, P_all@0.1 0.950
+
+===== qwen2.5-7b-instruct
+  group        cond  flip  n_valid_pairs  gen_unknown  score_unknown  score_acc  gen_acc
+  final           B 0.050            159        0.944          0.947      0.947    0.941
+  final    P_span@1 0.031            160        0.947          0.959      0.959    0.947
+  final  P_span@0.3 0.019            160        0.934          0.953      0.953    0.934
+  final  P_span@0.1 0.025            160        0.938          0.950      0.950    0.938
+  final P_span@0.03   NaN              0          NaN          0.950      0.950      NaN
+  final   CV_span@1 0.013            159        0.978          0.981      0.981    0.975
+  final CV_span@0.3 0.025            158        0.972          0.984      0.984    0.966
+  final CV_span@0.1 0.025            158        0.959          0.975      0.975    0.950
+  final      P_ne@1 0.052            155        0.943          0.962      0.962    0.943
+  final     P_all@1 0.044            160        0.941          0.953      0.953    0.941
+  final     R_all@1 0.038            160        0.938          0.947      0.947    0.938
+  final   Rk_span@1 0.031            160        0.947          0.956      0.956    0.947
+control           B 0.056             36        0.222          0.208      0.708    0.778
+control    P_span@1 0.032             31        0.197          0.194      0.403    0.569
+control  P_span@0.3 0.032             31        0.194          0.181      0.486    0.597
+control  P_span@0.1 0.139             36        0.181          0.194      0.583    0.736
+control P_span@0.03   NaN              0          NaN          0.208      0.694      NaN
+control   CV_span@1 0.094             32        0.227          0.306      0.028    0.319
+control CV_span@0.3 0.097             31        0.246          0.292      0.014    0.347
+control CV_span@0.1 0.042             24        0.291          0.250      0.125    0.306
+control      P_ne@1 0.111             36        0.194          0.194      0.736    0.806
+control     P_all@1 0.111             36        0.181          0.181      0.722    0.806
+control     R_all@1 0.167             36        0.222          0.208      0.736    0.778
+control   Rk_span@1 0.083             36        0.222          0.236      0.653    0.764
+  flip B - P_span@1   +0.0187 [-0.0125, +0.0500] p 0.2781 n=159
+  flip B - CV_span@1  +0.0312 [+0.0000, +0.0625] p 0.0811 n=158
+  flip B - P_ne@1     +0.0000 [-0.0190, +0.0190] p 1.0000 n=154
+  flip B - P_all@1    +0.0063 [+0.0000, +0.0187] p 0.0827 n=159
+  flip B - R_all@1    +0.0125 [+0.0000, +0.0312] p 0.0162 n=159
+  direction everywhere, acc R_all@1 - P_all@1: -0.0031 [-0.0094, +0.0000] p 0.0778
+  direction everywhere, T   R_all@1 - P_all@1: +0.0023 [-0.0008, +0.0068] p 0.3337
+  corr(dC, dT) raw 0.120; noise var in C 0.144, var(dC) 6.787, reliability 0.979, corrected 0.121
+  R_C: September's rule 35.4%, whole-term 33.4% (equal pairs 52.7 / 51.1, unequal 1.4 / -1.5)
+  scored rows outside 5%: 123 of 7005; along/nominal P_all@1 0.943, P_all@0.1 0.701
+
+===== phi-4-mini-instruct
+  group        cond  flip  n_valid_pairs  gen_unknown  score_unknown  score_acc  gen_acc
+  final           B 0.106            160        0.772          0.759      0.759    0.772
+  final    P_span@1 0.053            151        0.789          0.697      0.697    0.759
+  final  P_span@0.3 0.059            153        0.781          0.728      0.728    0.759
+  final  P_span@0.1 0.046            152        0.778          0.728      0.728    0.756
+  final P_span@0.03   NaN              0          NaN          0.734      0.734      NaN
+  final   CV_span@1 0.126            143        0.503          0.491      0.491    0.462
+  final CV_span@0.3 0.060            150        0.641          0.500      0.500    0.609
+  final CV_span@0.1 0.050            159        0.734          0.662      0.662    0.731
+  final      P_ne@1 0.110            155        0.752          0.736      0.736    0.752
+  final     P_all@1 0.081            160        0.659          0.594      0.594    0.659
+  final     R_all@1 0.100            160        0.781          0.766      0.766    0.781
+  final   Rk_span@1 0.057            159        0.790          0.800      0.800    0.788
+control           B 0.000             36        0.000          0.000      0.972    0.972
+control    P_span@1 0.125             24        0.056          0.125      0.111    0.264
+control  P_span@0.3 0.083             24        0.019          0.125      0.125    0.306
+control  P_span@0.1 0.103             29        0.016          0.097      0.264    0.444
+control P_span@0.03   NaN              0          NaN          0.056      0.542      NaN
+control   CV_span@1 0.000             12        0.132          0.417      0.000    0.097
+control CV_span@0.3 0.050             20        0.020          0.111      0.069    0.181
+control CV_span@0.1 0.042             24        0.000          0.139      0.056    0.250
+control      P_ne@1 0.000             36        0.000          0.000      0.972    0.972
+control     P_all@1 0.056             36        0.000          0.028      0.903    0.972
+control     R_all@1 0.000             36        0.000          0.000      0.972    0.972
+control   Rk_span@1 0.000             36        0.000          0.000      0.889    0.944
+  flip B - P_span@1   +0.0563 [-0.0063, +0.1250] p 0.0982 n=151
+  flip B - CV_span@1  -0.0192 [-0.0833, +0.0449] p 0.5530 n=143
+  flip B - P_ne@1     -0.0190 [-0.0570, +0.0190] p 0.3269 n=155
+  flip B - P_all@1    +0.0250 [-0.0252, +0.0813] p 0.3787 n=160
+  flip B - R_all@1    +0.0063 [-0.0187, +0.0312] p 0.6786 n=160
+  direction everywhere, acc R_all@1 - P_all@1: +0.1219 [+0.0688, +0.1844] p 0.0028
+  direction everywhere, T   R_all@1 - P_all@1: -0.0335 [-0.0701, +0.0045] p 0.0869
+  corr(dC, dT) raw 0.170; noise var in C 0.092, var(dC) 2.717, reliability 0.966, corrected 0.173
+  R_C: September's rule 30.1%, whole-term 39.3% (equal pairs 55.5 / 59.7, unequal -9.8 / 7.2)
+  scored rows outside 5%: 110 of 6955; along/nominal P_all@1 0.999, P_all@0.1 0.987
