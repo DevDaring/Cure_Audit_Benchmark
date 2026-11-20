@@ -1,1 +1,1 @@
-SMOKE PASSED for llama-3.1-8b-instruct @ Fri Nov 20 10:52:56 UTC 2026
+SMOKE ONLY DONE for llama-3.1-8b-instruct; holding for review @ Fri Nov 20 10:53:01 UTC 2026
