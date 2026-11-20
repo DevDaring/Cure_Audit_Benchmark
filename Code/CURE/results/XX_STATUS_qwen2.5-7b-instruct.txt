@@ -1,1 +1,1 @@
-container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov 20 11:18:22 UTC 2026
+stage x1 qwen2.5-7b-instruct starting @ Fri Nov 20 11:29:26 UTC 2026
