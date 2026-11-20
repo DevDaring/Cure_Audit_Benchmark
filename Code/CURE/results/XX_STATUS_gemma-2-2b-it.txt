@@ -1,1 +1,1 @@
-SMOKE ONLY DONE for gemma-2-2b-it; holding for review @ Fri Nov 20 10:58:32 UTC 2026
+container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov 20 11:15:33 UTC 2026
