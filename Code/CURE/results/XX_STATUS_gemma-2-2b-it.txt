@@ -1,1 +1,1 @@
-container started (NVIDIA GeForce RTX 3090, 24576 MiB) @ Fri Nov 20 12:17:20 UTC 2026
+setup complete @ Fri Nov 20 12:19:48 UTC 2026
