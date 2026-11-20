@@ -1,1 +1,1 @@
-SMOKE phi-4-mini-instruct starting @ Fri Nov 20 10:44:40 UTC 2026
+SMOKE PASSED for phi-4-mini-instruct @ Fri Nov 20 10:45:37 UTC 2026
