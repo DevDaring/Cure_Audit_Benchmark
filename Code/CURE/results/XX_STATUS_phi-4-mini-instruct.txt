@@ -1,1 +1,1 @@
-SMOKE ONLY DONE for phi-4-mini-instruct; holding for review @ Fri Nov 20 10:45:42 UTC 2026
+container started (NVIDIA GeForce RTX 3090 Ti, 24564 MiB) @ Fri Nov 20 11:12:34 UTC 2026
