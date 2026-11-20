@@ -1,1 +1,1 @@
-SMOKE qwen2.5-7b-instruct starting @ Fri Nov 20 11:23:12 UTC 2026
+SMOKE PASSED for qwen2.5-7b-instruct @ Fri Nov 20 11:25:18 UTC 2026
