@@ -10,13 +10,13 @@
 # Env: HH_MODELS (required), HH_SKIP_SMOKE=1, HH_GPU_RATE (recorded), HH_ONLY_STAGE (optional)
 set -uo pipefail
 WORK=${WORK:-/workspace}; REPO=${REPO:-"$WORK/Cure_Audit_Benchmark"}
-CURE="$REPO/Code/CURE"; HH="$CURE/Rebuttal_Run"; OUTD="$CURE/results/rebuttal_20261107"
+CURE="$REPO/Code/CURE"; HH="$CURE/Rebuttal_Run"; OUTD="$CURE/results/${HH_RESULTS_SUBDIR:-rebuttal_20261107}"
 export HF_HOME=${HF_HOME:-"$WORK/hf"} DEBIAN_FRONTEND=noninteractive PYTHONUNBUFFERED=1 TOKENIZERS_PARALLELISM=false
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4 NUMEXPR_NUM_THREADS=4
 PIP="pip3 install --break-system-packages --no-cache-dir"
 MODELS=${HH_MODELS:?HH_MODELS is required}
 TAG=$(echo "$MODELS" | tr ' ' '+')
-STATUS_REL="Code/CURE/results/HH_STATUS_${TAG}.txt"
+STATUS_REL="Code/CURE/results/${HH_STATUS_PREFIX:-HH_STATUS}_${TAG}.txt"
 mkdir -p "$CURE/logs" "$OUTD"; cd "$HH"
 echo "[hh] $(date -u) models=$MODELS"
 (apt-get update -y && apt-get install -y --no-install-recommends git wget ca-certificates) >/dev/null 2>&1 || true
@@ -53,7 +53,7 @@ git_sync_push() {
 _push_status_locked() { printf '%s @ %s\n' "$1" "$(date -u)" > "$REPO/$STATUS_REL"; git -C "$REPO" add -f "$STATUS_REL" >/dev/null 2>&1; git_sync_push "hh[$TAG]: $1"; }
 _push_results_locked() {
   find "$OUTD" -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git -C "$REPO" add -f >/dev/null 2>&1
-  for d in "$CURE"/results/rebuttal_smoke_*; do [ -d "$d" ] && find "$d" -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git -C "$REPO" add -f >/dev/null 2>&1; done
+  for d in "$CURE"/results/rebuttal_smoke_* "$CURE"/results/extension_smoke_*; do [ -d "$d" ] && find "$d" -type f ! -name '*.md' ! -name '*.log' -print0 | xargs -0 -r git -C "$REPO" add -f >/dev/null 2>&1; done
   git -C "$REPO" add -f "$STATUS_REL" >/dev/null 2>&1; git_sync_push "hh-results[$TAG]: $1"; }
 push_status()  { ( flock 9; _push_status_locked  "$1" ) 9>"$LOCK"; }
 push_results() { ( flock 9; _push_results_locked "$1" ) 9>"$LOCK"; }
@@ -109,6 +109,7 @@ run_stage() {  # $1 label, $2 log, rest = command; 3 attempts
 }
 
 stages_of() {
+  if [ -n "${HH_STAGES:-}" ]; then echo "$HH_STAGES"; return; fi
   case "$1" in
     gemma-2-2b-it|llama-3.1-8b-instruct) echo "h1a h7 h4 h2 h3 h1b";;
     qwen2.5-7b-instruct|phi-4-mini-instruct) echo "h5 h1a h7 h4 h3 h1b";;
@@ -122,7 +123,8 @@ for M in $MODELS; do
   # ---------------------------------------------------------------- SMOKE (two seeds through every stage, separate directory)
   if [ "${HH_SKIP_SMOKE:-0}" != "1" ]; then
     push_status "SMOKE $M starting"
-    export HH_OUT_DIR="rebuttal_smoke_${M}"; mkdir -p "$CURE/results/$HH_OUT_DIR"
+    if [ -n "${HH_RESULTS_SUBDIR:-}" ]; then export HH_OUT_DIR="extension_smoke_${M}"; else export HH_OUT_DIR="rebuttal_smoke_${M}"; fi
+    mkdir -p "$CURE/results/$HH_OUT_DIR"
     if run_stage "SMOKE $M" "hh_smoke_$M" python3 run_all.py --stage all --model "$M" --smoke; then
       push_status "SMOKE PASSED for $M"; push_results "smoke $M"
     else
@@ -134,6 +136,7 @@ for M in $MODELS; do
   # deploy_h.py restart --skip-smoke clears HH_SMOKE_ONLY and starts the full sequence
   if [ "${HH_SMOKE_ONLY:-0}" = "1" ]; then continue; fi
   # ---------------------------------------------------------------- FULL
+  [ -n "${HH_RESULTS_SUBDIR:-}" ] && export HH_OUT_DIR="$HH_RESULTS_SUBDIR"
   for st in $(stages_of "$M"); do
     if [ -n "${HH_ONLY_STAGE:-}" ] && [ "$st" != "$HH_ONLY_STAGE" ]; then continue; fi
     push_status "stage $st $M starting"

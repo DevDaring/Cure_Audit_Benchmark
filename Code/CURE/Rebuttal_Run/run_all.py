@@ -10,6 +10,8 @@ Stages
   h4    prompt-rewrite baseline                                                       GPU
   h6    statistics and tables (author's machine, CPU)
   h7    per-token option scores (explains the length-normalised reversal), after h1a GPU
+  x1    extension run: new held-out pairs under B, P_span@1, CV_span@1 (x_protocol.json) GPU
+  x2    the extension run's declared tests (author's machine, CPU)
   all   the model's own sequence (below)
 
 Per model
@@ -38,6 +40,9 @@ def run(cmd: list[str]) -> None:
 
 
 def sequence(model: str) -> list[str]:
+    import os
+    if os.environ.get("HH_STAGES"):          # a named subset, e.g. the extension run's x1
+        return os.environ["HH_STAGES"].split()
     if model in H.FRESH_MODELS:
         return ["h1a", "h7", "h4", "h2", "h3", "h1b"]
     return ["h5", "h1a", "h7", "h4", "h3", "h1b"]
@@ -45,13 +50,15 @@ def sequence(model: str) -> list[str]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", default="all", choices=["h1a", "h1b", "h2", "h3", "h4", "h5", "h6", "h7", "all"])
+    ap.add_argument("--stage", default="all", choices=["h1a", "h1b", "h2", "h3", "h4", "h5", "h6", "h7", "x1", "x2", "all"])
     ap.add_argument("--model", default=None, choices=H.ALL_MODELS)
     ap.add_argument("--smoke", action="store_true")
     a = ap.parse_args()
     smoke = ["--smoke"] if a.smoke else []
     if a.stage == "h6":
         run(["h6_analysis.py"]); return
+    if a.stage == "x2":
+        run(["x2_extension_analysis.py"]); return
     if not a.model:
         raise SystemExit("--model is required")
     stages = [a.stage] if a.stage != "all" else sequence(a.model)
@@ -68,6 +75,8 @@ def main() -> None:
             run(["h3_all_pairs.py", "--model", a.model] + smoke)
         elif st == "h7":
             run(["h7_token_scores.py", "--model", a.model] + smoke)
+        elif st == "x1":
+            run(["x1_extension_run.py", "--model", a.model] + smoke)
         elif st == "h4":
             run(["h4_rewrite.py", "--model", a.model] + smoke)
         else:
