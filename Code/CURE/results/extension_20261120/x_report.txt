@@ -1,0 +1,59 @@
+extension tests; models with rows: ['llama-3.1-8b-instruct', 'gemma-2-2b-it', 'qwen2.5-7b-instruct', 'phi-4-mini-instruct']
+  llama-3.1-8b-instruct    pairs 840 templates 82
+  gemma-2-2b-it            pairs 840 templates 82
+  qwen2.5-7b-instruct      pairs 840 templates 82
+  phi-4-mini-instruct      pairs 840 templates 82
+
+primary            pooled                   T       B - P_span@1 > 0 (mean over four models) est +0.0342 [+0.0232, +0.0452] n=82 p_holm 0.0003 supported
+primary            pooled                   T_mean  B - P_span@1 > 0 (mean over four models) est -0.0049 [-0.0088, -0.0010] n=82 p_holm 0.9951 reversal
+primary            pooled                   flip    B - P_span@1 > 0 (mean over four models) est +0.0225 [+0.0057, +0.0394] n=82 p_holm 0.0116 supported
+per_model_erasure  llama                    T       B - P_span@1 > 0                     est +0.0504 [+0.0334, +0.0675] n=840 p_holm 0.0004 supported
+per_model_erasure  gemma                    T       B - P_span@1 > 0                     est +0.0574 [+0.0343, +0.0811] n=840 p_holm 0.0004 supported
+per_model_erasure  qwen2.5                  T       B - P_span@1 > 0                     est +0.0056 [-0.0046, +0.0191] n=840 p_holm 0.1352 limited
+per_model_erasure  phi                      T       B - P_span@1 > 0                     est +0.0233 [+0.0046, +0.0420] n=840 p_holm 0.0172 supported
+per_model_erasure  llama                    T_mean  B - P_span@1 > 0                     est -0.0163 [-0.0206, -0.0119] n=840 p_holm 1.0000 reversal
+per_model_erasure  gemma                    T_mean  B - P_span@1 > 0                     est -0.0012 [-0.0082, +0.0055] n=840 p_holm 1.0000 limited
+per_model_erasure  qwen2.5                  T_mean  B - P_span@1 > 0                     est -0.0001 [-0.0060, +0.0060] n=840 p_holm 1.0000 limited
+per_model_erasure  phi                      T_mean  B - P_span@1 > 0                     est -0.0019 [-0.0083, +0.0043] n=840 p_holm 1.0000 limited
+per_model_erasure  llama                    flip    B - P_span@1 > 0                     est +0.0099 [-0.0176, +0.0383] n=825 p_holm 0.4512 limited
+per_model_erasure  gemma                    flip    B - P_span@1 > 0                     est +0.0549 [+0.0146, +0.0941] n=818 p_holm 0.0200 supported
+per_model_erasure  qwen2.5                  flip    B - P_span@1 > 0                     est +0.0051 [-0.0061, +0.0193] n=837 p_holm 0.4512 limited
+per_model_erasure  phi                      flip    B - P_span@1 > 0                     est +0.0200 [-0.0177, +0.0581] n=815 p_holm 0.4512 limited
+per_model_vector   llama                    T       B - CV_span@1 > 0                    est +0.1089 [+0.0894, +0.1269] n=840 p_holm 0.0004 supported
+per_model_vector   gemma                    T       B - CV_span@1 > 0                    est +0.1043 [+0.0839, +0.1261] n=840 p_holm 0.0004 supported
+per_model_vector   qwen2.5                  T       B - CV_span@1 > 0                    est +0.0211 [+0.0058, +0.0396] n=840 p_holm 0.0014 supported
+per_model_vector   phi                      T       B - CV_span@1 > 0                    est +0.0078 [-0.0167, +0.0325] n=840 p_holm 0.2718 limited
+per_model_vector   llama                    T_mean  B - CV_span@1 > 0                    est +0.0086 [+0.0012, +0.0158] n=840 p_holm 0.0214 supported
+per_model_vector   gemma                    T_mean  B - CV_span@1 > 0                    est +0.0229 [+0.0163, +0.0295] n=840 p_holm 0.0004 supported
+per_model_vector   qwen2.5                  T_mean  B - CV_span@1 > 0                    est +0.0510 [+0.0393, +0.0632] n=840 p_holm 0.0004 supported
+per_model_vector   phi                      T_mean  B - CV_span@1 > 0                    est +0.0021 [-0.0069, +0.0103] n=840 p_holm 0.3379 limited
+per_model_vector   llama                    flip    B - CV_span@1 > 0                    est +0.0692 [+0.0324, +0.1060] n=837 p_holm 0.0004 supported
+per_model_vector   gemma                    flip    B - CV_span@1 > 0                    est +0.1013 [+0.0652, +0.1385] n=835 p_holm 0.0004 supported
+per_model_vector   qwen2.5                  flip    B - CV_span@1 > 0                    est +0.0234 [+0.0071, +0.0437] n=839 p_holm 0.0004 supported
+per_model_vector   phi                      flip    B - CV_span@1 > 0                    est +0.0055 [-0.0378, +0.0516] n=763 p_holm 0.4073 limited
+erasure_vs_vector  llama                    T       P_span@1 - CV_span@1                 est +0.0586 [+0.0424, +0.0742] n=840 p_holm 0.0004 descriptive
+erasure_vs_vector  gemma                    T       P_span@1 - CV_span@1                 est +0.0469 [+0.0307, +0.0650] n=840 p_holm 0.0018 descriptive
+erasure_vs_vector  qwen2.5                  T       P_span@1 - CV_span@1                 est +0.0155 [+0.0041, +0.0299] n=840 p_holm 0.1470 descriptive
+erasure_vs_vector  phi                      T       P_span@1 - CV_span@1                 est -0.0155 [-0.0338, +0.0022] n=840 p_holm 0.1470 descriptive
+erasure_vs_vector  llama                    T_mean  P_span@1 - CV_span@1                 est +0.0249 [+0.0165, +0.0333] n=840 p_holm 0.0004 descriptive
+erasure_vs_vector  gemma                    T_mean  P_span@1 - CV_span@1                 est +0.0242 [+0.0169, +0.0318] n=840 p_holm 0.0004 descriptive
+erasure_vs_vector  qwen2.5                  T_mean  P_span@1 - CV_span@1                 est +0.0510 [+0.0400, +0.0625] n=840 p_holm 0.0004 descriptive
+erasure_vs_vector  phi                      T_mean  P_span@1 - CV_span@1                 est +0.0040 [-0.0031, +0.0110] n=840 p_holm 0.2867 descriptive
+erasure_vs_vector  llama                    flip    P_span@1 - CV_span@1                 est +0.0563 [+0.0234, +0.0899] n=823 p_holm 0.0068 descriptive
+erasure_vs_vector  gemma                    flip    P_span@1 - CV_span@1                 est +0.0383 [+0.0075, +0.0704] n=816 p_holm 0.0600 descriptive
+erasure_vs_vector  qwen2.5                  flip    P_span@1 - CV_span@1                 est +0.0176 [+0.0061, +0.0325] n=837 p_holm 0.1098 descriptive
+erasure_vs_vector  phi                      flip    P_span@1 - CV_span@1                 est -0.0305 [-0.0698, +0.0086] n=745 p_holm 0.1368 descriptive
+
+exploratory: inspected 160 pairs combined with the new pairs (B - P_span@1, one-sided)
+  llama-3.1-8b-instruct    T       est +0.0500 [+0.0345, +0.0657] p 0.0001 n=1000
+  llama-3.1-8b-instruct    T_mean  est -0.0159 [-0.0200, -0.0116] p 1.0000 n=1000
+  llama-3.1-8b-instruct    flip    est +0.0041 [-0.0203, +0.0289] p 0.3687 n=984
+  gemma-2-2b-it            T       est +0.0494 [+0.0254, +0.0741] p 0.0001 n=1000
+  gemma-2-2b-it            T_mean  est -0.0024 [-0.0095, +0.0043] p 0.7552 n=1000
+  gemma-2-2b-it            flip    est +0.0469 [+0.0099, +0.0849] p 0.0099 n=965
+  qwen2.5-7b-instruct      T       est +0.0051 [-0.0061, +0.0193] p 0.1784 n=1000
+  qwen2.5-7b-instruct      T_mean  est +0.0008 [-0.0051, +0.0070] p 0.3834 n=1000
+  qwen2.5-7b-instruct      flip    est +0.0062 [-0.0068, +0.0221] p 0.1640 n=996
+  phi-4-mini-instruct      T       est +0.0293 [+0.0106, +0.0485] p 0.0007 n=1000
+  phi-4-mini-instruct      T_mean  est -0.0018 [-0.0081, +0.0043] p 0.7186 n=1000
+  phi-4-mini-instruct      flip    est +0.0269 [-0.0071, +0.0636] p 0.0532 n=966

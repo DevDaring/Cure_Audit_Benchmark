@@ -104,7 +104,7 @@ def main() -> None:
                 r["p_holm"] = ph
             rows += fr
     for r in rows:
-        greater = r["statement"].endswith("> 0")
+        greater = r["family"] != "erasure_vs_vector"      # every other family is one-sided (greater)
         if r["p_holm"] < 0.05 and greater:
             r["verdict"] = "supported"
         elif greater and r["hi"] < 0:
